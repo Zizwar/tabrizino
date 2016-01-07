@@ -1,0 +1,8 @@
+{
+  "name": "tabris-getting-started",
+  "description": "manza, World!",
+  "main": "main.js",
+  "dependencies": {
+    "tabris": "^1.1.0"
+  }
+}

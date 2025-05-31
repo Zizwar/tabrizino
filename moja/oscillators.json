@@ -1,0 +1,428 @@
+{
+  "id": "oscillators",
+  "title": "أنماط التذبذب المعرفي - نموذج نظري للحالات العقلية",
+  "description": "نظام نظري من ثلاثة أنماط تذبذب تمثل الحالات العاطفية والمعرفية الأساسية",
+  "category": "core-engine",
+  "version": "2.0",
+
+  "scientific_relations": {
+    "physics": {
+      "concept": "harmonic_oscillators",
+      "similarity": "coupled_oscillator_systems",
+      "explanation": "مثل الرقاص المقترن، الحالات النفسية تؤثر على بعضها البعض",
+      "similarity_score": 0.6
+    },
+    "control_systems": {
+      "concept": "feedback_control",
+      "similarity": "homeostatic_regulation",
+      "explanation": "آليات الحفاظ على التوازن النفسي مثل أنظمة التحكم الآلي",
+      "similarity_score": 0.8
+    },
+    "signal_processing": {
+      "concept": "wave_analysis",
+      "similarity": "frequency_domain_analysis",
+      "explanation": "تحليل الحالات النفسية كإشارات بترددات مختلفة",
+      "similarity_score": 0.7
+    },
+    "biology": {
+      "concept": "circadian_rhythms",
+      "similarity": "biological_oscillations",
+      "explanation": "الساعة البيولوجية تؤثر على الحالة النفسية بشكل دوري",
+      "similarity_score": 0.9
+    },
+    "psychology": {
+      "concept": "mood_regulation",
+      "similarity": "emotional_homeostasis",
+      "explanation": "آليات الحفاظ على التوازن العاطفي",
+      "similarity_score": 0.8
+    }
+  },
+
+  "input_output_spec": {
+    "system_input": {
+      "type": "life_event",
+      "format": {
+        "event_data": "object",
+        "emotional_intensity": "float[0-1]",
+        "valence": "float[-1,1]", 
+        "duration": "number_milliseconds",
+        "context": "object"
+      }
+    },
+    "system_output": {
+      "type": "consciousness_state",
+      "format": {
+        "consciousness_score": "float[0-1]",
+        "stability_level": "float[0-1]",
+        "dominant_oscillator": "string",
+        "system_harmony": "float[0-1]",
+        "recommended_action": "string"
+      }
+    },
+    "monitoring_output": {
+      "type": "system_health",
+      "format": {
+        "energy_level": "float[0-1]",
+        "coherence": "float[0-1]",
+        "adaptation_capacity": "float[0-1]",
+        "warning_flags": "array[strings]"
+      }
+    }
+  },
+
+  "oscillator_types": {
+    "baseline_oscillator": {
+      "function": "الحفاظ على الحد الأدنى من الاستقرار والوجود",
+      "frequency_range": "0.5-2 Hz نظرياً",
+      "amplitude": 0.5,
+      "message": "النظام يعمل، الوجود مستمر",
+      "modifiable": false,
+      "purpose": "life_maintenance",
+      "input": "system_health_status",
+      "output": "stability_signal + existence_confirmation",
+      "failure_mode": "existential_crisis"
+    },
+    "dynamic_oscillator": {
+      "function": "معالجة التجارب والأحداث الحياتية",
+      "frequency_range": "متغير حسب شدة الحدث",
+      "amplitude": "متغير 0.1-0.9",
+      "message": "معلومات عن الأحداث والتجارب",
+      "modifiable": true,
+      "purpose": "experience_processing",
+      "input": "life_events + emotional_context",
+      "output": "processed_experience + adaptation_signals",
+      "failure_mode": "emotional_overflow"
+    },
+    "integration_oscillator": {
+      "function": "دمج الإشارات وحساب الحالة الإجمالية",
+      "frequency_range": "1 Hz مرجعي",
+      "amplitude": "محسوب من الفرق",
+      "message": "تقييم الحالة الإجمالية",
+      "modifiable": false,
+      "purpose": "system_integration",
+      "input": "baseline_signal + dynamic_signal",
+      "output": "integrated_consciousness_score + balance_assessment",
+      "failure_mode": "integration_breakdown"
+    }
+  },
+
+  "consciousness_calculation": {
+    "basic_formula": "consciousness_score = integration_oscillator.process(baseline, dynamic)",
+    "range": [0.0, 1.0],
+    "interpretation": {
+      "0.0-0.2": "حالة سكون عميق أو إنهاك",
+      "0.2-0.4": "هدوء ونوم أو راحة",
+      "0.4-0.6": "توازن طبيعي ووضوح",
+      "0.6-0.8": "نشاط وانتباه عالي",
+      "0.8-1.0": "إثارة شديدة أو توتر مفرط"
+    },
+    "optimal_range": [0.4, 0.7],
+    "warning_zones": {
+      "too_low": "< 0.3 - قد يشير لمشاكل صحية",
+      "too_high": "> 0.8 - قد يشير للإجهاد"
+    }
+  },
+
+  "parameters": {
+    "resonance_sensitivity": {
+      "type": "float",
+      "range": [0.1, 0.9],
+      "default": 0.5,
+      "description": "حساسية النظام للتوافق بين الأنماط"
+    },
+    "damping_coefficient": {
+      "type": "float",
+      "range": [0.0, 1.0],
+      "default": 0.2,
+      "description": "معامل تهدئة التذبذبات المفرطة"
+    },
+    "adaptation_speed": {
+      "type": "float",
+      "range": [0.01, 0.5],
+      "default": 0.1,
+      "description": "سرعة تكيف النظام مع الأحداث الجديدة"
+    },
+    "baseline_stability": {
+      "type": "float",
+      "range": [0.7, 1.0],
+      "default": 0.9,
+      "description": "مقاومة النمط الأساسي للتغيير"
+    }
+  },
+
+  "pseudocode": {
+    "oscillator_system": `
+      class CognitiveOscillatorSystem {
+          constructor(config) {
+              this.baseline = new BaselineOscillator(0.5);
+              this.dynamic = new DynamicOscillator();
+              this.integration = new IntegrationOscillator();
+              
+              this.dampingFactor = config.dampingCoefficient || 0.2;
+              this.adaptationSpeed = config.adaptationSpeed || 0.1;
+              this.resonanceThreshold = config.resonanceSensitivity || 0.5;
+              
+              this.systemHistory = [];
+              this.currentState = this.getInitialState();
+          }
+          
+          processLifeEvent(event, context) {
+              try {
+                  // تحديث الهزاز الديناميكي
+                  let dynamicResponse = this.dynamic.processEvent(event, context);
+                  
+                  // الحصول على الإشارة الأساسية المستقرة
+                  let baselineSignal = this.baseline.getCurrentSignal();
+                  
+                  // حساب التكامل
+                  let integrationResult = this.integration.integrate(
+                      baselineSignal,
+                      dynamicResponse,
+                      this.currentState
+                  );
+                  
+                  // تطبيق التخميد
+                  integrationResult = this.applyDamping(integrationResult);
+                  
+                  // فحص الحدود الآمنة
+                  let safetyCheck = this.checkSafetyBounds(integrationResult);
+                  if (!safetyCheck.safe) {
+                      return this.handleUnsafeState(safetyCheck);
+                  }
+                  
+                  // تحديث حالة النظام
+                  this.updateSystemState(integrationResult, event);
+                  
+                  // حفظ في التاريخ للتعلم
+                  this.recordStateTransition(event, integrationResult);
+                  
+                  return {
+                      consciousnessScore: integrationResult.score,
+                      systemHealth: this.assessSystemHealth(),
+                      recommendations: this.generateRecommendations(integrationResult),
+                      harmonics: this.analyzeHarmonics(),
+                      timestamp: Date.now()
+                  };
+                  
+              } catch (error) {
+                  return this.handleProcessingError(error, event);
+              }
+          }
+          
+          applyDamping(signal) {
+              // تطبيق التخميد لمنع التذبذبات المدمرة
+              let dampedAmplitude = signal.amplitude * (1 - this.dampingFactor);
+              
+              // الحفاظ على الحد الأدنى للاستجابة
+              dampedAmplitude = Math.max(dampedAmplitude, 0.1);
+              
+              return {
+                  ...signal,
+                  amplitude: dampedAmplitude,
+                  damping_applied: true
+              };
+          }
+          
+          checkSafetyBounds(result) {
+              let warnings = [];
+              let safe = true;
+              
+              // فحص الحدود الطبيعية
+              if (result.score < 0.1) {
+                  warnings.push("consciousness_score_too_low");
+                  safe = false;
+              }
+              
+              if (result.score > 0.95) {
+                  warnings.push("consciousness_score_too_high");
+                  safe = false;
+              }
+              
+              // فحص معدل التغيير
+              if (this.currentState && 
+                  Math.abs(result.score - this.currentState.score) > 0.5) {
+                  warnings.push("rapid_state_change");
+                  safe = false;
+              }
+              
+              // فحص استقرار النظام
+              if (result.systemCoherence < 0.3) {
+                  warnings.push("system_coherence_low");
+                  safe = false;
+              }
+              
+              return { safe, warnings, corrective_actions: this.suggestCorrections(warnings) };
+          }
+          
+          generateRecommendations(state) {
+              let recommendations = [];
+              
+              if (state.score < 0.3) {
+                  recommendations.push("consider_rest_or_relaxation");
+                  recommendations.push("check_physical_health");
+              } else if (state.score > 0.8) {
+                  recommendations.push("practice_calming_techniques");
+                  recommendations.push("reduce_stimulation");
+              } else {
+                  recommendations.push("maintain_current_balance");
+              }
+              
+              // توصيات مخصصة حسب النمط السائد
+              if (state.dominantOscillator === "dynamic") {
+                  recommendations.push("process_recent_experiences");
+              } else if (state.dominantOscillator === "baseline") {
+                  recommendations.push("engage_in_meaningful_activities");
+              }
+              
+              return recommendations;
+          }
+      }
+    `,
+
+    "resonance_detection": `
+      function detectResonancePatterns(oscillatorStates, timeWindow) {
+          let resonanceAnalysis = {
+              frequency_alignment: 0,
+              phase_coherence: 0,
+              energy_distribution: {},
+              resonance_quality: 0
+          };
+          
+          // تحليل التوافق الترددي
+          let frequencies = oscillatorStates.map(state => state.frequency);
+          resonanceAnalysis.frequency_alignment = calculateFrequencyAlignment(frequencies);
+          
+          // تحليل التماسك الطوري
+          let phases = oscillatorStates.map(state => state.phase);
+          resonanceAnalysis.phase_coherence = calculatePhaseCoherence(phases);
+          
+          // تحليل توزيع الطاقة
+          oscillatorStates.forEach(state => {
+              resonanceAnalysis.energy_distribution[state.id] = state.energy;
+          });
+          
+          // حساب جودة التوافق الإجمالية
+          resonanceAnalysis.resonance_quality = 
+              (resonanceAnalysis.frequency_alignment * 0.4) +
+              (resonanceAnalysis.phase_coherence * 0.6);
+          
+          // التحقق من أنماط التوافق المعروفة
+          let knownPatterns = detectKnownResonancePatterns(resonanceAnalysis);
+          
+          return {
+              ...resonanceAnalysis,
+              detected_patterns: knownPatterns,
+              recommendations: generateResonanceRecommendations(resonanceAnalysis),
+              stability_prediction: predictStability(resonanceAnalysis, timeWindow)
+          };
+      }
+    `
+  },
+
+  "system_states": {
+    "optimal_harmony": {
+      "description": "جميع الأنماط تعمل بتناغم",
+      "characteristics": {
+        "consciousness_score": [0.4, 0.7],
+        "coherence": "> 0.8",
+        "energy_efficiency": "> 0.7",
+        "adaptation_capacity": "> 0.6"
+      },
+      "indicators": ["stable_mood", "clear_thinking", "appropriate_responses"],
+      "maintenance": ["regular_rest", "balanced_stimulation", "mindful_awareness"]
+    },
+    "dynamic_dominance": {
+      "description": "النمط الديناميكي يهيمن على النظام",
+      "characteristics": {
+        "consciousness_score": [0.6, 0.9],
+        "coherence": "variable",
+        "energy_efficiency": "< 0.5",
+        "adaptation_capacity": "> 0.8"
+      },
+      "indicators": ["high_reactivity", "emotional_intensity", "rapid_processing"],
+      "management": ["grounding_techniques", "mindful_breathing", "structured_activities"]
+    },
+    "baseline_dominance": {
+      "description": "النمط الأساسي يهيمن بشكل مفرط",
+      "characteristics": {
+        "consciousness_score": [0.1, 0.4],
+        "coherence": "> 0.7",
+        "energy_efficiency": "> 0.8",
+        "adaptation_capacity": "< 0.3"
+      },
+      "indicators": ["low_responsiveness", "minimal_emotional_range", "slow_adaptation"],
+      "activation": ["engaging_activities", "social_interaction", "novel_experiences"]
+    },
+    "system_chaos": {
+      "description": "فقدان التنسيق بين الأنماط",
+      "characteristics": {
+        "consciousness_score": "highly_variable",
+        "coherence": "< 0.3",
+        "energy_efficiency": "< 0.4",
+        "adaptation_capacity": "unpredictable"
+      },
+      "indicators": ["erratic_behavior", "emotional_volatility", "decision_paralysis"],
+      "recovery": ["stabilization_techniques", "professional_support", "gradual_rebalancing"]
+    }
+  },
+
+  "environmental_factors": {
+    "circadian_influence": {
+      "description": "تأثير الساعة البيولوجية على الأنماط",
+      "peak_times": {
+        "morning": "baseline_strengthening",
+        "afternoon": "dynamic_peak",
+        "evening": "integration_optimization",
+        "night": "natural_dampening"
+      }
+    },
+    "social_context": {
+      "description": "تأثير البيئة الاجتماعية",
+      "factors": {
+        "group_dynamics": "affects_resonance_patterns",
+        "social_pressure": "increases_dynamic_activity", 
+        "isolation": "shifts_toward_baseline_dominance",
+        "support": "enhances_system_coherence"
+      }
+    },
+    "physical_health": {
+      "description": "تأثير الحالة الجسدية",
+      "factors": {
+        "energy_levels": "affects_all_oscillators",
+        "illness": "reduces_adaptive_capacity",
+        "exercise": "improves_coherence",
+        "nutrition": "impacts_baseline_stability"
+      }
+    }
+  },
+
+  "applications": [
+    "نمذجة أنماط الحالة النفسية النظرية",
+    "فهم ديناميكيات التوازن العاطفي",
+    "تطوير تقنيات مراقبة الحالة المزاجية",
+    "تصميم بيئات داعمة للصحة النفسية",
+    "فهم تأثير العوامل البيئية على الحالة النفسية"
+  ],
+
+  "limitations": [
+    "تبسيط مفرط لتعقيد الحالات النفسية",
+    "لا يراعي الاختلافات الفردية الكبيرة",
+    "صعوبة في القياس الدقيق للحالات النفسية",
+    "قد لا ينطبق على الاضطرابات النفسية المرضية"
+  ],
+
+  "safety_notes": [
+    "⚠️ هذا نموذج نظري وليس أداة تشخيص",
+    "⚠️ لا يستخدم لتقييم الصحة النفسية الفعلية",
+    "⚠️ استشر مختص إذا كانت لديك مخاوف حقيقية",
+    "⚠️ النتائج للفهم النظري فقط"
+  ],
+
+  "meta": {
+    "created": "2024",
+    "author": "نموذج نظري محدث",
+    "inspiration": "الفيزياء + علم التحكم + البيولوجيا + علم النفس",
+    "status": "نموذج نظري قابل للتطوير",
+    "validation_needed": "دراسات تجريبية في بيئات محكومة"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "id": "consciousness_flow",
+  "title": "تدفق العمليات المعرفية - من المدخل إلى القرار",
+  "description": "خريطة نظرية لكيفية تدفق المعلومات عبر المفاهيم المختلفة",
+  "version": "1.0",
+
+  "flow_sequence": [
+    {
+      "step": 1,
+      "process": "استقبال المدخلات",
+      "concepts": ["environmental-variables"],
+      "function": "تحديد السياق والمتغيرات الأساسية",
+      "analogy": "مثل حساسات الاستشعار في الروبوت",
+      "real_world_example": "دخولك لغرفة جديدة - تقييم فوري للبيئة",
+      "output": "context_data"
+    },
+    {
+      "step": 2,
+      "process": "الفحص الأمني",
+      "concepts": ["middleware", "trust-matrix"],
+      "function": "تصفية وتقييم مصداقية المدخلات",
+      "analogy": "مثل فلتر الأمان في الأنظمة أو حارس المبنى",
+      "real_world_example": "سماع خبر - فحص مصداقية المصدر تلقائياً",
+      "output": "filtered_safe_data"
+    },
+    {
+      "step": 3,
+      "process": "المعالجة المتوازية",
+      "concepts": ["simulators"],
+      "function": "توليد احتمالات وسيناريوهات متعددة",
+      "analogy": "مثل فرق عمل متخصصة تحلل نفس المشكلة من زوايا مختلفة",
+      "real_world_example": "التفكير في قرار مهني - جزء يفكر بالمال، جزء بالشغف، جزء بالأمان",
+      "output": "multiple_possibilities"
+    },
+    {
+      "step": 4,
+      "process": "التذبذب والتوازن",
+      "concepts": ["oscillators"],
+      "function": "قياس الحالة العاطفية وتحديد مستوى التوتر",
+      "analogy": "مثل مقياس الضغط الذي يحدد حالة النظام",
+      "real_world_example": "الشعور بالقلق قبل امتحان - النظام يقيس مستوى التوتر",
+      "output": "emotional_state_score"
+    },
+    {
+      "step": 5,
+      "process": "إضافة العشوائية الخلاقة",
+      "concepts": ["noise-factor"],
+      "function": "كسر الأنماط وإضافة مرونة للتفكير",
+      "analogy": "مثل إضافة ملح للطعام - قليل يحسن الطعم، كثير يفسده",
+      "real_world_example": "فكرة مجنونة تخطر لك أثناء حل مشكلة معقدة",
+      "output": "creative_variations"
+    },
+    {
+      "step": 6,
+      "process": "استدعاء الذكريات",
+      "concepts": ["emotional-encryption", "generative-reconstruction"],
+      "function": "البحث في الذكريات وإعادة بنائها حسب السياق",
+      "analogy": "مثل محرك بحث ذكي يجد الملفات ويعيد تنسيقها",
+      "real_world_example": "تذكر موقف مشابه من الماضي لمساعدتك في القرار الحالي",
+      "output": "relevant_memories"
+    },
+    {
+      "step": 7,
+      "process": "التفاعل الاجتماعي",
+      "concepts": ["self-copies"],
+      "function": "محاكاة ردود أفعال الآخرين واستدعاء نسخك في أذهانهم",
+      "analogy": "مثل لعب الشطرنج - تفكر في حركة الخصم قبل حركتك",
+      "real_world_example": "تخيل رد فعل أهلك قبل اتخاذ قرار مهم",
+      "output": "social_predictions"
+    },
+    {
+      "step": 8,
+      "process": "الانهيار التوليدي",
+      "concepts": ["generative-collapse"],
+      "function": "دمج كل الاحتمالات واختيار قرار واحد نهائي",
+      "analogy": "مثل ضغط ملف ZIP - تحويل معلومات كثيرة لقرار واحد مضغوط",
+      "real_world_example": "لحظة قول 'قررت!' بعد تفكير طويل",
+      "output": "final_decision"
+    },
+    {
+      "step": 9,
+      "process": "التنفيذ والتعلم",
+      "concepts": ["environmental-variables"],
+      "function": "تطبيق القرار وتحديث النظام بناءً على النتائج",
+      "analogy": "مثل تحديث قاعدة البيانات بعد المعاملة",
+      "real_world_example": "تنفيذ القرار ومراقبة النتائج للتعلم منها",
+      "output": "updated_system_state"
+    }
+  ],
+
+  "parallel_processes": {
+    "description": "عمليات تحدث بالتوازي مع التدفق الرئيسي",
+    "background_monitoring": {
+      "concepts": ["oscillators", "middleware"],
+      "function": "مراقبة مستمرة للحالة العاطفية والأمان",
+      "analogy": "مثل أنظمة الحماية التي تعمل في الخلفية"
+    },
+    "memory_consolidation": {
+      "concepts": ["emotional-encryption"],
+      "function": "ترميز التجربة الحالية للذاكرة طويلة المدى",
+      "analogy": "مثل الحفظ التلقائي في البرامج"
+    },
+    "pattern_recognition": {
+      "concepts": ["simulators", "noise-factor"],
+      "function": "البحث عن أنماط مألوفة أو جديدة",
+      "analogy": "مثل مضاد الفيروسات الذي يحدث قاعدة بياناته"
+    }
+  },
+
+  "decision_types": {
+    "instant_reaction": {
+      "flow_steps": [1, 2, 8],
+      "description": "قرارات سريعة تعتمد على الخبرة المخزنة",
+      "example": "سحب اليد من النار",
+      "processing_time": "< 1 second"
+    },
+    "emotional_decision": {
+      "flow_steps": [1, 2, 4, 6, 8],
+      "description": "قرارات مدفوعة بالعاطفة مع ذكريات",
+      "example": "قرار الزواج",
+      "processing_time": "minutes to hours"
+    },
+    "analytical_decision": {
+      "flow_steps": [1, 2, 3, 5, 6, 8],
+      "description": "قرارات منطقية مع استكشاف احتمالات",
+      "example": "اختيار استثمار مالي",
+      "processing_time": "hours to days"
+    },
+    "social_decision": {
+      "flow_steps": [1, 2, 3, 4, 6, 7, 8],
+      "description": "قرارات تأخذ بعين الاعتبار ردود الأفعال الاجتماعية",
+      "example": "قرار تغيير الوظيفة",
+      "processing_time": "days to weeks"
+    },
+    "creative_breakthrough": {
+      "flow_steps": [1, 3, 5, 6, 8],
+      "description": "حلول إبداعية مع عشوائية عالية",
+      "example": "اختراع فكرة جديدة",
+      "processing_time": "unpredictable"
+    }
+  },
+
+  "system_states": {
+    "normal_operation": {
+      "noise_level": 0.3,
+      "processing_speed": "optimal",
+      "all_concepts_active": true
+    },
+    "stress_mode": {
+      "noise_level": 0.1,
+      "processing_speed": "fast_but_narrow",
+      "active_concepts": ["middleware", "simulators", "generative-collapse"]
+    },
+    "creative_mode": {
+      "noise_level": 0.7,
+      "processing_speed": "slow_but_broad",
+      "enhanced_concepts": ["noise-factor", "simulators"]
+    },
+    "tired_mode": {
+      "noise_level": 0.5,
+      "processing_speed": "slow",
+      "degraded_concepts": ["simulators", "generative-reconstruction"]
+    }
+  },
+
+  "flow_pseudocode": {
+    "main_processing_loop": `
+      function processInput(rawInput) {
+          // Step 1: تحديد السياق
+          let context = environmentalVariables.assess(rawInput);
+          
+          // Step 2: الفحص الأمني
+          let safeInput = middleware.filter(rawInput, context);
+          if (!safeInput.approved) return defaultResponse();
+          
+          // Step 3: المعالجة المتوازية
+          let possibilities = simulators.processParallel(safeInput);
+          
+          // Step 4: قياس الحالة العاطفية
+          let emotionalState = oscillators.getCurrentState();
+          
+          // Step 5: إضافة العشوائية
+          possibilities = noiseFactor.addCreativeVariation(possibilities);
+          
+          // Step 6: استدعاء الذكريات
+          let memories = emotionalEncryption.recallRelevant(safeInput);
+          possibilities = combine(possibilities, memories);
+          
+          // Step 7: المحاكاة الاجتماعية
+          let socialPredictions = selfCopies.predictReactions(possibilities);
+          
+          // Step 8: الانهيار التوليدي
+          let finalDecision = generativeCollapse.selectBest(
+              possibilities, 
+              emotionalState, 
+              socialPredictions
+          );
+          
+          // Step 9: التعلم والتحديث
+          environmentalVariables.updateFromOutcome(finalDecision);
+          
+          return finalDecision;
+      }
+    `
+  },
+
+  "real_world_mappings": {
+    "buying_decision": {
+      "steps_involved": [1, 2, 3, 6, 7, 8],
+      "description": "عملية اتخاذ قرار الشراء من الرؤية إلى الدفع"
+    },
+    "job_interview": {
+      "steps_involved": [1, 2, 3, 4, 6, 7, 8],
+      "description": "عملية التفكير والاستجابة أثناء المقابلة"
+    },
+    "creative_writing": {
+      "steps_involved": [1, 3, 5, 6, 8],
+      "description": "عملية توليد الأفكار وتحويلها لنص"
+    },
+    "conflict_resolution": {
+      "steps_involved": [1, 2, 3, 4, 6, 7, 8, 9],
+      "description": "حل النزاعات مع الأخذ بعين الاعتبار كل الأطراف"
+    }
+  },
+
+  "meta": {
+    "created": "2024",
+    "author": "نموذج نظري تطبيقي",
+    "purpose": "ربط المفاهيم النظرية بالتطبيق العملي",
+    "disclaimer": "هذا تبسيط نظري للعمليات المعرفية المعقدة"
+  }
+}

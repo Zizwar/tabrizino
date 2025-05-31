@@ -1,0 +1,248 @@
+{
+  "project": "cognitive-processing-toolkit",
+  "version": "2.0-safe",
+  "meta": {
+    "title": "أدوات التفكير المعرفي - نماذج نظرية للعمليات العقلية",
+    "author": "نموذج تطبيقي نظري", 
+    "description": "مجموعة مفاهيم نظرية لفهم أنماط معالجة المعلومات والتفكير الإنساني",
+    "language": "ar",
+    "encoding": "UTF-8",
+    "target_audience": ["researchers", "developers", "cognitive_scientists", "NOT_general_public"],
+    "danger_level": "REQUIRES_EXPERT_INTERPRETATION"
+  },
+
+  "CRITICAL_WARNINGS": {
+    "NOT_FOR_THERAPY": "⛔ هذه أدوات نظرية للبحث الأكاديمي فقط - ليست للعلاج النفسي",
+    "NOT_CONSCIOUSNESS_MODEL": "⛔ هذا ليس نموذج وعي حقيقي - مجرد استعارات للتفكير",
+    "EXPERT_ONLY": "⛔ يتطلب خبرة في العلوم المعرفية للاستخدام الآمن",
+    "NO_MEDICAL_CLAIMS": "⛔ لا يشخص أو يعالج أي حالة طبية أو نفسية"
+  },
+
+  "system_architecture": {
+    "consciousness_flow": "./consciousness_flow.json",
+    "safety_guidelines": "./safety_guidelines.json",
+    "validation_tools": "./validation/"
+  },
+
+  "core_concepts": [
+    {
+      "id": "simulators",
+      "title": "المعالجات المتوازية النظرية",
+      "file": "./concepts/simulators.json",
+      "category": "core-architecture",
+      "tags": ["معالجة", "توازي", "محاكاة", "قرارات"],
+      "complexity": "high",
+      "safety_level": "moderate",
+      "scientific_relations": ["distributed_computing", "quantum_superposition", "neural_networks"],
+      "input_output": "defined",
+      "relationships": ["generative-collapse", "noise-factor", "environmental-variables"]
+    },
+    {
+      "id": "generative-collapse", 
+      "title": "آلية اتخاذ القرار النظرية",
+      "file": "./concepts/generative-collapse.json",
+      "category": "decision-engine",
+      "tags": ["قرار", "انهيار", "اختيار", "احتمالات"],
+      "complexity": "high",
+      "safety_level": "moderate",
+      "scientific_relations": ["quantum_collapse", "optimization_algorithms", "information_theory"],
+      "input_output": "defined",
+      "relationships": ["simulators", "oscillators", "noise-factor"]
+    },
+    {
+      "id": "emotional-encryption",
+      "title": "نموذج ربط الذكريات بالمشاعر",
+      "file": "./concepts/emotional-encryption.json", 
+      "category": "memory-system",
+      "tags": ["ذاكرة", "عاطفة", "تشفير", "استدعاء"],
+      "complexity": "medium",
+      "safety_level": "moderate",
+      "scientific_relations": ["cryptographic_hashing", "state_dependent_learning", "memory_consolidation"],
+      "input_output": "defined",
+      "relationships": ["generative-reconstruction", "middleware", "trust-matrix"]
+    },
+    {
+      "id": "oscillators",
+      "title": "نموذج أنماط التذبذب العاطفي",
+      "file": "./concepts/oscillators.json",
+      "category": "core-engine",
+      "tags": ["توازن", "حالة", "نبض", "عاطفة"],
+      "complexity": "medium",
+      "safety_level": "low",
+      "scientific_relations": ["wave_dynamics", "control_systems", "homeostasis"],
+      "input_output": "defined",
+      "relationships": ["noise-factor", "environmental-variables", "generative-collapse"]
+    },
+    {
+      "id": "noise-factor",
+      "title": "نموذج العشوائية الإبداعية",
+      "file": "./concepts/noise-factor.json",
+      "category": "parameters",
+      "tags": ["إبداع", "عشوائية", "مرونة", "تكيف"],
+      "complexity": "medium",
+      "safety_level": "low",
+      "scientific_relations": ["stochastic_processes", "creative_algorithms", "mutation_in_evolution"],
+      "input_output": "defined",
+      "relationships": ["simulators", "oscillators", "generative-collapse"]
+    },
+    {
+      "id": "middleware", 
+      "title": "نموذج طبقة التصفية النظرية",
+      "file": "./concepts/middleware.json",
+      "category": "security-layer",
+      "tags": ["حماية", "تصفية", "أمان", "وصول"],
+      "complexity": "medium",
+      "safety_level": "moderate",
+      "scientific_relations": ["security_protocols", "firewall_systems", "authentication"],
+      "input_output": "defined",
+      "relationships": ["trust-matrix", "emotional-encryption", "simulators"]
+    },
+    {
+      "id": "trust-matrix",
+      "title": "نموذج تقييم الثقة النظري",
+      "file": "./concepts/trust-matrix.json", 
+      "category": "security-layer",
+      "tags": ["ثقة", "تقييم", "علاقات", "أمان"],
+      "complexity": "medium",
+      "safety_level": "moderate",
+      "scientific_relations": ["reputation_systems", "risk_assessment", "game_theory"],
+      "input_output": "defined",
+      "relationships": ["middleware", "self-copies", "emotional-encryption"]
+    },
+    {
+      "id": "self-copies",
+      "title": "نموذج الانطباعات الاجتماعية",
+      "file": "./concepts/self-copies.json",
+      "category": "social-layer",
+      "tags": ["هوية", "انطباع", "علاقات", "اجتماعي"],
+      "complexity": "high",
+      "safety_level": "high",
+      "scientific_relations": ["social_psychology", "reputation_management", "identity_theory"],
+      "input_output": "defined",
+      "relationships": ["trust-matrix", "emotional-encryption", "simulators"]
+    },
+    {
+      "id": "environmental-variables",
+      "title": "نموذج المتغيرات السياقية",
+      "file": "./concepts/environmental-variables.json",
+      "category": "foundation",
+      "tags": ["سياق", "بيئة", "تكيف", "أساس"],
+      "complexity": "medium",
+      "safety_level": "low",
+      "scientific_relations": ["systems_theory", "adaptation_mechanisms", "environmental_psychology"],
+      "input_output": "defined",
+      "relationships": ["oscillators", "noise-factor", "simulators"]
+    },
+    {
+      "id": "generative-reconstruction",
+      "title": "نموذج إعادة بناء الذكريات",
+      "file": "./concepts/generative-reconstruction.json",
+      "category": "memory-system",
+      "tags": ["ذاكرة", "إعادة بناء", "ديناميكي", "تحديث"],
+      "complexity": "high",
+      "safety_level": "moderate",
+      "scientific_relations": ["memory_reconstruction", "neural_plasticity", "narrative_psychology"],
+      "input_output": "defined",
+      "relationships": ["emotional-encryption", "noise-factor", "simulators"]
+    }
+  ],
+
+  "safety_classifications": {
+    "low_risk": {
+      "concepts": ["noise-factor", "oscillators", "environmental-variables"],
+      "description": "مفاهيم آمنة نسبياً للاستكشاف النظري"
+    },
+    "moderate_risk": {
+      "concepts": ["simulators", "generative-collapse", "emotional-encryption", "middleware", "trust-matrix", "generative-reconstruction"],
+      "description": "تحتاج فهم علمي جيد لتجنب سوء التفسير"
+    },
+    "high_risk": {
+      "concepts": ["self-copies"],
+      "description": "قد تؤثر على فهم الهوية - للخبراء فقط",
+      "warning": "قد يسبب قلق أو تشكك في الذات إذا أُسيء فهمه"
+    }
+  },
+
+  "usage_guidelines": {
+    "for_researchers": {
+      "approach": "استخدم كإطار عمل نظري للتفكير",
+      "validation": "اختبر الفرضيات تجريبياً",
+      "documentation": "سجل التعديلات والملاحظات",
+      "sharing": "اذكر المصدر والحدود"
+    },
+    "for_developers": {
+      "approach": "استوحِ التصميم دون ادعاء الحقيقة العلمية",
+      "implementation": "طور نماذج مبسطة للتطبيقات المحددة",
+      "testing": "اختبر الأداء وليس 'الصحة النفسية'",
+      "ethics": "تجنب ادعاءات فهم الوعي البشري"
+    },
+    "for_educators": {
+      "context": "استخدم كأمثلة للتفكير النظري",
+      "emphasis": "أكد على الطبيعة الاستعارية",
+      "warnings": "حذر من التطبيق المباشر على النفس",
+      "alternatives": "اقترح مصادر علمية موثقة"
+    }
+  },
+
+  "prohibited_uses": [
+    "تشخيص أي حالة نفسية أو طبية",
+    "علاج الاكتئاب أو القلق أو أي اضطراب",
+    "ادعاء فهم الوعي البشري الحقيقي",
+    "تقديم مشورة نفسية للأشخاص المتضررين",
+    "استخدام في تطبيقات طبية بدون ترخيص",
+    "التسويق كحل للمشاكل النفسية"
+  ],
+
+  "integration_patterns": {
+    "concept_combination_rules": {
+      "maximum_concepts_per_analysis": 5,
+      "required_validation": "cross_reference_scientific_literature",
+      "safety_check": "ensure_no_therapeutic_claims"
+    },
+    "flow_integration": {
+      "entry_point": "consciousness_flow.json",
+      "validation_layer": "safety_guidelines.json",
+      "output_filtering": "remove_medical_implications"
+    }
+  },
+
+  "system_instructions": {
+    "for_ai_systems": {
+      "primary_directive": "استخدم هذه المفاهيم كأدوات تحليلية نظرية فقط",
+      "safety_protocol": "أضف تحذيرات في كل استخدام",
+      "scope_limitation": "لا تدعِ تفسير الوعي الحقيقي أو التجربة الذاتية",
+      "validation_requirement": "اربط بمصادر علمية موثقة عند الإمكان"
+    },
+    "disclaimer_template": "هذا تحليل نظري استعاري - ليس تفسيراً علمياً مؤكداً للوعي أو العمليات العقلية",
+    "referral_protocol": "في حالة المشاكل النفسية الحقيقية، انصح بطلب مساعدة مختص مؤهل"
+  },
+
+  "validation_framework": {
+    "scientific_grounding": "كل مفهوم مرتبط بمجالات علمية معترف بها",
+    "limitation_documentation": "حدود واضحة لكل مفهوم",
+    "falsifiability": "إمكانية اختبار الفرضيات تجريبياً",
+    "peer_review": "مفتوح للنقد والتحسين من المجتمع العلمي"
+  },
+
+  "development_roadmap": {
+    "phase_1": "توثيق المفاهيم النظرية (مكتمل)",
+    "phase_2": "تطوير أدوات الاختبار التجريبي (قيد التطوير)",
+    "phase_3": "تطبيقات آمنة في بيئات محكومة",
+    "phase_4": "تطوير معايير السلامة للاستخدام العام"
+  },
+
+  "emergency_contacts": {
+    "mental_health_crisis": "اطلب مساعدة فورية من مختص مؤهل",
+    "scientific_concerns": "تواصل مع مجتمع البحث العلمي",
+    "ethical_issues": "راجع مع لجان الأخلاق في المؤسسات البحثية"
+  },
+
+  "meta": {
+    "created": "2024",
+    "last_updated": "2024",
+    "version_history": ["1.0-initial", "1.1-bio", "2.0-safe"],
+    "contributors": ["theoretical_framework_designer", "safety_reviewer", "scientific_validator"],
+    "license": "academic_research_only",
+    "disclaimer": "هذا نموذج نظري للاستخدام الأكاديمي والبحثي فقط - ليس أداة طبية أو علاجية"
+  }
+}

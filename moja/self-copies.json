@@ -1,547 +1,577 @@
 {
   "id": "self-copies",
-  "title": "نسخ الذات الاجتماعية - نموذج نظري للانطباعات المتبادلة",
-  "description": "نموذج نظري لفهم كيف تتشكل انطباعات الآخرين عنا وتأثيرها على سلوكنا",
+  "title": "نمذجة الآخرين - النسخ الحرة في الذهن",
+  "aliases": ["others-modeling", "person-modeling", "social-copies"],
+  "description": "نموذج نظري لكيفية إنشاء نسخ حرة من الأشخاص الآخرين في أذهاننا وتأثيرها على سلوكنا",
   "category": "social-layer",
   "version": "2.0",
-  "safety_level": "high_risk_requires_expert_guidance",
+  "safety_level": "moderate_risk",
 
-  "CRITICAL_WARNING": {
-    "risk_level": "HIGH",
-    "concerns": [
-      "قد يؤثر على فهم الهوية الشخصية",
-      "قد يزيد القلق الاجتماعي إذا أُسيء فهمه",
-      "قد يؤدي للتفكير المفرط في آراء الآخرين",
-      "يحتاج إرشاد متخصص للاستخدام الآمن"
-    ],
-    "safe_usage": "للأكاديميين والباحثين في علم النفس الاجتماعي فقط"
+  "⚠️_NAMING_NOTE": {
+    "original_confusion": "الاسم 'self-copies' كان يوحي بالتركيز على رؤية الذات",
+    "actual_focus": "المفهوم يركز على النسخ التي ننشئها عن الآخرين + القلق على نسختنا عندهم",
+    "kept_original_name": "للحفاظ على الروابط الموجودة في النظام",
+    "content_corrected": "المحتوى تم تصحيحه بالكامل ليطابق المفهوم الصحيح"
+  },
+
+  "CORRECTED_FOCUS": {
+    "original_confusion": "ركز على كيف أرى نفسي في نظر الآخرين",
+    "correct_focus": "النسخ التي أنشئها عن الآخرين + القلق على نسختي عندهم",
+    "safety_reduction": "خفض من high_risk إلى moderate_risk بعد تصحيح التركيز"
   },
 
   "scientific_relations": {
-    "social_psychology": {
-      "concept": "social_identity_theory",
-      "similarity": "multiple_identities_in_different_contexts",
-      "explanation": "الأشخاص يطورون هويات مختلفة حسب المجموعات الاجتماعية",
-      "similarity_score": 0.8
-    },
-    "symbolic_interactionism": {
-      "concept": "looking_glass_self",
-      "similarity": "self_concept_through_others_perceptions",
-      "explanation": "نفهم أنفسنا من خلال كيف نعتقد أن الآخرين يروننا",
-      "similarity_score": 0.9
-    },
     "cognitive_psychology": {
       "concept": "theory_of_mind",
-      "similarity": "mental_models_of_others_minds",
-      "explanation": "قدرتنا على نمذجة ما يفكر فيه الآخرون",
+      "similarity": "mental_models_of_others_minds_and_behaviors",
+      "explanation": "قدرتنا على نمذجة ما يفكر ويشعر ويتصرف به الآخرون",
+      "similarity_score": 0.9
+    },
+    "social_psychology": {
+      "concept": "person_perception_and_impression_formation",
+      "similarity": "how_we_form_and_maintain_impressions_of_others",
+      "explanation": "كيف نكوّن ونحافظ على انطباعات عن الآخرين",
+      "similarity_score": 0.8
+    },
+    "artificial_intelligence": {
+      "concept": "agent_modeling_in_multi_agent_systems",
+      "similarity": "modeling_other_agents_behavior_for_prediction",
+      "explanation": "نمذجة سلوك الوكلاء الآخرين للتنبؤ والتفاعل",
       "similarity_score": 0.7
     },
-    "computer_science": {
-      "concept": "distributed_computing",
-      "similarity": "copies_of_data_across_network_nodes",
-      "explanation": "نسخ من المعلومات موزعة عبر شبكة من الأنظمة",
+    "game_theory": {
+      "concept": "opponent_modeling",
+      "similarity": "predicting_others_strategies_and_responses",
+      "explanation": "التنبؤ باستراتيجيات وردود أفعال الآخرين",
       "similarity_score": 0.6
     },
-    "anthropology": {
-      "concept": "cultural_identity_construction",
-      "similarity": "identity_formation_through_social_interaction",
-      "explanation": "الهوية تتشكل من خلال التفاعل الاجتماعي والثقافي",
-      "similarity_score": 0.7
+    "neuroscience": {
+      "concept": "mirror_neuron_systems",
+      "similarity": "neural_simulation_of_others_actions_and_intentions",
+      "explanation": "المحاكاة العصبية لأفعال ونوايا الآخرين",
+      "similarity_score": 0.5
     }
   },
 
   "input_output_spec": {
-    "copy_generation_input": {
-      "type": "social_interaction_data",
+    "person_modeling_input": {
+      "type": "person_observation_data",
       "format": {
-        "target_person": "person_identifier",
-        "interaction_context": "social_situation_object",
-        "displayed_behaviors": "array[behavior_descriptions]",
-        "communication_style": "communication_pattern_object",
-        "relationship_type": "enum[family,friend,colleague,stranger]"
+        "person_identifier": "unique_person_id",
+        "observed_behaviors": "array[behavioral_observations]",
+        "interaction_history": "array[past_interactions]",
+        "context_information": "situational_context_object",
+        "expressed_preferences": "array[stated_preferences]",
+        "social_role_information": "role_and_relationship_data"
       }
     },
-    "copy_assessment_output": {
-      "type": "self_copy_profile",
+    "person_model_output": {
+      "type": "behavioral_prediction_model",
       "format": {
-        "copy_fidelity": "float[0-1]",
-        "copy_stability": "float[0-1]",
-        "influence_potential": "float[0-1]",
-        "copy_components": "detailed_breakdown_object",
-        "evolution_trajectory": "predicted_changes_array"
+        "personality_profile": "inferred_personality_traits",
+        "behavioral_patterns": "predicted_behavior_patterns",
+        "decision_making_style": "decision_pattern_model",
+        "emotional_triggers": "array[emotional_response_triggers]",
+        "prediction_confidence": "float[0-1]",
+        "model_limitations": "array[known_uncertainties]"
       }
     },
-    "copy_monitoring_input": {
-      "type": "feedback_observation",
+    "reputation_protection_input": {
+      "type": "reputation_concern_scenario",
       "format": {
-        "observer_behavior": "behavioral_response_object",
-        "feedback_signals": "array[verbal_and_nonverbal_cues]",
-        "relationship_changes": "relationship_evolution_indicators",
-        "third_party_reports": "external_observations_array"
+        "target_person": "person_who_has_my_copy",
+        "perceived_threat": "threat_to_my_reputation_copy",
+        "current_relationship_status": "relationship_health_indicators",
+        "stakes_level": "importance_of_relationship",
+        "available_responses": "array[possible_actions]"
       }
     }
   },
 
-  "copy_characteristics": {
-    "surface_impression": {
-      "description": "الانطباع الأولي السطحي",
-      "components": [
-        "physical_appearance_perception",
-        "initial_communication_style",
-        "obvious_personality_traits",
-        "immediate_emotional_response"
-      ],
-      "formation_time": "seconds_to_minutes",
-      "stability": "low_to_moderate",
-      "influence_on_original": "minimal_but_noticeable"
-    },
-    "behavioral_pattern_copy": {
-      "description": "نمط السلوك المُدرك والمُتذكر",
-      "components": [
-        "typical_response_patterns",
-        "decision_making_style",
-        "emotional_expression_patterns",
-        "social_interaction_preferences"
-      ],
-      "formation_time": "weeks_to_months",
-      "stability": "moderate",
-      "influence_on_original": "significant"
-    },
-    "value_system_impression": {
-      "description": "التصور المُكون حول القيم والمبادئ",
-      "components": [
-        "perceived_moral_compass",
-        "priority_systems",
-        "belief_structure_assumptions",
-        "life_philosophy_impressions"
-      ],
-      "formation_time": "months_to_years",
-      "stability": "high",
-      "influence_on_original": "profound"
-    },
-    "emotional_connection_copy": {
-      "description": "النسخة العاطفية المرتبطة بالعلاقة",
-      "components": [
-        "emotional_safety_associations",
-        "attachment_style_perceptions",
-        "empathy_and_understanding_levels",
-        "emotional_accessibility_impressions"
-      ],
-      "formation_time": "varies_widely",
-      "stability": "very_high_when_positive",
-      "influence_on_original": "extremely_powerful"
-    }
-  },
-
-  "copy_formation_mechanisms": {
-    "first_impression_imprinting": {
-      "description": "تكوين نسخة أولية قوية من اللقاء الأول",
-      "factors": [
-        "contextual_priming",
-        "emotional_state_of_observer",
-        "cultural_and_social_expectations",
-        "availability_of_comparison_references"
-      ],
-      "durability": "surprisingly_persistent",
-      "modification_difficulty": "very_high"
-    },
-    "consistent_interaction_building": {
-      "description": "بناء النسخة عبر التفاعلات المتكررة",
+  "core_concepts": {
+    "free_copy_generation": {
+      "description": "إنشاء نسخة حرة ومستقلة من شخص آخر في الذهن",
       "process": [
-        "behavioral_observation_accumulation",
-        "pattern_recognition_and_generalization",
-        "exception_handling_and_adjustment",
-        "prediction_model_refinement"
+        "collect_behavioral_observations",
+        "identify_consistent_patterns",
+        "infer_underlying_motivations_and_values",
+        "create_predictive_behavioral_model",
+        "enable_autonomous_simulation_of_person"
       ],
-      "durability": "highly_stable",
-      "modification_difficulty": "moderate_with_consistent_effort"
+      "characteristics": [
+        "operates_independently_within_mind",
+        "responds_to_hypothetical_scenarios",
+        "generates_predictions_about_real_person",
+        "updates_based_on_new_information",
+        "influences_interaction_strategies"
+      ]
     },
-    "emotional_moment_crystallization": {
-      "description": "تكوين نسخة قوية من لحظة عاطفية مكثفة",
-      "triggers": [
-        "crisis_response_observation",
-        "moment_of_vulnerability_sharing",
-        "significant_help_or_harm",
-        "unexpected_behavior_revelation"
+    "copy_autonomy": {
+      "description": "استقلالية النسخة في التفكير والاستجابة",
+      "levels": {
+        "basic_response_patterns": "ردود أفعال بسيطة متوقعة",
+        "contextual_adaptation": "تكيف مع السياقات المختلفة", 
+        "creative_prediction": "توليد سلوكيات جديدة محتملة",
+        "autonomous_interaction": "محادثات كاملة مع النسخة في الذهن"
+      },
+      "example_autonomy": "النسخة من أخيك تقول: 'نعم أخذت الكعكة ولن أعترف!'"
+    },
+    "reputation_copy_anxiety": {
+      "description": "القلق على النسخة التي كوّنها الآخرون عنا",
+      "manifestations": [
+        "worry_about_others_mental_image_of_self",
+        "behavioral_modification_to_protect_reputation",
+        "concern_about_copy_being_damaged_in_others_minds",
+        "sacrificing_personal_needs_for_image_maintenance"
       ],
-      "durability": "extremely_stable", 
-      "modification_difficulty": "nearly_impossible"
+      "protective_behaviors": [
+        "consistent_positive_behavior_display",
+        "avoiding_actions_that_might_damage_copy",
+        "active_reputation_management_efforts",
+        "seeking_reassurance_about_others_perceptions"
+      ]
     },
-    "social_proof_reinforcement": {
-      "description": "تقوية النسخة من خلال أراء الآخرين",
+    "copy_interaction_dynamics": {
+      "description": "كيف تؤثر النسخ على التفاعلات الاجتماعية",
       "mechanisms": [
-        "third_party_testimonials",
-        "group_consensus_building",
-        "reputation_network_effects",
-        "social_validation_loops"
+        "prediction_based_conversation_steering",
+        "anticipatory_response_preparation",
+        "conflict_avoidance_through_prediction",
+        "opportunity_recognition_via_modeling"
       ],
-      "durability": "moderate_to_high",
-      "modification_difficulty": "moderate"
+      "bidirectional_influence": "نسختي تؤثر على سلوكي مع الآخرين + قلقي على نسختي عندهم يؤثر على سلوكي"
+    }
+  },
+
+  "copy_types_and_accuracy": {
+    "family_member_copies": {
+      "accuracy_level": "very_high",
+      "update_frequency": "continuous",
+      "autonomy_level": "high",
+      "emotional_investment": "very_high",
+      "example": "نسخة أخيك تعرف أنه يحب الحلويات ويخفي الأشياء عند الضبط"
+    },
+    "close_friend_copies": {
+      "accuracy_level": "high",
+      "update_frequency": "regular",
+      "autonomy_level": "high", 
+      "emotional_investment": "high",
+      "example": "نسخة صديقك تعرف كيف سيرد على نكتة معينة"
+    },
+    "colleague_copies": {
+      "accuracy_level": "moderate",
+      "update_frequency": "work_context_based",
+      "autonomy_level": "medium",
+      "emotional_investment": "moderate",
+      "example": "نسخة زميلك تتنبأ بموقفه من مشروع جديد"
+    },
+    "acquaintance_copies": {
+      "accuracy_level": "low_to_moderate",
+      "update_frequency": "infrequent",
+      "autonomy_level": "low",
+      "emotional_investment": "low",
+      "example": "نسخة بائع القهوة تتوقع ترحيبه المعتاد"
+    },
+    "authority_figure_copies": {
+      "accuracy_level": "variable",
+      "update_frequency": "context_dependent",
+      "autonomy_level": "medium",
+      "emotional_investment": "high_anxiety_protection",
+      "example": "نسخة المدير - قلق كبير على النسخة التي كوّنها عنك"
     }
   },
 
   "parameters": {
-    "copy_fidelity": {
+    "modeling_depth": {
+      "type": "integer",
+      "range": [1, 10],
+      "default": 5,
+      "description": "عمق النمذجة النفسية للشخص الآخر"
+    },
+    "update_sensitivity": {
       "type": "float",
-      "range": [0.0, 1.0],
+      "range": [0.1, 0.9],
+      "default": 0.4,
+      "description": "سرعة تحديث النموذج بناءً على سلوكيات جديدة"
+    },
+    "reputation_protection_priority": {
+      "type": "float",
+      "range": [0.2, 0.9],
       "default": 0.6,
-      "description": "مدى دقة النسخة مقارنة بالشخصية الحقيقية"
+      "description": "أولوية حماية النسخة الشخصية عند الآخرين"
     },
-    "copy_autonomy": {
+    "prediction_confidence_threshold": {
       "type": "float",
-      "range": [0.0, 1.0], 
-      "default": 0.3,
-      "description": "مدى استقلالية النسخة في ذهن الآخر"
-    },
-    "update_responsiveness": {
-      "type": "float",
-      "range": [0.01, 0.5],
-      "default": 0.1,
-      "description": "سرعة تحديث النسخة بناءً على سلوكيات جديدة"
-    },
-    "social_influence_weight": {
-      "type": "float",
-      "range": [0.0, 0.8],
-      "default": 0.3,
-      "description": "تأثير أراء الآخرين على تشكيل النسخة"
+      "range": [0.3, 0.8],
+      "default": 0.5,
+      "description": "الحد الأدنى للثقة في التنبؤات السلوكية"
     }
   },
 
   "pseudocode": {
-    "copy_simulation_engine": `
-      class SelfCopySimulator {
+    "person_modeling_engine": `
+      class PersonModelingEngine {
           constructor(config) {
-              this.copyFidelity = config.copyFidelity || 0.6;
-              this.copyAutonomy = config.copyAutonomy || 0.3;
-              this.updateResponsiveness = config.updateResponsiveness || 0.1;
+              this.modelingDepth = config.modelingDepth || 5;
+              this.updateSensitivity = config.updateSensitivity || 0.4;
+              this.reputationProtectionPriority = config.reputationProtectionPriority || 0.6;
               
-              this.activeCopies = new Map(); // person_id -> copy_profile
+              this.personModels = new Map(); // person_id -> person_model
               this.interactionHistory = new Map();
-              this.copyEvolutionTracker = new Map();
-              
-              // تحذير أمان
-              this.safetyMonitor = new CopyUsageSafetyMonitor();
+              this.reputationAnxietyTracker = new Map();
           }
           
-          simulateCopyFormation(targetPerson, interactionData, context) {
-              // فحص أمان الاستخدام
-              let safetyCheck = this.safetyMonitor.validateUsage(targetPerson, context);
-              if (!safetyCheck.safe) {
-                  return this.createSafetyBlockedResponse(safetyCheck.concerns);
-              }
-              
+          createPersonModel(personId, observationData, relationshipType) {
               try {
-                  // جمع البيانات الأساسية
-                  let existingCopy = this.activeCopies.get(targetPerson.id);
-                  let baseProfile = this.extractDisplayedCharacteristics(interactionData);
+                  // تحليل البيانات المُلاحظة
+                  let behavioralPatterns = this.extractBehavioralPatterns(observationData);
+                  let personalityInferences = this.inferPersonalityTraits(behavioralPatterns);
+                  let motivationalModel = this.buildMotivationalModel(personalityInferences, observationData);
                   
-                  // تحديد آلية التكوين
-                  let formationMechanism = this.determineFormationMechanism(
-                      interactionData,
-                      context,
-                      existingCopy
-                  );
+                  // إنشاء النموذج الأساسي
+                  let personModel = {
+                      id: personId,
+                      relationshipType: relationshipType,
+                      creationDate: Date.now(),
+                      
+                      // خصائص النموذج
+                      personality: personalityInferences,
+                      behavioral_patterns: behavioralPatterns,
+                      motivational_drivers: motivationalModel,
+                      emotional_triggers: this.identifyEmotionalTriggers(observationData),
+                      decision_making_style: this.inferDecisionStyle(behavioralPatterns),
+                      
+                      // معاملات النموذج
+                      accuracy_confidence: this.calculateInitialAccuracy(relationshipType, observationData.quality),
+                      autonomy_level: this.determineAutonomyLevel(relationshipType, behavioralPatterns),
+                      
+                      // تاريخ التحديثات
+                      update_history: [],
+                      prediction_accuracy_log: []
+                  };
                   
-                  // بناء أو تحديث النسخة
-                  let updatedCopy = existingCopy 
-                      ? this.updateExistingCopy(existingCopy, baseProfile, formationMechanism)
-                      : this.createNewCopy(baseProfile, formationMechanism, context);
+                  // تفعيل النسخة الحرة
+                  personModel.freeCopy = this.activateFreeCopy(personModel);
                   
-                  // تطبيق المرشحات والقيود
-                  updatedCopy = this.applyRealsimConstraints(updatedCopy, targetPerson);
-                  
-                  // تقييم تأثير النسخة على الأصل
-                  let feedbackEffect = this.calculateFeedbackEffect(updatedCopy, targetPerson);
-                  
-                  // حفظ النسخة المحدثة
-                  this.activeCopies.set(targetPerson.id, updatedCopy);
-                  this.recordCopyEvolution(targetPerson.id, updatedCopy, interactionData);
+                  // حفظ النموذج
+                  this.personModels.set(personId, personModel);
                   
                   return {
                       success: true,
-                      copyProfile: updatedCopy,
-                      formationMechanism: formationMechanism.type,
-                      feedbackEffect: feedbackEffect,
-                      evolutionPrediction: this.predictCopyEvolution(updatedCopy, targetPerson),
-                      safetyNotes: this.generateSafetyGuidance(updatedCopy)
+                      model: personModel,
+                      initial_predictions: this.generateInitialPredictions(personModel)
                   };
                   
               } catch (error) {
-                  return this.handleCopySimulationError(error, targetPerson, context);
+                  return this.handleModelingError(error, personId, observationData);
               }
           }
           
-          createNewCopy(baseProfile, formationMechanism, context) {
-              let newCopy = {
-                  id: this.generateCopyId(),
-                  creationTimestamp: Date.now(),
-                  formationContext: context,
-                  
-                  // خصائص النسخة
-                  perceivedTraits: baseProfile.dominantTraits,
-                  behavioralPatterns: baseProfile.observedBehaviors,
-                  emotionalAssociations: baseProfile.emotionalImpressions,
-                  valueSystemAssumptions: baseProfile.inferredValues,
-                  
-                  // معاملات النسخة
-                  fidelity: this.calculateInitialFidelity(baseProfile, formationMechanism),
-                  stability: this.calculateInitialStability(formationMechanism),
-                  influencePotential: this.calculateInfluencePotential(context, baseProfile),
-                  
-                  // ديناميكيات التطور
-                  updateHistory: [],
-                  reinforcementEvents: [],
-                  challengingEvents: [],
-                  
-                  // مؤشرات الأمان
-                  safetyFlags: this.identifyPotentialRisks(baseProfile, context),
-                  usageGuidelines: this.generateUsageGuidelines(context)
+          simulatePersonResponse(personId, hypotheticalScenario) {
+              let personModel = this.personModels.get(personId);
+              if (!personModel) {
+                  return { error: "Person model not found" };
+              }
+              
+              // تشغيل النسخة الحرة
+              let freeCopyResponse = personModel.freeCopy.simulate(hypotheticalScenario);
+              
+              // تقييم ثقة التنبؤ
+              let predictionConfidence = this.calculatePredictionConfidence(
+                  personModel,
+                  hypotheticalScenario
+              );
+              
+              return {
+                  predicted_response: freeCopyResponse,
+                  confidence: predictionConfidence,
+                  reasoning: freeCopyResponse.reasoning,
+                  alternative_responses: freeCopyResponse.alternatives,
+                  model_notes: this.generateModelNotes(personModel, hypotheticalScenario)
+              };
+          }
+          
+          // المثال الشهير: أخيك والكعكة
+          simulateKakeScenario(brotherId) {
+              let brotherModel = this.personModels.get(brotherId);
+              
+              let scenario = {
+                  situation: "كعكة مفقودة من المطبخ",
+                  context: "ليلاً، الجميع نائم، الكعكة كانت مخزنة في مكان عالي",
+                  question: "هل أخذ أخوك الكعكة؟"
               };
               
-              return newCopy;
-          }
-          
-          calculateFeedbackEffect(copy, originalPerson) {
-              let feedbackEffect = {
-                  behavioralInfluence: 0,
-                  emotionalImpact: 0,
-                  identityAdjustment: 0,
-                  relationshipDynamics: 0
+              let prediction = brotherModel.freeCopy.simulate(scenario);
+              
+              // النسخة الحرة من أخيك تقول:
+              return {
+                  verdict: "نعم، أخذ الكعكة",
+                  reasoning: [
+                      "يحب الحلويات بجنون",
+                      "له تاريخ في 'استعارة' الطعام",
+                      "قادر على الوصول للمكان العالي",
+                      "سيتعاون مع الأخ الآخر للمساعدة",
+                      "سينكر عند المواجهة"
+                  ],
+                  confidence: 0.85,
+                  predicted_response_when_confronted: "لم أرَ أي كعكة!"
               };
-              
-              // تأثير سلوكي - ميل لتلبية التوقعات
-              if (copy.perceivedTraits.positivity > 0.7) {
-                  feedbackEffect.behavioralInfluence = 0.3; // تعزيز السلوك الإيجابي
-              } else if (copy.perceivedTraits.positivity < 0.3) {
-                  feedbackEffect.behavioralInfluence = -0.2; // قد يؤثر سلبياً
-              }
-              
-              // تأثير عاطفي - كيف يشعر الشخص تجاه نفسه
-              feedbackEffect.emotionalImpact = (copy.emotionalAssociations.warmth - 0.5) * 0.4;
-              
-              // تعديل الهوية - تأثير على مفهوم الذات
-              if (copy.fidelity > 0.8 && copy.stability > 0.7) {
-                  feedbackEffect.identityAdjustment = 0.2; // تعزيز الهوية
-              }
-              
-              // ديناميكيات العلاقة
-              feedbackEffect.relationshipDynamics = copy.influencePotential * 0.5;
-              
-              return feedbackEffect;
           }
           
-          generateSafetyGuidance(copy) {
-              let guidance = [];
+          manageReputationAnxiety(targetPersonId, perceivedThreat) {
+              let anxietyLevel = this.assessReputationThreat(targetPersonId, perceivedThreat);
               
-              if (copy.fidelity < 0.4) {
-                  guidance.push({
-                      type: "DISTORTION_WARNING",
-                      message: "هذه النسخة قد لا تعكس الشخصية الحقيقية",
-                      action: "تجنب اتخاذ قرارات مهمة بناءً على هذا التصور"
-                  });
+              if (anxietyLevel > 0.7) {
+                  return {
+                      anxiety_level: "high",
+                      recommended_actions: [
+                          "immediate_damage_control",
+                          "proactive_positive_interaction",
+                          "seek_reassurance_about_relationship",
+                          "modify_behavior_to_protect_copy"
+                      ],
+                      potential_sacrifices: [
+                          "personal_needs_for_image_maintenance",
+                          "authentic_expression_for_social_approval",
+                          "individual_preferences_for_group_harmony"
+                      ]
+                  };
               }
               
-              if (copy.influencePotential > 0.8) {
-                  guidance.push({
-                      type: "HIGH_INFLUENCE_ALERT",
-                      message: "هذه النسخة لها تأثير قوي على السلوك",
-                      action: "كن واعياً لكيفية تأثيرها على تصرفاتك"
-                  });
-              }
-              
-              if (copy.safetyFlags.includes("identity_confusion_risk")) {
-                  guidance.push({
-                      type: "IDENTITY_RISK",
-                      message: "قد تؤثر على فهمك لهويتك الشخصية",
-                      action: "استشر مختص في علم النفس"
-                  });
-              }
-              
-              return guidance;
+              return this.generateBalancedResponse(anxietyLevel);
           }
       }
     `,
 
-    "copy_protection_mechanisms": `
-      function protectCopyIntegrity(copy, threatAssessment, protectionStrategy) {
-          let protectionActions = [];
-          
-          if (threatAssessment.identityThreat > 0.7) {
-              protectionActions.push({
-                  type: "DEFENSIVE_BEHAVIOR_ADJUSTMENT",
-                  description: "تعديل السلوك للحفاظ على النسخة الإيجابية",
-                  methods: [
-                      "emphasize_positive_traits",
-                      "consistent_image_maintenance", 
-                      "strategic_vulnerability_sharing",
-                      "proactive_relationship_repair"
-                  ]
-              });
-          }
-          
-          if (threatAssessment.misrepresentationRisk > 0.6) {
-              protectionActions.push({
-                  type: "CLARIFICATION_STRATEGY",
-                  description: "توضيح السلوك لتصحيح الانطباعات الخاطئة",
-                  methods: [
-                      "direct_communication_about_misunderstandings",
-                      "behavioral_demonstration_of_true_values",
-                      "context_provision_for_past_actions",
-                      "gradual_authentic_self_revelation"
-                  ]
-              });
-          }
-          
-          if (threatAssessment.copyDeterioration > 0.5) {
-              protectionActions.push({
-                  type: "RELATIONSHIP_MAINTENANCE",
-                  description: "استثمار في الحفاظ على جودة النسخة",
-                  methods: [
-                      "consistent_positive_interactions",
-                      "reliability_demonstration",
-                      "emotional_availability_maintenance",
-                      "conflict_resolution_priority"
-                  ]
-              });
-          }
-          
-          return {
-              protectionLevel: calculateProtectionLevel(threatAssessment),
-              recommendedActions: protectionActions,
-              energyInvestment: calculateRequiredEnergyInvestment(protectionActions),
-              successProbability: estimateProtectionSuccess(copy, protectionActions)
+    "reputation_protection": `
+      function protectReputationCopy(myReputationCopyAtPerson, perceivedThreat, relationshipImportance) {
+          let protectionStrategy = {
+              threat_level: assessThreatLevel(perceivedThreat),
+              protection_priority: relationshipImportance * myReputationCopyAtPerson.importance,
+              actions: []
           };
+          
+          if (protectionStrategy.threat_level > 0.6) {
+              // تهديد عالي للنسخة الشخصية
+              protectionStrategy.actions.push({
+                  type: "IMMEDIATE_DAMAGE_CONTROL",
+                  description: "تصحيح فوري للانطباع السلبي",
+                  methods: [
+                      "direct_communication_and_clarification",
+                      "behavioral_demonstration_of_true_character",
+                      "seeking_understanding_and_forgiveness"
+                  ],
+                  personal_cost: "high_energy_and_emotional_investment"
+              });
+              
+              protectionStrategy.actions.push({
+                  type: "BEHAVIORAL_MODIFICATION",
+                  description: "تعديل السلوك لحماية النسخة",
+                  methods: [
+                      "avoid_behaviors_that_triggered_threat",
+                      "emphasize_positive_traits_consistently", 
+                      "increase_positive_interaction_frequency"
+                  ],
+                  personal_cost: "reduced_authenticity_and_spontaneity"
+              });
+          }
+          
+          // حساب التنازلات المطلوبة
+          protectionStrategy.personal_sacrifices = calculateRequiredSacrifices(
+              protectionStrategy.threat_level,
+              relationshipImportance,
+              myReputationCopyAtPerson.current_quality
+          );
+          
+          return protectionStrategy;
       }
     `
   },
 
-  "copy_evolution_patterns": {
-    "positive_reinforcement_cycle": {
-      "description": "النسخة الإيجابية تؤدي لسلوك أفضل",
-      "stages": [
-        "positive_copy_formation",
-        "increased_confidence_and_positive_behavior",
-        "reinforcement_from_others",
-        "copy_strengthening_and_expansion"
+  "pathological_recursive_loops": {
+    "⚠️_EXTREME_WARNING": "هذا القسم يصف حالة مرضية خطيرة - للفهم النظري فقط!",
+    
+    "infinite_mirror_effect": {
+      "description": "حلقات لانهائية من التفكير في تفكير الآخرين",
+      "analogy": "مثل الوقوف بين مرآتين متقابلتين - انعكاسات لا نهائية",
+      "danger_level": "EXTREMELY_HIGH",
+      
+      "recursive_levels": {
+        "level_0": "ماذا يفكر عني؟",
+        "level_1": "ماذا يفكر أنني أفكر فيه؟",
+        "level_2": "ماذا يفكر أنني أفكر أنه يفكر عني؟",
+        "level_3": "ماذا يفكر أنني أفكر أنه يفكر أنني أفكر فيه؟",
+        "level_n": "infinite_recursion → cognitive_paralysis"
+      },
+      
+      "real_world_devastation": {
+        "simple_whatsapp_message": "30 دقيقة لكتابة 'كيف حالك؟'",
+        "social_gathering": "شلل كامل أو هروب فوري",
+        "work_meeting": "عدم القدرة على المشاركة مطلقاً",
+        "relationship": "تدمير كامل بسبب الـ overthinking"
+      },
+      
+      "symptoms": [
+        "cognitive_overload_and_exhaustion",
+        "decision_paralysis_complete",
+        "social_withdrawal_and_isolation", 
+        "sleep_disturbance_from_racing_thoughts",
+        "physical_anxiety_symptoms",
+        "inability_to_be_present_in_moment"
       ],
-      "typical_duration": "months_to_years",
-      "stability": "high_when_maintained"
+      
+      "why_its_terrifying": {
+        "conscious_awareness": "الشخص يعرف أنه في الحلقة لكن لا يستطيع الخروج",
+        "energy_vampirism": "يستنزف 100% من الطاقة المعرفية",
+        "no_natural_exit": "بدون تدخل خارجي، الحلقة تستمر إلى ما لا نهاية",
+        "reality_disconnection": "فقدان كامل للاتصال مع الواقع الحالي"
+      }
     },
-    "negative_spiral": {
-      "description": "النسخة السلبية تؤدي لتدهور العلاقة",
-      "stages": [
-        "negative_copy_formation",
-        "defensive_or_avoidant_behavior",
-        "relationship_deterioration",
-        "copy_reinforcement_and_isolation"
-      ],
-      "typical_duration": "weeks_to_months",
-      "intervention_window": "early_stages_most_responsive"
+    
+    "natural_circuit_breakers": {
+      "description": "الآليات الطبيعية التي تكسر هذه الحلقات القاتلة",
+      
+      "noise_factor_salvation": {
+        "mechanism": "التشويش العشوائي يقطع سلسلة التفكير",
+        "examples": [
+          "رنة هاتف مفاجئة",
+          "شخص يناديك",
+          "إحساس بالجوع أو العطش",
+          "ضوضاء خارجية",
+          "فكرة عشوائية تطرأ"
+        ],
+        "why_essential": "بدون التشويش، الدماغ يدخل في loop مدمر"
+      },
+      
+      "exhaustion_shutdown": {
+        "description": "الدماغ يتوقف قسرياً من الإرهاق",
+        "timeline": "بعد ساعات من الـ recursion",
+        "cost": "استنزاف كامل للطاقة لأيام"
+      },
+      
+      "external_interruption": {
+        "description": "تدخل شخص آخر أو حدث خارجي",
+        "effectiveness": "فوري لكن مؤقت",
+        "risk": "عودة للحلقة بمجرد انتهاء المقاطعة"
+      }
     },
-    "copy_fragmentation": {
-      "description": "نسخ متضاربة في أذهان مختلفة",
-      "causes": [
-        "inconsistent_behavior_across_contexts",
-        "different_people_seeing_different_aspects",
-        "life_transitions_and_changes",
-        "conflicting_social_role_demands"
+    
+    "emergency_protocols": {
+      "if_you_recognize_this_pattern_in_yourself": [
+        "⚠️ توقف فوراً عن القراءة في هذا القسم",
+        "🌬️ خذ 5 أنفاس عميقة",
+        "🔌 اقطع الاتصال بالموضوع كلياً",
+        "🏃‍♂️ قم بنشاط فيزيائي فوري",
+        "🗣️ تحدث مع شخص عن أي موضوع آخر",
+        "🆘 إذا استمر، اطلب مساعدة مختص"
       ],
-      "resolution_strategies": [
-        "identity_integration_work",
-        "authentic_self_presentation",
-        "context_appropriate_behavior_consistency"
+      
+      "if_you_see_someone_in_this_state": [
+        "🛑 اقطع تفكيرهم بلطف لكن بحزم",
+        "🎯 وجه انتباههم لشيء ملموس فوري",
+        "💬 ابدأ محادثة عن موضوع مختلف تماماً",
+        "🤝 ابق معهم حتى تخف الحلقة",
+        "⚕️ اقترح مساعدة مهنية إذا تكرر"
       ]
+    },
+    
+    "scientific_understanding": {
+      "why_it_happens": [
+        "theory_of_mind_gone_recursive",
+        "meta_cognitive_awareness_overload",
+        "social_anxiety_amplification_loop",
+        "perfectionism_meets_uncertainty"
+      ],
+      
+      "brain_regions_involved": [
+        "prefrontal_cortex_overactivation",
+        "default_mode_network_hyperactivity", 
+        "anterior_cingulate_cortex_stress",
+        "mirror_neuron_system_overload"
+      ],
+      
+      "research_connections": [
+        "social_anxiety_disorder_studies",
+        "obsessive_compulsive_thinking_patterns",
+        "rumination_and_worry_research",
+        "theory_of_mind_disorders"
+      ]
+    },
+    
+    "ABSOLUTE_PROHIBITIONS": {
+      "NEVER_PRACTICE_THIS": "⛔ ممنوع منعاً باتاً محاولة تجربة هذا النمط",
+      "NEVER_ENCOURAGE_THIS": "⛔ لا تشجع أحداً على التفكير بهذه الطريقة",
+      "NEVER_ROMANTICIZE_THIS": "⛔ هذا ليس 'تفكير عميق' - هذا مرض",
+      "UNDERSTANDING_ONLY": "✅ الهدف الوحيد: فهم لتجنب الوقوع فيه"
     }
   },
 
-  "risk_assessment": {
-    "psychological_risks": [
-      "excessive_self_monitoring_and_anxiety",
-      "identity_confusion_and_fragmentation",
-      "people_pleasing_at_expense_of_authenticity",
-      "depression_from_negative_copy_obsession"
-    ],
-    "social_risks": [
-      "manipulative_behavior_for_copy_management",
-      "relationship_superficiality",
-      "social_exhaustion_from_impression_management",
-      "loss_of_genuine_connections"
-    ],
-    "intervention_indicators": [
-      "constant_worry_about_others_opinions",
-      "significant_behavior_changes_around_different_people",
-      "difficulty_being_alone_or_authentic",
-      "relationship_problems_due_to_image_obsession"
-    ]
-  },
-
-  "therapeutic_applications": {
-    "self_awareness_development": {
-      "purpose": "understand_how_others_perceive_you",
-      "methods": ["feedback_collection", "behavioral_observation", "perspective_taking_exercises"],
-      "cautions": "must_be_guided_by_qualified_therapist"
+  "real_world_examples": {
+    "family_dynamics": {
+      "cake_mystery_example": {
+        "scenario": "كعكة مفقودة في المطبخ",
+        "brother_copy_says": "أخوك أخذها - يحب الحلويات ويستيقظ ليلاً",
+        "brother_copy_predicts": "سينكر ويدعي عدم رؤيتها",
+        "accuracy": "عالية جداً بناءً على تاريخ طويل من الملاحظة"
+      }
     },
-    "social_anxiety_treatment": {
-      "purpose": "reduce_excessive_worry_about_others_judgments",
-      "methods": ["reality_testing", "cognitive_restructuring", "exposure_therapy"],
-      "cautions": "requires_professional_mental_health_treatment"
+    "workplace_relationships": {
+      "boss_copy_protection": {
+        "scenario": "خطأ في مشروع مهم",
+        "reputation_anxiety": "عالي جداً - النسخة عند المدير مهددة",
+        "protective_actions": [
+          "اعتراف سريع بالخطأ",
+          "تقديم حلول فورية",
+          "العمل ساعات إضافية لإصلاح الضرر",
+          "إظهار التعلم من الخطأ"
+        ],
+        "personal_cost": "تضحية بوقت شخصي وراحة نفسية"
+      }
     },
-    "relationship_improvement": {
-      "purpose": "improve_interpersonal_connections",
-      "methods": ["communication_skills", "empathy_development", "authenticity_practice"],
-      "cautions": "should_complement_not_replace_relationship_counseling"
+    "friendship_maintenance": {
+      "friend_copy_evolution": {
+        "scenario": "صديق غيّر شخصيته بعد الزواج",
+        "model_update": "النسخة القديمة لا تعمل - تحديث مطلوب",
+        "adaptation_process": [
+          "ملاحظة التغييرات الجديدة",
+          "تعديل توقعات السلوك",
+          "تكييف أسلوب التفاعل",
+          "قبول النسخة الجديدة"
+        ]
+      }
     }
   },
 
   "applications": [
-    "فهم ديناميكيات الانطباعات الاجتماعية نظرياً",
-    "تطوير نماذج للسلوك الاجتماعي في الأنظمة الذكية",
-    "البحث الأكاديمي في علم النفس الاجتماعي",
-    "تحليل شبكات العلاقات والسمعة الرقمية",
-    "تطوير فهم نظري للهوية الاجتماعية"
+    "فهم ديناميكيات التفاعل الاجتماعي نظرياً",
+    "تطوير نماذج للذكاء الاصطناعي الاجتماعي",
+    "تحسين مهارات التواصل والتنبؤ الاجتماعي",
+    "تطوير أنظمة التوصية الاجتماعية",
+    "فهم آليات القلق الاجتماعي والحماية النفسية"
   ],
 
   "limitations": [
-    "تبسيط مفرط لتعقيد الإدراك الاجتماعي",
-    "لا يراعي الاختلافات الثقافية في تكوين الانطباعات",
-    "صعوبة في قياس دقة الانطباعات الفعلية",
-    "قد يؤدي للتفكير المفرط في آراء الآخرين"
+    "النماذج الذهنية قد تكون غير دقيقة أو متحيزة",
+    "الإفراط في النمذجة قد يقلل من التلقائية الاجتماعية",
+    "القلق المفرط على السمعة قد يضر بالأصالة الشخصية",
+    "النماذج قد تفشل في تتبع التغييرات السريعة في الأشخاص"
   ],
 
-  "safety_protocols": {
-    "usage_restrictions": [
-      "للباحثين المؤهلين في علم النفس فقط",
-      "يتطلب إشراف أخلاقي ومهني",
-      "ممنوع الاستخدام للتلاعب أو الخداع",
-      "ضرورة الحصول على موافقة مدروسة"
-    ],
-    "monitoring_requirements": [
-      "تتبع التأثير النفسي على المشاركين",
-      "فحص دوري للاستخدام الأخلاقي",
-      "إيقاف فوري في حالة الضرر النفسي",
-      "متابعة طويلة المدى للمشاركين"
-    ],
-    "emergency_procedures": [
-      "إحالة فورية للمساعدة النفسية المتخصصة",
-      "إيقاف كل الأنشطة المرتبطة",
-      "تقييم شامل للضرر النفسي",
-      "تطوير خطة تعافي مخصصة"
-    ]
-  },
-
-  "ethical_considerations": {
-    "consent_requirements": "explicit_informed_consent_about_identity_exploration_risks",
-    "privacy_protection": "strict_confidentiality_of_personal_reflections",
-    "harm_prevention": "immediate_cessation_if_psychological_distress_detected",
-    "professional_boundaries": "only_qualified_mental_health_professionals"
-  },
+  "safety_notes": [
+    "⚠️ هذا نموذج نظري لفهم التفاعل الاجتماعي وليس أداة للتلاعب بالآخرين",
+    "⚠️ لا يستخدم لإصدار أحكام قاطعة على الأشخاص",
+    "⚠️ القلق المفرط على السمعة قد يضر بالصحة النفسية",
+    "⚠️ احترم خصوصية الآخرين ولا تحللهم بشكل مفرط"
+  ],
 
   "meta": {
     "created": "2024",
-    "author": "نموذج نظري عالي المخاطر",
-    "inspiration": "علم النفس الاجتماعي + نظرية التفاعل الرمزي + دراسات الهوية",
-    "status": "نموذج نظري يتطلب إشراف متخصص",
-    "safety_clearance": "requires_institutional_ethics_approval",
-    "disclaimer": "للاستخدام الأكاديمي والبحثي المحدود فقط تحت إشراف متخصص"
+    "author": "نموذج نظري مصحح مع تحذيرات مرضية",
+    "inspiration": "علم النفس الاجتماعي + نظرية العقل + نمذجة الوكلاء + علم النفس المرضي",
+    "status": "نموذج نظري مع مخاطر موثقة",
+    "safety_level_change": "moderate مع قسم EXTREME_WARNING للحلقات التكرارية",
+    "validation_methods": ["social_interaction_studies", "prediction_accuracy_testing", "behavioral_observation"],
+    "pathological_section_added": "recursive_loops_as_extreme_warning_only",
+    "filename_note": "تم الاحتفاظ بالاسم الأصلي 'self-copies' للحفاظ على الروابط مع إضافة aliases"
   }
 }

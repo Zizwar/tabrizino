@@ -111,15 +111,18 @@
     },
     {
       "id": "self-copies",
-      "title": "نموذج الانطباعات الاجتماعية",
+      "title": "نمذجة الآخرين - النسخ الحرة في الذهن",
+      "aliases": ["others-modeling", "person-modeling", "social-copies"],
       "file": "./concepts/self-copies.json",
       "category": "social-layer",
-      "tags": ["هوية", "انطباع", "علاقات", "اجتماعي"],
-      "complexity": "high",
-      "safety_level": "high",
-      "scientific_relations": ["social_psychology", "reputation_management", "identity_theory"],
+      "tags": ["نمذجة", "تنبؤ", "علاقات", "اجتماعي", "نسخ_حرة"],
+      "complexity": "medium",
+      "safety_level": "moderate",
+      "scientific_relations": ["theory_of_mind", "person_perception", "agent_modeling"],
       "input_output": "defined",
-      "relationships": ["trust-matrix", "emotional-encryption", "simulators"]
+      "relationships": ["trust-matrix", "emotional-encryption", "simulators"],
+      "naming_note": "اسم الملف محفوظ للتوافق مع الروابط، لكن المحتوى يركز على نمذجة الآخرين",
+      "content_corrected": "تم تصحيح المفهوم من 'رؤية الذات' إلى 'النسخ التي ننشئها عن الآخرين'"
     },
     {
       "id": "environmental-variables",
@@ -153,13 +156,13 @@
       "description": "مفاهيم آمنة نسبياً للاستكشاف النظري"
     },
     "moderate_risk": {
-      "concepts": ["simulators", "generative-collapse", "emotional-encryption", "middleware", "trust-matrix", "generative-reconstruction"],
+      "concepts": ["simulators", "generative-collapse", "emotional-encryption", "middleware", "trust-matrix", "generative-reconstruction", "self-copies"],
       "description": "تحتاج فهم علمي جيد لتجنب سوء التفسير"
     },
     "high_risk": {
-      "concepts": ["self-copies"],
-      "description": "قد تؤثر على فهم الهوية - للخبراء فقط",
-      "warning": "قد يسبب قلق أو تشكك في الذات إذا أُسيء فهمه"
+      "concepts": [],
+      "description": "لا توجد مفاهيم عالية المخاطر بعد التصحيحات",
+      "note": "تم تصحيح self-copies وخفض مستوى المخاطر مع aliases للتوافق"
     }
   },
 

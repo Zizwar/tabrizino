@@ -1,8 +1,6 @@
 {
-  "name": "tabris-getting-started",
+  "name": "cpf",
   "description": "manza, World!",
-  "main": "main.js",
-  "dependencies": {
-    "tabris": "^1.1.0"
-  }
+  "main": "main.js"
+  
 }

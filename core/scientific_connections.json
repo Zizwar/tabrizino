@@ -134,7 +134,7 @@
 
   "biology_connections": {
     "neuroscience": {
-      "related_concepts": ["oscillators", "simulators", "noise-factor"],
+      "related_concepts": ["oscillators", "simulators", "noise-factor", "meta-cognition"],
       "specific_parallels": {
         "neural_oscillations": {
           "concept": "oscillators",
@@ -156,6 +156,13 @@
           "similarity_score": 0.7,
           "scientific_basis": "Stochastic resonance, neural variability",
           "applications": "computational neuroscience, neural prosthetics"
+        },
+        "default_mode_network": {
+          "concept": "meta-cognition",
+          "similarity": "self_referential_processing_and_introspection",
+          "similarity_score": 0.8,
+          "scientific_basis": "DMN research, self-referential thinking, mindfulness studies",
+          "applications": "meditation research, self-awareness training"
         }
       }
     },
@@ -201,7 +208,7 @@
 
   "psychology_connections": {
     "cognitive_psychology": {
-      "related_concepts": ["simulators", "generative-collapse", "emotional-encryption"],
+      "related_concepts": ["simulators", "generative-collapse", "emotional-encryption", "meta-cognition"],
       "specific_parallels": {
         "working_memory": {
           "concept": "simulators",
@@ -223,6 +230,13 @@
           "similarity_score": 0.9,
           "scientific_basis": "Levels of processing, mood congruent memory",
           "applications": "educational psychology, therapy techniques"
+        },
+        "metacognition": {
+          "concept": "meta-cognition",
+          "similarity": "thinking_about_thinking_and_monitoring_cognition",
+          "similarity_score": 0.95,
+          "scientific_basis": "Flavell metacognitive theory, metamemory research",
+          "applications": "learning strategies, executive function training"
         }
       }
     },

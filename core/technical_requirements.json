@@ -33,7 +33,7 @@
     "required_files": [
       "index.json - الفهرس الرئيسي",
       "safety_guidelines.json - إرشادات السلامة الحرجة",
-      "consciousness_flow.json - خريطة تدفق العمليات",
+      "cognitive_flow.json - خريطة تدفق العمليات",
       "scientific_connections.json - الروابط العلمية"
     ],
     "concept_files": [
@@ -120,7 +120,7 @@
         "extract_algorithmic_patterns",
         "implement_simplified_versions",
         "test_on_artificial_problems",
-        "avoid_consciousness_claims",
+        "avoid_cognitive_claims",
         "document_inspiration_sources"
       ],
       "safety_measures": [
@@ -232,7 +232,7 @@
       "goals": [
         "develop_industry_safety_standards",
         "create_certification_programs",
-        "influence_policy_on_ai_consciousness_claims"
+        "influence_policy_on_ai_cognitive_claims"
       ]
     }
   },

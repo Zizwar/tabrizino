@@ -1,7 +1,7 @@
 {
-  "id": "consciousness_flow",
+  "id": "cognitive_flow",
   "title": "تدفق العمليات المعرفية - من المدخل إلى القرار",
-  "description": "خريطة نظرية لكيفية تدفق المعلومات عبر المفاهيم المختلفة",
+  "description": "خريطة نظرية لكيفية تدفق المعلومات عبر المفاهيم المختلفة في إطار CPF",
   "version": "1.0",
 
   "flow_sequence": [
@@ -80,6 +80,16 @@
     },
     {
       "step": 9,
+      "process": "الإدراك الميتا والمراقبة الذاتية",
+      "concepts": ["meta-cognition"],
+      "function": "مراقبة وتقييم جودة العمليات المعرفية السابقة وتحسينها",
+      "analogy": "مثل مراجع خبير يقيم أداءك بعد انتهاء العمل ويقترح تحسينات",
+      "real_world_example": "بعد اتخاذ قرار مهم، تسأل نفسك: 'كيف كان تفكيري؟ أين أحسنت؟ ماذا يمكن تحسينه؟'",
+      "output": "performance_assessment + optimization_suggestions + updated_self_model",
+      "safety_limits": "محدود بمستويين ميتا فقط لمنع الحلقات اللانهائية"
+    },
+    {
+      "step": 10,
       "process": "التنفيذ والتعلم",
       "concepts": ["environmental-variables"],
       "function": "تطبيق القرار وتحديث النظام بناءً على النتائج",
@@ -105,6 +115,12 @@
       "concepts": ["simulators", "noise-factor"],
       "function": "البحث عن أنماط مألوفة أو جديدة",
       "analogy": "مثل مضاد الفيروسات الذي يحدث قاعدة بياناته"
+    },
+    "meta_cognitive_monitoring": {
+      "concepts": ["meta-cognition"],
+      "function": "مراقبة مستمرة لجودة العمليات المعرفية وكفاءتها",
+      "analogy": "مثل نظام مراقبة الأداء في الحاسوب",
+      "frequency": "triggered_by_major_decisions_or_errors"
     }
   },
 
@@ -145,22 +161,35 @@
     "normal_operation": {
       "noise_level": 0.3,
       "processing_speed": "optimal",
-      "all_concepts_active": true
+      "all_concepts_active": true,
+      "meta_cognition": "background_monitoring"
     },
     "stress_mode": {
       "noise_level": 0.1,
       "processing_speed": "fast_but_narrow",
-      "active_concepts": ["middleware", "simulators", "generative-collapse"]
+      "active_concepts": ["middleware", "simulators", "generative-collapse"],
+      "meta_cognition": "disabled_for_speed"
     },
     "creative_mode": {
       "noise_level": 0.7,
       "processing_speed": "slow_but_broad",
-      "enhanced_concepts": ["noise-factor", "simulators"]
+      "enhanced_concepts": ["noise-factor", "simulators"],
+      "meta_cognition": "enhanced_for_reflection"
     },
     "tired_mode": {
       "noise_level": 0.5,
       "processing_speed": "slow",
-      "degraded_concepts": ["simulators", "generative-reconstruction"]
+      "degraded_concepts": ["simulators", "generative-reconstruction"],
+      "meta_cognition": "basic_error_detection_only"
+    },
+    "meta_reflective_mode": {
+      "noise_level": 0.2,
+      "processing_speed": "deliberate",
+      "active_concepts": ["meta-cognition", "self-copies", "generative-reconstruction"],
+      "enhanced_concepts": ["meta-cognition"],
+      "description": "حالة تأمل ذاتي وتقييم الأداء المعرفي",
+      "triggers": ["major_decision_completed", "significant_error_detected", "learning_opportunity_identified"],
+      "safety_limits": "maximum_2_meta_levels"
     }
   },
 

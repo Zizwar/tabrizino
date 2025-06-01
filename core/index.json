@@ -1,25 +1,27 @@
 {
-  "project": "cognitive-processing-toolkit",
-  "version": "2.0-safe",
+  "project": "cpf-cognitive-processing-framework",
+  "version": "2.4-stable",
   "meta": {
-    "title": "أدوات التفكير المعرفي - نماذج نظرية للعمليات العقلية",
-    "author": "نموذج تطبيقي نظري", 
-    "description": "مجموعة مفاهيم نظرية لفهم أنماط معالجة المعلومات والتفكير الإنساني",
+    "title": "CPF - إطار العمليات المعرفية التطبيقي",
+    "subtitle": "Cognitive Processing Framework - An experimental prototype for understanding human information processing patterns",
+    "author": "إطار تطبيقي تجريبي", 
+    "description": "مجموعة مفاهيم نظرية لفهم أنماط معالجة المعلومات والإدراك الإنساني",
     "language": "ar",
     "encoding": "UTF-8",
     "target_audience": ["researchers", "developers", "cognitive_scientists", "NOT_general_public"],
-    "danger_level": "REQUIRES_EXPERT_INTERPRETATION"
+    "framework_nature": "experimental_prototype_not_established_science"
   },
 
   "CRITICAL_WARNINGS": {
-    "NOT_FOR_THERAPY": "⛔ هذه أدوات نظرية للبحث الأكاديمي فقط - ليست للعلاج النفسي",
-    "NOT_CONSCIOUSNESS_MODEL": "⛔ هذا ليس نموذج وعي حقيقي - مجرد استعارات للتفكير",
+    "NOT_FOR_THERAPY": "⛔ هذا إطار نظري تجريبي للبحث الأكاديمي فقط - ليس للعلاج النفسي",
+    "NOT_CONSCIOUSNESS_MODEL": "⛔ هذا ليس نموذج وعي حقيقي - مجرد أدوات لفهم الإدراك المعرفي",
+    "EXPERIMENTAL_NATURE": "⛔ إطار تجريبي قيد التطوير - ليس علم راسخ",
     "EXPERT_ONLY": "⛔ يتطلب خبرة في العلوم المعرفية للاستخدام الآمن",
     "NO_MEDICAL_CLAIMS": "⛔ لا يشخص أو يعالج أي حالة طبية أو نفسية"
   },
 
   "system_architecture": {
-    "consciousness_flow": "./consciousness_flow.json",
+    "cognitive_flow": "./cognitive_flow.json",
     "safety_guidelines": "./safety_guidelines.json",
     "validation_tools": "./validation/"
   },
@@ -147,6 +149,19 @@
       "scientific_relations": ["memory_reconstruction", "neural_plasticity", "narrative_psychology"],
       "input_output": "defined",
       "relationships": ["emotional-encryption", "noise-factor", "simulators"]
+    },
+    {
+      "id": "meta-cognition",
+      "title": "الإدراك الميتا - مراقبة العمليات المعرفية", 
+      "file": "./concepts/meta-cognition.json",
+      "category": "meta-layer",
+      "tags": ["ميتا", "مراقبة", "وعي_ذاتي", "تحسين", "تقييم"],
+      "complexity": "high",
+      "safety_level": "moderate",
+      "scientific_relations": ["metacognition", "higher_order_thought", "self_monitoring"],
+      "input_output": "defined",
+      "relationships": ["simulators", "generative-collapse", "emotional-encryption", "self-copies"],
+      "added_reason": "استجابة لنقد صحيح حول غياب طبقة الإدراك الميتا في النظام"
     }
   ],
 
@@ -156,13 +171,13 @@
       "description": "مفاهيم آمنة نسبياً للاستكشاف النظري"
     },
     "moderate_risk": {
-      "concepts": ["simulators", "generative-collapse", "emotional-encryption", "middleware", "trust-matrix", "generative-reconstruction", "self-copies"],
+      "concepts": ["simulators", "generative-collapse", "emotional-encryption", "middleware", "trust-matrix", "generative-reconstruction", "self-copies", "meta-cognition"],
       "description": "تحتاج فهم علمي جيد لتجنب سوء التفسير"
     },
     "high_risk": {
       "concepts": [],
       "description": "لا توجد مفاهيم عالية المخاطر بعد التصحيحات",
-      "note": "تم تصحيح self-copies وخفض مستوى المخاطر مع aliases للتوافق"
+      "note": "تم تصحيح self-copies وخفض مستوى المخاطر مع aliases للتوافق + إضافة meta-cognition بحماية من الحلقات التكرارية"
     }
   },
 
@@ -203,7 +218,7 @@
       "safety_check": "ensure_no_therapeutic_claims"
     },
     "flow_integration": {
-      "entry_point": "consciousness_flow.json",
+      "entry_point": "cognitive_flow.json",
       "validation_layer": "safety_guidelines.json",
       "output_filtering": "remove_medical_implications"
     }

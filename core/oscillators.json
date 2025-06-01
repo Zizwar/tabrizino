@@ -50,9 +50,9 @@
       }
     },
     "system_output": {
-      "type": "consciousness_state",
+      "type": "cognitive_state",
       "format": {
-        "consciousness_score": "float[0-1]",
+        "cognitive_score": "float[0-1]",
         "stability_level": "float[0-1]",
         "dominant_oscillator": "string",
         "system_harmony": "float[0-1]",
@@ -101,13 +101,13 @@
       "modifiable": false,
       "purpose": "system_integration",
       "input": "baseline_signal + dynamic_signal",
-      "output": "integrated_consciousness_score + balance_assessment",
+      "output": "integrated_cognitive_score + balance_assessment",
       "failure_mode": "integration_breakdown"
     }
   },
 
-  "consciousness_calculation": {
-    "basic_formula": "consciousness_score = integration_oscillator.process(baseline, dynamic)",
+  "cognitive_calculation": {
+    "basic_formula": "cognitive_score = integration_oscillator.process(baseline, dynamic)",
     "range": [0.0, 1.0],
     "interpretation": {
       "0.0-0.2": "حالة سكون عميق أو إنهاك",
@@ -229,12 +229,12 @@
               
               // فحص الحدود الطبيعية
               if (result.score < 0.1) {
-                  warnings.push("consciousness_score_too_low");
+                  warnings.push("cognitive_score_too_low");
                   safe = false;
               }
               
               if (result.score > 0.95) {
-                  warnings.push("consciousness_score_too_high");
+                  warnings.push("cognitive_score_too_high");
                   safe = false;
               }
               
@@ -323,7 +323,7 @@
     "optimal_harmony": {
       "description": "جميع الأنماط تعمل بتناغم",
       "characteristics": {
-        "consciousness_score": [0.4, 0.7],
+        "cognitive_score": [0.4, 0.7],
         "coherence": "> 0.8",
         "energy_efficiency": "> 0.7",
         "adaptation_capacity": "> 0.6"
@@ -334,7 +334,7 @@
     "dynamic_dominance": {
       "description": "النمط الديناميكي يهيمن على النظام",
       "characteristics": {
-        "consciousness_score": [0.6, 0.9],
+        "cognitive_score": [0.6, 0.9],
         "coherence": "variable",
         "energy_efficiency": "< 0.5",
         "adaptation_capacity": "> 0.8"
@@ -345,7 +345,7 @@
     "baseline_dominance": {
       "description": "النمط الأساسي يهيمن بشكل مفرط",
       "characteristics": {
-        "consciousness_score": [0.1, 0.4],
+        "cognitive_score": [0.1, 0.4],
         "coherence": "> 0.7",
         "energy_efficiency": "> 0.8",
         "adaptation_capacity": "< 0.3"
@@ -356,7 +356,7 @@
     "system_chaos": {
       "description": "فقدان التنسيق بين الأنماط",
       "characteristics": {
-        "consciousness_score": "highly_variable",
+        "cognitive_score": "highly_variable",
         "coherence": "< 0.3",
         "energy_efficiency": "< 0.4",
         "adaptation_capacity": "unpredictable"

@@ -1,7 +1,8 @@
 {
   "id": "skill_acquisition_process",
-  "title": "عملية اكتساب المهارات - من الجهد الواعي إلى الإتقان التلقائي",
-  "description": "وصف للعملية الديناميكية التي يتم من خلالها اكتساب المهارات، حيث لا يتم إضافة مفهوم جديد، بل يتم تغيير حالة وطريقة عمل المفاهيم الحالية مثل 'simulators' و'generative_reconstruction' و'meta_cognition'.",
+  "title": "عملية اكتساب المهارات (كاتب السكريبت)",
+  "description": "وصف للعملية الديناميكية التي يتم من خلالها اكتساب المهارات. تعمل هذه العملية كـ 'كاتب السكريبتات'، حيث تحول التجارب والممارسات الفوضوية إلى 'سكريبت مهارة' (Skill Script) فعال ومحسن يمكن تشغيله تلقائياً.",
+  
   "category": "core-process-definition",
   "version": "1.0",
   "safety_level": "low_risk",
@@ -67,16 +68,18 @@
         "meta_cognitive_feedback": "object (self-assessment of performance)"
       }
     },
-    "process_output": {
-      "type": "updated_skill_profile",
-      "format": {
-        "skill_id": "string",
-        "current_mastery_level": "enum[novice, intermediate, expert]",
-        "optimized_skill_schema": "object (the refined data pattern for the skill)",
-        "updated_simulator_pathways": "object (rules for activating the schema in specific contexts)"
-      }
+    
+
+
+  "process_output": {
+    "description": "المخرجات النهائية لعملية الممارسة.",
+    "format": {
+      "updated_skill_profile": "object (the modified skill profile in memory)",
+      "optimized_skill_script": "object (the optimized script for performing the skill automatically)",
+      "learning_feedback_to_metacognition": "object (insights about the learning process)"
     }
   },
+  
 
   "pseudocode": {
     "reference": "./pseudocode/skill_acquisition_pseudo.js",

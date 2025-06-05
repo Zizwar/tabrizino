@@ -103,12 +103,13 @@
   },
 
   "collapse_mechanisms": {
-    "weighted_voting": {
-      "description": "كل محاكي يصوت بوزن مختلف",
-      "algorithm": "confidence * priority * relevance",
-      "speed": "moderate",
-      "accuracy": "high"
+      "weighted_voting": {
+      "description": "يتم تقييم كل احتمال بناءً على درجة جاذبية شاملة تأخذ في الاعتبار مخرجات المحاكيات، الذكريات، الأهداف الحالية، الحالة العاطفية، والطاقة المتاحة. الاحتمال ذو الدرجة الأعلى يفوز.",
+      "algorithm_detail": "CAS_final = Σ (weight_i * factor_score_i). Factors include simulator confidence, memory match, goal alignment, emotional tag, energy cost.", 
+      "speed": "moderate_to_fast", 
+      "accuracy": "high_to_very_high_depending_on_evaluation_quality"
     },
+
     "threshold_racing": {
       "description": "أول خيار يتجاوز عتبة معينة يفوز",
       "algorithm": "first_to_threshold(0.8)",
@@ -261,14 +262,76 @@
                   return this.tournamentCollapse([winner, runnerUp], context);
               }
           }
-          
-          calculateFinalWeight(possibility, context) {
+          /*
+         calculateFinalWeight(possibility, context) {
               let baseWeight = possibility.confidence || 0.5;
               let utilityWeight = possibility.utility || 0.5;
               let contextRelevance = this.assessContextRelevance(possibility, context);
               
               return (baseWeight * 0.4 + utilityWeight * 0.4 + contextRelevance * 0.2);
           }
+          */
+          // داخل GenerativeCollapseEngine
+
+// الدالة الجديدة التي اقترحناها
+calculateComprehensiveAttractivenessScore(possibility, context, memorySystem, motivationSystem, embodimentSystem, emotionalSystem) {
+    // ... منطق حساب درجة الجاذبية الشاملة كما وضحنا سابقاً ...
+    // ... (w1 * simulator_confidence) + (w2 * memory_resonance_score) + ...
+    return comprehensiveScore;
+}
+
+// تعديل آلية الانهيار
+weightedVotingCollapse(possibilities, context) {
+    // افتراض أن واجهات المفاهيم الأخرى متاحة هنا (this.memorySystem, this.motivationSystem, etc.)
+    // أو يتم تمريرها إلى weightedVotingCollapse
+    let weightedPossibilities = possibilities.map(p => ({
+        ...p,
+        // استدعاء الدالة الجديدة بدلاً من القديمة
+        finalWeight: this.calculateComprehensiveAttractivenessScore(
+            p, 
+            context, 
+            this.memorySystem, // مثال لكيفية الوصول للمفاهيم الأخرى
+            this.motivationSystem,
+            this.embodimentSystem,
+            this.emotionalSystem 
+        )
+    }));
+
+    // ترتيب حسب الوزن النهائي (درجة الجاذبية الشاملة)
+    weightedPossibilities.sort((a, b) => b.finalWeight - a.finalWeight);
+
+    let winner = weightedPossibilities[0];
+    // ... بقية منطق weightedVotingCollapse ...
+
+    return {
+        selected: winner,
+        confidence: winner.finalWeight, // أو يمكن أن تكون هناك ثقة منفصلة
+        // ...
+    };
+}
+
+// يجب أن يتضمن constructor الخاص بـ GenerativeCollapseEngine 
+// تهيئة أو تلقي واجهات لـ memorySystem, motivationSystem, etc.
+constructor(config, memorySystem, motivationSystem, embodimentSystem, emotionalSystem /*... other dependencies ...*/) {
+    this.config = config;
+    this.memorySystem = memorySystem;
+    this.motivationSystem = motivationSystem;
+    this.embodimentSystem = embodimentSystem;
+    this.emotionalSystem = emotionalSystem;
+    // ...
+    this.defaultDecisionWeights = { // مثال للأوزان الافتراضية
+        simulator_confidence: 0.3,
+        memory_resonance: 0.2,
+        goal_alignment: 0.25,
+        emotional_valence: 0.1,
+        energy_conservation: 0.05,
+        current_emotion_bias: 0.1
+    };
+    this.collapseHistory = [];
+}
+
+// ... بقية دوال GenerativeCollapseEngine كما هي أو مع تعديلات طفيفة ...
+
       }
     `,
 

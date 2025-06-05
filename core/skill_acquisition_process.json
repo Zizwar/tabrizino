@@ -1,0 +1,93 @@
+{
+  "id": "skill_acquisition_process",
+  "title": "عملية اكتساب المهارات - من الجهد الواعي إلى الإتقان التلقائي",
+  "description": "وصف للعملية الديناميكية التي يتم من خلالها اكتساب المهارات، حيث لا يتم إضافة مفهوم جديد، بل يتم تغيير حالة وطريقة عمل المفاهيم الحالية مثل 'simulators' و'generative_reconstruction' و'meta_cognition'.",
+  "category": "core-process-definition",
+  "version": "1.0",
+  "safety_level": "low_risk",
+  "status": "new_process_draft",
+
+  "core_idea_summary": {
+    "concept_origin": "Derived from a user suggestion (Ibrahim) to model learning as a state change rather than a new component.",
+    "hot_to_cold_paradigm": {
+      "hot_phase_learning": "Initial learning is effortful, conscious, and tiring, as 'simulators' process raw, unfiltered reality data.",
+      "cold_phase_mastery": "Mastery is achieved when repeated experiences are consolidated into an optimized 'skill schema'. This schema is then fed directly to the simulators, making the process efficient, automatic, and 'cold'."
+    },
+    "technical_analogy": "The process is analogous to updating a state in a reactive programming framework (like React's useState), where the input to a function (the simulator) changes from raw data to a refined, pre-processed object (the skill schema)."
+  },
+
+  "stages_of_acquisition": {
+    "stage_1_conscious_incompetence_hot_phase": {
+      "description": "المرحلة الأولى: المبتدئ يواجه المهارة بجهد واعٍ كامل، ويرتكب العديد من الأخطاء.",
+      "active_concepts": {
+        "simulators": "يعمل 'reality_processor' و 'prediction_engine' بحمل أقصى، لمعالجة كل التفاصيل الحسية الخام.",
+        "middleware": "يكون في وضع 'منفتح'، يسمح بمرور معظم البيانات الحسية دون تصفية مسبقة.",
+        "noise_factor": "مرتفع وغير منظم، مما يؤدي إلى استجابات غير دقيقة (مثل حركات متشنجة عند تعلم القيادة).",
+        "meta_cognition": "نشط في وضع 'مراقبة الأخطاء'، يسجل باستمرار الفجوة بين النية والنتيجة."
+      },
+      "cognitive_load": "Very High"
+    },
+    "stage_2_conscious_competence_refinement_phase": {
+      "description": "المرحلة الثانية: يبدأ المتعلم في فهم المهارة، لكنها لا تزال تتطلب تركيزاً كاملاً.",
+      "active_concepts": {
+        "generative_reconstruction": "يبدأ في بناء 'مخطط المهارة' الأولي (Skill Schema) من خلال تجميع التجارب الناجحة والفاشلة في نمط متماسك.",
+        "meta_cognition": "ينتقل من مجرد كشف الأخطاء إلى 'توجيه التعلم'، حيث يقدم اقتراحات لتحسين الأداء.",
+        "noise_factor": "يبدأ في الانخفاض والتنظيم، وتصبح الاستجابات أكثر سلاسة.",
+        "simulators": "لا يزال الحمل مرتفعاً، لكنه يبدأ في الاستفادة من المخطط الأولي لتقليل بعض المعالجات."
+      },
+      "cognitive_load": "High"
+    },
+    "stage_3_unconscious_competence_cold_phase": {
+      "description": "المرحلة النهائية: أصبحت المهارة 'طبيعة ثانية'، يتم أداؤها تلقائياً بأقل جهد واعٍ.",
+      "active_concepts": {
+        "skill_schema_activation": "يكتشف 'middleware' أو نظام التعرف على الأنماط سياق المهارة (مثل: 'أنا الآن أقود السيارة')، ويقوم بتنشيط 'مخطط المهارة' المحسن.",
+        "simulators": "يتلقى المدخلات من 'مخطط المهارة' المحسن بدلاً من البيانات الحسية الخام. هذا يجعله 'بارداً'، سريعاً، وفعالاً.",
+        "meta_cognition": "ينتقل إلى وضع 'المراقبة الخلفية'، يتدخل فقط عند حدوث خطأ غير متوقع أو عند الحاجة لتعلم تعديل جديد على المهارة.",
+        "generative_reconstruction": "يقوم فقط بتحديثات طفيفة على المخطط بناءً على تجارب جديدة، بدلاً من بنائه من الصفر."
+      },
+      "cognitive_load": "Very Low"
+    }
+  },
+
+  "role_of_key_concepts_in_learning": {
+    "simulators": "هو 'الممثل' الذي ينفذ المهارة. يكون 'ساخناً' ومجهداً في البداية، و'بارداً' وفعالاً بعد الإتقان.",
+    "generative_reconstruction": "هو 'المهندس' الذي يبني مخطط المهارة (Skill Schema) من بيانات التجارب الفوضوية.",
+    "meta_cognition": "هو 'المدرب' الذي يراقب الأداء، يكتشف الأخطاء، ويوجه عملية البناء التي يقوم بها 'المهندس'.",
+    "noise_factor": "هو مقياس 'عدم الدقة'. يكون مرتفعاً وعشوائياً في البداية، ويصبح منخفضاً ومنظماً مع الإتقان.",
+    "embodiment_interface": "يوفر الطاقة اللازمة للتعلم (الذي يستهلك طاقة عالية في البداية) ويوفر التغذية الراجعة الحسية-الحركية الضرورية للممارسة."
+  },
+
+  "input_output_spec_for_the_process": {
+    "process_input": {
+      "type": "practice_experience_data_packet",
+      "format": {
+        "goal_to_learn": "string (from motivation_core, e.g., 'learn_to_drive')",
+        "sensory_motor_data": "object (raw data from the practice session)",
+        "performance_outcome": "object (success, errors, timing)",
+        "meta_cognitive_feedback": "object (self-assessment of performance)"
+      }
+    },
+    "process_output": {
+      "type": "updated_skill_profile",
+      "format": {
+        "skill_id": "string",
+        "current_mastery_level": "enum[novice, intermediate, expert]",
+        "optimized_skill_schema": "object (the refined data pattern for the skill)",
+        "updated_simulator_pathways": "object (rules for activating the schema in specific contexts)"
+      }
+    }
+  },
+
+  "pseudocode": {
+    "reference": "./pseudocode/skill_acquisition_pseudo.js",
+    "description": "يشمل الكود الزائف لدالة `processPracticeExperience` التي توضح كيفية تفاعل المفاهيم عبر مراحل التعلم الثلاث."
+  },
+
+  "meta": {
+    "created": "2025-06-05",
+    "author": "AI Language Model (Gemini) & Ibrahim",
+    "inspiration": "Dreyfus model of skill acquisition, Procedural Memory Research, Reactive Programming Models",
+    "purpose": "To define the dynamic process of learning within the existing CPF framework."
+  }
+}
+

@@ -1,0 +1,171 @@
+{
+  "id": "motivation_core",
+  "title": "نواة الدوافع والأهداف - المحرك الداخلي للسلوك",
+  "description": "نموذج نظري للمنظومة الداخلية التي تولد وتدير الدوافع والأهداف الأساسية والعليا، وتوجه السلوك بشكل استباقي.",
+  "category": "core-engine",
+  "version": "1.0",
+  "safety_level": "low_risk",
+  "status": "new_concept_draft",
+
+  "scientific_relations": {
+    "psychology": {
+      "concept": "maslow_hierarchy_of_needs",
+      "similarity": "hierarchical_goal_structure_from_basic_to_self_actualization",
+      "explanation": "وجود تسلسل هرمي للدوافع، من الاحتياجات الأساسية إلى تحقيق الذات.",
+      "similarity_score": 0.8
+    },
+    "neuroscience": {
+      "concept": "reward_system_dopamine_pathways",
+      "similarity": "neural_basis_of_motivation_and_goal_pursuit",
+      "explanation": "الدور المركزي لنظام المكافأة في الدماغ في تحفيز السلوك الموجه نحو الهدف.",
+      "similarity_score": 0.7
+    },
+    "cybernetics": {
+      "concept": "goal_directed_systems",
+      "similarity": "systems_that_actively_pursue_defined_objectives",
+      "explanation": "الأنظمة التي تعمل بشكل فعال لتحقيق أهداف محددة مسبقًا.",
+      "similarity_score": 0.9
+    },
+    "behavioral_economics": {
+      "concept": "incentive_theory_and_prospect_theory",
+      "similarity": "how_incentives_and_perceived_value_drive_choices",
+      "explanation": "تأثير الحوافز والقيمة المتوقعة على عملية اتخاذ القرار والسعي نحو الأهداف.",
+      "similarity_score": 0.6
+    }
+  },
+
+  "core_components": {
+    "needs_assessment_module": {
+      "description": "وحدة تقييم الاحتياجات الفسيولوجية والنفسية الأساسية.",
+      "inputs": ["internal_state_signals_from_embodiment_interface", "environmental_threats_or_opportunities"],
+      "outputs": ["prioritized_needs_list", "deficit_signals"],
+      "function": "تحديد الاحتياجات غير الملباة وترتيبها حسب الأولوية (مثل: الجوع، الأمان، الانتماء)."
+    },
+    "value_system_integrator": {
+      "description": "وحدة تدمج القيم الشخصية والمعتقدات لتشكيل الأهداف العليا.",
+      "inputs": ["personal_values_learned", "cultural_norms", "life_experiences_via_generative_reconstruction"],
+      "outputs": ["long_term_aspirations", "guiding_principles"],
+      "function": "تحديد ما هو مهم وذو معنى للفرد على المدى الطويل (مثل: النمو، الإسهام، الإبداع)."
+    },
+    "goal_generation_engine": {
+      "description": "محرك توليد الأهداف، يترجم الاحتياجات والقيم إلى أهداف ملموسة وقابلة للقياس.",
+      "inputs": ["prioritized_needs_list", "long_term_aspirations", "current_context_from_environmental_variables"],
+      "outputs": ["short_term_goals", "medium_term_goals", "long_term_goals_hierarchy"],
+      "process": "يستخدم استراتيجيات مثل SMART (Specific, Measurable, Achievable, Relevant, Time-bound) لتحويل الرغبات إلى خطط."
+    },
+    "motivation_intensity_regulator": {
+      "description": "منظم شدة الدافع، يحدد مستوى الطاقة والحماس الموجه نحو هدف معين.",
+      "inputs": ["goal_importance", "perceived_likelihood_of_success_from_prediction_engine", "emotional_state_from_oscillators", "available_energy_from_embodiment_interface"],
+      "outputs": ["motivation_level_for_specific_goal", "effort_allocation_recommendation"],
+      "function": "يوازن بين أهمية الهدف وصعوبة تحقيقه والموارد المتاحة لضبط مستوى الدافع."
+    },
+    "priority_arbitration_unit": {
+      "description": "وحدة تحكيم الأولويات، تحل التعارض بين الأهداف المتنافسة.",
+      "inputs": ["multiple_active_goals", "resource_constraints", "contextual_urgency"],
+      "outputs": ["currently_active_primary_goal", "deferred_goals_list"],
+      "function": "تستخدم مصفوفة قرار (مثل مصفوفة أيزنهاور: عاجل/هام) لتحديد الهدف الذي يجب التركيز عليه."
+    }
+  },
+
+  "input_output_spec": {
+    "system_inputs_triggering_motivation": {
+      "type": "internal_or_external_stimuli_array",
+      "format": {
+        "stimulus_type": "enum[internal_need, external_opportunity, value_conflict, new_information]",
+        "stimulus_data": "object_describing_the_stimulus",
+        "current_context": "environmental_variables_snapshot"
+      }
+    },
+    "primary_output_goal_directed_behavior": {
+      "type": "actionable_goal_set_and_motivation_profile",
+      "format": {
+        "active_goal": "object_detailing_the_primary_goal",
+        "motivation_level": "float[0-1]",
+        "supporting_sub_goals": "array[related_sub_goals]",
+        "resource_allocation_plan_for_simulators": "object",
+        "expected_emotional_outcome_if_achieved": "emotion_vector_from_oscillators"
+      }
+    },
+    "monitoring_output_goal_progress": {
+      "type": "goal_tracking_status",
+      "format": {
+        "goal_id": "string",
+        "progress_percentage": "float[0-1]",
+        "obstacles_encountered": "array[challenges]",
+        "motivation_sustainability_index": "float[0-1]",
+        "need_for_goal_reassessment": "boolean"
+      }
+    }
+  },
+
+  "interaction_with_other_concepts": {
+    "environmental_variables": "يوفر السياق الذي يؤثر على تقييم الاحتياجات وأولوية الأهداف.",
+    "embodiment_interface": "يزود بإشارات الحالة الداخلية (الجوع، الإرهاق) التي تحفز الاحتياجات الأساسية.",
+    "oscillators": "يؤثر على شدة الدافع ويعكس الحالة العاطفية المرتبطة بالسعي نحو الهدف أو الفشل فيه.",
+    "prediction_engine_in_simulators": "يقدر احتمالية نجاح تحقيق الهدف، مما يؤثر على الدافع.",
+    "generative_collapse": "يتلقى الأهداف ذات الأولوية لترجمتها إلى قرارات فعلية.",
+    "generative_reconstruction": "يساعد في تذكر التجارب السابقة المتعلقة بنجاح أو فشل أهداف مشابهة، وتشكيل القيم.",
+    "meta_cognition": "يراقب فعالية استراتيجيات تحديد الأهداف وتحقيقها، ويقترح تحسينات."
+  },
+
+  "parameters": {
+    "need_sensitivity_threshold": {
+      "type": "float",
+      "range": [0.1, 0.8],
+      "default": 0.3,
+      "description": "مستوى العجز في الحاجة الذي يتطلبه لتصبح دافعاً نشطاً."
+    },
+    "goal_commitment_factor": {
+      "type": "float",
+      "range": [0.5, 0.95],
+      "default": 0.8,
+      "description": "مدى الالتزام بالهدف بمجرد تحديده، ومقاومته للتغيير."
+    },
+    "value_driven_priority_weight": {
+      "type": "float",
+      "range": [0.0, 1.0],
+      "default": 0.6,
+      "description": "الوزن المعطى للأهداف المشتقة من القيم العليا مقابل الأهداف المشتقة من الاحتياجات الأساسية عند التعارض."
+    },
+    "achievement_feedback_impact": {
+      "type": "float",
+      "range": [0.1, 0.5],
+      "default": 0.2,
+      "description": "مدى تأثير النجاح أو الفشل في تحقيق هدف فرعي على الدافع العام للهدف الرئيسي."
+    }
+  },
+
+  "pseudocode": {
+    "reference": "./pseudocode/motivation_core_pseudo.js",
+    "description": "يشمل الكود الزائف لوظائف مثل `assessNeeds`, `generateGoals`, `regulateMotivation`, `arbitratePriorities`."
+  },
+
+  "applications_and_implications": [
+    "فهم السلوك البشري الموجه نحو الهدف.",
+    "تطوير أنظمة ذكاء اصطناعي ذات دوافع وأهداف ذاتية (بشكل نظري ومحاكاة).",
+    "تحسين استراتيجيات التحفيز في التعليم والعمل.",
+    "نمذجة عمليات اتخاذ القرار طويلة الأمد.",
+    "تفسير التغيرات في الأولويات عبر مراحل الحياة المختلفة."
+  ],
+
+  "limitations_and_future_work": [
+    "تبسيط لعمليات الدافع المعقدة والمتشابكة.",
+    "لا يفسر بشكل كامل الدوافع اللاواعية العميقة.",
+    "يحتاج إلى ربط أكثر تفصيلاً بآليات المكافأة العصبية.",
+    "التأثيرات الثقافية على نظام القيم والدوافع تحتاج إلى تفصيل أكبر."
+  ],
+
+  "safety_notes": [
+    "⚠️ هذا نموذج نظري لفهم الدوافع، وليس أداة لتشخيص مشاكل التحفيز أو الإرادة.",
+    "⚠️ لا يستخدم لمحاولة التلاعب بدوافع الآخرين.",
+    "⚠️ الدوافع البشرية معقدة للغاية وتتأثر بعوامل متعددة لا يشملها هذا النموذج بالضرورة."
+  ],
+
+  "meta": {
+    "created": "2025-06-05",
+    "author": "AI Language Model (Gemini) & Ibrahim",
+    "inspiration": "Maslow, Cybernetics, Reinforcement Learning Theory",
+    "purpose": "To model the internal drive and goal-setting mechanisms within CPF."
+  }
+}
+

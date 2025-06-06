@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF Concept Builder - مولد المفاهيم المعرفية</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e6ed;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Enhanced Animated Background */
+        #particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        /* Improved Header */
+        .header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.4);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        @keyframes logoGlow {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            }
+            100% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(139, 92, 246, 0.7);
+            }
+        }
+        
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e6ed;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Enhanced Main Layout */
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 320px 1fr 380px;
+            gap: 2rem;
+            min-height: calc(100vh - 120px);
+        }
+        
+        /* Enhanced Sidebar */
+        .sidebar {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 1.5rem;
+            height: fit-content;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .concept-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .concept-item {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .concept-item:hover::before {
+            left: 100%;
+        }
+        
+        .concept-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .concept-item.active {
+            background: rgba(59, 130, 246, 0.25);
+            border-color: #3b82f6;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .concept-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        .risk-low { 
+            background: #10b981; 
+            box-shadow: 0 0 15px #10b981;
+        }
+        .risk-moderate { 
+            background: #f59e0b;
+            box-shadow: 0 0 15px #f59e0b;
+        }
+        .risk-high { 
+            background: #ef4444;
+            box-shadow: 0 0 15px #ef4444;
+        }
+        
+        .concept-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .concept-category {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.2rem;
+        }
+        
+        /* Enhanced Main Content */
+        .main-content {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .content-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .tab.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .tab-content {
+            padding: 2rem;
+            flex: 1;
+            overflow: auto;
+        }
+        
+        /* Enhanced Graph Container */
+        .graph-container {
+            height: 600px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Flow Controls */
+        .flow-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .flow-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            color: #e0e6ed;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+        
+        .flow-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .flow-btn.active {
+            background: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Enhanced JSON Editor */
+        .json-editor {
+            background: #1a1a1a;
+            border-radius: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            height: 600px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            color: #e0e6ed;
+            resize: none;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Enhanced Properties Panel */
+        .properties-panel {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 1.5rem;
+            height: fit-content;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            background: linear-gradient(45deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #e0e6ed;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Enhanced Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        
+        /* Connection Info */
+        .connection-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .connection-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .connection-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Enhanced Notifications */
+        .notification {
+            position: fixed;
+            top: 120px;
+            right: 2rem;
+            background: rgba(59, 130, 246, 0.95);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            transform: translateX(100%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: rgba(16, 185, 129, 0.95);
+        }
+        
+        .notification.error {
+            background: rgba(239, 68, 68, 0.95);
+        }
+        
+        /* Node and Link Styles for D3 */
+        .node {
+            stroke: #fff;
+            stroke-width: 3px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 5px currentColor);
+        }
+        
+        .node:hover {
+            stroke-width: 4px;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .link {
+            fill: none;
+            stroke: #3b82f6;
+            stroke-width: 2;
+            opacity: 0.6;
+        }
+        
+        .link.flow-link {
+            stroke: #8b5cf6;
+            stroke-dasharray: 5,5;
+            animation: dash 2s linear infinite;
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -10;
+            }
+        }
+        
+        .node-label {
+            font-size: 11px;
+            fill: #e0e6ed;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+            font-weight: 500;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .main-container {
+                grid-template-columns: 280px 1fr 320px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 250px 1fr;
+                gap: 1rem;
+            }
+            
+            .properties-panel {
+                grid-column: 1 / -1;
+                margin-top: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #2563eb, #7c3aed);
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Animated Background -->
+    <canvas id="particles-bg"></canvas>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                <div class="logo-text">CPF Concept Builder</div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="loadCPFData()">
+                    📊 تحميل مفاهيم CPF
+                </button>
+                <button class="btn btn-secondary" onclick="exportAll()">
+                    💾 تصدير كامل
+                </button>
+                <button class="btn btn-primary" onclick="createNewConcept()">
+                    ➕ مفهوم جديد
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Enhanced Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    🧩 المفاهيم الأساسية
+                </h3>
+                <ul class="concept-list" id="conceptList">
+                    <!-- سيتم ملؤها ديناميكياً -->
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">
+                    📊 إحصائيات النظام
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalConcepts">0</div>
+                        <div class="stat-label">إجمالي المفاهيم</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalConnections">0</div>
+                        <div class="stat-label">الروابط النشطة</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="flowSteps">0</div>
+                        <div class="stat-label">خطوات التدفق</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Enhanced Main Content -->
+        <main class="main-content">
+            <div class="content-tabs">
+                <div class="tab active" onclick="switchTab('visual')">🎨 العرض البصري</div>
+                <div class="tab" onclick="switchTab('flow')">🌊 التدفق المعرفي</div>
+                <div class="tab" onclick="switchTab('json')">📝 محرر JSON</div>
+                <div class="tab" onclick="switchTab('connections')">🔗 شبكة الروابط</div>
+            </div>
+            
+            <div class="tab-content">
+                <!-- Visual Tab -->
+                <div id="visualTab" class="tab-pane active">
+                    <div class="flow-controls">
+                        <button class="flow-btn active" onclick="setVisualizationMode('concepts')">المفاهيم</button>
+                        <button class="flow-btn" onclick="setVisualizationMode('relationships')">الروابط</button>
+                        <button class="flow-btn" onclick="setVisualizationMode('categories')">الفئات</button>
+                        <button class="flow-btn" onclick="setVisualizationMode('safety')">مستويات الأمان</button>
+                    </div>
+                    <div class="graph-container" id="conceptGraph">
+                        <svg width="100%" height="100%"></svg>
+                    </div>
+                </div>
+                
+                <!-- Flow Tab -->
+                <div id="flowTab" class="tab-pane" style="display: none;">
+                    <div class="flow-controls">
+                        <button class="flow-btn active" onclick="setFlowMode('sequential')">تدفق تسلسلي</button>
+                        <button class="flow-btn" onclick="setFlowMode('parallel')">تدفق متوازي</button>
+                        <button class="flow-btn" onclick="setFlowMode('circular')">تدفق دائري</button>
+                    </div>
+                    <div class="graph-container" id="flowGraph">
+                        <svg width="100%" height="100%"></svg>
+                    </div>
+                </div>
+                
+                <!-- JSON Editor Tab -->
+                <div id="jsonTab" class="tab-pane" style="display: none;">
+                    <textarea class="json-editor" id="jsonEditor" placeholder="اختر مفهوماً لتحريره..."></textarea>
+                    <button class="btn btn-primary" onclick="saveJSON()" style="margin-top: 1rem;">
+                        💾 حفظ التغييرات
+                    </button>
+                </div>
+                
+                <!-- Connections Tab -->
+                <div id="connectionsTab" class="tab-pane" style="display: none;">
+                    <h3>شبكة الروابط بين المفاهيم</h3>
+                    <div id="connectionsList">
+                        <!-- سيتم ملؤها ديناميكياً -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Enhanced Properties Panel -->
+        <aside class="properties-panel">
+            <h3 class="sidebar-title">
+                ⚙️ خصائص المفهوم
+            </h3>
+            
+            <form id="conceptForm">
+                <div class="form-group">
+                    <label class="form-label">اسم المفهوم</label>
+                    <input type="text" class="form-input" id="conceptTitle" placeholder="أدخل اسم المفهوم">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">المعرف</label>
+                    <input type="text" class="form-input" id="conceptId" placeholder="concept-id">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">الفئة</label>
+                    <select class="form-input" id="conceptCategory">
+                        <option value="core-architecture">البنية الأساسية</option>
+                        <option value="decision-engine">محرك القرارات</option>
+                        <option value="memory-system">نظام الذاكرة</option>
+                        <option value="security-layer">طبقة الأمان</option>
+                        <option value="social-layer">الطبقة الاجتماعية</option>
+                        <option value="meta-layer">الطبقة الفوقية</option>
+                        <option value="core-engine">محرك أساسي</option>
+                        <option value="foundational-interface">واجهة أساسية</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">مستوى المخاطر</label>
+                    <select class="form-input" id="conceptSafety">
+                        <option value="low">منخفض</option>
+                        <option value="moderate">متوسط</option>
+                        <option value="high">عالي</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">الوصف</label>
+                    <textarea class="form-input" id="conceptDescription" placeholder="وصف المفهوم..." rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">الكلمات المفتاحية</label>
+                    <input type="text" class="form-input" id="conceptTags" placeholder="كلمة1, كلمة2, كلمة3">
+                </div>
+                
+                <button type="button" class="btn btn-primary" onclick="saveConcept()" style="width: 100%;">
+                    💾 حفظ المفهوم
+                </button>
+                
+                <button type="button" class="btn btn-secondary" onclick="exportConcept()" style="width: 100%; margin-top: 0.5rem;">
+                    📥 تصدير JSON
+                </button>
+            </form>
+            
+            <!-- Connection Info -->
+            <div class="sidebar-section" style="margin-top: 2rem;">
+                <h3 class="sidebar-title">🔗 معلومات الروابط</h3>
+                <div id="connectionInfo">
+                    <p style="opacity: 0.7; font-size: 0.9rem;">اختر مفهوماً لعرض روابطه</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    
+    <script>
+        // Global State
+        let concepts = {};
+        let currentConcept = null;
+        let relationships = [];
+        let cognitiveFlow = [];
+        let visualizationMode = 'concepts';
+        let flowMode = 'sequential';
+        
+        // CPF Data from your files
+        const cpfIndex = {
+            "core_concepts_and_processes": [
+                { "id": "simulators", "title": "المحاكيات المتوازية", "category": "core-architecture", "safety_level": "moderate", "relationships": ["generative-collapse", "noise-factor", "middleware"] },
+                { "id": "generative-collapse", "title": "الانهيار التوليدي", "category": "decision-engine", "safety_level": "moderate", "relationships": ["simulators", "oscillators"] },
+                { "id": "emotional-encryption", "title": "التشفير العاطفي", "category": "memory-system", "safety_level": "moderate", "relationships": ["generative-reconstruction", "oscillators"] },
+                { "id": "oscillators", "title": "أنماط التذبذب", "category": "core-engine", "safety_level": "low", "relationships": ["embodiment-interface", "noise-factor"] },
+                { "id": "noise-factor", "title": "معامل التشويش الإبداعي", "category": "parameters", "safety_level": "low", "relationships": ["simulators", "oscillators"] },
+                { "id": "middleware", "title": "الجسر الإدراكي", "category": "security-layer", "safety_level": "moderate", "relationships": ["trust-matrix", "attention-manager"] },
+                { "id": "trust-matrix", "title": "مصفوفة الثقة", "category": "security-layer", "safety_level": "moderate", "relationships": ["self-copies", "middleware"] },
+                { "id": "self-copies", "title": "نمذجة الآخرين", "category": "social-layer", "safety_level": "moderate", "relationships": ["trust-matrix", "noise-factor"] },
+                { "id": "environmental-variables", "title": "المتغيرات البيئية", "category": "foundation", "safety_level": "low", "relationships": ["attention-manager", "motivation-core"] },
+                { "id": "generative-reconstruction", "title": "إعادة التجميع التوليدي", "category": "memory-system", "safety_level": "moderate", "relationships": ["emotional-encryption", "meta-cognition"] },
+                { "id": "meta-cognition", "title": "الإدراك الميتا", "category": "meta-layer", "safety_level": "moderate", "relationships": ["all-concepts"] },
+                { "id": "motivation-core", "title": "نواة الدوافع", "category": "core-engine", "safety_level": "low", "relationships": ["embodiment-interface", "environmental-variables", "oscillators"] },
+                { "id": "embodiment-interface", "title": "واجهة التجسيد", "category": "foundational-interface", "safety_level": "low", "relationships": ["motivation-core", "oscillators"] },
+                { "id": "attention-manager", "title": "إدارة الانتباه", "category": "meta-layer-control", "safety_level": "low", "relationships": ["environmental-variables", "middleware"] }
+            ]
+        };
+        
+        const cognitiveFlowData = {
+            "flow_sequence": [
+                { "step": 0, "process": "تهيئة السياق", "concepts": ["motivation-core", "embodiment-interface", "environmental-variables"] },
+                { "step": 1, "process": "استقبال المدخلات", "concepts": ["environmental-variables", "attention-manager", "middleware"] },
+                { "step": 2, "process": "الفحص الأمني", "concepts": ["middleware", "trust-matrix"] },
+                { "step": 3, "process": "المعالجة المتوازية", "concepts": ["simulators", "attention-manager"] },
+                { "step": 4, "process": "التذبذب العاطفي", "concepts": ["oscillators", "embodiment-interface"] },
+                { "step": 5, "process": "إضافة العشوائية", "concepts": ["noise-factor"] },
+                { "step": 6, "process": "استدعاء الذكريات", "concepts": ["emotional-encryption", "generative-reconstruction"] },
+                { "step": 7, "process": "النمذجة الاجتماعية", "concepts": ["self-copies", "trust-matrix"] },
+                { "step": 8, "process": "اتخاذ القرار", "concepts": ["generative-collapse"] },
+                { "step": 9, "process": "المراقبة الميتا", "concepts": ["meta-cognition"] }
+            ]
+        };
+
+        // Enhanced Particles Background
+        function initParticles() {
+            const canvas = document.getElementById('particles-bg');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 150;
+            
+            // Create particles with different types
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8,
+                    size: Math.random() * 3 + 1,
+                    opacity: Math.random() * 0.6 + 0.2,
+                    color: Math.random() > 0.5 ? '59, 130, 246' : '139, 92, 246',
+                    pulseSpeed: Math.random() * 0.02 + 0.01
+                });
+            }
+            
+            let time = 0;
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                time += 0.01;
+                
+                particles.forEach((particle, index) => {
+                    // Update position
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Bounce off edges
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                    
+                    // Pulse effect
+                    const pulse = Math.sin(time * particle.pulseSpeed) * 0.3 + 0.7;
+                    
+                    // Draw particle
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size * pulse, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${particle.color}, ${particle.opacity * pulse})`;
+                    ctx.fill();
+                    
+                    // Add glow effect
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = `rgba(${particle.color}, ${particle.opacity})`;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                });
+                
+                // Draw connections with enhanced effects
+                particles.forEach((p1, i) => {
+                    particles.slice(i + 1).forEach(p2 => {
+                        const distance = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+                        if (distance < 120) {
+                            const alpha = 0.15 * (1 - distance / 120);
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            
+                            // Gradient line
+                            const gradient = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+                            gradient.addColorStop(0, `rgba(${p1.color}, ${alpha})`);
+                            gradient.addColorStop(1, `rgba(${p2.color}, ${alpha})`);
+                            
+                            ctx.strokeStyle = gradient;
+                            ctx.lineWidth = 1.5;
+                            ctx.stroke();
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        
+        // Initialize the application
+        function init() {
+            initParticles();
+            loadCPFData();
+            updateStats();
+        }
+        
+        // Load CPF data
+        function loadCPFData() {
+            concepts = {};
+            relationships = [];
+            
+            // Load concepts
+            cpfIndex.core_concepts_and_processes.forEach(concept => {
+                concepts[concept.id] = {
+                    id: concept.id,
+                    title: concept.title,
+                    category: concept.category,
+                    safety_level: concept.safety_level,
+                    description: `مفهوم ${concept.title} في إطار العمليات المعرفية CPF`,
+                    relationships: concept.relationships || [],
+                    tags: concept.title.split(' ')
+                };
+                
+                // Create relationships
+                if (concept.relationships) {
+                    concept.relationships.forEach(relatedId => {
+                        if (relatedId !== 'all-concepts') {
+                            relationships.push({
+                                source: concept.id,
+                                target: relatedId,
+                                type: 'relates_to'
+                            });
+                        }
+                    });
+                }
+            });
+            
+            // Load cognitive flow
+            cognitiveFlow = cognitiveFlowData.flow_sequence;
+            
+            renderConceptList();
+            updateGraph();
+            renderConnectionsList();
+            updateStats();
+            
+            showNotification('تم تحميل مفاهيم CPF بنجاح!', 'success');
+        }
+        
+        // Enhanced concept list rendering
+        function renderConceptList() {
+            const list = document.getElementById('conceptList');
+            list.innerHTML = '';
+            
+            Object.values(concepts).forEach(concept => {
+                const item = document.createElement('li');
+                item.className = 'concept-item';
+                item.onclick = () => selectConcept(concept.id);
+                
+                const riskClass = `risk-${concept.safety_level}`;
+                
+                item.innerHTML = `
+                    <div class="concept-icon ${riskClass}"></div>
+                    <div>
+                        <div class="concept-name">${concept.title}</div>
+                        <div class="concept-category">${getCategoryName(concept.category)}</div>
+                    </div>
+                `;
+                
+                list.appendChild(item);
+            });
+        }
+        
+        function getCategoryName(category) {
+            const categoryNames = {
+                'core-architecture': 'البنية الأساسية',
+                'decision-engine': 'محرك القرارات',
+                'memory-system': 'نظام الذاكرة',
+                'security-layer': 'طبقة الأمان',
+                'social-layer': 'طبقة اجتماعية',
+                'meta-layer': 'طبقة فوقية',
+                'core-engine': 'محرك أساسي',
+                'foundation': 'أساسي',
+                'foundational-interface': 'واجهة أساسية',
+                'meta-layer-control': 'تحكم فوقي',
+                'parameters': 'معاملات'
+            };
+            return categoryNames[category] || category;
+        }
+        
+        // Select concept
+        function selectConcept(conceptId) {
+            document.querySelectorAll('.concept-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            event.target.closest('.concept-item').classList.add('active');
+            
+            currentConcept = conceptId;
+            loadConceptToForm(concepts[conceptId]);
+            loadConceptToJSON(concepts[conceptId]);
+            updateConnectionInfo(conceptId);
+            highlightConceptInGraph(conceptId);
+        }
+        
+        // Load concept to form
+        function loadConceptToForm(concept) {
+            document.getElementById('conceptTitle').value = concept.title || '';
+            document.getElementById('conceptId').value = concept.id || '';
+            document.getElementById('conceptCategory').value = concept.category || 'core-architecture';
+            document.getElementById('conceptSafety').value = concept.safety_level || 'low';
+            document.getElementById('conceptDescription').value = concept.description || '';
+            document.getElementById('conceptTags').value = concept.tags ? concept.tags.join(', ') : '';
+        }
+        
+        // Load concept to JSON editor
+        function loadConceptToJSON(concept) {
+            const jsonEditor = document.getElementById('jsonEditor');
+            jsonEditor.value = JSON.stringify(concept, null, 2);
+        }
+        
+        // Update connection info
+        function updateConnectionInfo(conceptId) {
+            const connectionInfo = document.getElementById('connectionInfo');
+            const concept = concepts[conceptId];
+            
+            if (!concept || !concept.relationships) {
+                connectionInfo.innerHTML = '<p style="opacity: 0.7;">لا توجد روابط محددة</p>';
+                return;
+            }
+            
+            let html = '<div class="connection-info">';
+            concept.relationships.forEach(relId => {
+                const relatedConcept = concepts[relId];
+                if (relatedConcept) {
+                    html += `
+                        <div class="connection-item">
+                            <span>${relatedConcept.title}</span>
+                            <span style="opacity: 0.7; font-size: 0.8rem;">يرتبط مع</span>
+                        </div>
+                    `;
+                }
+            });
+            html += '</div>';
+            
+            connectionInfo.innerHTML = html;
+        }
+        
+        // Switch tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.style.display = 'none');
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+            
+            if (tabName === 'visual') {
+                updateGraph();
+            } else if (tabName === 'flow') {
+                updateFlowGraph();
+            } else if (tabName === 'connections') {
+                renderConnectionsList();
+            }
+        }
+        
+        // Set visualization mode
+        function setVisualizationMode(mode) {
+            visualizationMode = mode;
+            document.querySelectorAll('.flow-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateGraph();
+        }
+        
+        // Set flow mode
+        function setFlowMode(mode) {
+            flowMode = mode;
+            document.querySelectorAll('.flow-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateFlowGraph();
+        }
+        
+        // Enhanced graph update
+        function updateGraph() {
+            const svg = d3.select('#conceptGraph svg');
+            svg.selectAll('*').remove();
+            
+            const container = document.getElementById('conceptGraph');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            const nodes = Object.values(concepts).map(concept => ({
+                id: concept.id,
+                title: concept.title,
+                category: concept.category,
+                safety: concept.safety_level,
+                x: Math.random() * width,
+                y: Math.random() * height
+            }));
+            
+            const links = relationships.map(rel => ({
+                source: rel.source,
+                target: rel.target,
+                type: rel.type
+            }));
+            
+            // Color schemes based on visualization mode
+            const getNodeColor = (d) => {
+                switch (visualizationMode) {
+                    case 'safety':
+                        return {
+                            'low': '#10b981',
+                            'moderate': '#f59e0b', 
+                            'high': '#ef4444'
+                        }[d.safety] || '#6b7280';
+                    case 'categories':
+                        return {
+                            'core-architecture': '#3b82f6',
+                            'decision-engine': '#8b5cf6',
+                            'memory-system': '#ec4899',
+                            'security-layer': '#f59e0b',
+                            'social-layer': '#10b981',
+                            'meta-layer': '#ef4444'
+                        }[d.category] || '#6b7280';
+                    default:
+                        return '#3b82f6';
+                }
+            };
+            
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+                .force('charge', d3.forceManyBody().strength(-400))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(30));
+            
+            // Draw links with enhanced styling
+            const link = svg.append('g')
+                .selectAll('line')
+                .data(links)
+                .enter().append('line')
+                .attr('class', 'link')
+                .style('stroke', d => d.type === 'flow' ? '#8b5cf6' : '#3b82f6')
+                .style('stroke-width', 2)
+                .style('stroke-opacity', 0.6);
+            
+            // Draw nodes with enhanced styling
+            const node = svg.append('g')
+                .selectAll('circle')
+                .data(nodes)
+                .enter().append('circle')
+                .attr('class', 'node')
+                .attr('r', 20)
+                .style('fill', getNodeColor)
+                .style('stroke', '#ffffff')
+                .style('stroke-width', 3)
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended))
+                .on('click', (event, d) => selectConcept(d.id))
+                .on('mouseover', function(event, d) {
+                    d3.select(this).transition().duration(200).attr('r', 25);
+                })
+                .on('mouseout', function(event, d) {
+                    d3.select(this).transition().duration(200).attr('r', 20);
+                });
+            
+            // Add labels with enhanced styling
+            const labels = svg.append('g')
+                .selectAll('text')
+                .data(nodes)
+                .enter().append('text')
+                .attr('class', 'node-label')
+                .text(d => d.title)
+                .style('font-size', '11px')
+                .style('fill', '#e0e6ed')
+                .style('text-anchor', 'middle')
+                .style('dominant-baseline', 'middle')
+                .style('pointer-events', 'none')
+                .style('font-weight', '500');
+            
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+                
+                node
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
+                
+                labels
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y + 35);
+            });
+            
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+            
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+        
+        // Update flow graph
+        function updateFlowGraph() {
+            const svg = d3.select('#flowGraph svg');
+            svg.selectAll('*').remove();
+            
+            const container = document.getElementById('flowGraph');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            // Create flow nodes
+            const flowNodes = cognitiveFlow.map((step, index) => ({
+                id: `step-${step.step}`,
+                title: step.process,
+                step: step.step,
+                concepts: step.concepts,
+                x: flowMode === 'circular' ? 
+                    width/2 + Math.cos(2 * Math.PI * index / cognitiveFlow.length) * Math.min(width, height) * 0.3 :
+                    (width / (cognitiveFlow.length + 1)) * (index + 1),
+                y: flowMode === 'circular' ? 
+                    height/2 + Math.sin(2 * Math.PI * index / cognitiveFlow.length) * Math.min(width, height) * 0.3 :
+                    height / 2
+            }));
+            
+            // Create flow links
+            const flowLinks = flowNodes.slice(0, -1).map((node, index) => ({
+                source: node.id,
+                target: flowNodes[index + 1].id,
+                type: 'flow'
+            }));
+            
+            if (flowMode === 'circular') {
+                flowLinks.push({
+                    source: flowNodes[flowNodes.length - 1].id,
+                    target: flowNodes[0].id,
+                    type: 'flow'
+                });
+            }
+            
+            // Draw flow links
+            const flowLink = svg.append('g')
+                .selectAll('line')
+                .data(flowLinks)
+                .enter().append('line')
+                .attr('class', 'link flow-link')
+                .attr('x1', d => flowNodes.find(n => n.id === d.source).x)
+                .attr('y1', d => flowNodes.find(n => n.id === d.source).y)
+                .attr('x2', d => flowNodes.find(n => n.id === d.target).x)
+                .attr('y2', d => flowNodes.find(n => n.id === d.target).y);
+            
+            // Draw flow nodes
+            const flowNode = svg.append('g')
+                .selectAll('circle')
+                .data(flowNodes)
+                .enter().append('circle')
+                .attr('class', 'node')
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y)
+                .attr('r', 25)
+                .style('fill', '#8b5cf6')
+                .style('stroke', '#ffffff')
+                .style('stroke-width', 3);
+            
+            // Add flow labels
+            const flowLabels = svg.append('g')
+                .selectAll('text')
+                .data(flowNodes)
+                .enter().append('text')
+                .attr('class', 'node-label')
+                .attr('x', d => d.x)
+                .attr('y', d => d.y - 40)
+                .text(d => `${d.step}. ${d.title}`)
+                .style('font-size', '10px')
+                .style('fill', '#e0e6ed')
+                .style('text-anchor', 'middle');
+        }
+        
+        // Highlight concept in graph
+        function highlightConceptInGraph(conceptId) {
+            const svg = d3.select('#conceptGraph svg');
+            
+            svg.selectAll('.node')
+                .style('opacity', d => d.id === conceptId ? 1 : 0.3)
+                .style('stroke-width', d => d.id === conceptId ? 5 : 3);
+                
+            svg.selectAll('.link')
+                .style('opacity', d => d.source.id === conceptId || d.target.id === conceptId ? 1 : 0.1);
+        }
+        
+        // Render connections list
+        function renderConnectionsList() {
+            const connectionsList = document.getElementById('connectionsList');
+            let html = '<h4>الروابط النشطة في النظام:</h4>';
+            
+            relationships.forEach(rel => {
+                const sourceConcept = concepts[rel.source];
+                const targetConcept = concepts[rel.target];
+                
+                if (sourceConcept && targetConcept) {
+                    html += `
+                        <div class="connection-info">
+                            <div class="connection-item">
+                                <strong>${sourceConcept.title}</strong>
+                                <span>←→</span>
+                                <strong>${targetConcept.title}</strong>
+                            </div>
+                            <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">
+                                النوع: ${rel.type} | الفئة: ${getCategoryName(sourceConcept.category)} ↔ ${getCategoryName(targetConcept.category)}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            connectionsList.innerHTML = html;
+        }
+        
+        // Save concept
+        function saveConcept() {
+            if (!currentConcept) {
+                showNotification('يرجى اختيار مفهوم للحفظ', 'error');
+                return;
+            }
+            
+            const concept = concepts[currentConcept];
+            concept.title = document.getElementById('conceptTitle').value;
+            concept.id = document.getElementById('conceptId').value;
+            concept.category = document.getElementById('conceptCategory').value;
+            concept.safety_level = document.getElementById('conceptSafety').value;
+            concept.description = document.getElementById('conceptDescription').value;
+            concept.tags = document.getElementById('conceptTags').value.split(',').map(tag => tag.trim());
+            
+            concepts[currentConcept] = concept;
+            renderConceptList();
+            loadConceptToJSON(concept);
+            updateGraph();
+            updateStats();
+            
+            showNotification('تم حفظ المفهوم بنجاح!', 'success');
+        }
+        
+        // Save JSON
+        function saveJSON() {
+            if (!currentConcept) {
+                showNotification('يرجى اختيار مفهوم أولاً', 'error');
+                return;
+            }
+            
+            try {
+                const jsonText = document.getElementById('jsonEditor').value;
+                const parsedConcept = JSON.parse(jsonText);
+                concepts[currentConcept] = parsedConcept;
+                loadConceptToForm(parsedConcept);
+                renderConceptList();
+                updateGraph();
+                updateStats();
+                showNotification('تم حفظ JSON بنجاح!', 'success');
+            } catch (error) {
+                showNotification('خطأ في تنسيق JSON: ' + error.message, 'error');
+            }
+        }
+        
+        // Create new concept
+        function createNewConcept() {
+            const id = prompt('أدخل معرف المفهوم الجديد:');
+            if (!id) return;
+            
+            if (concepts[id]) {
+                showNotification('هذا المعرف موجود بالفعل!', 'error');
+                return;
+            }
+            
+            concepts[id] = {
+                id: id,
+                title: `مفهوم جديد: ${id}`,
+                category: 'core-architecture',
+                safety_level: 'low',
+                description: 'وصف المفهوم الجديد',
+                relationships: [],
+                tags: ['جديد']
+            };
+            
+            renderConceptList();
+            selectConcept(id);
+            updateStats();
+            showNotification('تم إنشاء مفهوم جديد!', 'success');
+        }
+        
+        // Export single concept
+        function exportConcept() {
+            if (!currentConcept) {
+                showNotification('يرجى اختيار مفهوم أولاً', 'error');
+                return;
+            }
+            
+            const concept = concepts[currentConcept];
+            const dataStr = JSON.stringify(concept, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `${concept.id}.json`;
+            link.click();
+            
+            showNotification('تم تصدير المفهوم!', 'success');
+        }
+        
+        // Export all concepts
+        function exportAll() {
+            const exportData = {
+                concepts: concepts,
+                relationships: relationships,
+                cognitive_flow: cognitiveFlow,
+                meta: {
+                    exported_at: new Date().toISOString(),
+                    version: '2.0',
+                    total_concepts: Object.keys(concepts).length,
+                    total_relationships: relationships.length,
+                    flow_steps: cognitiveFlow.length
+                }
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'cpf-complete-export.json';
+            link.click();
+            
+            showNotification('تم تصدير النظام كاملاً!', 'success');
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('totalConcepts').textContent = Object.keys(concepts).length;
+            document.getElementById('totalConnections').textContent = relationships.length;
+            document.getElementById('flowSteps').textContent = cognitiveFlow.length;
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

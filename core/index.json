@@ -33,7 +33,13 @@
     "safety_guidelines": "./safety_guidelines.json",
     "pseudocode_folder": "./pseudocode/" 
   },
-  "core_concepts_and_processes": [ 
+  "core_concepts_and_processes": [ {
+  "id": "cognitive_layers",
+  "title": "الطبقات الإدراكية (The Cognitive Layers)",
+  "file": "./cognitive_layers.json",
+  "category": "system-architecture-evolution",
+  "type": "definition"
+},
     {
       "id": "simulators",
       "title": "المعالجات المتوازية النظرية",

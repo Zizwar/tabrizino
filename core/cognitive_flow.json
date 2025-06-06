@@ -1,156 +1,102 @@
 {
-  "id": "cognitive_flow",
-  "title": "تدفق العمليات المعرفية - من المدخل إلى القرار (مع تكامل المفاهيم الجديدة)",
-  "description": "خريطة نظرية لكيفية تدفق المعلومات عبر المفاهيم المختلفة في إطار CPF، مع دمج نواة الدوافع، واجهة التجسيد، إدارة الانتباه، وعملية اكتساب المهارات.",
-  "version": "2.0",
-
+  "id": "cognitive_flow_v2",
+  "title": "تدفق العمليات المعرفية مع طبقة أمان أريادني (Ariadne's Safety Layer)",
+  "description": "خريطة محدّثة لكيفية تدفق المعلومات، مع دمج 'خيط أريادني' كآلية حماية ومراقبة مستمرة للمحاكيات.",
+  "version": "2.1",
   "foundational_influences": [
     {
       "concept_id": "embodiment_interface",
-      "influence": "يوفر بشكل مستمر بيانات الحالة الفسيولوجية (طاقة، إرهاق، جوع) التي تؤثر على كفاءة وأداء جميع العمليات المعرفية. على سبيل المثال، انخفاض الطاقة قد يقلل من عمق معالجة المحاكيات أو يزيد من سرعة الانهيار نحو قرارات مرضية."
+      "influence": "يوفر بيانات الحالة الفسيولوجية التي تؤثر على كفاءة جميع العمليات."
     },
     {
       "concept_id": "motivation_core",
-      "influence": "يحدد الأهداف والدوافع الحالية التي توجه عملية انتقاء المدخلات وتؤثر على معايير تقييم الخيارات في مرحلة اتخاذ القرار. يعمل بشكل استباقي ويضبط 'بوصلة' النظام."
+      "influence": "يحدد الأهداف التي توجه عملية انتقاء المدخلات وتقييم الخيارات."
     },
     {
       "concept_id": "attention_manager",
-      "influence": "يدير مورد الانتباه المحدود عبر جميع مراحل التدفق. يحدد أي المعلومات أو العمليات تحظى بالأولوية، مما يؤثر على عمق المعالجة وسرعتها."
+      "influence": "يدير مورد الانتباه المحدود ويحدد أولويات المعالجة."
+    },
+    {
+      "concept_id": "ariadne-thread",
+      "influence": "يعمل كطبقة أمان ورقابة عليا، يراقب خطر المحاكيات ويستخدم المؤثرات الخارجية كسياج أمان للعودة للواقع عند الضرورة."
     }
   ],
-
   "flow_sequence": [
     {
       "step": 0,
-      "process": "تهيئة السياق وتحديد الهدف (Pre-computation & Goal Priming)",
-      "concepts": ["motivation_core", "embodiment_interface", "environmental_variables", "attention_manager"],
-      "function": "تقييم الحالة الداخلية (جسدية، دافعية) والخارجية. تحديد الهدف (الأهداف) الأساسية التي ستقود دورة المعالجة الحالية. توجيه الانتباه الأولي.",
-      "analogy": "قبل بدء الرحلة: فحص وقود السيارة (الطاقة)، تحديد الوجهة (الهدف)، والاطلاع على حالة الطريق (البيئة).",
-      "output": "primed_context_data, active_goal_set, initial_attention_focus"
+      "process": "تهيئة السياق وتحديد الهدف",
+      "concepts": ["motivation_core", "embodiment_interface", "environmental_variables"],
+      "function": "تقييم الحالة الداخلية والخارجية لتحديد الهدف الأساسي الذي سيقود الدورة الحالية.",
+      "output": "primed_context_data, active_goal_set"
     },
     {
       "step": 1,
-      "process": "استقبال المدخلات الموجهة (Goal-Oriented Input Reception)",
+      "process": "استقبال المدخلات الموجهة",
       "concepts": ["environmental_variables", "attention_manager", "middleware"],
-      "function": "جمع المعلومات من البيئة مع تركيز الانتباه على ما هو ذو صلة بالهدف (الأهداف) الحالية. `attention_manager` يوجه `environmental_variables` و `middleware` لفلترة المدخلات.",
-      "analogy": "مسح الغرفة بحثاً عن مفتاح معين (الهدف)، وتجاهل الأشياء الأخرى.",
-      "real_world_example": "البحث عن معلومة محددة في مكتبة مزدحمة، مع تجاهل الكتب غير ذات الصلة.",
-      "output": "relevant_context_data",
-      "embodiment_note": "مستوى الإرهاق (من embodiment_interface) قد يؤثر على قدرة الانتباه على التركيز."
+      "function": "جمع المعلومات من البيئة مع تركيز الانتباه على ما هو ذو صلة بالهدف الحالي.",
+      "output": "relevant_context_data"
     },
     {
       "step": 2,
-      "process": "الفحص الأمني وتقييم الثقة (Security Screening & Trust Assessment)",
-      "concepts": ["middleware", "trust-matrix", "attention_manager"],
-      "function": "تصفية وتقييم مصداقية المدخلات ذات الصلة. `attention_manager` قد يوجه لتدقيق أعمق لمصادر معينة.",
-      "analogy": "التحقق من هوية زائر قبل السماح له بالدخول.",
-      "real_world_example": "تقييم مصداقية خبر قبل مشاركته، مع التركيز على مصدر الخبر.",
-      "output": "filtered_safe_relevant_data"
+      "process": "[أمان] فحص الخيط الأريادني الأولي (Initial Reality Anchor Check)",
+      "concepts": ["ariadne-thread", "environmental_variables"],
+      "function": "فحص أولي لقوة الارتباط بالواقع. استدعاء ariadne_thread.initialize_session() لتحديد قوة المؤثرات الخارجية قبل البدء بالمعالجة العميقة.",
+      "output": "reality_anchor_strength_score"
     },
     {
       "step": 3,
-      "process": "المعالجة المتوازية الموجهة بالهدف (Goal-Driven Parallel Processing)",
-      "concepts": ["simulators", "attention_manager", "embodiment_interface"],
-      "function": "توليد احتمالات وسيناريوهات متعددة تركز على تحقيق الهدف النشط. `attention_manager` يخصص موارد انتباه أكثر للمحاكيات ذات الصلة بالهدف. `embodiment_interface` يحدد مستوى الطاقة المتاح لعمق المعالجة.",
-      "analogy": "فرق عمل متعددة تبحث عن أفضل طريق للوصول إلى الوجهة المحددة.",
-      "real_world_example": "عند التخطيط لمشروع، فريق يفكر في الميزانية، وآخر في الجدول الزمني، وثالث في المخاطر، كلها تخدم هدف إنجاز المشروع.",
-      "output": "goal_oriented_possibilities",
-      "skill_acquisition_note": "إذا كان الهدف هو تعلم مهارة، ستكون المحاكيات 'ساخنة' وتعمل بجهد، وتتفاعل بشكل مكثف مع `generative_reconstruction` و `meta_cognition`."
+      "process": "المعالجة المتوازية مع خطافات الأمان (Parallel Processing with Safety Hooks)",
+      "concepts": ["simulators", "attention_manager", "ariadne-thread"],
+      "function": "توليد احتمالات وسيناريوهات. **يجب على كل محاكي أثناء عمله أن يستدعي ariadne_thread.assess() بشكل دوري** لتقييم مستوى الخطر بشكل مستمر.",
+      "output": "goal_oriented_possibilities_with_risk_assessment"
     },
     {
       "step": 4,
-      "process": "التذبذب والتوازن العاطفي (Emotional Oscillation & Balancing)",
-      "concepts": ["oscillators", "embodiment_interface"],
-      "function": "قياس الحالة العاطفية وتحديد مستوى التوتر/الحماس المرتبط بالهدف الحالي والمعالجة. الحالة الجسدية (من `embodiment_interface`) تؤثر مباشرة على الهزازات.",
-      "analogy": "مقياس حرارة السيارة الذي يوضح سخونة المحرك أثناء الرحلة.",
-      "real_world_example": "الشعور بالحماس عند الاقتراب من تحقيق هدف، أو القلق عند مواجهة عقبة.",
-      "output": "current_emotional_state_score_and_profile"
+      "process": "[أمان] تقييم ما بعد المحاكاة (Post-Simulation Safety Evaluation)",
+      "concepts": ["ariadne-thread"],
+      "function": "بعد انتهاء عمل المحاكيات، يتم إجراء تقييم شامل. استدعاء ariadne_thread.evaluate_all_simulators() لاتخاذ قرار: هل نكمل الدورة أم نفعّل آلية العودة للواقع؟",
+      "output": "go_or_no_go_decision"
     },
     {
       "step": 5,
-      "process": "إضافة العشوائية الخلاقة (Creative Noise Injection)",
-      "concepts": ["noise-factor", "attention_manager"],
-      "function": "كسر الأنماط وإضافة مرونة للتفكير في إطار السعي نحو الهدف. `attention_manager` قد يسمح بـ'تجول ذهني' محدود لاستكشاف أفكار جديدة.",
-      "analogy": "أخذ طريق جانبي غير متوقع أثناء الرحلة قد يؤدي لاكتشاف مكان جميل.",
-      "real_world_example": "فكرة 'خارج الصندوق' لحل مشكلة بعد استكشاف عدة حلول تقليدية.",
-      "output": "creative_variations_on_possibilities"
+      "process": "التذبذب والتوازن العاطفي",
+      "concepts": ["oscillators", "embodiment_interface"],
+      "function": "قياس الحالة العاطفية وتحديد مستوى التوتر/الحماس المرتبط بالهدف الحالي والمعالجة.",
+      "output": "current_emotional_state_score_and_profile"
     },
     {
       "step": 6,
-      "process": "استدعاء وإعادة بناء الذكريات ذات الصلة (Relevant Memory Retrieval & Reconstruction)",
+      "process": "استدعاء وإعادة بناء الذكريات ذات الصلة",
       "concepts": ["emotional-encryption", "generative-reconstruction", "attention_manager"],
-      "function": "البحث في الذكريات عن تجارب سابقة متعلقة بالهدف الحالي أو بالخيارات المطروحة، وإعادة بنائها في السياق الحالي. `attention_manager` يوجه عملية البحث.",
-      "analogy": "تذكر رحلات سابقة عند التخطيط لرحلة جديدة.",
-      "real_world_example": "استحضار تجربة تفاوض سابقة عند الاستعداد لمقابلة عمل.",
+      "function": "البحث في الذكريات عن تجارب سابقة متعلقة بالهدف الحالي وإعادة بنائها.",
       "output": "contextualized_relevant_memories"
     },
     {
       "step": 7,
-      "process": "نمذجة الآخرين والتفاعل الاجتماعي المتوقع (Social Modeling & Anticipated Interaction)",
-      "concepts": ["self-copies", "trust-matrix", "attention_manager"],
-      "function": "محاكاة ردود أفعال الآخرين المهمين بالنسبة للهدف الحالي وتقييم الثقة في تفاعلاتهم المحتملة. الانتباه يركز على النماذج الاجتماعية الأكثر صلة.",
-      "analogy": "التفكير في كيف سيستقبل الأصدقاء خبر قرارك قبل إخبارهم.",
-      "real_world_example": "توقع أسئلة لجنة المقابلة والاستعداد لها.",
-      "output": "social_predictions_and_reputation_impact_assessment"
-    },
-    {
-      "step": 8,
-      "process": "الانهيار التوليدي الموجه بالهدف (Goal-Oriented Generative Collapse)",
+      "process": "الانهيار التوليدي الموجه بالهدف",
       "concepts": ["generative-collapse", "motivation_core", "embodiment_interface"],
-      "function": "دمج كل الاحتمالات والتقييمات واختيار قرار واحد نهائي يخدم الهدف (الأهداف) المحددة بواسطة `motivation_core` على أفضل وجه، مع الأخذ في الاعتبار الطاقة المتاحة من `embodiment_interface` (قد يؤدي الإرهاق لقرار أسرع وأقل مثالية).",
-      "analogy": "بعد دراسة كل الخرائط والطرق، اختيار المسار النهائي للرحلة.",
-      "real_world_example": "قول 'قررت سأقبل هذه الوظيفة' بعد موازنة كل الإيجابيات والسلبيات.",
+      "function": "دمج كل الاحتمالات والتقييمات واختيار قرار واحد نهائي يخدم الهدف المحدد.",
       "output": "final_decision_aligned_with_goal"
     },
     {
-      "step": 9,
-      "process": "الإدراك الميتا والمراقبة والتكيف (Meta-Cognition, Monitoring & Adaptation)",
-      "concepts": ["meta-cognition", "attention_manager", "skill_acquisition_process"],
-      "function": "مراقبة وتقييم جودة العمليات المعرفية السابقة وكفاءة تحقيق الهدف. `attention_manager` يساعد في تركيز المراقبة. إذا كان الهدف هو تعلم مهارة، فإن `meta-cognition` يشرف على `skill_acquisition_process` ويقترح تحسينات.",
-      "analogy": "مراجعة الرحلة بعد انتهائها: ما الذي سار بشكل جيد؟ ماذا يمكن تحسينه في المرة القادمة؟",
-      "real_world_example": "بعد تقديم عرض، التفكير في نقاط القوة والضعف في الأداء وكيفية تحسينه مستقبلاً.",
-      "output": "performance_assessment, optimization_suggestions, updated_self_model, skill_schema_refinement_if_learning"
+      "step": 8,
+      "process": "الإدراك الميتا والمراقبة والتكيف",
+      "concepts": ["meta-cognition", "skill_acquisition_process"],
+      "function": "مراقبة وتقييم جودة العمليات المعرفية السابقة وكفاءة تحقيق الهدف.",
+      "output": "performance_assessment, optimization_suggestions"
     },
     {
-      "step": 10,
-      "process": "التنفيذ، التعلم، وتحديث الدوافع (Execution, Learning & Motivation Update)",
-      "concepts": ["environmental-variables", "motivation_core", "embodiment_interface", "generative_reconstruction"],
-      "function": "تطبيق القرار، مراقبة النتائج، وتحديث النظام. `generative_reconstruction` يخزن التجربة. `motivation_core` يعيد تقييم الأهداف والدوافع بناءً على نتيجة القرار (هل تم تحقيق الهدف؟ هل ظهرت احتياجات جديدة؟). `embodiment_interface` يسجل التأثير الجسدي للقرار ونتائجه.",
-      "analogy": "قيادة السيارة فعلياً على الطريق المختار، وملاحظة ما إذا كان جيداً، وتحديث خطط الرحلات المستقبلية.",
-      "real_world_example": "بدء العمل في الوظيفة الجديدة، وتقييم ما إذا كانت تلبي التوقعات، وتحديث الأهداف المهنية بناءً على ذلك.",
+      "step": 9,
+      "process": "التنفيذ والتعلم وتحديث الدوافع",
+      "concepts": ["environmental-variables", "motivation_core", "generative_reconstruction"],
+      "function": "تطبيق القرار، مراقبة النتائج، وتحديث النظام.",
       "output": "updated_system_state, learned_knowledge, potentially_new_active_goals"
     }
   ],
-  "parallel_processes_with_new_integrations": {
-    "description": "عمليات تحدث بالتوازي مع التدفق الرئيسي، متأثرة بالمفاهيم الجديدة.",
-    "continuous_embodiment_monitoring": {
-      "concepts": ["embodiment_interface", "oscillators"],
-      "function": "مراقبة مستمرة للحالة الفسيولوجية وتأثيرها على الحالة العاطفية (`oscillators`) وكفاءة المعالجة.",
-      "analogy": "لوحة عدادات السيارة التي تعرض مستوى الوقود وحرارة المحرك بشكل دائم."
-    },
-    "dynamic_attention_allocation": {
-      "concepts": ["attention_manager", "meta-cognition"],
-      "function": "تعديل مستمر لتركيز الانتباه وتوزيعه بناءً على المهمة الحالية، الأهداف، والمشتتات، بتوجيه من `meta-cognition`.",
-      "analogy": "سائق يغير تركيزه بين الطريق، المرايا، وعدادات السرعة حسب الحاجة."
-    },
-    "background_goal_tracking": {
-      "concepts": ["motivation_core", "meta-cognition"],
-      "function": "مراقبة التقدم نحو الأهداف طويلة المدى، وتحديث الأولويات عند ظهور فرص أو عقبات جديدة.",
-      "analogy": "نظام GPS يعيد حساب المسار إذا تغيرت ظروف الطريق أو إذا قررت التوقف في مكان غير مخطط له."
-    }
-  },
-  "decision_types_revisited": {
-    "description": "إعادة النظر في أنواع القرارات مع تأثير المفاهيم الجديدة.",
-    "energy_dependent_decision_making": {
-      "influence_of": "embodiment_interface",
-      "description": "في حالة انخفاض الطاقة، قد يميل النظام نحو قرارات أسرع وأقل استهلاكاً للموارد (Satisficing) بدلاً من التحليل المعمق.",
-      "example": "اختيار وجبة سريعة عند الشعور بالإرهاق الشديد بدلاً من طهي وجبة صحية."
-    },
-    "goal_driven_analytical_decision": {
-      "influence_of": "motivation_core, attention_manager",
-      "description": "قرارات تحليلية يتم فيها توجيه الانتباه والمعالجة بشكل مكثف لخدمة هدف محدد بوضوح.",
-      "example": "بحث مستفيض ومقارنة بين عدة جامعات لتحقيق هدف الحصول على شهادة معينة."
-    }
+  "emergency_override": {
+    "triggered_by": "ariadne-thread.emergency_exit_signal",
+    "action": "توقف فوري للتدفق الحالي وإعادة تشغيل الدورة الإدراكية (wino.js) مع التركيز الكامل على محاكي الواقع فقط (reality_simulator).",
+    "description": "آلية الطوارئ القصوى التي يفعّلها خيط أريادني عند اكتشاف خطر وجودي وشيك."
   }
 }
 

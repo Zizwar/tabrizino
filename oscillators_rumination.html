@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الهزازات في الاجترار العقلي</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0; 
+            padding: 20px;
+            color: white;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+        }
+        .state-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid;
+        }
+        .normal { border-left-color: #4CAF50; }
+        .rumination { border-left-color: #f44336; }
+        .oscillator {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .baseline { background: #2196F3; }
+        .dynamic { background: #FF9800; }
+        .integration { background: #9C27B0; }
+        .wave {
+            height: 80px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .wave-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: currentColor;
+        }
+        .stable { animation: stable-wave 2s ease-in-out infinite; }
+        .chaotic { animation: chaotic-wave 0.5s ease-in-out infinite; }
+        .stuck { animation: stuck-wave 3s ease-in-out infinite; }
+        
+        @keyframes stable-wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes chaotic-wave {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            25% { transform: translateY(-20px) scaleY(1.5); }
+            75% { transform: translateY(15px) scaleY(0.5); }
+        }
+        @keyframes stuck-wave {
+            0%, 100% { transform: translateY(-15px); }
+            50% { transform: translateY(-25px); }
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 10px 0;
+        }
+        .good-score { background: rgba(76, 175, 80, 0.3); }
+        .bad-score { background: rgba(244, 67, 54, 0.3); }
+        .emoji { font-size: 1.5em; }
+        .network {
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .connection {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .arrow { margin: 0 15px; font-size: 1.5em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 30px;">🎼 الهزازات في الحالة الطبيعية vs الاجترار</h1>
+        
+        <div class="comparison">
+            <div class="state-box normal">
+                <h2>🟢 الحالة الطبيعية</h2>
+                <div style="text-align: center;">
+                    <div class="oscillator baseline">0.5</div>
+                    <div class="oscillator dynamic">0.6</div>
+                    <div class="oscillator integration">0.1</div>
+                </div>
+                <div class="wave" style="color: #4CAF50;">
+                    <div class="wave-line stable"></div>
+                </div>
+                <div class="score good-score">
+                    Cognitive Score: 0.55<br>
+                    <span style="font-size: 0.7em;">توازن طبيعي وصحي</span>
+                </div>
+            </div>
+
+            <div class="state-box rumination">
+                <h2>🔴 حالة الاجترار</h2>
+                <div style="text-align: center;">
+                    <div class="oscillator baseline">0.3</div>
+                    <div class="oscillator dynamic">0.9</div>
+                    <div class="oscillator integration">0.6</div>
+                </div>
+                <div class="wave" style="color: #f44336;">
+                    <div class="wave-line chaotic"></div>
+                </div>
+                <div class="score bad-score">
+                    Cognitive Score: 0.75<br>
+                    <span style="font-size: 0.7em;">إثارة مرضية وتوتر</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="network">
+            <h2>🔗 الشبكة المعطلة: كيف يؤثر الاجترار على الأنظمة الأخرى</h2>
+            
+            <div class="connection">
+                <span class="emoji">🧠</span>
+                <strong>Dynamic Oscillator عالق (0.9)</strong>
+                <span class="arrow">→</span>
+                <span>يرسل إشارات "خطر مستمر" لبقية النظام</span>
+            </div>
+
+            <div class="connection">
+                <span class="emoji">⚡</span>
+                <strong>Noise Factor مثبط</strong>
+                <span class="arrow">→</span>
+                <span>لا يستطيع كسر دورة التفكير المتكررة</span>
+            </div>
+
+            <div class="connection">
+                <span class="emoji">💪</span>
+                <strong>Embodiment Interface منهك</strong>
+                <span class="arrow">→</span>
+                <span>الإرهاق الجسدي يخفض Baseline Oscillator</span>
+            </div>
+
+            <div class="connection">
+                <span class="emoji">🎯</span>
+                <strong>Attention Manager مختطف</strong>
+                <span class="arrow">→</span>
+                <span>كل الانتباه موجه للأفكار السلبية</span>
+            </div>
+
+            <div class="connection">
+                <span class="emoji">❌</span>
+                <strong>Generative Collapse معطل</strong>
+                <span class="arrow">→</span>
+                <span>عدم قدرة على "إغلاق" موضوع التفكير</span>
+            </div>
+        </div>
+
+        <div style="background: rgba(255,193,7,0.2); padding: 20px; border-radius: 15px; margin: 20px 0;">
+            <h3>🧬 المعادلة المدمرة للاجترار:</h3>
+            <div style="font-family: monospace; font-size: 1.2em; text-align: center; margin: 15px;">
+                <strong>Baseline↓ (0.3) + Dynamic↑ (0.9) = Integration↑ (0.6)</strong><br>
+                <span style="font-size: 0.8em; color: #ffeb3b;">= حالة "مفرطة النشاط" مع عدم استقرار أساسي</span>
+            </div>
+        </div>
+
+        <div style="background: rgba(76,175,80,0.2); padding: 20px; border-radius: 15px;">
+            <h3>💊 العلاج المقترح من منظور الهزازات:</h3>
+            <ul style="font-size: 1.1em; line-height: 1.6;">
+                <li><strong>استقرار Baseline:</strong> تقنيات التأمل والتنفس العميق</li>
+                <li><strong>تهدئة Dynamic:</strong> كسر دورة التفكير بأنشطة بديلة</li>
+                <li><strong>إعادة تعيين Integration:</strong> تمارين الوعي باللحظة الحالية</li>
+                <li><strong>تفعيل Noise Factor:</strong> أنشطة إبداعية عشوائية</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
+            ⚠️ <strong>تحذير:</strong> هذا تحليل نظري للفهم الأكاديمي فقط - لا يستخدم للتشخيص أو العلاج
+        </div>
+    </div>
+</body>
+</html>

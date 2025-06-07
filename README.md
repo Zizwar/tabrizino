@@ -52,15 +52,42 @@
 
 ```
 cpf/
-├── index.json                    # الفهرس الرئيسي
-├── cognitive_flow.json           # تدفق العمليات المعرفية
-├── concepts/                     # المفاهيم النظرية
-│   ├── simulators.json          # نموذج معالجات متوازية نظرية
-│   ├── middleware.json          # نموذج طبقة التصفية النظرية  
-│   ├── oscillators.json         # نموذج أنماط التذبذب المعرفي
-│   ├── ariadne-thread.json      # آلية العودة للواقع الجذري
-│   └── ...                      # مفاهيم أخرى
-└── README.md                    # هذا الملف
+├── README.md                     # دليل المشروع
+├── wino.js                       # المحرك الرئيسي للتنفيذ
+├── package.json                  # إعدادات المشروع
+├── builder.html                  # أداة البناء التفاعلية
+├── core/                         # المفاهيم الأساسية
+│   ├── index.json               # الفهرس الرئيسي
+│   ├── cognitive_flow.json      # تدفق العمليات المعرفية
+│   ├── cognitive-layers.json    # طبقات التطور المعرفي
+│   ├── simulators.json          # المعالجات المتوازية
+│   ├── oscillators.json         # أنماط التذبذب المعرفي
+│   ├── ariadne-thread.json      # آلية العودة للواقع
+│   ├── trust-matrix.json        # تقييم الثقة
+│   ├── self-copies.json         # نمذجة الآخرين
+│   ├── middleware.json          # طبقة التصفية والحماية
+│   ├── noise-factor.json        # العشوائية الإبداعية
+│   ├── attention_manager.json   # إدارة الانتباه
+│   ├── embodiment_interface.json # واجهة التجسيد
+│   ├── motivation_core.json     # نواة الدوافع والأهداف
+│   ├── generative-collapse.json # آلية اتخاذ القرار
+│   ├── generative-reconstruction.json # إعادة بناء الذكريات
+│   ├── emotional-encryption.json # ربط الذكريات بالمشاعر
+│   ├── environmental-variables.json # المتغيرات السياقية
+│   ├── skill_acquisition_process.json # عملية اكتساب المهارات
+│   ├── safety_guidelines.json   # إرشادات الأمان
+│   ├── technical_requirements.json # المتطلبات التقنية
+│   ├── safe_examples.json       # أمثلة آمنة للاستخدام
+│   └── pseudocode/              # الأكواد الزائفة للتنفيذ
+│       ├── simulators_pseudo.js
+│       ├── attention_manager_pseudo.js
+│       ├── embodiment_interface_pseudo.js
+│       ├── motivation_core_pseudo.js
+│       ├── skill_acquisition_pseudo.js
+│       └── ariadne-thread.js
+├── oscillators_rumination.html  # مثال تفاعلي للاجترار
+└── output/                      # مخرجات التحليل
+    └── analysis-results.md      # نتائج التحليلات
 ```
 
 ## 🎓 للباحثين والمطورين
@@ -87,31 +114,140 @@ cpf/
 
 ## 🚀 كيفية الاستخدام
 
-### للباحثين:
-```javascript
-// تحميل المفاهيم النظرية
-const cpf = require('./cpf/concepts/simulators.json');
+### **1. للذكاء الاصطناعي - تحليل الاستعلامات المعرفية:**
 
-// تحليل نمط إدراكي معين
-function analyzePattern(scenario) {
-    // استخدم المفاهيم كأدوات تحليلية
-    return conceptualAnalysis(scenario, cpf);
+```javascript
+const WinoScript = require('./wino.js');
+const cpf = new WinoScript();
+
+// استعلامات مثالية يمكن للـ AI الإجابة عليها:
+
+// تحليل كائن معين
+const butterflyQuery = await cpf.analyzeCognition({
+  subject: "butterfly",
+  context: "how_does_butterfly_perceive_reality",
+  cognitive_layers: [0, 1], // طبقات بسيطة
+  processing_mode: "basic_survival_responses"
+});
+
+// تحليل ظاهرة معرفية
+const overthinkingAnalysis = await cpf.analyzePattern({
+  phenomenon: "rumination_overthinking",
+  affected_concepts: ["oscillators", "noise-factor", "ariadne-thread"],
+  query: "what_happens_when_thinking_loops_infinitely"
+});
+
+// التمييز بين المحاكيات
+const simulatorDifference = await cpf.compareSimulators({
+  simulators: ["reality_processor", "prediction_engine", "dream_simulator"],
+  question: "how_to_distinguish_between_reality_and_future_projection"
+});
+```
+
+### **2. استعلامات نموذجية يمكن تحليلها:**
+
+```javascript
+// الأسئلة المدعومة:
+const supportedQueries = [
+  "كيف يدرك الصرصار العالم؟ (cognitive-layers)",
+  "ما تأثير الاجترار على النظام؟ (oscillators + noise-factor)",
+  "كيف أميز بين الحلم والواقع؟ (ariadne-thread + simulators)",
+  "لماذا أتذكر الألم بوضوح؟ (emotional-encryption)",
+  "كيف أثق في شخص جديد؟ (trust-matrix + self-copies)",
+  "ما الذي يجعلني أتخذ قرار سريع؟ (generative-collapse)",
+  "لماذا أشعر بالتوتر في مكان معين؟ (environmental-variables + oscillators)"
+];
+
+// تشغيل استعلام
+async function processQuery(question, context = {}) {
+  const result = await cpf.processQuery({
+    query: question,
+    context: context,
+    analysis_depth: "moderate",
+    return_concepts: true,
+    include_safety_notes: true
+  });
+  
+  return result;
 }
 ```
 
-### للمطورين:
+### **3. تحليل الحالات المعقدة:**
+
 ```javascript
-// استخدام كإطار عمل نظري
-class CognitiveFramework {
-    constructor() {
-        this.concepts = loadCPFConcepts();
-    }
-    
-    analyzeProcessingPattern(inputs) {
-        // تطبيق المفاهيم النظرية
-        return this.processWithCPF(inputs);
-    }
+// مثال: تحليل حالة الاجترار (Overthinking)
+const ruminationAnalysis = await cpf.analyzeComplexState({
+  state: "rumination_loop",
+  involved_concepts: {
+    oscillators: "infinite_recursive_thinking_pattern",
+    noise_factor: "protective_interruption_needed", 
+    ariadne_thread: "reality_anchor_weakening",
+    meta_cognition: "awareness_of_loop_but_unable_to_break"
+  },
+  intervention_query: "how_to_break_the_thinking_loop"
+});
+
+// النتيجة المتوقعة:
+/*
+{
+  analysis: "recursive thinking pattern detected",
+  affected_systems: ["oscillators", "noise-factor", "meta-cognition"],
+  intervention_recommendations: [
+    "activate_noise_factor_protective_interruption",
+    "strengthen_ariadne_thread_external_anchors",
+    "oscillators_circuit_breaker_activation"
+  ],
+  safety_notes: ["professional_help_if_persistent", "not_a_medical_diagnosis"]
 }
+*/
+```
+
+### **4. للباحثين - تحليل أنماط معرفية:**
+
+```javascript
+// تحميل إطار العمل الكامل
+const CPF = require('./core/index.json');
+const concepts = CPF.core_concepts_and_processes;
+
+// تحليل نمط معرفي معين
+function analyzePattern(scenario) {
+  const relevantConcepts = CPF.selectRelevantConcepts(scenario);
+  const cognitiveFlow = require('./core/cognitive_flow.json');
+  
+  return {
+    flow_analysis: cognitiveFlow.analyzeScenario(scenario),
+    concept_interactions: relevantConcepts.map(c => c.interactions),
+    safety_considerations: CPF.safety_classifications
+  };
+}
+
+// استعلام للباحثين
+const researchQuery = analyzePattern({
+  scenario: "decision_making_under_time_pressure",
+  subject_type: "human_adult",
+  context: "high_stakes_environment"
+});
+```
+
+### **5. استعلامات للمقارنة والتمييز:**
+
+```javascript
+// التمييز بين أنواع المحاكيات
+const simulatorComparison = {
+  query: "differentiate_simulators",
+  examples: {
+    reality_vs_dream: cpf.compareStates("reality_simulator", "dream_simulator"),
+    memory_vs_imagination: cpf.compareStates("memory_reconstructor", "pattern_explorer"),
+    prediction_vs_wishful_thinking: cpf.compareStates("prediction_engine", "fantasy_simulator")
+  }
+};
+
+// مثال للتشغيل:
+const dreamVsReality = await cpf.processComparison({
+  question: "كيف أعرف أنني في حلم وليس الواقع؟",
+  concepts_involved: ["ariadne-thread", "simulators", "environmental-variables"],
+  analysis_type: "state_discrimination"
+});
 ```
 
 ## 📚 الأساس العلمي

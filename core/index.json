@@ -387,4 +387,9 @@
     "future_development_focus": "تحسين مستمر لآليات الحماية والتدخل",
     "research_priority": "اختبار فعالية الأمان في بيئات محكومة"
   }
+,{
+      "id": "design_philosophy",
+      "title": "COMPLEXITY_JUSTIFICATION , TERMINOLOGY_CLARIFICATION",
+      "file": "./design_philosophy.json",
+}
 }

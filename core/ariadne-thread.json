@@ -1,510 +1,364 @@
 {
-  "id": "ariadne-thread",
-  "title": "الخيط الأريادني - آلية العودة للواقع الجذري",
-  "description": "نظام أمان نظري يسحب الوعي من المحاكيات الفرعية إلى الواقع الجذري عبر المؤثرات الخارجية والحماية التطورية",
-  "category": "navigation-safety-layer",
-  "version": "1.0",
-  "safety_level": "critical_system_component",
+  "id": "cognitive_flow",
+  "title": "تدفق العمليات المعرفية المحدث - مع تكامل الخيط الأريادني وآليات الأمان",
+  "description": "خريطة نظرية محدثة لكيفية تدفق المعلومات عبر المفاهيم المختلفة في إطار CPF، مع دمج الخيط الأريادني كآلية حماية مستمرة وتكامل متقدم للمفاهيم الجديدة",
+  "version": "3.0",
 
-  "classical_inspiration": {
-    "mythological_origin": "خيط أريادن في الأسطورة اليونانية - خيط لإيجاد الطريق للخروج من المتاهة",
-    "cognitive_adaptation": "خيط للعودة من متاهة المحاكيات المتداخلة إلى الواقع الجذري",
-    "survival_mechanism": "آلية حماية تطورية تمنع الغرق في محاكيات خطرة على البقاء"
-  },
-
-  "scientific_relations": {
-    "evolutionary_psychology": {
-      "concept": "survival_instincts_and_reality_testing",
-      "similarity": "mechanisms_that_protect_from_dangerous_mental_states",
-      "explanation": "آليات تطورية تحمي من الحالات الذهنية الخطرة على البقاء",
-      "similarity_score": 0.9
+  "foundational_influences": [
+    {
+      "concept_id": "embodiment_interface",
+      "influence": "يوفر بشكل مستمر بيانات الحالة الفسيولوجية والمؤثرات الحسية التي تؤثر على كفاءة العمليات المعرفية وتغذي الخيط الأريادني بإشارات الربط بالواقع"
     },
-    "neuroscience": {
-      "concept": "sensory_gating_and_attention_networks",
-      "similarity": "neural_mechanisms_for_reality_anchoring",
-      "explanation": "آليات عصبية للربط بالواقع والانتباه للمخاطر",
-      "similarity_score": 0.8
+    {
+      "concept_id": "motivation_core", 
+      "influence": "يحدد الأهداف والدوافع الحالية التي توجه عملية انتقاء المدخلات وتؤثر على معايير تقييم الخيارات، مع التأثير على تحديد أولوية المحاكيات الآمنة"
     },
-    "cognitive_psychology": {
-      "concept": "reality_monitoring_and_source_memory",
-      "similarity": "distinguishing_internal_from_external_sources",
-      "explanation": "التمييز بين المصادر الداخلية والخارجية للمعلومات",
-      "similarity_score": 0.8
+    {
+      "concept_id": "attention_manager",
+      "influence": "يدير مورد الانتباه المحدود عبر جميع مراحل التدفق ويتعاون مع الخيط الأريادني لإعادة توجيه الانتباه عند الحاجة للعودة للواقع"
     },
-    "systems_theory": {
-      "concept": "negative_feedback_loops_and_homeostasis",
-      "similarity": "self_correcting_mechanisms",
-      "explanation": "آليات التصحيح الذاتي للحفاظ على استقرار النظام",
-      "similarity_score": 0.7
+    {
+      "concept_id": "ariadne_thread",
+      "influence": "يراقب مستمراً مستوى الأمان في كل مرحلة ويتدخل عند الحاجة لحماية النظام من المحاكيات الخطرة، مع إمكانية قطع التدفق وإعادة التوجيه للواقع"
     }
-  },
-
-  "input_output_spec": {
-    "danger_assessment_input": {
-      "type": "simulator_context_analysis",
-      "format": {
-        "current_simulator": "active_simulator_identifier",
-        "simulator_content": "current_processing_content",
-        "reality_deviation": "float[0-1]_how_far_from_baseline_reality",
-        "survival_implications": "potential_real_world_consequences",
-        "duration_in_simulator": "time_spent_in_current_state"
-      }
-    },
-    "external_stimuli_input": {
-      "type": "sensory_anchor_data",
-      "format": {
-        "auditory_stimuli": "array[sound_events_with_intensity]",
-        "tactile_stimuli": "array[touch_pressure_temperature]",
-        "visual_interrupts": "array[sudden_light_changes]",
-        "pain_signals": "urgent_physical_discomfort_indicators",
-        "social_calls": "external_human_voice_recognition"
-      }
-    },
-    "intervention_output": {
-      "type": "reality_return_action",
-      "format": {
-        "intervention_level": "enum[monitoring,gentle_pull,strong_pull,emergency_exit]",
-        "pull_strength": "float[0-1]",
-        "recommended_action": "specific_return_mechanism",
-        "reality_anchor_points": "array[external_reference_points]",
-        "force_restart_required": "boolean"
-      }
-    }
-  },
-
-  "core_mechanisms": {
-    "external_sensory_anchors": {
-      "description": "المؤثرات الخارجية كخيوط طبيعية للعودة للواقع",
-      "anchor_types": {
-        "auditory_anchors": {
-          "background_noise": "قوة سحب: 0.3 - يقطع التركيز العميق",
-          "alarm_sounds": "قوة سحب: 0.9 - يقطع حتى الأحلام العميقة",
-          "human_voice_calls": "قوة سحب: 0.8 - خاصة الأسماء المألوفة",
-          "danger_sounds": "قوة سحب: 1.0 - استجابة فورية"
-        },
-        "tactile_anchors": {
-          "gentle_touch": "قوة سحب: 0.4 - لمسة خفيفة",
-          "firm_pressure": "قوة سحب: 0.7 - هز أو ضغط",
-          "pain_signals": "قوة سحب: 1.0 - ألم جسدي فوري",
-          "temperature_changes": "قوة سحب: 0.6 - برد أو حر شديد"
-        },
-        "instinctive_triggers": {
-          "baby_crying": "قوة سحب: 0.95 - غريزة الأمومة/الأبوة",
-          "predator_sounds": "قوة سحب: 0.9 - غريزة البقاء",
-          "fire_smell": "قوة سحب: 0.85 - خطر حيوي",
-          "falling_sensation": "قوة سحب: 1.0 - حماية جسدية"
-        }
-      }
-    },
-    
-    "danger_classification_system": {
-      "description": "تصنيف المحاكيات حسب مستوى الخطر على البقاء",
-      "safe_simulators": {
-        "pleasant_memories": {
-          "danger_level": 0.1,
-          "description": "ذكريات سعيدة - آمنة للاستمرار",
-          "max_duration": "unlimited"
-        },
-        "creative_imagination": {
-          "danger_level": 0.2,
-          "description": "تخيل إبداعي مفيد",
-          "max_duration": "several_hours"
-        },
-        "problem_solving_simulation": {
-          "danger_level": 0.15,
-          "description": "محاكاة حل المشاكل",
-          "max_duration": "unlimited_if_productive"
-        }
-      },
-      "moderate_risk_simulators": {
-        "emotional_processing": {
-          "danger_level": 0.4,
-          "description": "معالجة مشاعر صعبة",
-          "max_duration": "limited_with_monitoring"
-        },
-        "past_trauma_review": {
-          "danger_level": 0.6,
-          "description": "مراجعة صدمات الماضي",
-          "max_duration": "short_supervised_sessions"
-        }
-      },
-      "high_risk_simulators": {
-        "violent_fantasies": {
-          "danger_level": 0.9,
-          "description": "تخيلات عنيفة قد تؤثر على السلوك",
-          "max_duration": "immediate_intervention_required"
-        },
-        "reality_defying_actions": {
-          "danger_level": 0.95,
-          "description": "أفعال مستحيلة قد تُطبق في الواقع (طيران، قفز من مرتفعات)",
-          "max_duration": "emergency_exit_required"
-        },
-        "dissociative_states": {
-          "danger_level": 0.85,
-          "description": "انفصال عن الواقع",
-          "max_duration": "strong_intervention_needed"
-        }
-      }
-    },
-
-    "evolutionary_protection_system": {
-      "description": "النظام 'يعلق بإرادة' لحماية البقاء في بعض الحالات",
-      "voluntary_hanging_scenarios": {
-        "trauma_escape": {
-          "condition": "الواقع أكثر ألماً من المحاكي الآمن",
-          "protection_mechanism": "السماح بالبقاء مؤقتاً",
-          "override_triggers": ["external_danger", "basic_needs_urgent"]
-        },
-        "creative_flow": {
-          "condition": "محاكي إبداعي مفيد للحياة الواقعية",
-          "protection_mechanism": "تأخير التدخل",
-          "override_triggers": ["time_limits", "exhaustion_signals"]
-        },
-        "problem_solving": {
-          "condition": "محاكي تخيلي يحل مشكلة واقعية",
-          "protection_mechanism": "دعم الاستمرار",
-          "override_triggers": ["solution_found", "diminishing_returns"]
-        }
-      },
-      "forced_intervention_scenarios": {
-        "survival_threats": "أي محاكي يهدد البقاء الجسدي",
-        "reality_confusion": "عدم القدرة على التمييز بين المحاكي والواقع",
-        "behavioral_risks": "محاكيات قد تؤدي لسلوك خطر في الواقع",
-        "physiological_stress": "تأثير جسدي ضار من المحاكي"
-      }
-    },
-
-    "layer_navigation_system": {
-      "description": "آلية التنقل عبر طبقات المحاكيات للوصول للواقع الجذري",
-      "layer_identification": {
-        "method": "تحديد العمق الحالي في متاهة المحاكيات",
-        "indicators": [
-          "consistency_with_physical_laws",
-          "presence_of_external_validation",
-          "sensory_input_completeness",
-          "temporal_continuity",
-          "social_reality_confirmation"
-        ]
-      },
-      "upward_navigation": {
-        "gentle_ascent": {
-          "method": "زيادة تدريجية في المؤثرات الخارجية",
-          "triggers": ["gradual_reality_cues", "soft_environmental_changes"],
-          "success_rate": "70% للمحاكيات الآمنة"
-        },
-        "forced_ascent": {
-          "method": "سحب قوي وفوري للطبقة الأعلى",
-          "triggers": ["loud_sounds", "physical_contact", "pain_signals"],
-          "success_rate": "95% لمعظم الحالات"
-        },
-        "emergency_ejection": {
-          "method": "قذف فوري للواقع الجذري",
-          "triggers": ["extreme_danger", "life_threatening_scenarios"],
-          "success_rate": "99% مع تكلفة عالية"
-        }
-      },
-      "reality_root_validation": {
-        "description": "التأكد من الوصول للواقع الجذري الحقيقي",
-        "validation_criteria": [
-          "no_higher_internal_simulator_detected",
-          "full_sensory_spectrum_active",
-          "external_entities_independently_validated",
-          "consistent_physical_laws_confirmed",
-          "temporal_flow_linear_and_stable"
-        ],
-        "confirmation_methods": [
-          "cross_reference_with_others",
-          "consistency_checks_over_time",
-          "physical_law_validation",
-          "memory_continuity_assessment"
-        ]
-      }
-    }
-  },
-
-  "intervention_levels": {
-    "level_1_monitoring": {
-      "danger_threshold": "0.0-0.3",
-      "description": "مراقبة سلبية - لا تدخل",
-      "actions": [
-        "continuous_background_monitoring",
-        "reality_anchor_strength_assessment",
-        "external_stimuli_sensitivity_tracking"
-      ],
-      "effect": "النظام يعمل بحرية كاملة",
-      "energy_cost": "minimal"
-    },
-    
-    "level_2_gentle_pull": {
-      "danger_threshold": "0.3-0.6",
-      "description": "تعزيز تدريجي للوعي بالواقع",
-      "actions": [
-        "subtle_increase_in_external_awareness",
-        "gentle_reality_cue_enhancement",
-        "gradual_sensory_input_amplification",
-        "soft_environmental_anchor_activation"
-      ],
-      "effect": "زيادة الوعي بالواقع دون إجبار أو صدمة",
-      "energy_cost": "low_to_moderate"
-    },
-    
-    "level_3_strong_pull": {
-      "danger_threshold": "0.6-0.8",
-      "description": "سحب قوي نحو الواقع مع مقاطعة المحاكي",
-      "actions": [
-        "active_external_stimuli_amplification",
-        "simulator_disruption_protocols",
-        "forced_attention_redirection",
-        "reality_anchor_point_activation"
-      ],
-      "effect": "مقاطعة فعالة للمحاكي والعودة للواقع",
-      "energy_cost": "moderate_to_high",
-      "side_effects": ["temporary_disorientation", "possible_emotional_shock"]
-    },
-    
-    "level_4_emergency_exit": {
-      "danger_threshold": "0.8-1.0",
-      "description": "إجبار فوري للعودة مع إعادة تشغيل النظام",
-      "actions": [
-        "immediate_simulator_termination",
-        "maximum_sensory_anchor_activation",
-        "emergency_wino_js_restart",
-        "reality_only_mode_enforcement",
-        "all_safety_systems_activation"
-      ],
-      "effect": "توقف كامل للمحاكي الحالي وعودة فورية للواقع",
-      "energy_cost": "maximum",
-      "side_effects": ["significant_disorientation", "memory_gap_possible", "emotional_impact"],
-      "recovery_time": "minutes_to_hours"
-    }
-  },
-
-  "parameters": {
-    "base_reality_anchor_strength": {
-      "type": "float",
-      "range": [0.1, 0.9],
-      "default": 0.6,
-      "description": "قوة الربط الأساسية بالواقع"
-    },
-    "external_sensitivity": {
-      "type": "float",
-      "range": [0.1, 1.0],
-      "default": 0.7,
-      "description": "حساسية النظام للمؤثرات الخارجية"
-    },
-    "danger_assessment_strictness": {
-      "type": "float",
-      "range": [0.3, 0.9],
-      "default": 0.6,
-      "description": "مدى صرامة تقييم الخطر"
-    },
-    "intervention_threshold": {
-      "type": "float",
-      "range": [0.2, 0.8],
-      "default": 0.4,
-      "description": "العتبة لبدء التدخل النشط"
-    },
-    "emergency_threshold": {
-      "type": "float",
-      "range": [0.7, 0.95],
-      "default": 0.85,
-      "description": "عتبة التدخل الطارئ"
-    },
-    "voluntary_hanging_tolerance": {
-      "type": "float",
-      "range": [0.0, 0.6],
-      "default": 0.3,
-      "description": "مدى السماح بالبقاء الإرادي في المحاكيات الآمنة"
-    }
-  },
-
-  "integration_with_other_concepts": {
-    "simulators": {
-      "relationship": "يراقب كل محاكي ويقيم مستوى خطره",
-      "data_exchange": "simulators → ariadne_thread.assess_danger() → intervention_recommendation",
-      "emergency_override": "يمكن إيقاف أي محاكي فوراً عند الخطر"
-    },
-    
-    "oscillators": {
-      "relationship": "يتأثر بحالة التذبذب ويؤثر عليها",
-      "trigger_conditions": [
-        "cognitive_score approaching extremes (0.05 or 0.95)",
-        "high_dissonance_level > 0.8",
-        "protection_system_activation"
-      ],
-      "feedback_loop": "ariadne_thread.status → oscillators.safety_adjustment"
-    },
-    
-    "environmental_variables": {
-      "relationship": "مصدر أساسي للمؤثرات الخارجية",
-      "data_flow": "environmental_stimuli → ariadne_thread.external_anchor_processing",
-      "priority_processing": "إشارات الخطر تحصل على أولوية قصوى"
-    },
-    
-    "embodiment_interface": {
-      "relationship": "توفير البيانات الحسية والجسدية",
-      "critical_inputs": ["pain_signals", "fatigue_levels", "stress_hormones", "sensory_input_quality"],
-      "emergency_signals": "embodiment_interface.emergency_state → immediate_intervention"
-    },
-    
-    "meta_cognition": {
-      "relationship": "مراقب عام لحالة الخيط وفعاليته",
-      "monitoring": "ariadne_thread.system_health + intervention_success_rate",
-      "optimization": "تحسين معايير التدخل بناءً على النتائج"
-    },
-    
-    "wino_js": {
-      "relationship": "يمكن إجبار إعادة تشغيل النظام الكامل",
-      "restart_triggers": [
-        "emergency_exit_activation",
-        "multiple_intervention_failures", 
-        "system_integrity_compromise"
-      ],
-      "initialization": "ariadne_thread.initialize_session() في بداية كل دورة"
-    }
-  },
-
-  "failure_modes_and_recovery": {
-    "anchor_failure": {
-      "description": "فشل المؤثرات الخارجية في السحب للواقع",
-      "causes": [
-        "sensory_deprivation_environment",
-        "extremely_high_simulator_engagement",
-        "damaged_sensory_receptors",
-        "psychological_resistance"
-      ],
-      "symptoms": [
-        "no_response_to_external_stimuli",
-        "continued_deep_engagement_with_dangerous_simulator",
-        "loss_of_reality_discrimination"
-      ],
-      "recovery_strategies": [
-        "escalate_to_physical_intervention",
-        "activate_backup_anchor_systems",
-        "emergency_medical_protocols",
-        "social_intervention_activation"
-      ]
-    },
-    
-    "false_reality_lock": {
-      "description": "النظام يعتقد أنه في الواقع لكنه في محاكي معقد",
-      "causes": [
-        "highly_realistic_simulator",
-        "compromised_validation_systems",
-        "recursive_simulator_loops"
-      ],
-      "detection": [
-        "inconsistency_pattern_analysis",
-        "external_validation_failure",
-        "temporal_anomaly_detection"
-      ],
-      "intervention": [
-        "forced_external_reality_check",
-        "social_verification_protocols",
-        "physical_law_validation_tests"
-      ]
-    },
-    
-    "intervention_cascade_failure": {
-      "description": "فشل متتالي لجميع مستويات التدخل",
-      "emergency_protocols": [
-        "immediate_external_help_activation",
-        "medical_intervention_alert",
-        "system_full_reset_preparation",
-        "backup_consciousness_systems_activation"
-      ]
-    },
-    
-    "over_intervention": {
-      "description": "تدخل مفرط يضر بالوظائف الطبيعية",
-      "symptoms": [
-        "inability_to_engage_with_safe_simulators",
-        "constant_hyper_vigilance",
-        "creative_and_imaginative_suppression"
-      ],
-      "correction": [
-        "sensitivity_calibration_adjustment",
-        "intervention_threshold_raising",
-        "safe_simulator_whitelist_expansion"
-      ]
-    }
-  },
-
-  "memory_formation_and_validation": {
-    "dual_measurement_system": {
-      "description": "الذكريات تتكون من قياسين: داخلي وخارجي",
-      "internal_measurement": {
-        "source": "التجربة الذاتية داخل المحاكي",
-        "data": "الأحاسيس، المشاعر، التفاصيل المدركة",
-        "reliability": "عالية للتجربة الشخصية، منخفضة للواقعية"
-      },
-      "external_measurement": {
-        "source": "تأكيد من كيانات خارجية مستقلة (أشخاص آخرين)",
-        "data": "شهادات، ملاحظات، تسجيلات",
-        "reliability": "عالية للواقعية، متغيرة للتفاصيل"
-      },
-      "validation_process": {
-        "cross_reference": "مطابقة القياس الداخلي مع الخارجي",
-        "consistency_check": "التحقق من اتساق التفاصيل عبر الزمن",
-        "plausibility_assessment": "تقييم منطقية الذكرى ضمن السياق المعروف",
-        "confidence_scoring": "تحديد مستوى الثقة في صحة الذكرى"
-      }
-    },
-    
-    "reality_proof_mechanism": {
-      "formula": "reality_confidence = (internal_consistency * 0.3) + (external_validation * 0.7)",
-      "thresholds": {
-        "high_confidence": "> 0.8 - ذكرى واقعية مؤكدة",
-        "moderate_confidence": "0.5-0.8 - ذكرى محتملة الواقعية",
-        "low_confidence": "< 0.5 - ذكرى مشكوك في واقعيتها"
-      },
-      "storage_classification": {
-        "validated_memories": "تُحفظ كذكريات واقعية مؤكدة",
-        "simulator_memories": "تُحفظ كتجارب محاكي مع علامات التمييز",
-        "uncertain_memories": "تُحفظ مع علامات عدم اليقين"
-      }
-    }
-  },
-
-  "applications": [
-    "فهم آليات الحماية الطبيعية من الحالات الذهنية الخطرة",
-    "تطوير أنظمة أمان للواقع الافتراضي والألعاب الغامرة",
-    "تحسين علاج اضطرابات الانفصال والذهان نظرياً",
-    "فهم آليات الاستيقاظ من الأحلام والكوابيس",
-    "تطوير تقنيات التأمل الآمن والاستكشاف الذاتي",
-    "نمذجة آليات التمييز بين الواقع والخيال",
-    "تحسين تقنيات العلاج بالتعرض المحكوم"
   ],
 
-  "limitations": [
-    "يعتمد على سلامة المستقبلات الحسية",
-    "قد يفشل في حالات الحرمان الحسي الشديد",
-    "معرض للتلاعب من قبل محاكيات معقدة جداً",
-    "يحتاج معايرة فردية حسب حساسية كل شخص",
-    "قد يتداخل مع الوظائف الإبداعية المفيدة"
+  "flow_sequence": [
+    {
+      "step": 0,
+      "process": "تهيئة النظام وتحديد الهدف مع التحقق من الأمان الأولي",
+      "concepts": ["motivation_core", "embodiment_interface", "environmental_variables", "attention_manager", "ariadne_thread"],
+      "function": "تقييم الحالة الداخلية والخارجية، تحديد الأهداف الأساسية، توجيه الانتباه الأولي، وتهيئة آليات الأمان",
+      "analogy": "فحص شامل للسيارة قبل الرحلة: الوقود، الوجهة، حالة الطريق، وأنظمة الأمان",
+      "ariadne_integration": {
+        "function": "ariadne_thread.initialize_session(global_context)",
+        "purpose": "تحديد قوة الربط الأساسية بالواقع وتقييم المؤثرات الخارجية",
+        "output": "baseline_reality_anchor_strength + external_stimuli_map + safety_baseline"
+      },
+      "output": "primed_context_data + active_goal_set + initial_attention_focus + safety_baseline",
+      "safety_checkpoint": "أول نقطة تأكد من جاهزية أنظمة الأمان"
+    },
+    {
+      "step": 1,
+      "process": "استقبال المدخلات الموجهة مع المراقبة الأمنية",
+      "concepts": ["environmental_variables", "attention_manager", "middleware", "ariadne_thread"],
+      "function": "جمع المعلومات من البيئة مع تركيز الانتباه على ما هو ذو صلة بالهدف، مع مراقبة مستمرة لمؤشرات الخطر",
+      "analogy": "مسح الغرفة بحذر للبحث عن شيء محدد مع الانتباه للمخاطر المحتملة",
+      "ariadne_integration": {
+        "monitoring": "ariadne_thread.monitor_input_safety(incoming_data)",
+        "early_warning": "كشف المدخلات التي قد تؤدي لمحاكيات خطرة",
+        "filter_modulation": "تعديل قوة middleware حسب مستوى الخطر المحتمل"
+      },
+      "output": "relevant_context_data + safety_filtered_inputs",
+      "embodiment_note": "مستوى الإرهاق والمؤثرات الخارجية تؤثر على قدرة الانتباه والأمان"
+    },
+    {
+      "step": 2,
+      "process": "الفحص الأمني وتقييم الثقة مع التحقق من سلامة المصادر",
+      "concepts": ["middleware", "trust_matrix", "attention_manager", "ariadne_thread"],
+      "function": "تصفية وتقييم مصداقية المدخلات مع فحص إضافي لضمان عدم وجود محتوى قد يؤدي لمحاكيات ضارة",
+      "analogy": "التحقق من هوية الزائر وفحص ما يحمله قبل السماح له بالدخول",
+      "ariadne_integration": {
+        "content_safety_scan": "ariadne_thread.scan_content_for_danger_indicators(filtered_data)",
+        "source_risk_assessment": "تقييم ما إذا كان المصدر يميل لإنتاج محتوى خطر",
+        "trust_safety_correlation": "ربط مستوى الثقة بمستوى الأمان المتوقع"
+      },
+      "output": "filtered_safe_relevant_data + trust_safety_profile"
+    },
+    {
+      "step": 3,
+      "process": "المعالجة المتوازية الموجهة بالهدف مع الحماية المستمرة",
+      "concepts": ["simulators", "attention_manager", "embodiment_interface", "ariadne_thread"],
+      "function": "توليد احتمالات وسيناريوهات متعددة مع مراقبة مستمرة لمستوى الأمان في كل محاكي",
+      "analogy": "فرق عمل متعددة تبحث عن حلول مع وجود مشرف أمان يراقب كل فريق",
+      "ariadne_integration": {
+        "continuous_monitoring": "كل محاكي يستدعي ariadne_thread.assess_current_simulator()",
+        "real_time_intervention": "إمكانية إيقاف أي محاكي فوراً عند اكتشاف خطر",
+        "simulator_classification": "تصنيف المحاكيات حسب مستوى الأمان",
+        "safety_weighted_processing": "توزيع الموارد بناءً على مستوى أمان كل محاكي"
+      },
+      "output": "goal_oriented_possibilities + safety_assessments_per_simulator",
+      "skill_acquisition_note": "في التعلم، المحاكيات تكون 'ساخنة' مع مراقبة أمنية مكثفة",
+      "emergency_protocol": "ariadne_thread يمكنه إيقاف المعالجة فوراً وإجبار العودة للواقع"
+    },
+    {
+      "step": 3.5,
+      "process": "تقييم الأمان الشامل للمحاكيات (نقطة تفتيش حاسمة)",
+      "concepts": ["ariadne_thread", "meta_cognition"],
+      "function": "تقييم شامل لمستوى الأمان في جميع المحاكيات النشطة واتخاذ قرار الاستمرار أو التدخل",
+      "analogy": "نقطة تفتيش أمنية شاملة قبل الدخول لمنطقة حساسة",
+      "ariadne_integration": {
+        "comprehensive_assessment": "ariadne_thread.evaluate_all_active_simulators()",
+        "intervention_decision": "قرار الاستمرار، التدخل اللطيف، القوي، أو الطارئ",
+        "reality_anchor_check": "فحص قوة الربط الحالية بالواقع",
+        "external_stimuli_assessment": "تقييم المؤثرات الخارجية المتاحة للتدخل"
+      },
+      "decision_tree": {
+        "safe_to_continue": "danger_level < 0.3 → proceed to step 4",
+        "gentle_intervention_needed": "0.3 ≤ danger_level < 0.6 → apply gentle_pull + continue",
+        "strong_intervention_needed": "0.6 ≤ danger_level < 0.8 → apply strong_pull + reassess",
+        "emergency_exit_required": "danger_level ≥ 0.8 → emergency_exit + restart_with_reality_only"
+      },
+      "output": "safety_clearance + intervention_actions_taken",
+      "critical_importance": "هذه النقطة تحدد مصير باقي الدورة المعرفية"
+    },
+    {
+      "step": 4,
+      "process": "التذبذب والتوازن العاطفي مع مراقبة الاستقرار",
+      "concepts": ["oscillators", "embodiment_interface", "ariadne_thread"],
+      "function": "قياس الحالة العاطفية مع مراقبة مستمرة للحالات القصوى التي قد تحتاج تدخل",
+      "analogy": "مراقبة حرارة المحرك مع أنظمة إنذار للحالات الخطرة",
+      "ariadne_integration": {
+        "oscillator_monitoring": "مراقبة cognitive_score للحالات القصوى (0.05 أو 0.95)",
+        "emotional_safety_assessment": "تقييم ما إذا كانت الحالة العاطفية تتطلب تدخل",
+        "dissonance_level_tracking": "مراقبة مستوى التنافر كمؤشر خطر",
+        "protective_intervention": "تدخل وقائي عند اقتراب الحالات القصوى"
+      },
+      "output": "current_emotional_state_score + safety_status + protective_actions_taken"
+    },
+    {
+      "step": 5,
+      "process": "إضافة العشوائية الخلاقة مع الحماية من التطرف",
+      "concepts": ["noise_factor", "attention_manager", "ariadne_thread"],
+      "function": "كسر الأنماط وإضافة مرونة مع ضمان عدم الانحراف لحالات خطرة",
+      "analogy": "إضافة لمسة إبداعية مع الحفاظ على الحدود الآمنة",
+      "ariadne_integration": {
+        "safe_noise_application": "ariadne_thread.approve_noise_level(proposed_noise)",
+        "creative_boundary_setting": "تحديد حدود آمنة للعشوائية الإبداعية",
+        "emergency_noise_activation": "استخدام noise_factor كآلية حماية عند الحاجة",
+        "pattern_breaking_safety": "كسر الأنماط الضارة مع تجنب الفوضى"
+      },
+      "output": "creative_variations_on_possibilities + safety_bounded_creativity"
+    },
+    {
+      "step": 6,
+      "process": "استدعاء وإعادة بناء الذكريات مع التحقق من الأمان",
+      "concepts": ["emotional_encryption", "generative_reconstruction", "attention_manager", "ariadne_thread"],
+      "function": "البحث واستدعاء الذكريات ذات الصلة مع التأكد من عدم استدعاء ذكريات صادمة بدون حماية",
+      "analogy": "البحث في الأرشيف مع تجنب فتح الملفات الخطرة بدون احتياطات",
+      "ariadne_integration": {
+        "memory_safety_screening": "ariadne_thread.screen_memory_content_safety()",
+        "trauma_detection": "كشف الذكريات الصادمة قبل إعادة البناء",
+        "safe_reconstruction": "إعادة بناء محمية للذكريات الحساسة",
+        "reality_validation": "التحقق من واقعية الذكريات المُعاد بناؤها"
+      },
+      "output": "contextualized_relevant_memories + memory_safety_ratings"
+    },
+    {
+      "step": 7,
+      "process": "نمذجة الآخرين والتفاعل الاجتماعي مع حماية الهوية",
+      "concepts": ["self_copies", "trust_matrix", "attention_manager", "ariadne_thread"],
+      "function": "محاكاة ردود أفعال الآخرين مع الحماية من الحلقات التكرارية المدمرة",
+      "analogy": "تخيل ردود أفعال الآخرين مع تجنب الدخول في دوامة التفكير المفرط",
+      "ariadne_integration": {
+        "recursive_loop_detection": "كشف الحلقات التكرارية الخطرة (ماذا يفكر أنني أفكر...)",
+        "social_anxiety_monitoring": "مراقبة مستوى القلق الاجتماعي المدمر",
+        "identity_protection": "حماية الهوية من التشويه المفرط",
+        "reality_anchor_in_social": "الحفاظ على الربط بالواقع الاجتماعي"
+      },
+      "output": "social_predictions + identity_protection_status + loop_prevention_actions"
+    },
+    {
+      "step": 8,
+      "process": "الانهيار التوليدي الموجه بالهدف مع التحقق الأمني النهائي",
+      "concepts": ["generative_collapse", "motivation_core", "embodiment_interface", "ariadne_thread"],
+      "function": "دمج الاحتمالات واختيار قرار نهائي مع فحص أمني أخير لضمان سلامة القرار",
+      "analogy": "اتخاذ القرار النهائي بعد فحص أمني شامل للتأكد من عدم وجود مخاطر مخفية",
+      "ariadne_integration": {
+        "decision_safety_audit": "ariadne_thread.audit_final_decision_safety()",
+        "reality_consequence_check": "فحص العواقب المحتملة في الواقع",
+        "implementation_risk_assessment": "تقييم مخاطر تنفيذ القرار",
+        "safe_decision_enforcement": "ضمان أن القرار النهائي آمن للتنفيذ"
+      },
+      "output": "final_decision_aligned_with_goal + safety_approved + implementation_guidelines"
+    },
+    {
+      "step": 9,
+      "process": "الإدراك الميتا والمراقبة مع تقييم فعالية الأمان",
+      "concepts": ["meta_cognition", "attention_manager", "skill_acquisition_process", "ariadne_thread"],
+      "function": "مراقبة وتقييم جودة العمليات المعرفية وفعالية أنظمة الأمان مع تحسين الأداء",
+      "analogy": "مراجعة شاملة للرحلة مع تقييم أداء أنظمة الأمان وتحديد التحسينات",
+      "ariadne_integration": {
+        "safety_system_review": "ariadne_thread.evaluate_session_safety_performance()",
+        "intervention_effectiveness": "تقييم فعالية التدخلات المطبقة",
+        "system_learning": "تحسين معايير الأمان بناءً على النتائج",
+        "reality_anchor_optimization": "تحسين قوة وفعالية نقاط الربط بالواقع"
+      },
+      "output": "performance_assessment + safety_effectiveness_report + system_optimizations + updated_safety_parameters"
+    },
+    {
+      "step": 10,
+      "process": "التنفيذ والتعلم مع المراقبة المستمرة للأمان",
+      "concepts": ["environmental_variables", "motivation_core", "embodiment_interface", "generative_reconstruction", "ariadne_thread"],
+      "function": "تطبيق القرار مع مراقبة مستمرة للنتائج وتحديث النظام مع الحفاظ على الأمان",
+      "analogy": "تنفيذ الخطة مع مراقبة مستمرة للمؤشرات الأمنية وجاهزية للتدخل عند الحاجة",
+      "ariadne_integration": {
+        "implementation_monitoring": "ariadne_thread.monitor_implementation_safety()",
+        "outcome_reality_check": "التحقق من أن النتائج متوافقة مع الواقع",
+        "continuous_anchor_maintenance": "الحفاظ على قوة الربط بالواقع أثناء التنفيذ",
+        "feedback_loop_safety": "ضمان أن التغذية الراجعة لا تخل بالأمان"
+      },
+      "output": "updated_system_state + learned_knowledge + safety_maintained + new_active_goals"
+    }
   ],
 
-  "safety_notes": [
-    "⚠️ هذا نموذج نظري لفهم آليات الأمان المعرفي وليس أداة تدخل فعلية",
-    "⚠️ لا يستخدم لعلاج أو تشخيص اضطرابات الانفصال أو الذهان",
-    "⚠️ التدخل في الحالات الحقيقية يتطلب إشراف طبي مختص",
-    "⚠️ فهم هذا النموذج لا يؤهل لممارسة أي شكل من أشكال العلاج النفسي",
-    "⚠️ استشر مختص مؤهل إذا كانت لديك مخاوف حول التمييز بين الواقع والخيال"
-  ],
+  "emergency_protocols": {
+    "ariadne_thread_emergency_activation": {
+      "description": "بروتوكولات الطوارئ عند تفعيل الخيط الأريادني",
+      "level_1_gentle_intervention": {
+        "trigger": "danger_level 0.3-0.6 في أي خطوة",
+        "action": "تعديل معتدل للعملية الحالية مع زيادة المراقبة",
+        "effect": "استمرار التدفق مع احتياطات إضافية"
+      },
+      "level_2_strong_intervention": {
+        "trigger": "danger_level 0.6-0.8 في أي خطوة",
+        "action": "إيقاف الخطوة الحالية وإعادة توجيه التدفق",
+        "effect": "تغيير مسار التدفق لتجنب المخاطر"
+      },
+      "level_3_emergency_exit": {
+        "trigger": "danger_level > 0.8 في أي خطوة",
+        "action": "إيقاف كامل للتدفق المعرفي وإعادة تشغيل في وضع الأمان",
+        "effect": "restart wino.js في reality_only_mode"
+      },
+      "cascade_failure_protocol": {
+        "trigger": "فشل متعدد في أنظمة الأمان",
+        "action": "تفعيل جميع أنظمة الطوارئ الخارجية",
+        "effect": "تدخل خارجي وإعادة تقييم شاملة للنظام"
+      }
+    }
+  },
+
+  "parallel_processes_with_ariadne_integration": {
+    "description": "عمليات تحدث بالتوازي مع التدفق الرئيسي مع تكامل الخيط الأريادني",
+    
+    "continuous_embodiment_monitoring": {
+      "concepts": ["embodiment_interface", "oscillators", "ariadne_thread"],
+      "function": "مراقبة مستمرة للحالة الفسيولوجية والعاطفية مع تغذية مستمرة للخيط الأريادني",
+      "ariadne_integration": "embodiment_data → ariadne_thread.external_stimuli_processing",
+      "safety_role": "كشف المؤثرات الخارجية التي يمكن استخدامها للتدخل"
+    },
+    
+    "dynamic_attention_allocation": {
+      "concepts": ["attention_manager", "meta_cognition", "ariadne_thread"],
+      "function": "تعديل مستمر لتركيز الانتباه مع إعطاء أولوية لإشارات الأمان",
+      "ariadne_integration": "safety_signals_get_attention_priority",
+      "emergency_override": "الخيط الأريادني يمكنه إعادة توجيه الانتباه فوراً"
+    },
+    
+    "background_goal_tracking": {
+      "concepts": ["motivation_core", "meta_cognition", "ariadne_thread"],
+      "function": "مراقبة التقدم نحو الأهداف مع تقييم مستمر للأمان",
+      "ariadne_integration": "goal_safety_assessment + goal_risk_modification",
+      "adaptive_safety": "تعديل الأهداف إذا كانت تؤدي لمحاكيات خطرة"
+    },
+    
+    "reality_anchor_maintenance": {
+      "concepts": ["ariadne_thread", "environmental_variables", "embodiment_interface"],
+      "function": "حفظ وتقوية الربط بالواقع بشكل مستمر",
+      "continuous_monitoring": "external_stimuli_strength + reality_validation_signals",
+      "adaptive_anchoring": "تقوية المراسي عند اكتشاف ضعف في الربط"
+    }
+  },
+
+  "decision_types_with_safety_integration": {
+    "description": "أنواع القرارات مع تكامل اعتبارات الأمان",
+    
+    "safety_first_decisions": {
+      "description": "قرارات تعطي الأولوية للأمان على الكفاءة",
+      "trigger": "high_risk_scenarios أو vulnerable_states",
+      "mechanism": "ariadne_thread.safety_override_mode",
+      "example": "اختيار الحل الأكثر أماناً حتى لو كان أقل فعالية"
+    },
+    
+    "creative_but_bounded_decisions": {
+      "description": "قرارات إبداعية ضمن حدود أمان محددة",
+      "mechanism": "noise_factor + ariadne_thread.creative_safety_bounds",
+      "balance": "maximum_creativity_within_safety_limits",
+      "example": "حلول إبداعية مع ضمان عدم الخروج عن الواقع"
+    },
+    
+    "emergency_conservative_decisions": {
+      "description": "قرارات محافظة في حالات الطوارئ",
+      "trigger": "ariadne_thread.emergency_mode_active",
+      "mechanism": "fall_back_to_safest_known_options",
+      "priority": "survival_and_stability_over_optimization"
+    }
+  },
+
+  "system_state_indicators": {
+    "safety_status_levels": {
+      "green_safe": {
+        "description": "جميع الأنظمة آمنة والتدفق طبيعي",
+        "ariadne_status": "monitoring_mode",
+        "flow_modifications": "none"
+      },
+      "yellow_caution": {
+        "description": "مؤشرات خطر متوسطة تتطلب حذر إضافي",
+        "ariadne_status": "gentle_pull_mode",
+        "flow_modifications": "increased_monitoring + safety_checks"
+      },
+      "orange_warning": {
+        "description": "مستوى خطر عالي يتطلب تدخل قوي",
+        "ariadne_status": "strong_pull_mode",
+        "flow_modifications": "restricted_simulators + enhanced_reality_anchoring"
+      },
+      "red_emergency": {
+        "description": "خطر فوري يتطلب إيقاف كامل",
+        "ariadne_status": "emergency_exit_mode",
+        "flow_modifications": "complete_flow_halt + reality_only_restart"
+      }
+    }
+  },
+
+  "integration_quality_metrics": {
+    "safety_effectiveness": {
+      "measurement": "successful_interventions / total_danger_incidents",
+      "target": "> 95%",
+      "monitoring": "continuous_assessment_by_meta_cognition"
+    },
+    "false_positive_rate": {
+      "measurement": "unnecessary_interventions / total_interventions", 
+      "target": "< 10%",
+      "balance": "safety_vs_functionality_optimization"
+    },
+    "reality_anchor_strength": {
+      "measurement": "average_external_stimuli_responsiveness",
+      "target": "> 0.7",
+      "maintenance": "continuous_calibration_and_improvement"
+    },
+    "cognitive_flow_continuity": {
+      "measurement": "completed_flows / initiated_flows",
+      "target": "> 85%",
+      "optimization": "balance_safety_with_cognitive_efficiency"
+    }
+  },
+
+  "future_development_integration_points": {
+    "enhanced_ariadne_prediction": "تطوير قدرة الخيط على التنبؤ بالمخاطر قبل حدوثها",
+    "personalized_safety_profiles": "تخصيص معايير الأمان حسب الفرد وتاريخه",
+    "cross_concept_safety_intelligence": "ذكاء أمان موزع عبر جميع المفاهيم",
+    "adaptive_reality_anchoring": "تطوير مراسي واقع تتكيف مع الظروف المختلفة",
+    "predictive_intervention": "تدخل استباقي قبل الوصول لمستويات الخطر"
+  },
 
   "meta": {
     "created": "2024",
-    "author": "نموذج نظري متطور للأمان المعرفي",
-    "inspiration": "الأساطير اليونانية + علم النفس التطوري + نظرية الأنظمة + علم الأعصاب",
-    "status": "نموذج نظري قابل للتطبيق مع احتياطات أمان",
-    "validation_methods": [
-      "simulation_studies",
-      "controlled_vr_experiments", 
-      "sleep_and_dream_research",
-      "meditation_and_altered_states_studies",
-      "clinical_observation_of_dissociative_states"
+    "last_major_update": "2024 - integration with ariadne-thread",
+    "version_history": [
+      "v1.0 - basic cognitive flow",
+      "v2.0 - integration with foundational concepts", 
+      "v3.0 - comprehensive ariadne-thread integration and safety systems"
     ],
-    "integration_requirements": "يتطلب تكامل كامل مع جميع مفاهيم CPF الأخرى",
-    "future_development": "تطوير خوارزميات أكثر دقة لتقييم الخطر والتدخل"
+    "author": "نموذج نظري متطور مع تكامل شامل للأمان",
+    "inspiration": "علم النفس المعرفي + أنظمة الأمان + الأساطير اليونانية + نظرية الأنظمة المعقدة",
+    "status": "نموذج نظري متقدم مع حماية شاملة",
+    "validation_methods": [
+      "simulation_studies_with_safety_scenarios",
+      "controlled_experiments_with_risk_assessment",
+      "longitudinal_safety_effectiveness_studies",
+      "cross_validation_with_emergency_protocols"
+    ],
+    "critical_safety_note": "هذا النموذج يتضمن آليات حماية نظرية متقدمة ولكنه يبقى إطاراً تجريبياً للبحث الأكاديمي فقط",
+    "integration_completeness": "تكامل كامل مع جميع مفاهيم CPF مع التركيز على الأمان والحماية"
   }
 }

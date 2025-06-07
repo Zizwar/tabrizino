@@ -30,6 +30,7 @@
     "EXPERT_ONLY": "⛔ يتطلب خبرة في العلوم المعرفية للاستخدام الآمن",
     "NO_MEDICAL_CLAIMS": "⛔ لا يشخص أو يعالج أي حالة طبية أو نفسية",
     "ARIADNE_THREAD_WARNING": "⛔ الخيط الأريادني مفهوم أمان نظري - لا يُستخدم للتدخل في الحالات النفسية الحقيقية"
+, "academic_warning": "لا يُستخدم كأساس وحيد للبحث الأكاديمي أو الرسائل العلمية"
   },
   "system_architecture": {
     "cognitive_flow": "./cognitive_flow.json",

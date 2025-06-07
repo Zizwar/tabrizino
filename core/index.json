@@ -390,6 +390,6 @@
 ,{
       "id": "design_philosophy",
       "title": "COMPLEXITY_JUSTIFICATION , TERMINOLOGY_CLARIFICATION",
-      "file": "./design_philosophy.json",
+      "file": "../design_philosophy.json",
 }
 }

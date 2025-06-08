@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اكتساب مهارة كرة القدم - CPF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'ball-bounce': 'ballBounce 1s ease-in-out infinite',
+                        'skill-glow': 'skillGlow 2s ease-in-out infinite alternate',
+                        'neural-pulse': 'neuralPulse 1.5s ease-in-out infinite',
+                        'brain-wave': 'brainWave 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        ballBounce: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        skillGlow: {
+                            '0%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)' },
+                            '100%': { boxShadow: '0 0 40px rgba(59, 130, 246, 0.8)' }
+                        },
+                        neuralPulse: {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '1' }
+                        },
+                        brainWave: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-green-900 via-green-700 to-emerald-600 min-h-screen text-white font-sans">
+    <!-- نموذج CPF لاكتساب مهارة كرة القدم -->
+    <div x-data="footballSkillCPF()" class="container mx-auto px-4 py-8">
+        
+        <!-- العنوان الرئيسي -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4 text-white drop-shadow-lg">
+                <i class="fas fa-futbol animate-bounce mr-3"></i>
+                اكتساب مهارة كرة القدم
+            </h1>
+            <p class="text-xl text-green-100 opacity-80">نموذج الإطار المعرفي CPF</p>
+        </header>
+
+        <!-- حالة اللاعب العامة -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- معلومات اللاعب -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">🧠 حالة اللاعب</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span>مستوى المهارة:</span>
+                        <span x-text="skillLevel" class="font-bold" :class="skillLevelColor"></span>
+                    </div>
+                    <div class="w-full bg-gray-300 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 h-2 rounded-full transition-all duration-1000"
+                             :style="`width: ${skillProgress}%`"></div>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>طاقة جسدية:</span>
+                        <span x-text="`${energyLevel}%`" :class="energyLevel > 70 ? 'text-green-300' : energyLevel > 30 ? 'text-yellow-300' : 'text-red-300'"></span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>تركيز ذهني:</span>
+                        <span x-text="`${focusLevel}%`" :class="focusLevel > 70 ? 'text-blue-300' : 'text-gray-300'"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المرحلة الحالية -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">📍 المرحلة الحالية</h3>
+                <div class="text-center">
+                    <div class="text-3xl mb-2" x-text="currentPhase.icon"></div>
+                    <h4 class="font-bold text-lg mb-2" x-text="currentPhase.name"></h4>
+                    <p class="text-sm text-gray-200" x-text="currentPhase.description"></p>
+                    <div class="mt-4">
+                        <div class="w-full bg-gray-300 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full transition-all duration-500"
+                                 :style="`width: ${phaseProgress}%`"></div>
+                        </div>
+                        <p class="text-xs mt-1" x-text="`${phaseProgress}% مكتمل`"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- إحصائيات التدريب -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">📊 إحصائيات</h3>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span>جلسات التدريب:</span>
+                        <span x-text="practiceCount" class="font-bold text-blue-300"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>نسبة النجاح:</span>
+                        <span x-text="`${successRate}%`" class="font-bold text-green-300"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>سكريبت المهارة:</span>
+                        <span x-text="skillScript.version" class="font-bold text-purple-300"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحاكيات (Simulators) -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-center">🔄 المحاكيات المتوازية</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <template x-for="sim in simulators" :key="sim.id">
+                    <div class="bg-white/10 backdrop-blur-md rounded-lg p-4 text-center transition-all duration-300 hover:bg-white/20"
+                         :class="sim.active ? 'ring-2 ring-blue-400 animate-pulse' : ''">
+                        <div class="text-2xl mb-2" x-text="sim.icon"></div>
+                        <h4 class="font-bold text-sm mb-2" x-text="sim.name"></h4>
+                        <div class="w-full bg-gray-300 rounded-full h-1 mb-2">
+                            <div class="bg-blue-500 h-1 rounded-full transition-all duration-500"
+                                 :style="`width: ${sim.activity}%`"></div>
+                        </div>
+                        <p class="text-xs text-gray-200" x-text="sim.status"></p>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- منطقة التدريب -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 mb-8 border border-white/20">
+            <h2 class="text-2xl font-bold mb-6 text-center">⚽ منطقة التدريب</h2>
+            
+            <!-- الملعب المصغر -->
+            <div class="relative bg-green-600 rounded-lg p-6 mb-6 min-h-[200px] border-2 border-white">
+                <!-- خطوط الملعب -->
+                <div class="absolute inset-0 opacity-30">
+                    <div class="w-full h-1/2 border-b-2 border-white"></div>
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-2 border-white rounded-full"></div>
+                </div>
+                
+                <!-- اللاعب -->
+                <div class="absolute transition-all duration-1000 ease-in-out"
+                     :style="`top: ${playerPosition.y}%; left: ${playerPosition.x}%`">
+                    <div class="relative">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full animate-pulse"></div>
+                        <div class="absolute -top-1 -right-1 text-xs">👤</div>
+                    </div>
+                </div>
+                
+                <!-- الكرة -->
+                <div class="absolute transition-all duration-800"
+                     :style="`top: ${ballPosition.y}%; left: ${ballPosition.x}%`">
+                    <div class="w-6 h-6 bg-white rounded-full animate-ball-bounce shadow-lg">⚽</div>
+                </div>
+                
+                <!-- الهدف -->
+                <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <div class="w-12 h-8 border-2 border-white bg-gray-400/20">🥅</div>
+                </div>
+            </div>
+
+            <!-- أزرار التحكم -->
+            <div class="flex flex-wrap justify-center gap-4 mb-6">
+                <button @click="practice()" 
+                        :disabled="energyLevel < 10"
+                        class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 px-6 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105 disabled:scale-100">
+                    <i class="fas fa-play mr-2"></i>تدريب
+                </button>
+                <button @click="rest()" 
+                        class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-bed mr-2"></i>راحة
+                </button>
+                <button @click="analyze()" 
+                        class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-chart-line mr-2"></i>تحليل
+                </button>
+            </div>
+        </div>
+
+        <!-- سجل النشاط -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+            <h3 class="text-xl font-bold mb-4">📝 سجل التدريب (ذاكرة العقيق)</h3>
+            <div class="max-h-40 overflow-y-auto space-y-2">
+                <template x-for="log in activityLog.slice(-5)" :key="log.id">
+                    <div class="flex justify-between items-center p-2 bg-white/5 rounded-lg">
+                        <span class="text-sm" x-text="log.message"></span>
+                        <span class="text-xs text-gray-300" x-text="log.time"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function footballSkillCPF() {
+            return {
+                // حالة اللاعب
+                skillLevel: 'مبتدئ',
+                skillProgress: 5,
+                energyLevel: 100,
+                focusLevel: 80,
+                practiceCount: 0,
+                successRate: 50,
+                
+                // المراحل
+                phases: [
+                    { 
+                        id: 'novice', 
+                        name: 'المبتدئ (Hot Phase)', 
+                        icon: '🔥', 
+                        description: 'تعلم المهارات الأساسية بجهد واعي',
+                        minProgress: 0,
+                        maxProgress: 30
+                    },
+                    { 
+                        id: 'intermediate', 
+                        name: 'المتوسط (Refinement)', 
+                        icon: '⚡', 
+                        description: 'صقل المهارات وتحسين الأداء',
+                        minProgress: 30,
+                        maxProgress: 70
+                    },
+                    { 
+                        id: 'expert', 
+                        name: 'الخبير (Cold Phase)', 
+                        icon: '❄️', 
+                        description: 'أداء تلقائي بدون جهد واعي',
+                        minProgress: 70,
+                        maxProgress: 100
+                    }
+                ],
+                
+                currentPhase: {},
+                phaseProgress: 0,
+                
+                // سكريبت المهارة
+                skillScript: {
+                    version: 'v0.1',
+                    rules: [],
+                    complexity: 0.1
+                },
+                
+                // المحاكيات
+                simulators: [
+                    { id: 'reality', name: 'معالج الواقع', icon: '👁️', activity: 0, status: 'نائم', active: false },
+                    { id: 'prediction', name: 'محرك التنبؤ', icon: '🔮', activity: 0, status: 'نائم', active: false },
+                    { id: 'memory', name: 'مُعيد الذكريات', icon: '🧠', activity: 0, status: 'نائم', active: false },
+                    { id: 'social', name: 'النمذجة الاجتماعية', icon: '👥', activity: 0, status: 'نائم', active: false },
+                    { id: 'pattern', name: 'مستكشف الأنماط', icon: '🎯', activity: 0, status: 'نائم', active: false }
+                ],
+                
+                // المواقع
+                playerPosition: { x: 20, y: 50 },
+                ballPosition: { x: 25, y: 50 },
+                
+                // سجل النشاط
+                activityLog: [],
+                
+                init() {
+                    this.updatePhase();
+                    this.addLog('بدء نظام CPF لاكتساب مهارة كرة القدم', '🚀');
+                },
+                
+                get skillLevelColor() {
+                    if (this.skillProgress < 30) return 'text-red-300';
+                    if (this.skillProgress < 70) return 'text-yellow-300';
+                    return 'text-green-300';
+                },
+                
+                updatePhase() {
+                    for (let phase of this.phases) {
+                        if (this.skillProgress >= phase.minProgress && this.skillProgress < phase.maxProgress) {
+                            this.currentPhase = phase;
+                            this.phaseProgress = ((this.skillProgress - phase.minProgress) / (phase.maxProgress - phase.minProgress)) * 100;
+                            break;
+                        }
+                    }
+                    
+                    // تحديث مستوى المهارة
+                    if (this.skillProgress < 30) {
+                        this.skillLevel = 'مبتدئ';
+                    } else if (this.skillProgress < 70) {
+                        this.skillLevel = 'متوسط';
+                    } else {
+                        this.skillLevel = 'خبير';
+                    }
+                },
+                
+                practice() {
+                    if (this.energyLevel < 10) return;
+                    
+                    this.practiceCount++;
+                    this.energyLevel = Math.max(0, this.energyLevel - 15);
+                    this.focusLevel = Math.max(30, this.focusLevel - 5);
+                    
+                    // تفعيل المحاكيات
+                    this.activateSimulators();
+                    
+                    // محاكاة التدريب
+                    setTimeout(() => {
+                        const success = Math.random() > 0.3;
+                        
+                        if (success) {
+                            this.skillProgress = Math.min(100, this.skillProgress + Math.random() * 3 + 1);
+                            this.successRate = Math.min(100, this.successRate + 1);
+                            this.addLog('تدريب ناجح! تحسن في المهارة', '✅');
+                            this.movePlayerAndBall(true);
+                        } else {
+                            this.addLog('تدريب فاشل، لكن هناك تعلم', '❌');
+                            this.movePlayerAndBall(false);
+                        }
+                        
+                        this.updateSkillScript();
+                        this.updatePhase();
+                        this.deactivateSimulators();
+                    }, 2000);
+                },
+                
+                rest() {
+                    this.energyLevel = Math.min(100, this.energyLevel + 25);
+                    this.focusLevel = Math.min(100, this.focusLevel + 15);
+                    this.addLog('استراحة مفيدة، استعادة الطاقة', '😴');
+                },
+                
+                analyze() {
+                    this.addLog('تحليل الأداء وتحديث السكريبت', '📊');
+                    this.focusLevel = Math.min(100, this.focusLevel + 10);
+                    
+                    // تحليل بواسطة Meta-Cognition
+                    setTimeout(() => {
+                        this.addLog('Meta-Cognition: اكتشاف نمط جديد في الأداء', '🔍');
+                    }, 1000);
+                },
+                
+                activateSimulators() {
+                    // تفعيل المحاكيات بناءً على المرحلة
+                    const intensity = this.currentPhase.id === 'novice' ? 90 : 
+                                    this.currentPhase.id === 'intermediate' ? 60 : 30;
+                    
+                    this.simulators.forEach((sim, index) => {
+                        setTimeout(() => {
+                            sim.active = true;
+                            sim.activity = intensity + Math.random() * 10;
+                            sim.status = 'يعمل';
+                        }, index * 200);
+                    });
+                },
+                
+                deactivateSimulators() {
+                    this.simulators.forEach((sim, index) => {
+                        setTimeout(() => {
+                            sim.active = false;
+                            sim.activity = 0;
+                            sim.status = 'نائم';
+                        }, index * 100);
+                    });
+                },
+                
+                updateSkillScript() {
+                    const newVersion = parseFloat(this.skillScript.version.substring(1)) + 0.1;
+                    this.skillScript.version = `v${newVersion.toFixed(1)}`;
+                    this.skillScript.complexity = Math.min(1.0, this.skillScript.complexity + 0.05);
+                },
+                
+                movePlayerAndBall(success) {
+                    if (success) {
+                        // حركة نحو الهدف
+                        this.playerPosition.x = Math.min(70, this.playerPosition.x + 10);
+                        this.ballPosition.x = Math.min(75, this.ballPosition.x + 12);
+                        this.ballPosition.y = 50 + (Math.random() - 0.5) * 10;
+                    } else {
+                        // حركة عشوائية
+                        this.playerPosition.x = Math.max(15, this.playerPosition.x + (Math.random() - 0.5) * 10);
+                        this.ballPosition.x = Math.max(20, this.ballPosition.x + (Math.random() - 0.5) * 15);
+                        this.ballPosition.y = Math.max(20, Math.min(80, this.ballPosition.y + (Math.random() - 0.5) * 20));
+                    }
+                    
+                    // إعادة تعيين المواقع بعد فترة
+                    setTimeout(() => {
+                        this.playerPosition = { x: 20, y: 50 };
+                        this.ballPosition = { x: 25, y: 50 };
+                    }, 3000);
+                },
+                
+                addLog(message, icon = '📝') {
+                    const now = new Date();
+                    this.activityLog.push({
+                        id: Date.now(),
+                        message: `${icon} ${message}`,
+                        time: now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
+                    });
+                    
+                    // الاحتفاظ بآخر 50 سجل فقط
+                    if (this.activityLog.length > 50) {
+                        this.activityLog.splice(0, this.activityLog.length - 50);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

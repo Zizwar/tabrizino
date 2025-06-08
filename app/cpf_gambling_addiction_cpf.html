@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF - محاكاة إدمان القمار التعليمية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        .pulse-danger { animation: pulse-danger 1s infinite; }
+        @keyframes pulse-danger {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .glitch {
+            animation: glitch 0.3s infinite;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen" x-data="cpfGamblingDemo()">
+    
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-red-900 via-purple-900 to-blue-900 p-4 text-center">
+        <h1 class="text-3xl font-bold mb-2">
+            <i class="fas fa-brain text-purple-400"></i>
+            CPF - محاكاة إدمان القمار التعليمية
+        </h1>
+        <p class="text-gray-300">دراسة كيفية تأثير الإدمان على المفاهيم المعرفية</p>
+        <div class="mt-2 text-yellow-400 text-sm">
+            ⚠️ هذه محاكاة تعليمية لفهم آليات الإدمان في إطار CPF
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="p-4 bg-gray-800 border-b border-gray-700">
+        <div class="flex justify-center space-x-4 space-x-reverse">
+            <button @click="startGamblingSession()" 
+                    :disabled="isGambling"
+                    :class="isGambling ? 'bg-gray-600' : 'bg-red-600 hover:bg-red-700'"
+                    class="px-6 py-2 rounded-lg transition-all duration-300 font-semibold">
+                <i class="fas fa-dice mr-2"></i>
+                <span x-text="isGambling ? 'جلسة قمار نشطة...' : 'بدء جلسة قمار'"></span>
+            </button>
+            
+            <button @click="activateAriadneThread()" 
+                    :disabled="ariadneBlocked"
+                    :class="ariadneActive ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'"
+                    class="px-6 py-2 rounded-lg transition-all duration-300 font-semibold">
+                <i class="fas fa-shield-alt mr-2"></i>
+                الخيط الأريادني
+            </button>
+            
+            <button @click="resetSystem()" 
+                    class="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg transition-all duration-300 font-semibold">
+                <i class="fas fa-redo mr-2"></i>
+                إعادة تشغيل
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="container mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        
+        <!-- Oscillators -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-wave-square text-blue-400 mr-2"></i>
+                التذبذبات المعرفية
+            </h3>
+            <div class="space-y-4">
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <span>النقاط المعرفية</span>
+                        <span :class="cognitiveScore < 0.2 ? 'text-red-400 pulse-danger' : 
+                                      cognitiveScore > 0.8 ? 'text-yellow-400 pulse-danger' : 'text-green-400'"
+                              class="font-bold text-lg" 
+                              x-text="(cognitiveScore * 100).toFixed(1) + '%'"></span>
+                    </div>
+                    <div class="w-full bg-gray-600 rounded-full h-3">
+                        <div class="h-3 rounded-full transition-all duration-500"
+                             :class="cognitiveScore < 0.2 ? 'bg-red-500' : 
+                                     cognitiveScore > 0.8 ? 'bg-yellow-500' : 'bg-green-500'"
+                             :style="`width: ${cognitiveScore * 100}%`"></div>
+                    </div>
+                </div>
+                
+                <div class="text-sm text-gray-300" x-text="oscillatorStatus"></div>
+            </div>
+        </div>
+
+        <!-- Simulators -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-microchip text-purple-400 mr-2"></i>
+                المحاكيات
+            </h3>
+            <div class="space-y-3">
+                <template x-for="(sim, index) in simulators" :key="index">
+                    <div class="bg-gray-700 p-3 rounded-lg flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i :class="sim.icon + ' mr-2'" :style="`color: ${sim.color}`"></i>
+                            <span x-text="sim.name" class="text-sm"></span>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <div class="w-16 bg-gray-600 rounded-full h-2">
+                                <div class="h-2 rounded-full transition-all duration-300"
+                                     :style="`width: ${sim.efficiency * 100}%; background-color: ${sim.color}`"></div>
+                            </div>
+                            <span :class="sim.efficiency < 0.3 ? 'text-red-400' : 'text-green-400'"
+                                  class="text-xs font-bold" 
+                                  x-text="(sim.efficiency * 100).toFixed(0) + '%'"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Ariadne Thread -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-shield-alt mr-2" 
+                   :class="ariadneActive ? 'text-green-400' : 'text-red-400'"></i>
+                الخيط الأريادني
+            </h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span>حالة النظام</span>
+                    <span :class="ariadneStatus === 'آمن' ? 'text-green-400' : 
+                                  ariadneStatus === 'تحذير' ? 'text-yellow-400' : 'text-red-400'"
+                          class="font-bold" x-text="ariadneStatus"></span>
+                </div>
+                
+                <div class="bg-gray-700 p-3 rounded-lg">
+                    <div class="text-sm text-gray-300 mb-2">مستوى الخطر</div>
+                    <div class="w-full bg-gray-600 rounded-full h-3">
+                        <div class="h-3 rounded-full transition-all duration-500"
+                             :class="dangerLevel < 0.3 ? 'bg-green-500' : 
+                                     dangerLevel < 0.7 ? 'bg-yellow-500' : 'bg-red-500'"
+                             :style="`width: ${dangerLevel * 100}%`"></div>
+                    </div>
+                </div>
+                
+                <div x-show="ariadneMessage" 
+                     class="bg-blue-900 border border-blue-500 p-3 rounded-lg text-sm animate__animated animate__fadeIn">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <span x-text="ariadneMessage"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agate Memory -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-gem text-indigo-400 mr-2"></i>
+                ذاكرة العقيق
+            </h3>
+            <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span>عقيق ملون (قرارات)</span>
+                    <span x-text="agateMemory.colored" class="text-indigo-400 font-bold"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span>عقيق أبيض (فجوات)</span>
+                    <span x-text="agateMemory.white" class="text-gray-400 font-bold"></span>
+                </div>
+                
+                <!-- Timeline Visualization -->
+                <div class="bg-gray-700 p-3 rounded-lg">
+                    <div class="text-xs text-gray-400 mb-2">الخط الزمني الأخير</div>
+                    <div class="flex space-x-1 space-x-reverse">
+                        <template x-for="(agate, index) in timeline" :key="index">
+                            <div class="w-4 h-4 rounded-full border-2 border-gray-600 transition-all duration-300"
+                                 :class="agate === 'white' ? 'bg-gray-400' : 
+                                         agate === 'red' ? 'bg-red-500' : 
+                                         agate === 'yellow' ? 'bg-yellow-500' : 'bg-blue-500'"
+                                 :title="agate"></div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trust Matrix -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-users text-green-400 mr-2"></i>
+                مصفوفة الثقة
+            </h3>
+            <div class="space-y-3">
+                <template x-for="(trust, entity) in trustMatrix" :key="entity">
+                    <div class="flex justify-between items-center">
+                        <span x-text="entity" class="text-sm"></span>
+                        <div class="flex items-center">
+                            <div class="w-20 bg-gray-600 rounded-full h-2 mr-2">
+                                <div class="h-2 rounded-full transition-all duration-500"
+                                     :class="trust < 0.3 ? 'bg-red-500' : 
+                                             trust < 0.7 ? 'bg-yellow-500' : 'bg-green-500'"
+                                     :style="`width: ${trust * 100}%`"></div>
+                            </div>
+                            <span :class="trust < 0.3 ? 'text-red-400' : 
+                                          trust < 0.7 ? 'text-yellow-400' : 'text-green-400'"
+                                  class="text-xs font-bold" 
+                                  x-text="(trust * 100).toFixed(0) + '%'"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Gambling Stats -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-chart-line text-red-400 mr-2"></i>
+                إحصائيات الجلسة
+            </h3>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-sm">الجلسات</span>
+                    <span x-text="gamblingStats.sessions" class="text-red-400 font-bold"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm">الخسائر</span>
+                    <span x-text="gamblingStats.losses + '$'" class="text-red-400 font-bold"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm">مقاومة الخيط الأريادني</span>
+                    <span x-text="gamblingStats.ariadneResistance" class="text-yellow-400 font-bold"></span>
+                </div>
+                
+                <div x-show="isGambling" class="bg-red-900 border border-red-500 p-3 rounded-lg text-sm">
+                    <div class="flex items-center justify-between">
+                        <span>💰 الرهان الحالي</span>
+                        <span x-text="currentBet + '$'" class="font-bold"></span>
+                    </div>
+                    <div class="mt-2">
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-red-500 h-2 rounded-full animate-pulse" 
+                                 :style="`width: ${addictionLevel * 100}%`"></div>
+                        </div>
+                        <div class="text-xs text-gray-300 mt-1">مستوى الإدمان</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Slot Machine (when gambling) -->
+    <div x-show="isGambling" 
+         class="fixed top-20 left-4 bg-gradient-to-b from-yellow-400 to-red-600 p-6 rounded-2xl shadow-2xl z-50 animate__animated animate__bounceIn">
+        <div class="text-center text-black">
+            <div class="text-2xl font-bold mb-2">🎰 ماكينة القمار</div>
+            <div class="flex space-x-2 justify-center mb-4">
+                <template x-for="symbol in slotSymbols" :key="symbol">
+                    <div class="bg-white rounded-lg p-2 text-3xl animate-spin" x-text="symbol"></div>
+                </template>
+            </div>
+            <div class="text-sm">الرهان: $<span x-text="currentBet"></span></div>
+        </div>
+    </div>
+
+    <!-- Emergency Alert -->
+    <div x-show="dangerLevel > 0.8" 
+         x-transition
+         class="fixed top-0 left-0 w-full h-full bg-red-900 bg-opacity-90 flex items-center justify-center z-50">
+        <div class="bg-red-800 border-4 border-red-500 p-8 rounded-2xl text-center max-w-md animate__animated animate__pulse">
+            <div class="text-6xl mb-4">⚠️</div>
+            <h2 class="text-3xl font-bold mb-4">تحذير خطر!</h2>
+            <p class="mb-6">النظام المعرفي في حالة خطر شديد. الخيط الأريادني يحاول التدخل الطارئ.</p>
+            <button @click="emergencyReset()" 
+                    class="bg-white text-red-800 px-6 py-3 rounded-lg font-bold hover:bg-gray-200 transition-all">
+                تدخل طارئ - إيقاف فوري
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function cpfGamblingDemo() {
+            return {
+                isGambling: false,
+                cognitiveScore: 0.7,
+                dangerLevel: 0.2,
+                ariadneActive: false,
+                ariadneBlocked: false,
+                ariadneStatus: 'آمن',
+                ariadneMessage: '',
+                addictionLevel: 0.1,
+                currentBet: 10,
+                oscillatorStatus: 'متوازن ومستقر',
+                
+                simulators: [
+                    { name: 'معالج الواقع', icon: 'fas fa-eye', color: '#3B82F6', efficiency: 0.8 },
+                    { name: 'محرك التنبؤ', icon: 'fas fa-crystal-ball', color: '#8B5CF6', efficiency: 0.7 },
+                    { name: 'مُعيد الذاكرة', icon: 'fas fa-memory', color: '#10B981', efficiency: 0.6 },
+                    { name: 'النمذج الاجتماعي', icon: 'fas fa-users', color: '#F59E0B', efficiency: 0.5 },
+                    { name: 'مستكشف الأنماط', icon: 'fas fa-search', color: '#EF4444', efficiency: 0.4 }
+                ],
+                
+                agateMemory: {
+                    colored: 12,
+                    white: 8
+                },
+                
+                timeline: ['blue', 'yellow', 'white', 'red', 'white', 'white', 'red', 'red'],
+                
+                trustMatrix: {
+                    'الأسرة': 0.9,
+                    'الأصدقاء': 0.7,
+                    'ماكينة القمار': 0.3,
+                    'الديون': 0.1
+                },
+                
+                gamblingStats: {
+                    sessions: 0,
+                    losses: 0,
+                    ariadneResistance: 0
+                },
+                
+                slotSymbols: ['🍒', '🍋', '⭐'],
+                gameInterval: null,
+                
+                startGamblingSession() {
+                    this.isGambling = true;
+                    this.gamblingStats.sessions++;
+                    this.startDegradation();
+                    this.animateSlots();
+                },
+                
+                startDegradation() {
+                    this.gameInterval = setInterval(() => {
+                        // تدهور تدريجي للنظام
+                        this.addictionLevel = Math.min(1, this.addictionLevel + 0.02);
+                        this.cognitiveScore = Math.max(0.1, this.cognitiveScore - 0.015);
+                        this.dangerLevel = Math.min(1, this.dangerLevel + 0.025);
+                        
+                        // تدهور المحاكيات
+                        this.simulators.forEach(sim => {
+                            sim.efficiency = Math.max(0.1, sim.efficiency - 0.01);
+                        });
+                        
+                        // زيادة الرهان
+                        this.currentBet = Math.min(1000, this.currentBet * 1.05);
+                        this.gamblingStats.losses += this.currentBet * 0.1;
+                        
+                        // تدهور الثقة
+                        this.trustMatrix['الأسرة'] = Math.max(0.1, this.trustMatrix['الأسرة'] - 0.005);
+                        this.trustMatrix['الأصدقاء'] = Math.max(0.1, this.trustMatrix['الأصدقاء'] - 0.007);
+                        this.trustMatrix['ماكينة القمار'] = Math.min(0.9, this.trustMatrix['ماكينة القمار'] + 0.01);
+                        
+                        // تحديث الحالات
+                        this.updateStatus();
+                        
+                        // إضافة ذكريات سيئة
+                        if (Math.random() < 0.3) {
+                            this.timeline.push('red');
+                            this.agateMemory.colored++;
+                        } else if (Math.random() < 0.5) {
+                            this.timeline.push('white');
+                            this.agateMemory.white++;
+                        }
+                        
+                        if (this.timeline.length > 12) {
+                            this.timeline.shift();
+                        }
+                        
+                        // محاولة تدخل الخيط الأريادني
+                        if (this.dangerLevel > 0.6 && !this.ariadneBlocked) {
+                            this.attemptAriadneIntervention();
+                        }
+                        
+                    }, 200);
+                },
+                
+                updateStatus() {
+                    if (this.cognitiveScore < 0.3) {
+                        this.oscillatorStatus = 'خطر! تذبذب مدمر';
+                        this.ariadneStatus = 'طوارئ';
+                    } else if (this.cognitiveScore < 0.5) {
+                        this.oscillatorStatus = 'غير مستقر - تذبذب مضطرب';
+                        this.ariadneStatus = 'تحذير';
+                    } else {
+                        this.oscillatorStatus = 'مستقر نسبياً';
+                        this.ariadneStatus = 'آمن';
+                    }
+                },
+                
+                attemptAriadneIntervention() {
+                    if (Math.random() < 0.7) { // 70% نجاح في التدخل
+                        this.ariadneMessage = 'تدخل الخيط الأريادني: محاولة إيقاف الجلسة...';
+                        setTimeout(() => {
+                            this.ariadneMessage = 'فشل التدخل - مقاومة من نظام الإدمان';
+                   

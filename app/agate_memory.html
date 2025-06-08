@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ذاكرة العقيق - إعادة قراءة الماضي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+        body { font-family: 'Amiri', serif; }
+        
+        .agate-gem {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        
+        .agate-gem:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        .reinterpretation-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.8); }
+        }
+        
+        .timeline-flow {
+            background: linear-gradient(90deg, 
+                rgba(139, 69, 19, 0.1) 0%,
+                rgba(255, 215, 0, 0.1) 25%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(173, 216, 230, 0.1) 75%,
+                rgba(128, 0, 128, 0.1) 100%);
+        }
+        
+        .context-bubble {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .morphing-text {
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .speculation-shimmer {
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.3),
+                rgba(255, 255, 255, 0.1));
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 min-h-screen text-white" 
+      x-data="agateMemory()">
+
+    <!-- العنوان الرئيسي -->
+    <div class="container mx-auto px-6 py-8">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                🔮 ذاكرة العقيق
+            </h1>
+            <p class="text-xl text-gray-300 mb-6">إعادة قراءة الماضي في CPF</p>
+            <div class="text-sm text-gray-400 bg-black/30 rounded-lg px-4 py-2 inline-block">
+                <i class="fas fa-info-circle"></i> العقيق الملون = ذكريات محددة | العقيق الأبيض = احتمالات قابلة للتفسير
+            </div>
+        </div>
+
+        <!-- لوحة التحكم في السياق -->
+        <div class="mb-8 p-6 context-bubble rounded-2xl bg-white/10">
+            <h3 class="text-2xl font-bold mb-4 text-center">🎭 تغيير السياق العاطفي</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button @click="changeContext('happy')" 
+                        :class="currentContext === 'happy' ? 'ring-4 ring-yellow-400' : ''"
+                        class="bg-yellow-500/20 hover:bg-yellow-500/40 p-4 rounded-xl transition-all duration-300 transform hover:scale-105">
+                    <div class="text-3xl">😊</div>
+                    <div class="text-sm mt-2">سعيد</div>
+                </button>
+                
+                <button @click="changeContext('sad')" 
+                        :class="currentContext === 'sad' ? 'ring-4 ring-blue-400' : ''"
+                        class="bg-blue-500/20 hover:bg-blue-500/40 p-4 rounded-xl transition-all duration-300 transform hover:scale-105">
+                    <div class="text-3xl">😢</div>
+                    <div class="text-sm mt-2">حزين</div>
+                </button>
+                
+                <button @click="changeContext('nostalgic')" 
+                        :class="currentContext === 'nostalgic' ? 'ring-4 ring-purple-400' : ''"
+                        class="bg-purple-500/20 hover:bg-purple-500/40 p-4 rounded-xl transition-all duration-300 transform hover:scale-105">
+                    <div class="text-3xl">🌅</div>
+                    <div class="text-sm mt-2">حنين</div>
+                </button>
+                
+                <button @click="changeContext('analytical')" 
+                        :class="currentContext === 'analytical' ? 'ring-4 ring-green-400' : ''"
+                        class="bg-green-500/20 hover:bg-green-500/40 p-4 rounded-xl transition-all duration-300 transform hover:scale-105">
+                    <div class="text-3xl">🤔</div>
+                    <div class="text-sm mt-2">تحليلي</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- الخط الزمني -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-bold mb-6 text-center">⏰ الخط الزمني للذاكرة</h3>
+            
+            <!-- حاوي الخط الزمني -->
+            <div class="relative timeline-flow rounded-2xl p-6 min-h-32">
+                <div class="flex items-center justify-between h-20 relative">
+                    
+                    <!-- خط الزمن -->
+                    <div class="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 via-white to-purple-400 rounded-full"></div>
+                    
+                    <!-- العقيق على الخط الزمني -->
+                    <template x-for="(agate, index) in timeline" :key="index">
+                        <div class="relative flex flex-col items-center">
+                            <!-- العقيق نفسه -->
+                            <div @click="selectAgate(index)"
+                                 :class="[
+                                     'agate-gem cursor-pointer w-12 h-12 rounded-full border-4 border-white/50 flex items-center justify-center text-xl relative z-10',
+                                     agate.type === 'measured' ? getAgateColor(agate.color) : getWhiteAgateAppearance(agate, index),
+                                     selectedAgate === index ? 'ring-4 ring-yellow-300' : '',
+                                     agate.type === 'white' && isReinterpreting ? 'reinterpretation-glow' : ''
+                                 ]">
+                                <span x-text="agate.emoji"></span>
+                                
+                                <!-- تأثير التخمين للعقيق الأبيض -->
+                                <div x-show="agate.type === 'white' && isReinterpreting" 
+                                     class="absolute inset-0 speculation-shimmer rounded-full"></div>
+                            </div>
+                            
+                            <!-- وصف العقيق -->
+                            <div class="mt-3 text-center">
+                                <div class="text-xs bg-black/50 rounded-full px-3 py-1 whitespace-nowrap morphing-text"
+                                     x-text="getAgateDescription(agate)"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- تفاصيل العقيق المختار -->
+        <div x-show="selectedAgate !== null" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             class="mb-8 p-6 context-bubble rounded-2xl bg-white/10">
+            
+            <template x-if="selectedAgate !== null">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-center">
+                        <span x-text="timeline[selectedAgate]?.emoji"></span>
+                        تفاصيل العقيق
+                    </h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- المعلومات الأساسية -->
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                <i class="fas fa-gem text-yellow-400"></i>
+                                <span class="font-semibold">النوع:</span>
+                                <span x-text="timeline[selectedAgate]?.type === 'measured' ? 'عقيق ملون (مُقاس)' : 'عقيق أبيض (قابل للتفسير)'"></span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                <i class="fas fa-clock text-blue-400"></i>
+                                <span class="font-semibold">الوقت:</span>
+                                <span x-text="timeline[selectedAgate]?.time"></span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3 space-x-reverse">
+                                <i class="fas fa-heart text-red-400"></i>
+                                <span class="font-semibold">المحتوى:</span>
+                                <span x-text="timeline[selectedAgate]?.content"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- التفسير الحالي للعقيق الأبيض -->
+                        <div x-show="timeline[selectedAgate]?.type === 'white'" class="space-y-3">
+                            <h4 class="font-bold text-lg text-yellow-400">
+                                <i class="fas fa-magic"></i> التفسير المحتمل:
+                            </h4>
+                            <div class="bg-black/30 rounded-lg p-4">
+                                <p class="morphing-text" x-text="getWhiteAgateInterpretation(timeline[selectedAgate])"></p>
+                            </div>
+                            
+                            <!-- القيود المنطقية -->
+                            <div class="text-sm text-gray-400">
+                                <strong>القيود المنطقية:</strong>
+                                <span x-text="timeline[selectedAgate]?.constraints"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- معلومات النظام -->
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-green-500/20 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">📊</div>
+                <div class="font-semibold">العقيق الملون</div>
+                <div class="text-2xl font-bold" x-text="timeline.filter(a => a.type === 'measured').length"></div>
+            </div>
+            
+            <div class="bg-white/20 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">🔍</div>
+                <div class="font-semibold">العقيق الأبيض</div>
+                <div class="text-2xl font-bold" x-text="timeline.filter(a => a.type === 'white').length"></div>
+            </div>
+            
+            <div class="bg-purple-500/20 rounded-xl p-4 text-center">
+                <div class="text-2xl mb-2">🎭</div>
+                <div class="font-semibold">السياق الحالي</div>
+                <div class="text-sm font-bold morphing-text" x-text="contextDescriptions[currentContext]"></div>
+            </div>
+        </div>
+
+        <!-- أزرار التحكم -->
+        <div class="text-center space-x-4 space-x-reverse">
+            <button @click="reinterpretTimeline()" 
+                    :disabled="isReinterpreting"
+                    class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-sync-alt" :class="isReinterpreting ? 'animate-spin' : ''"></i>
+                إعادة تفسير العقيق الأبيض
+            </button>
+            
+            <button @click="resetTimeline()" 
+                    class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-undo"></i>
+                إعادة تعيين
+            </button>
+        </div>
+
+        <!-- توضيح المفهوم -->
+        <div class="mt-12 bg-black/30 rounded-2xl p-6">
+            <h3 class="text-xl font-bold mb-4 text-center">💡 كيف يعمل هذا في CPF؟</h3>
+            <div class="grid md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <h4 class="font-bold text-yellow-400 mb-2">العقيق الملون (Measured Agate):</h4>
+                    <ul class="space-y-1 text-gray-300">
+                        <li>• نتائج generative_collapse المحددة</li>
+                        <li>• قرارات وأحداث مُقاسة ولا تتغير</li>
+                        <li>• تشكل العمود الفقري للخط الزمني</li>
+                        <li>• كل لون يمثل نوع مختلف من التجارب</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-2">العقيق الأبيض (White Agate):</h4>
+                    <ul class="space-y-1 text-gray-300">
+                        <li>• احتمالات غير محسومة وقابلة للتفسير</li>
+                        <li>• تتغير حسب السياق العاطفي الحالي</li>
+                        <li>• مقيدة بالقيود المنطقية والفيزيائية</li>
+                        <li>• تسمح بإعادة قراءة مرنة للماضي</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function agateMemory() {
+            return {
+                currentContext: 'happy',
+                selectedAgate: null,
+                isReinterpreting: false,
+                
+                contextDescriptions: {
+                    happy: '😊 متفائل ومبهج',
+                    sad: '😢 حزين ومتأمل',
+                    nostalgic: '🌅 حنين للماضي',
+                    analytical: '🤔 منطقي وتحليلي'
+                },
+                
+                timeline: [
+                    {
+                        type: 'measured',
+                        color: 'yellow',
+                        emoji: '🌟',
+                        time: '09:00',
+                        content: 'قرار بدء يوم جديد',
+                        originalContent: 'قرار بدء يوم جديد'
+                    },
+                    {
+                        type: 'white',
+                        emoji: '⚪',
+                        time: '09:30-11:00',
+                        content: 'فترة غير محددة',
+                        constraints: 'قيود جغرافية: البيت-العمل، وسائل النقل متاحة',
+                        interpretations: {
+                            happy: 'ربما تناولت فطاراً لذيذاً وتحدثت مع الأصدقاء 😋',
+                            sad: 'فترة تأمل وتفكير في التحديات الحالية 😔',
+                            nostalgic: 'استذكار ذكريات جميلة من الماضي 🌸',
+                            analytical: 'تخطيط منهجي لمهام اليوم وتنظيم الأولويات 📋'
+                        }
+                    },
+                    {
+                        type: 'measured',
+                        color: 'blue',
+                        emoji: '💼',
+                        time: '11:00',
+                        content: 'وصول للعمل',
+                        originalContent: 'وصول للعمل'
+                    },
+                    {
+                        type: 'white',
+                        emoji: '⚪',
+                        time: '11:00-15:00',
+                        content: 'فترة العمل',
+                        constraints: 'قيود مهنية: اجتماعات ممكنة، مهام محددة',
+                        interpretations: {
+                            happy: 'يوم عمل منتج ومليء بالإنجازات الجميلة 🚀',
+                            sad: 'يوم صعب مليء بالتحديات والضغوط ⚡',
+                            nostalgic: 'استذكار بدايات العمل والزملاء القدامى 👥',
+                            analytical: 'تركيز على المشاريع وحل المشاكل التقنية 🔧'
+                        }
+                    },
+                    {
+                        type: 'measured',
+                        color: 'green',
+                        emoji: '🏠',
+                        time: '15:00',
+                        content: 'العودة للبيت',
+                        originalContent: 'العودة للبيت'
+                    },
+                    {
+                        type: 'white',
+                        emoji: '⚪',
+                        time: '15:00-22:00',
+                        content: 'أمسية في البيت',
+                        constraints: 'قيود منزلية: وقت العائلة، أنشطة شخصية',
+                        interpretations: {
+                            happy: 'أمسية رائعة مع العائلة والأنشطة المفضلة 🎉',
+                            sad: 'وقت هادئ للراحة والتفكير في النفس 🕯️',
+                            nostalgic: 'مراجعة الصور القديمة والذكريات الجميلة 📸',
+                            analytical: 'تعلم شيء جديد أو العمل على مشروع شخصي 📚'
+                        }
+                    }
+                ],
+                
+                getAgateColor(color) {
+                    const colors = {
+                        yellow: 'bg-gradient-to-br from-yellow-400 to-yellow-600',
+                        blue: 'bg-gradient-to-br from-blue-400 to-blue-600',
+                        red: 'bg-gradient-to-br from-red-400 to-red-600',
+                        green: 'bg-gradient-to-br from-green-400 to-green-600',
+                        purple: 'bg-gradient-to-br from-purple-400 to-purple-600',
+                        black: 'bg-gradient-to-br from-gray-700 to-black'
+                    };
+                    return colors[color] || 'bg-gray-500';
+                },
+                
+                getWhiteAgateAppearance(agate, index) {
+                    if (this.isReinterpreting) {
+                        return 'bg-gradient-to-br from-white/60 to-gray-300/60 animate-pulse';
+                    }
+                    return 'bg-gradient-to-br from-white/40 to-gray-300/40';
+                },
+                
+                getAgateDescription(agate) {
+                    if (agate.type === 'measured') {
+                        return agate.content;
+                    } else {
+                        return agate.interpretations[this.currentContext] || agate.content;
+                    }
+                },
+                
+                getWhiteAgateInterpretation(agate) {
+                    return agate.interpretations[this.currentContext] || 'فترة غير محددة قابلة للتفسير';
+                },
+                
+                changeContext(newContext) {
+                    this.currentContext = newContext;
+                    this.selectedAgate = null;
+                    
+                    // تأثير بصري للتغيير
+                    setTimeout(() => {
+                        this.reinterpretTimeline();
+                    }, 300);
+                },
+                
+                selectAgate(index) {
+                    this.selectedAgate = this.selectedAgate === index ? null : index;
+                },
+                
+                async reinterpretTimeline() {
+                    if (this.isReinterpreting) return;
+                    
+                    this.isReinterpreting = true;
+                    
+                    // محاكاة عملية إعادة التفسير
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // تحديث التفسيرات (يحدث تلقائياً من خلال reactivity)
+                    this.isReinterpreting = false;
+                },
+                
+                resetTimeline() {
+                    this.currentContext = 'happy';
+                    this.selectedAgate = null;
+                    this.isReinterpreting = false;
+                }
+            }
+        }
+    </script>

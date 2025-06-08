@@ -146,8 +146,9 @@ const simulatorDifference = await cpf.compareSimulators({
 ### **2. استعلامات نموذجية يمكن تحليلها:**
 
 ```javascript
-// الأسئلة المدعومة:
+
 const supportedQueries = [
+ // الأسئلة المدعومة:
   "كيف يدرك الصرصار العالم؟ (cognitive-layers)",
   "ما تأثير الاجترار على النظام؟ (oscillators + noise-factor)",
   "كيف أميز بين الحلم والواقع؟ (ariadne-thread + simulators)",
@@ -174,7 +175,8 @@ async function processQuery(question, context = {}) {
 ### **3. تحليل الحالات المعقدة:**
 
 ```javascript
-// مثال: تحليل حالة الاجترار (Overthinking)
+
+//  (Overthinking) مثال: تحليل حالة الاجترار
 const ruminationAnalysis = await cpf.analyzeComplexState({
   state: "rumination_loop",
   involved_concepts: {
@@ -204,7 +206,7 @@ const ruminationAnalysis = await cpf.analyzeComplexState({
 ### **4. للباحثين - تحليل أنماط معرفية:**
 
 ```javascript
-// تحميل إطار العمل الكامل
+
 const CPF = require('./core/index.json');
 const concepts = CPF.core_concepts_and_processes;
 
@@ -231,8 +233,9 @@ const researchQuery = analyzePattern({
 ### **5. استعلامات للمقارنة والتمييز:**
 
 ```javascript
-// التمييز بين أنواع المحاكيات
+
 const simulatorComparison = {
+// التمييز بين أنواع المحاكيات
   query: "differentiate_simulators",
   examples: {
     reality_vs_dream: cpf.compareStates("reality_simulator", "dream_simulator"),
@@ -248,22 +251,23 @@ const dreamVsReality = await cpf.processComparison({
   analysis_type: "state_discrimination"
 });
 ```
-### .5 **مثال استعلام الذاكرة الإحتمالية: **
-‏```javascript
-‏async function runAgateMemoryDemo() {
+
+#### **6. ديمو تفاعلي شامل:**
+```javascript
+async function runAgateMemoryDemo() {
     // تجربة مهمة: السفر من الدار البيضاء لطنجة
-‏    const importantExperience = {
-‏        content: "planning_trip_casablanca_to_tangier",
-‏        realityRelevance: 0.8,
-‏        futureImportance: 0.7,
-‏        memoryWorthiness: 0.9
+    const importantExperience = {
+        content: "planning_trip_casablanca_to_tangier",
+        realityRelevance: 0.8,
+        futureImportance: 0.7,
+        memoryWorthiness: 0.9
     };
     
     // تجربة عادية: شرب القهوة
-‏    const ordinaryExperience = {
-‏        content: "having_morning_coffee",
-‏        realityRelevance: 0.3,
-‏        memoryWorthiness: 0.1
+    const ordinaryExperience = {
+        content: "having_morning_coffee",
+        realityRelevance: 0.3,
+        memoryWorthiness: 0.1
     };
 }
 ```
@@ -271,31 +275,31 @@ const dreamVsReality = await cpf.processComparison({
 ### **النتائج المتوقعة عند التشغيل:**
 
 ```
-‏🚀 Starting WinoScript Demo with Agate Memory...
+🚀 Starting WinoScript Demo with Agate Memory...
 
-‏📝 Processing important experience...
-‏SimulatorOrchestrator: Collecting votes on experience significance...
-‏  reality_processor: significance=0.8, color=blue
-‏  prediction_engine: significance=0.7, color=yellow
-‏  memory_reconstructor: significance=0.9, color=green
-‏Consensus: 0.8 (high) → Store as colored agate
+📝 Processing important experience...
+SimulatorOrchestrator: Collecting votes on experience significance...
+  reality_processor: significance=0.8, color=blue
+  prediction_engine: significance=0.7, color=yellow
+  memory_reconstructor: significance=0.9, color=green
+Consensus: 0.8 (high) → Store as colored agate
 
-‏💎 Agate storage: colored (blue)
+💎 Agate storage: colored (blue)
 
-‏📊 Current Agate Timeline:
+📊 Current Agate Timeline:
 ==================================================
-‏0: 🔵 [blue] 14:30:15 - planning_trip_casablanca_to_tangier
+0: 🔵 [blue] 14:30:15 - planning_trip_casablanca_to_tangier
 ==================================================
 
-‏📝 Processing ordinary experience...
-‏Consensus: 0.2 (low) → Store as white agate
+📝 Processing ordinary experience...
+Consensus: 0.2 (low) → Store as white agate
 
-‏💎 Agate storage: white
+💎 Agate storage: white
 
-‏📊 Current Agate Timeline:
+📊 Current Agate Timeline:
 ==================================================
-‏0: 🔵 [blue] 14:30:15 - planning_trip_casablanca_to_tangier
-‏1: ⚪ [white] 14:31:22 - unmeasured
+0: 🔵 [blue] 14:30:15 - planning_trip_casablanca_to_tangier
+1: ⚪ [white] 14:31:22 - unmeasured
 ==================================================
 ```
 

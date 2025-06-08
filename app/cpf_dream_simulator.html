@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF Dream Simulator - محاكي الأحلام</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        
+        .dream-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(147,197,253,0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .simulator-glow {
+            box-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(147, 197, 253, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(147, 197, 253, 0.6); }
+        }
+        
+        .noise-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: noise-drift 8s linear infinite;
+        }
+        
+        @keyframes noise-drift {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+        
+        .ariadne-thread {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 3px;
+            height: 100px;
+            background: linear-gradient(to bottom, #fbbf24, #f59e0b, #d97706);
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+            animation: thread-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes thread-pulse {
+            0%, 100% { opacity: 0.7; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white overflow-hidden">
+    <!-- خيط أريادن للأمان -->
+    <div class="ariadne-thread"></div>
+    
+    <div x-data="dreamSimulator()" class="min-h-screen relative">
+        <!-- خلفية الضوضاء الإبداعية -->
+        <div class="noise-pattern absolute inset-0 opacity-20"></div>
+        
+        <!-- جسيمات الحلم -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <template x-for="particle in dreamParticles" :key="particle.id">
+                <div class="dream-particle" 
+                     :style="`left: ${particle.x}px; top: ${particle.y}px; opacity: ${particle.opacity}`">
+                </div>
+            </template>
+        </div>
+
+        <!-- العنوان والحالة -->
+        <div class="relative z-10 p-6">
+            <h1 class="text-4xl font-bold text-center mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                🌙 محاكي الأحلام في CPF
+            </h1>
+            <p class="text-center text-gray-300 mb-6">
+                استكشاف المحاكيات أثناء النوم والأحلام
+            </p>
+            
+            <!-- مؤشرات الحالة -->
+            <div class="flex justify-center space-x-reverse space-x-4 mb-8">
+                <div class="text-center">
+                    <div class="text-2xl mb-1">😴</div>
+                    <div class="text-sm">مرحلة النوم</div>
+                    <div class="text-xs text-blue-300" x-text="sleepStage"></div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl mb-1">🧠</div>
+                    <div class="text-sm">المحاكيات النشطة</div>
+                    <div class="text-xs text-purple-300" x-text="activeSimulators"></div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl mb-1">⚡</div>
+                    <div class="text-sm">مستوى الضوضاء</div>
+                    <div class="text-xs text-green-300" x-text="Math.round(noiseLevel * 100) + '%'"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- منطقة المحاكيات -->
+        <div class="relative z-10 grid grid-cols-3 gap-4 p-6 max-w-6xl mx-auto">
+            <!-- محاكي معالجة الواقع -->
+            <div class="simulator-card bg-blue-900/30 backdrop-blur-sm rounded-lg p-4 border border-blue-500/30 simulator-glow"
+                 :class="{'bg-blue-600/50': activeSimulators.includes('reality_processor')}">
+                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                    🔍 معالج الواقع
+                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-blue-500/30" 
+                          x-show="activeSimulators.includes('reality_processor')">نشط</span>
+                </h3>
+                <div class="space-y-2">
+                    <div class="text-sm text-gray-300">يحول الذكريات اليومية لمشاهد حلم</div>
+                    <div class="bg-blue-800/30 rounded p-2 text-xs">
+                        <div>المدخل: الذكريات الحديثة</div>
+                        <div>المعالجة: 
+                            <span class="text-blue-300" x-text="dreamContent.reality_fragments.join(', ')"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- محاكي التنبؤ -->
+            <div class="simulator-card bg-purple-900/30 backdrop-blur-sm rounded-lg p-4 border border-purple-500/30 simulator-glow"
+                 :class="{'bg-purple-600/50': activeSimulators.includes('prediction_engine')}">
+                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                    🔮 محرك التنبؤ
+                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-purple-500/30"
+                          x-show="activeSimulators.includes('prediction_engine')">نشط</span>
+                </h3>
+                <div class="space-y-2">
+                    <div class="text-sm text-gray-300">ينشئ سيناريوهات مستقبلية خيالية</div>
+                    <div class="bg-purple-800/30 rounded p-2 text-xs">
+                        <div>السيناريو: 
+                            <span class="text-purple-300" x-text="dreamContent.future_scenarios[0] || 'لا توجد تنبؤات'"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- محاكي إعادة البناء -->
+            <div class="simulator-card bg-green-900/30 backdrop-blur-sm rounded-lg p-4 border border-green-500/30 simulator-glow"
+                 :class="{'bg-green-600/50': activeSimulators.includes('memory_reconstructor')}">
+                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                    💭 معيد بناء الذاكرة
+                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-green-500/30"
+                          x-show="activeSimulators.includes('memory_reconstructor')">نشط</span>
+                </h3>
+                <div class="space-y-2">
+                    <div class="text-sm text-gray-300">يخلط الذكريات ويعيد تشكيلها</div>
+                    <div class="bg-green-800/30 rounded p-2 text-xs">
+                        <div>الذكرى المركبة: 
+                            <span class="text-green-300" x-text="dreamContent.mixed_memories"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- محاكي الأنماط -->
+            <div class="simulator-card bg-red-900/30 backdrop-blur-sm rounded-lg p-4 border border-red-500/30 simulator-glow"
+                 :class="{'bg-red-600/50': activeSimulators.includes('pattern_explorer')}">
+                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                    🎨 مستكشف الأنماط
+                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-red-500/30"
+                          x-show="activeSimulators.includes('pattern_explorer')">نشط</span>
+                </h3>
+                <div class="space-y-2">
+                    <div class="text-sm text-gray-300">ينشئ رموزاً وأنماطاً جديدة</div>
+                    <div class="bg-red-800/30 rounded p-2 text-xs">
+                        <div>النمط: 
+                            <span class="text-red-300" x-text="dreamContent.symbolic_patterns"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- محاكي اجتماعي -->
+            <div class="simulator-card bg-yellow-900/30 backdrop-blur-sm rounded-lg p-4 border border-yellow-500/30 simulator-glow"
+                 :class="{'bg-yellow-600/50': activeSimulators.includes('social_modeler')}">
+                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                    👥 النمذجة الاجتماعية
+                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-yellow-500/30"
+                          x-show="activeSimulators.includes('social_modeler')">نشط</span>
+                </h3>
+                <div class="space-y-2">
+                    <div class="text-sm text-gray-300">يحاكي الأشخاص والعلاقات</div>
+                    <div class="bg-yellow-800/30 rounded p-2 text-xs">
+                        <div>الشخصيات: 
+                            <span class="text-yellow-300" x-text="dreamContent.dream_characters.join(', ')"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- منظومة التذبذب -->
+            <div class="simulator-card bg-indigo-900/30 backdrop-blur-sm rounded-lg p-4 border border-indigo-500/30 simulator-glow">
+                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                    🌊 منظومة التذبذب
+                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-indigo-500/30">مستمر</span>
+                </h3>
+                <div class="space-y-2">
+                    <div class="text-sm text-gray-300">الحالة العاطفية للحلم</div>
+                    <div class="bg-indigo-800/30 rounded p-2 text-xs">
+                        <div class="flex items-center justify-between">
+                            <span>المستوى:</span>
+                            <div class="w-16 h-2 bg-gray-700 rounded-full">
+                                <div class="h-full bg-indigo-400 rounded-full transition-all duration-1000" 
+                                     :style="`width: ${oscillatorLevel * 100}%`"></div>
+                            </div>
+                        </div>
+                        <div class="mt-1">
+                            الحالة: <span class="text-indigo-300" x-text="getCurrentEmotionalState()"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- منطقة الحلم الحالي -->
+        <div class="relative z-10 mx-6 mb-6">
+            <div class="bg-black/40 backdrop-blur-sm rounded-lg p-6 border border-gray-500/30">
+                <h3 class="text-xl font-semibold mb-4 text-center">🌙 الحلم الحالي</h3>
+                <div class="text-lg text-center mb-4 min-h-[60px] flex items-center justify-center">
+                    <span class="text-gray-200" x-text="currentDream"></span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-400">وضوح الحلم:</span>
+                        <div class="w-full h-2 bg-gray-700 rounded-full mt-1">
+                            <div class="h-full bg-blue-400 rounded-full transition-all duration-1000" 
+                                 :style="`width: ${dreamClarity * 100}%`"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">تحكم الحالم:</span>
+                        <div class="w-full h-2 bg-gray-700 rounded-full mt-1">
+                            <div class="h-full bg-purple-400 rounded-full transition-all duration-1000" 
+                                 :style="`width: ${lucidLevel * 100}%`"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار التحكم -->
+        <div class="relative z-10 flex justify-center space-x-reverse space-x-4 pb-6">
+            <button @click="toggleDreaming()" 
+                    class="px-6 py-3 rounded-lg font-semibold transition-all duration-300"
+                    :class="isDreaming ? 
+                        'bg-red-600 hover:bg-red-700 text-white' : 
+                        'bg-blue-600 hover:bg-blue-700 text-white'">
+                <span x-text="isDreaming ? '⏹️ استيقظ' : '😴 ابدأ الحلم'"></span>
+            </button>
+            
+            <button @click="triggerLucidMoment()" 
+                    :disabled="!isDreaming"
+                    class="px-6 py-3 rounded-lg font-semibold transition-all duration-300"
+                    :class="isDreaming ? 
+                        'bg-purple-600 hover:bg-purple-700 text-white' : 
+                        'bg-gray-600 text-gray-400 cursor-not-allowed'">
+                ✨ لحظة وعي
+            </button>
+            
+            <button @click="increaseNoise()" 
+                    :disabled="!isDreaming"
+                    class="px-6 py-3 rounded-lg font-semibold transition-all duration-300"
+                    :class="isDreaming ? 
+                        'bg-green-600 hover:bg-green-700 text-white' : 
+                        'bg-gray-600 text-gray-400 cursor-not-allowed'">
+                🎲 زيادة العشوائية
+            </button>
+        </div>
+
+        <!-- تحذير الخيط الأريادني -->
+        <div x-show="ariadneWarning" 
+             class="fixed bottom-4 left-4 bg-yellow-600 text-white px-4 py-2 rounded-lg shadow-lg"
+             x-transition>
+            ⚠️ الخيط الأريادني: حلم شديد الغرابة - اعتبر الاستيقاظ
+        </div>
+    </div>
+
+    <script>
+        function dreamSimulator() {
+            return {
+                isDreaming: false,
+                sleepStage: 'استيقاظ',
+                activeSimulators: [],
+                noiseLevel: 0.3,
+                oscillatorLevel: 0.5,
+                dreamClarity: 0.7,
+                lucidLevel: 0.1,
+                currentDream: 'لا يوجد حلم نشط حالياً',
+                ariadneWarning: false,
+                dreamParticles: [],
+                dreamContent: {
+                    reality_fragments: ['البيت', 'العمل', 'الأصدقاء'],
+                    future_scenarios: ['السفر للفضاء', 'لقاء شخص مهم'],
+                    mixed_memories: 'ذكرى الطفولة مع مكان العمل',
+                    symbolic_patterns: 'سلالم لانهائية',
+                    dream_characters: ['صديق قديم', 'شخص غريب']
+                },
+
+                dreamTemplates: [
+                    'أطير فوق مدينة مضيئة تشبه الدار البيضاء',
+                    'أتحدث مع نسخة من نفسي من الماضي',
+                    'أجد نفسي في مكتبة تحتوي على كل كتب العالم',
+                    'أسبح في بحر من النجوم والألوان',
+                    'أركض في متاهة تتغير باستمرار',
+                    'أحل مشاكل رياضية معقدة بسهولة مذهلة',
+                    'أتكلم مع الحيوانات وأفهم لغتها',
+                    'أرى ذكرياتي تتحول إلى أفلام سينمائية'
+                ],
+
+                sleepStages: ['نوم خفيف', 'نوم عميق', 'نوم الأحلام (REM)', 'الاستيقاظ'],
+
+                init() {
+                    this.createDreamParticles();
+                    this.startParticleAnimation();
+                },
+
+                toggleDreaming() {
+                    this.isDreaming = !this.isDreaming;
+                    
+                    if (this.isDreaming) {
+                        this.startDreamCycle();
+                    } else {
+                        this.wakeUp();
+                    }
+                },
+
+                startDreamCycle() {
+                    this.sleepStage = 'نوم خفيف';
+                    this.dreamClarity = Math.random() * 0.5 + 0.3;
+                    
+                    // محاكاة مراحل النوم
+                    setTimeout(() => {
+                        if (this.isDreaming) {
+                            this.sleepStage = 'نوم عميق';
+                            this.activateSimulators(['reality_processor']);
+                        }
+                    }, 2000);
+                    
+                    setTimeout(() => {
+                        if (this.isDreaming) {
+                            this.sleepStage = 'نوم الأحلام (REM)';
+                            this.activateAllSimulators();
+                            this.startDreamGeneration();
+                        }
+                    }, 4000);
+                },
+
+                activateSimulators(simulators) {
+                    this.activeSimulators = simulators;
+                    this.updateDreamContent();
+                },
+
+                activateAllSimulators() {
+                    this.activeSimulators = [
+                        'reality_processor', 
+                        'prediction_engine', 
+                        'memory_reconstructor',
+                        'pattern_explorer',
+                        'social_modeler'
+                    ];
+                    this.updateDreamContent();
+                },
+
+                updateDreamContent() {
+                    // محاكاة تحديث محتوى الحلم بناءً على المحاكيات النشطة
+                    if (this.activeSimulators.includes('reality_processor')) {
+                        this.dreamContent.reality_fragments = ['البيت', 'العمل', 'الشارع'];
+                    }
+                    if (this.activeSimulators.includes('prediction_engine')) {
+                        this.dreamContent.future_scenarios = ['مغامرة جديدة', 'لقاء مهم'];
+                    }
+                    if (this.activeSimulators.includes('memory_reconstructor')) {
+                        this.dreamContent.mixed_memories = 'خليط من ذكريات الطفولة والحاضر';
+                    }
+                },
+
+                startDreamGeneration() {
+                    this.generateNewDream();
+                    
+                    // تحديث دوري للحلم
+                    this.dreamInterval = setInterval(() => {
+                        if (this.isDreaming) {
+                            this.generateNewDream();
+                            this.updateOscillator();
+                            this.checkAriadneThread();
+                        }
+                    }, 5000);
+                },
+
+                generateNewDream() {
+                    // انهيار توليدي: اختيار حلم من القوالب مع تأثير الضوضاء
+                    let baseTemplate = this.dreamTemplates[Math.floor(Math.random() * this.dreamTemplates.length)];
+                    
+                    // تطبيق تأثير الضوضاء الإبداعية
+                    if (this.noiseLevel > 0.6) {
+                        const noiseModifications = [
+                            'بألوان مستحيلة',
+                            'مع قوانين فيزياء مختلفة', 
+                            'في بُعد آخر',
+                            'مع شخصيات كرتونية',
+                            'بحجم مصغر',
+                            'في المستقبل البعيد'
+                        ];
+                        baseTemplate += ' ' + noiseModifications[Math.floor(Math.random() * noiseModifications.length)];
+                    }
+                    
+                    this.currentDream = baseTemplate;
+                    this.dreamClarity = Math.random() * 0.8 + 0.2;
+                },
+
+                updateOscillator() {
+                    // محاكاة تذبذب الحالة العاطفية
+                    this.oscillatorLevel += (Math.random() - 0.5) * 0.3;
+                    this.oscillatorLevel = Math.max(0, Math.min(1, this.oscil

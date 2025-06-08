@@ -64,6 +64,7 @@ cpf/
 │   ├── trust-matrix.json        # تقييم الثقة
 │   ├── self-copies.json         # نمذجة الآخرين
 │   ├── middleware.json          # طبقة التصفية والحماية
+│   ├── agate-memory.json          # ذاكرة احتمالية
 │   ├── noise-factor.json        # العشوائية الإبداعية
 │   ├── attention_manager.json   # إدارة الانتباه
 │   ├── embodiment_interface.json # واجهة التجسيد
@@ -247,6 +248,58 @@ const dreamVsReality = await cpf.processComparison({
   analysis_type: "state_discrimination"
 });
 ```
+### .5 **مثال استعلام الذاكرة الإحتمالية: **
+‏```javascript
+‏async function runAgateMemoryDemo() {
+    // تجربة مهمة: السفر من الدار البيضاء لطنجة
+‏    const importantExperience = {
+‏        content: "planning_trip_casablanca_to_tangier",
+‏        realityRelevance: 0.8,
+‏        futureImportance: 0.7,
+‏        memoryWorthiness: 0.9
+    };
+    
+    // تجربة عادية: شرب القهوة
+‏    const ordinaryExperience = {
+‏        content: "having_morning_coffee",
+‏        realityRelevance: 0.3,
+‏        memoryWorthiness: 0.1
+    };
+}
+```
+
+### **النتائج المتوقعة عند التشغيل:**
+
+```
+‏🚀 Starting WinoScript Demo with Agate Memory...
+
+‏📝 Processing important experience...
+‏SimulatorOrchestrator: Collecting votes on experience significance...
+‏  reality_processor: significance=0.8, color=blue
+‏  prediction_engine: significance=0.7, color=yellow
+‏  memory_reconstructor: significance=0.9, color=green
+‏Consensus: 0.8 (high) → Store as colored agate
+
+‏💎 Agate storage: colored (blue)
+
+‏📊 Current Agate Timeline:
+==================================================
+‏0: 🔵 [blue] 14:30:15 - planning_trip_casablanca_to_tangier
+==================================================
+
+‏📝 Processing ordinary experience...
+‏Consensus: 0.2 (low) → Store as white agate
+
+‏💎 Agate storage: white
+
+‏📊 Current Agate Timeline:
+==================================================
+‏0: 🔵 [blue] 14:30:15 - planning_trip_casablanca_to_tangier
+‏1: ⚪ [white] 14:31:22 - unmeasured
+==================================================
+```
+
+
 
 ## 📚 الأساس العلمي
 

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ذاكرة العقيق - طيف إعادة قراءة الماضي</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+        
+        body { font-family: 'Amiri', serif; }
+        
+        .agate-dot {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
+        }
+        
+        .agate-dot:hover {
+            transform: scale(1.3);
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+        
+        .white-agate {
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 20%, rgba(255,255,255,0.3) 80%);
+            border: 2px dashed rgba(255,255,255,0.6);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes speculate {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+            100% { opacity: 0.3; transform: scale(0.8); }
+        }
+        
+        .speculation {
+            animation: speculate 3s infinite;
+        }
+        
+        .timeline-glow {
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(99, 102, 241, 0.3) 20%, 
+                rgba(168, 85, 247, 0.4) 50%, 
+                rgba(236, 72, 153, 0.3) 80%, 
+                transparent 100%);
+            filter: blur(1px);
+        }
+        
+        .voting-panel {
+            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .colored-agate {
+            background: radial-gradient(circle, currentColor 30%, rgba(255,255,255,0.2) 70%);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white" x-data="agateMemorySystem()">
+    
+    <!-- Header -->
+    <div class="text-center py-8">
+        <h1 class="text-4xl font-bold mb-2">💎 ذاكرة العقيق</h1>
+        <p class="text-purple-300 text-lg">طيف إعادة قراءة الماضي</p>
+        <div class="mt-4 text-sm text-gray-400">
+            <span class="inline-block mx-2">🔵 أحداث مُقاسة</span>
+            <span class="inline-block mx-2">⚪ احتمالات مضغوطة</span>
+            <span class="inline-block mx-2">🌈 إعادة التفسير</span>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="max-w-6xl mx-auto px-4 mb-8">
+        <div class="voting-panel rounded-lg p-6 mb-6">
+            <h3 class="text-xl font-bold mb-4">🗳️ لوحة التحكم</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Add Experience -->
+                <div>
+                    <h4 class="font-semibold mb-3">إضافة تجربة جديدة</h4>
+                    <div class="space-y-3">
+                        <input x-model="newExperience.content" 
+                               placeholder="وصف التجربة..." 
+                               class="w-full p-2 rounded bg-slate-700 border border-slate-600 text-white">
+                        
+                        <div class="flex gap-2 flex-wrap">
+                            <template x-for="color in agateColors" :key="color.name">
+                                <button @click="newExperience.suggestedColor = color.name"
+                                        :class="`w-8 h-8 rounded-full ${color.class} border-2 transition-all
+                                                ${newExperience.suggestedColor === color.name ? 'border-white scale-110' : 'border-gray-500'}`"
+                                        :title="color.meaning">
+                                </button>
+                            </template>
+                        </div>
+                        
+                        <button @click="addExperience()" 
+                                class="w-full bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded transition-colors">
+                            إضافة للخط الزمني
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Context Selector -->
+                <div>
+                    <h4 class="font-semibold mb-3">🎭 السياق الحالي</h4>
+                    <div class="space-y-3">
+                        <select x-model="currentContext.mood" 
+                                class="w-full p-2 rounded bg-slate-700 border border-slate-600 text-white">
+                            <option value="neutral">محايد</option>
+                            <option value="happy">سعيد</option>
+                            <option value="sad">حزين</option>
+                            <option value="nostalgic">حنين</option>
+                            <option value="optimistic">متفائل</option>
+                            <option value="anxious">قلق</option>
+                        </select>
+                        
+                        <button @click="reinterpretWhiteAgate()" 
+                                class="w-full bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded transition-colors">
+                            🌈 إعادة تفسير العقيق الأبيض
+                        </button>
+                        
+                        <button @click="compressWhiteSequences()" 
+                                class="w-full bg-green-600 hover:bg-green-500 px-4 py-2 rounded transition-colors">
+                            🗜️ ضغط التسلسلات البيضاء
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div>
+                    <h4 class="font-semibold mb-3">📊 إحصائيات الخط الزمني</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>مجموع الأحداث:</span>
+                            <span x-text="timeline.length"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>عقيق ملون:</span>
+                            <span x-text="timeline.filter(t => t.type === 'measured').length"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>عقيق أبيض:</span>
+                            <span x-text="timeline.filter(t => t.type === 'white').length"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>معدل الضغط:</span>
+                            <span x-text="`${Math.round(compressionRatio * 100)}%`"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulator Voting Display -->
+        <div class="voting-panel rounded-lg p-4 mb-6" x-show="lastVotingResult">
+            <h4 class="font-semibold mb-3">🤖 تصويت المحاكيات الأخير</h4>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <template x-for="vote in lastVotingResult" :key="vote.simulator">
+                    <div class="text-center p-3 bg-slate-800 rounded-lg">
+                        <div class="text-2xl mb-2" x-text="vote.icon"></div>
+                        <div class="text-xs text-gray-400" x-text="vote.simulator"></div>
+                        <div class="text-sm font-bold" x-text="`${Math.round(vote.significance * 100)}%`"></div>
+                        <div class="w-4 h-4 mx-auto mt-2 rounded-full" :class="vote.colorClass"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Display -->
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="relative">
+            <!-- Timeline Base Line -->
+            <div class="timeline-glow absolute top-1/2 left-0 right-0 h-1 -translate-y-1/2"></div>
+            <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 -translate-y-1/2"></div>
+            
+            <!-- Timeline Dots -->
+            <div class="flex justify-center items-center space-x-4 py-8 overflow-x-auto min-h-24">
+                <template x-for="(item, index) in timeline" :key="index">
+                    <div class="relative flex-shrink-0" 
+                         @mouseenter="hoveredItem = item" 
+                         @mouseleave="hoveredItem = null"
+                         @click="selectedItem = item">
+                        
+                        <!-- Agate Dot -->
+                        <div class="agate-dot relative cursor-pointer"
+                             :class="{
+                                 'white-agate': item.type === 'white',
+                                 'colored-agate': item.type === 'measured'
+                             }"
+                             :style="`color: ${item.color}; width: ${item.compressed ? '60px' : '24px'}; height: 24px;`">
+                            
+                            <!-- Compressed indicator -->
+                            <template x-if="item.compressed">
+                                <div class="absolute inset-0 rounded-full flex items-center justify-center text-xs font-bold text-white">
+                                    <span x-text="`×${item.count}`"></span>
+                                </div>
+                            </template>
+                            
+                            <!-- Regular dot -->
+                            <template x-if="!item.compressed">
+                                <div class="w-6 h-6 rounded-full"></div>
+                            </template>
+                            
+                            <!-- Speculation overlay -->
+                            <template x-if="item.speculation && showSpeculation">
+                                <div class="speculation absolute -top-2 -right-2 w-4 h-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-xs flex items-center justify-center">
+                                    ✨
+                                </div>
+                            </template>
+                        </div>
+                        
+                        <!-- Hover tooltip -->
+                        <div x-show="hoveredItem === item" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
+                             class="absolute -top-16 left-1/2 -translate-x-1/2 bg-black bg-opacity-80 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap z-10">
+                            <div x-text="item.content"></div>
+                            <div class="text-xs text-gray-300" x-text="item.type === 'white' ? 'احتمالات غير محسومة' : 'حدث مُقاس'"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div x-show="selectedItem" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-4"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         class="max-w-4xl mx-auto px-4 mt-8">
+        
+        <div class="voting-panel rounded-lg p-6">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold">تفاصيل العقيق</h3>
+                <button @click="selectedItem = null" 
+                        class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <template x-if="selectedItem">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Content -->
+                        <div>
+                            <h4 class="font-semibold mb-2">المحتوى</h4>
+                            <p class="text-gray-300" x-text="selectedItem.content"></p>
+                            <div class="mt-2 text-sm text-gray-400">
+                                <span>النوع: </span>
+                                <span x-text="selectedItem.type === 'white' ? 'عقيق أبيض (احتمالات)' : 'عقيق ملون (مُقاس)'"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Properties -->
+                        <div>
+                            <h4 class="font-semibold mb-2">الخصائص</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between">
+                                    <span>الموقع الزمني:</span>
+                                    <span x-text="selectedItem.position || 'غير محدد'"></span>
+                                </div>
+                                <template x-if="selectedItem.significance">
+                                    <div class="flex justify-between">
+                                        <span>درجة الأهمية:</span>
+                                        <span x-text="`${Math.round(selectedItem.significance * 100)}%`"></span>
+                                    </div>
+                                </template>
+                                <template x-if="selectedItem.compressed">
+                                    <div class="flex justify-between">
+                                        <span>مضغوط:</span>
+                                        <span x-text="`${selectedItem.count} حدث`"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Speculation Panel for White Agate -->
+                    <template x-if="selectedItem.type === 'white' && selectedItem.speculation">
+                        <div class="mt-6 p-4 bg-slate-800 rounded-lg">
+                            <h4 class="font-semibold mb-3">🔮 التخمينات المحتملة</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <template x-for="spec in selectedItem.speculation" :key="spec.scenario">
+                                    <div class="p-3 bg-slate-700 rounded">
+                                        <div class="font-medium" x-text="spec.scenario"></div>
+                                        <div class="text-sm text-gray-400 mt-1">
+                                            <span>الثقة: </span>
+                                            <span x-text="`${Math.round(spec.confidence * 100)}%`"></span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Footer Controls -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="flex justify-center space-x-4">
+            <button @click="showSpeculation = !showSpeculation" 
+                    :class="`px-4 py-2 rounded transition-colors ${showSpeculation ? 'bg-yellow-600' : 'bg-gray-600'}`">
+                <i class="fas fa-eye mr-2"></i>
+                <span x-text="showSpeculation ? 'إخفاء التخمينات' : 'إظهار التخمينات'"></span>
+            </button>
+            
+            <button @click="generateRandomExperience()" 
+                    class="px-4 py-2 rounded bg-purple-600 hover:bg-purple-500 transition-colors">
+                <i class="fas fa-dice mr-2"></i>
+                توليد تجربة عشوائية
+            </button>
+            
+            <button @click="clearTimeline()" 
+                    class="px-4 py-2 rounded bg-red-600 hover:bg-red-500 transition-colors">
+                <i class="fas fa-trash mr-2"></i>
+                مسح الخط الزمني
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function agateMemorySystem() {
+            return {
+                timeline: [
+                    { type: 'measured', content: 'قرار السفر إلى المغرب', color: '#ffd700', significance: 0.9, position: 0 },
+                    { type: 'white', content: 'رحلة من الدار البيضاء إلى طنجة', color: '#ffffff', position: 1 },
+                    { type: 'white', content: 'استكشاف المدينة', color: '#ffffff', position: 2, compressed: true, count: 3 },
+                    { type: 'measured', content: 'لقاء مع صديق قديم', color: '#32cd32', significance: 0.7, position: 5 },
+                    { type: 'white', content: 'نشاطات مسائية', color: '#ffffff', position: 6 },
+                    { type: 'measured', content: 'قرار العودة', color: '#4169e1', significance: 0.6, position: 7 }
+                ],
+                
+                agateColors: [
+                    { name: 'yellow', class: 'bg-yellow-400', meaning: 'قرارات إيجابية' },
+                    { name: 'blue', class: 'bg-blue-500', meaning: 'تأمل وهدوء' },
+                    { name: 'red', class: 'bg-red-500', meaning: 'انفعالات قوية' },
+                    { name: 'green', class: 'bg-green-500', meaning: 'أمل ونمو' },
+                    { name: 'purple', class: 'bg-purple-500', meaning: 'إبداع وخيال' },
+                    { name: 'pink', class: 'bg-pink-500', meaning: 'حب وعاطفة' }
+                ],
+                
+                simulators: [
+                    { id: 'reality', name: 'معالج الواقع', icon: '🌍' },
+                    { id: 'prediction', name: 'محرك التنبؤ', icon: '🔮' },
+                    { id: 'memory', name: 'مُعيد البناء', icon: '🧠' },
+                    { id: 'social', name: 'المحاكي الاجتماعي', icon: '👥' },
+                    { id: 'pattern', name: 'مستكشف الأنماط', icon: '🔍' }
+                ],
+                
+                newExperience: { content: '', suggestedColor: 'yellow' },
+                currentContext: { mood: 'neutral' },
+                selectedItem: null,
+                hoveredItem: null,
+                showSpeculation: false,
+                lastVotingResult: null,
+                
+                get compressionRatio() {
+                    const compressed = this.timeline.filter(t => t.compressed).length;
+                    return this.timeline.length > 0 ? compressed / this.timeline.length : 0;
+                },
+                
+                addExperience() {
+                    if (!this.newExperience.content.trim()) return;
+                    
+                    // Simulate voting
+                    const votes = this.simulators.map(sim => {
+                        const significance = 0.3 + Math.random() * 0.7;
+                        const colors = ['#ffd700', '#4169e1', '#ff6347', '#32cd32', '#9370db'];
+                        return {
+                            simulator: sim.name,
+                            icon: sim.icon,
+                            significance: significance,
+                            colorClass: this.getColorClass(this.newExperience.suggestedColor),
+                            suggestedColor: this.newExperience.suggestedColor
+                        };
+                    });
+                    
+                    this.lastVotingResult = votes;
+                    
+                    // Determine if it sh

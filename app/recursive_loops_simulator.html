@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحلقات التكرارية المدمرة - CPF Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        .spiral-animation { animation: spiral 2s ease-in-out infinite; }
+        @keyframes spiral {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        .shake { animation: shake 0.5s ease-in-out infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .pulse-danger { animation: pulse-danger 1s ease-in-out infinite; }
+        @keyframes pulse-danger {
+            0%, 100% { background-color: rgb(239 68 68); }
+            50% { background-color: rgb(185 28 28); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen text-white">
+    
+    <div x-data="recursiveLoopSimulator()" class="container mx-auto px-4 py-8">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
+                🌀 محاكي الحلقات التكرارية المدمرة
+            </h1>
+            <p class="text-lg text-blue-200 mb-4">مفهوم "النسخ الحرة" من إطار CPF - عندما يدخل العقل في حلقة لا نهائية</p>
+            <div class="bg-red-900/30 border border-red-500 rounded-lg p-3 max-w-2xl mx-auto">
+                <i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>
+                <span class="text-sm">تحذير: هذا نموذج نظري للفهم العلمي فقط</span>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 mb-8 border border-gray-600">
+            <h3 class="text-xl font-bold mb-4 text-center">🎮 لوحة التحكم</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button 
+                    @click="startLoop()" 
+                    :disabled="isLooping"
+                    class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-6 py-3 rounded-lg font-bold transition-all duration-300"
+                >
+                    <i class="fas fa-play mr-2"></i>
+                    بدء التفكير
+                </button>
+                
+                <button 
+                    @click="triggerNoise()" 
+                    :disabled="!isLooping"
+                    class="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 px-6 py-3 rounded-lg font-bold transition-all duration-300"
+                >
+                    <i class="fas fa-bolt mr-2"></i>
+                    تشويش إبداعي
+                </button>
+                
+                <button 
+                    @click="ariadneIntervention()" 
+                    :disabled="!isLooping || loopLevel < 3"
+                    class="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 px-6 py-3 rounded-lg font-bold transition-all duration-300"
+                    :class="{ 'pulse-danger': loopLevel >= 4 }"
+                >
+                    <i class="fas fa-life-ring mr-2"></i>
+                    خروج طارئ
+                </button>
+            </div>
+        </div>
+
+        <!-- Status Indicators -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <!-- Cognitive Energy -->
+            <div class="bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl p-4 border border-blue-600">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-bold">🧠 الطاقة المعرفية</span>
+                    <span class="text-xs text-blue-300" x-text="cognitiveEnergy + '%'"></span>
+                </div>
+                <div class="w-full bg-blue-900 rounded-full h-3">
+                    <div 
+                        class="h-3 rounded-full transition-all duration-500"
+                        :class="cognitiveEnergy > 50 ? 'bg-blue-400' : cognitiveEnergy > 20 ? 'bg-yellow-400' : 'bg-red-500'"
+                        :style="`width: ${cognitiveEnergy}%`"
+                    ></div>
+                </div>
+            </div>
+
+            <!-- Loop Depth -->
+            <div class="bg-gradient-to-br from-purple-800 to-purple-900 rounded-xl p-4 border border-purple-600">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-bold">🌀 عمق الحلقة</span>
+                    <span class="text-xs text-purple-300" x-text="'المستوى ' + loopLevel"></span>
+                </div>
+                <div class="text-2xl font-bold text-center" x-text="loopLevel"></div>
+            </div>
+
+            <!-- Reality Anchor -->
+            <div class="bg-gradient-to-br from-green-800 to-green-900 rounded-xl p-4 border border-green-600">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-bold">⚓ ربط الواقع</span>
+                    <span class="text-xs text-green-300" x-text="realityAnchor + '%'"></span>
+                </div>
+                <div class="w-full bg-green-900 rounded-full h-3">
+                    <div 
+                        class="h-3 rounded-full transition-all duration-500"
+                        :class="realityAnchor > 50 ? 'bg-green-400' : realityAnchor > 20 ? 'bg-yellow-400' : 'bg-red-500'"
+                        :style="`width: ${realityAnchor}%`"
+                    ></div>
+                </div>
+            </div>
+
+            <!-- Danger Level -->
+            <div class="bg-gradient-to-br from-red-800 to-red-900 rounded-xl p-4 border border-red-600">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-bold">⚠️ مستوى الخطر</span>
+                    <span class="text-xs text-red-300" x-text="dangerLevel"></span>
+                </div>
+                <div class="text-2xl font-bold text-center" 
+                     :class="dangerLevel === 'أخضر' ? 'text-green-400' : dangerLevel === 'أصفر' ? 'text-yellow-400' : 'text-red-400'"
+                     x-text="dangerLevel">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Simulation Area -->
+        <div class="bg-gray-900/70 backdrop-blur-sm rounded-xl p-8 mb-8 border border-gray-600 min-h-96">
+            
+            <!-- Thought Bubble -->
+            <div class="text-center mb-8">
+                <div 
+                    class="inline-block bg-white text-gray-800 rounded-3xl px-8 py-4 max-w-3xl relative transition-all duration-500"
+                    :class="{ 'shake': isLooping && loopLevel > 2 }"
+                >
+                    <div class="text-lg font-bold mb-2" x-text="currentThought"></div>
+                    <div class="text-sm text-gray-600" x-text="thoughtDetails"></div>
+                    
+                    <!-- Thought tail -->
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
+                        <div class="w-4 h-4 bg-white transform rotate-45"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character -->
+            <div class="text-center mb-8">
+                <div 
+                    class="text-8xl transition-all duration-500"
+                    :class="{ 'spiral-animation': isLooping && loopLevel > 1 }"
+                >
+                    <span x-text="characterState"></span>
+                </div>
+            </div>
+
+            <!-- Loop Visualization -->
+            <div x-show="isLooping" class="flex justify-center">
+                <div class="relative">
+                    <template x-for="level in loopLevel" :key="level">
+                        <div 
+                            class="absolute border-4 border-purple-500 rounded-full opacity-70"
+                            :style="`width: ${level * 80}px; height: ${level * 80}px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: spiral ${2 - level * 0.1}s linear infinite;`"
+                        ></div>
+                    </template>
+                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
+                        🧠
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CPF System Analysis -->
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-600">
+            <h3 class="text-xl font-bold mb-4 text-center">🔬 تحليل النظام CPF</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Active Concepts -->
+                <div>
+                    <h4 class="text-lg font-bold mb-3 text-blue-300">💡 المفاهيم النشطة</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between bg-blue-900/30 rounded-lg p-2">
+                            <span>🤖 Self-Copies</span>
+                            <span class="text-xs bg-red-500 px-2 py-1 rounded" x-show="isLooping">مفرط النشاط</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-gray-700/30 rounded-lg p-2">
+                            <span>⚡ Noise Factor</span>
+                            <span class="text-xs bg-green-500 px-2 py-1 rounded" x-show="noiseApplied">نشط</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-gray-700/30 rounded-lg p-2">
+                            <span>🧵 Ariadne Thread</span>
+                            <span class="text-xs bg-yellow-500 px-2 py-1 rounded" x-show="loopLevel >= 3">مراقب</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-gray-700/30 rounded-lg p-2">
+                            <span>🏃 Meta-Cognition</span>
+                            <span class="text-xs bg-orange-500 px-2 py-1 rounded" x-show="loopLevel >= 2">كاشف المشكلة</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Messages -->
+                <div>
+                    <h4 class="text-lg font-bold mb-3 text-green-300">📱 رسائل النظام</h4>
+                    <div class="bg-black/30 rounded-lg p-3 h-40 overflow-y-auto text-sm space-y-1">
+                        <template x-for="message in systemMessages" :key="message.id">
+                            <div class="flex items-start space-x-2 space-x-reverse">
+                                <span class="text-gray-400 text-xs" x-text="message.time"></span>
+                                <span x-text="message.text" :class="message.type === 'warning' ? 'text-yellow-400' : message.type === 'error' ? 'text-red-400' : 'text-green-400'"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Educational Info -->
+        <div class="mt-8 bg-blue-900/20 border border-blue-600 rounded-xl p-6">
+            <h3 class="text-xl font-bold mb-4 text-center">📚 المفهوم العلمي</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <h4 class="font-bold text-blue-300 mb-2">🌀 الحلقات التكرارية المدمرة</h4>
+                    <p class="text-gray-300 leading-relaxed">
+                        عندما يبدأ العقل في التفكير "ماذا يفكر أنني أفكر أنه يفكر..." إلى ما لا نهاية، 
+                        يستنزف ذلك الطاقة المعرفية ويؤدي للشلل التام في اتخاذ القرارات.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-green-300 mb-2">🛡️ آليات الحماية</h4>
+                    <p class="text-gray-300 leading-relaxed">
+                        النظام يحتوي على آليات حماية مثل التشويش الإبداعي (Noise Factor) 
+                        والخيط الأريادني (Ariadne Thread) لكسر هذه الحلقات المدمرة.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function recursiveLoopSimulator() {
+            return {
+                isLooping: false,
+                loopLevel: 0,
+                cognitiveEnergy: 100,
+                realityAnchor: 100,
+                dangerLevel: 'أخضر',
+                currentThought: 'أفكر في موضوع عادي...',
+                thoughtDetails: 'كل شيء طبيعي',
+                characterState: '😊',
+                systemMessages: [],
+                noiseApplied: false,
+                loopInterval: null,
+
+                init() {
+                    this.addSystemMessage('النظام جاهز للمحاكاة', 'info');
+                },
+
+                startLoop() {
+                    this.isLooping = true;
+                    this.noiseApplied = false;
+                    this.addSystemMessage('بدء عملية التفكير...', 'info');
+                    this.addSystemMessage('Self-Copies: تم تفعيل نمذجة الآخرين', 'info');
+                    
+                    this.loopInterval = setInterval(() => {
+                        this.progressLoop();
+                    }, 2000);
+                },
+
+                progressLoop() {
+                    if (!this.isLooping) return;
+
+                    this.loopLevel++;
+                    this.cognitiveEnergy = Math.max(0, this.cognitiveEnergy - 15);
+                    this.realityAnchor = Math.max(0, this.realityAnchor - 10);
+
+                    const thoughts = [
+                        { text: 'ماذا يفكر عني؟', details: 'المستوى الأول من التفكير', char: '🤔' },
+                        { text: 'ماذا يفكر أنني أفكر فيه؟', details: 'المستوى الثاني - بداية الحلقة', char: '😵' },
+                        { text: 'ماذا يفكر أنني أفكر أنه يفكر عني؟', details: 'المستوى الثالث - الحلقة تتعمق', char: '🤯' },
+                        { text: 'ماذا يفكر أنني أفكر أنه يفكر أنني...', details: 'المستوى الرابع - الخطر!', char: '😵‍💫' },
+                        { text: 'لا أستطيع التوقف عن التفكير...', details: 'الشلل المعرفي الكامل', char: '💀' }
+                    ];
+
+                    if (this.loopLevel <= thoughts.length) {
+                        const thought = thoughts[this.loopLevel - 1];
+                        this.currentThought = thought.text;
+                        this.thoughtDetails = thought.details;
+                        this.characterState = thought.char;
+                    } else {
+                        this.currentThought = 'تكرار لا نهائي...';
+                        this.thoughtDetails = 'النظام في حالة انهيار';
+                        this.characterState = '💀';
+                    }
+
+                    // Update danger level
+                    if (this.loopLevel >= 4) {
+                        this.dangerLevel = 'أحمر';
+                        this.addSystemMessage('Ariadne Thread: خطر شديد! تدخل فوري مطلوب', 'error');
+                    } else if (this.loopLevel >= 2) {
+                        this.dangerLevel = 'أصفر';
+                        this.addSystemMessage('Meta-Cognition: اكتشاف حلقة تكرارية', 'warning');
+                    }
+
+                    this.addSystemMessage(`Self-Copies: وصل للمستوى ${this.loopLevel}`, 'warning');
+
+                    // Auto-crash if too deep
+                    if (this.loopLevel >= 6 || this.cognitiveEnergy <= 0) {
+                        this.systemCrash();
+                    }
+                },
+
+                triggerNoise() {
+                    this.noiseApplied = true;
+                    this.addSystemMessage('Noise Factor: تطبيق تشويش إبداعي!', 'info');
+                    
+                    const randomThoughts = [
+                        'ما رأيك في الطقس اليوم؟',
+                        'تذكرت أنني أريد شرب القهوة',
+                        'هل تعلم أن الزرافة لا تنام أكثر من ساعتين؟',
+                        'فجأة تذكرت أغنية قديمة',
+                        'أشعر بالجوع، ما رأيك في البيتزا؟'
+                    ];
+
+                    const randomThought = randomThoughts[Math.floor(Math.random() * randomThoughts.length)];
+                    this.currentThought = randomThought;
+                    this.thoughtDetails = 'تم كسر الحلقة بنجاح!';
+                    this.characterState = '😅';
+                    
+                    // Break the loop
+                    setTimeout(() => {
+                        this.resetSystem();
+                        this.addSystemMessage('Noise Factor: تم كسر الحلقة بنجاح!', 'info');
+                    }, 2000);
+                },
+
+                ariadneIntervention() {
+                    this.addSystemMessage('Ariadne Thread: تفعيل بروتوكول الخروج الطارئ!', 'error');
+                    this.currentThought = 'أشعر بقدمي على الأرض...';
+                    this.thoughtDetails = 'أسمع الأصوات من حولي... أشم رائحة القهوة...';
+                    this.characterState = '😮‍💨';
+                    
+                    setTimeout(() => {
+                        this.resetSystem();
+                        this.addSystemMessage('تم العودة للواقع بأمان', 'info');
+                    }, 1500);
+                },
+
+                systemCrash() {
+                    this.addSystemMessage('تحذير: انهيار في النظام المعرفي!', 'error');
+                    this.currentThought = 'لا أستطيع التفكير...';
+                    this.thoughtDetails = 'الطاقة المعرفية مستنزفة تماماً';
+                    this.characterState = '💀';
+                    this.dangerLevel = 'أحمر';
+                    
+                    setTimeout(() => {
+                        this.addSystemMessage('Ariadne Thread: إعادة تشغيل طارئة...', 'info');
+                        this.resetSystem();
+                    }, 3000);
+                },
+
+                resetSystem() {
+                    this.isLooping = false;
+                    this.loopLevel = 0;
+                    this.cognitiveEnergy = 100;
+                    this.realityAnchor = 100;
+                    this.dangerLevel = 'أخضر';
+                    this.currentThought = 'أفكر في موضوع عادي...';
+                    this.thoughtDetails = 'كل شيء طبيعي مرة أخرى';
+                    this.characterState = '😊';
+                    this.noiseApplied = false;
+                    
+                    if (this.loopInterval) {
+                        clearInterval(this.loopInterval);
+                        this.loopInterval = null;
+                    }
+                },
+
+                addSystemMessage(text, type) {
+                    const time = new Date().toLocaleTimeString('ar', { timeStyle: 'medium' });
+                    this.systemMessages.unshift({
+                        id: Date.now() + Math.random(),
+                        text,
+                        type,
+                        time
+                    });
+                    
+                    // Keep only last 10 messages
+                    if (this.systemMessages.length > 10) {
+                        this.systemMessages = this.systemMessages.slice(0, 10);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

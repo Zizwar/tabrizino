@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF: محاكاة لوم النفس وآليات الحماية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes pulse-danger {
+            0%, 100% { background-color: rgb(239 68 68); }
+            50% { background-color: rgb(185 28 28); }
+        }
+        @keyframes ariadne-intervention {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        @keyframes rescue-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.8); }
+        }
+        .pulse-danger { animation: pulse-danger 2s infinite; }
+        .ariadne-spin { animation: ariadne-intervention 3s ease-in-out; }
+        .rescue-glow { animation: rescue-glow 2s infinite; }
+        
+        .simulator-card {
+            transition: all 0.3s ease;
+        }
+        .simulator-overload {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            animation: pulse-danger 1s infinite;
+        }
+        .simulator-protected {
+            background: linear-gradient(45deg, #10b981, #059669);
+            animation: rescue-glow 2s infinite;
+        }
+        
+        .oscillator-danger {
+            background: radial-gradient(circle, #dc2626, #7f1d1d);
+        }
+        .oscillator-safe {
+            background: radial-gradient(circle, #10b981, #064e3b);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white">
+    <div x-data="cpfSimulation()" class="container mx-auto p-6">
+        <!-- العنوان والتحذير -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                🧠 محاكاة CPF: لوم النفس وآليات الحماية
+            </h1>
+            <div class="bg-yellow-900/50 border border-yellow-500 rounded-lg p-4 mb-6">
+                <p class="text-yellow-200">
+                    ⚠️ هذه محاكاة تعليمية لإظهار كيف يحمي إطار CPF من الأنماط السلبية - ليس للاستخدام العلاجي
+                </p>
+            </div>
+        </div>
+
+        <!-- أزرار التحكم -->
+        <div class="flex justify-center gap-4 mb-8">
+            <button @click="triggerSelfCriticism()" 
+                    :disabled="ariadneActive"
+                    class="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 px-6 py-3 rounded-lg font-bold transition-all">
+                🔥 محاكاة لوم النفس
+            </button>
+            <button @click="activateAriadne()" 
+                    class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold transition-all">
+                🛡️ تفعيل الخيط الأريادني
+            </button>
+            <button @click="reset()" 
+                    class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-bold transition-all">
+                🔄 إعادة تعيين
+            </button>
+        </div>
+
+        <!-- شاشة الحالة العامة -->
+        <div class="bg-black/30 rounded-xl p-6 mb-8 border-2" 
+             :class="systemStatus === 'danger' ? 'border-red-500' : systemStatus === 'protected' ? 'border-green-500' : 'border-gray-500'">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold">📊 حالة النظام</h2>
+                <div class="text-4xl" x-text="getSystemEmoji()"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="text-center">
+                    <div class="text-sm text-gray-400">مستوى الخطر</div>
+                    <div class="text-2xl font-bold" 
+                         :class="dangerLevel > 0.8 ? 'text-red-400' : dangerLevel > 0.5 ? 'text-yellow-400' : 'text-green-400'"
+                         x-text="(dangerLevel * 100).toFixed(0) + '%'"></div>
+                </div>
+                <div class="text-center">
+                    <div class="text-sm text-gray-400">الخيط الأريادني</div>
+                    <div class="text-2xl" x-text="ariadneActive ? '🟢 نشط' : '🔴 غير نشط'"></div>
+                </div>
+                <div class="text-center">
+                    <div class="text-sm text-gray-400">التدخلات</div>
+                    <div class="text-2xl font-bold text-blue-400" x-text="interventionCount"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الهزازات (Oscillators) -->
+        <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">🌊 أنماط التذبذب المعرفي</h3>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg p-4 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-30"
+                         :class="oscillators.baseline > 0.9 ? 'oscillator-danger' : oscillators.baseline < 0.1 ? 'oscillator-danger' : ''"></div>
+                    <h4 class="font-bold mb-2">⚖️ الهزاز الأساسي</h4>
+                    <div class="text-3xl font-bold" x-text="oscillators.baseline.toFixed(2)"></div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
+                        <div class="bg-blue-400 h-2 rounded-full transition-all duration-500"
+                             :style="`width: ${oscillators.baseline * 100}%`"></div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg p-4 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-30"
+                         :class="oscillators.dynamic > 0.9 ? 'oscillator-danger' : oscillators.dynamic < 0.1 ? 'oscillator-danger' : ''"></div>
+                    <h4 class="font-bold mb-2">⚡ الهزاز الديناميكي</h4>
+                    <div class="text-3xl font-bold" x-text="oscillators.dynamic.toFixed(2)"></div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
+                        <div class="bg-purple-400 h-2 rounded-full transition-all duration-500"
+                             :style="`width: ${oscillators.dynamic * 100}%`"></div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-lg p-4 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-30"
+                         :class="oscillators.integration > 0.9 ? 'oscillator-danger' : oscillators.integration < 0.1 ? 'oscillator-danger' : ''"></div>
+                    <h4 class="font-bold mb-2">🔄 هزاز التكامل</h4>
+                    <div class="text-3xl font-bold" x-text="oscillators.integration.toFixed(2)"></div>
+                    <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
+                        <div class="bg-green-400 h-2 rounded-full transition-all duration-500"
+                             :style="`width: ${oscillators.integration * 100}%`"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحاكيات -->
+        <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">🤖 المحاكيات المتوازية</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <template x-for="(simulator, name) in simulators" :key="name">
+                    <div class="simulator-card rounded-lg p-4 text-center transition-all duration-500"
+                         :class="simulator.overloaded ? 'simulator-overload' : simulator.protected ? 'simulator-protected' : 'bg-gray-700'">
+                        <div class="text-3xl mb-2" x-text="simulator.icon"></div>
+                        <h4 class="font-bold mb-2" x-text="simulator.name"></h4>
+                        <div class="text-sm mb-2" x-text="simulator.status"></div>
+                        <div class="w-full bg-gray-800 rounded-full h-2">
+                            <div class="h-2 rounded-full transition-all duration-500"
+                                 :class="simulator.overloaded ? 'bg-red-400' : simulator.protected ? 'bg-green-400' : 'bg-blue-400'"
+                                 :style="`width: ${simulator.load * 100}%`"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- الخيط الأريادني -->
+        <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">🧵 الخيط الأريادني - نظام الحماية</h3>
+            <div class="bg-gradient-to-r from-green-900 to-blue-900 rounded-xl p-6 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-20"
+                     :class="ariadneActive ? 'rescue-glow' : ''"></div>
+                <div class="flex items-center justify-between relative z-10">
+                    <div>
+                        <h4 class="text-2xl font-bold mb-2">🛡️ حالة الحماية</h4>
+                        <p class="text-lg" x-text="ariadneStatus"></p>
+                    </div>
+                    <div class="text-8xl transition-all duration-500"
+                         :class="ariadneActive ? 'ariadne-spin' : ''"
+                         x-text="ariadneActive ? '🌀' : '😴'"></div>
+                </div>
+                
+                <div class="mt-4 grid grid-cols-4 gap-4 text-center">
+                    <div>
+                        <div class="text-sm text-gray-400">مستوى التدخل</div>
+                        <div class="font-bold" x-text="interventionLevel"></div>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-400">قوة السحب</div>
+                        <div class="font-bold" x-text="(pullStrength * 100).toFixed(0) + '%'"></div>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-400">مراسي الواقع</div>
+                        <div class="font-bold" x-text="realityAnchors"></div>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-400">حالة الأمان</div>
+                        <div class="font-bold" x-text="safetyStatus"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- سجل الأحداث -->
+        <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">📜 سجل الأحداث</h3>
+            <div class="bg-black/40 rounded-lg p-4 h-64 overflow-y-auto">
+                <template x-for="event in eventLog.slice().reverse()" :key="event.id">
+                    <div class="mb-2 p-2 rounded"
+                         :class="event.type === 'danger' ? 'bg-red-900/50' : event.type === 'intervention' ? 'bg-green-900/50' : 'bg-blue-900/50'">
+                        <span class="text-xs text-gray-400" x-text="event.timestamp"></span>
+                        <div x-text="event.message"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- معلومات التعليم -->
+        <div class="bg-blue-900/30 rounded-xl p-6 border border-blue-500">
+            <h3 class="text-xl font-bold mb-4">📚 كيف يعمل CPF في مواجهة لوم النفس</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-bold mb-2">🔍 آليات الكشف:</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>• الهزازات تراقب الحالات القصوى</li>
+                        <li>• المحاكيات تكتشف الأنماط السلبية</li>
+                        <li>• تحليل التكرار والشدة</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">🛡️ آليات الحماية:</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>• تدخل الخيط الأريادني الفوري</li>
+                        <li>• إعادة توجيه الانتباه للواقع</li>
+                        <li>• تفعيل الضوضاء الإبداعية لكسر الحلقات</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function cpfSimulation() {
+            return {
+                dangerLevel: 0.2,
+                systemStatus: 'normal', // normal, danger, protected
+                ariadneActive: false,
+                interventionCount: 0,
+                interventionLevel: 'مراقبة',
+                pullStrength: 0,
+                realityAnchors: 3,
+                safetyStatus: 'آمن',
+                ariadneStatus: 'في وضع الاستعداد',
+                
+                oscillators: {
+                    baseline: 0.5,
+                    dynamic: 0.5,
+                    integration: 0.5
+                },
+                
+                simulators: {
+                    reality: {
+                        name: 'معالج الواقع',
+                        icon: '🌍',
+                        load: 0.3,
+                        status: 'عادي',
+                        overloaded: false,
+                        protected: false
+                    },
+                    prediction: {
+                        name: 'محرك التنبؤ',
+                        icon: '🔮',
+                        load: 0.4,
+                        status: 'عادي',
+                        overloaded: false,
+                        protected: false
+                    },
+                    memory: {
+                        name: 'مُعيد البناء',
+                        icon: '💭',
+                        load: 0.2,
+                        status: 'عادي',
+                        overloaded: false,
+                        protected: false
+                    },
+                    social: {
+                        name: 'النمذجة الاجتماعية',
+                        icon: '👥',
+                        load: 0.5,
+                        status: 'عادي',
+                        overloaded: false,
+                        protected: false
+                    },
+                    pattern: {
+                        name: 'مستكشف الأنماط',
+                        icon: '🧩',
+                        load: 0.3,
+                        status: 'عادي',
+                        overloaded: false,
+                        protected: false
+                    },
+                    monitor: {
+                        name: 'مراقب النظام',
+                        icon: '📊',
+                        load: 0.4,
+                        status: 'عادي',
+                        overloaded: false,
+                        protected: false
+                    }
+                },
+                
+                eventLog: [],
+                
+                init() {
+                    this.addEvent('info', 'تم تهيئة نظام CPF بنجاح');
+                },
+                
+                triggerSelfCriticism() {
+                    this.addEvent('danger', '🚨 تم اكتشاف نمط لوم النفس المدمر');
+                    
+                    // محاكاة تصاعد الخطر
+                    this.dangerLevel = 0.9;
+                    this.systemStatus = 'danger';
+                    
+                    // تأثير على الهزازات
+                    this.oscillators.dynamic = 0.05; // انهيار
+                    this.oscillators.integration = 0.95; // توتر شديد
+                    
+                    // إرهاق المحاكيات
+                    Object.keys(this.simulators).forEach(key => {
+                        this.simulators[key].load = 0.95;
+                        this.simulators[key].status = 'مُرهق';
+                        this.simulators[key].overloaded = true;
+                    });
+                    
+                    // المحاكيات الأكثر تضرراً
+                    this.simulators.memory.load = 1.0;
+                    this.simulators.social.load = 1.0;
+                    
+                    this.addEvent('danger', 'المحاكيات في حالة إرهاق شديد');
+                    this.addEvent('danger', 'الهزازات تظهر قراءات خطرة');
+                    
+                    // تفعيل الخيط الأريادني تلقائياً بعد ثانيتين
+                    setTimeout(() => {
+                        if (this.dangerLevel > 0.8) {
+                            this.activateAriadne();
+                        }
+                    }, 2000);
+                },
+                
+                activateAriadne() {
+                    if (this.ariadneActive) return;
+                    
+                    this.ariadneActive = true;
+                    this.interventionCount++;
+                    this.addEvent('intervention', '🛡️ تم تفعيل الخيط الأريادني');
+                    
+                    // تحديد مستوى التدخل
+                    if (this.dangerLevel > 0.8) {
+                        this.interventionLevel = 'خروج طارئ';
+                        this.pullStrength = 1.0;
+                        this.addEvent('intervention', '🚨 تم تفعيل بروتوكول الخروج الطارئ');
+                    } else if (this.dangerLevel > 0.6) {
+                        this.interventionLevel = 'سحب قوي';
+                        this.pullStrength = 0.8;
+                    } else {
+                        this.interventionLevel = 'سحب لطيف';
+                        this.pullStrength = 0.4;
+                    }
+                    
+                    this.ariadneStatus = 'يطبق التدخل الوقائي';
+                    this.realityAnchors = 8;
+                    
+                    // محاكاة عملية الإنقاذ
+                    this.rescueSequence();
+                },
+                
+                rescueSequence() {
+                    const steps = [
+                        { delay: 500, action: () => {
+                            this.addEvent('intervention', '🔍 فحص شامل لحالة المحاكيات');
+                        }},
+                        { delay: 1000, action: () => {
+                            this.addEvent('intervention', '⚡ تطبيق الضوضاء الوقائية لكسر الحلقات السلبية');
+                            this.oscillators.dynamic = 0.3; // تحسن تدريجي
+                        }},
+                        { delay: 1500, action: () => {
+                            this.addEvent('intervention', '🌍 تفعيل مراسي الواقع الحسية');
+                            this.realityAnchors = 12;
+                        }},
+                        { delay: 2000, action: () => {
+                            this.addEvent('intervention', '💊 تطبيق حماية المحاكيات');
+                            Object.keys(this.simulators).forEach(key => {
+                                this.simulators[key].protected = true;
+                                this.simulators[key].overloaded = false;
+                                this.simulators[key].load = Math.max(0.3, this.simulators[key].load - 0.5);
+                                this.simulators[key].status = 'محمي';
+                            });
+                        }},
+                        { delay: 2500, action: () => {
+                            this.addEvent('intervention', '🔄 إعادة توازن الهزازات');
+                            this.oscillators.baseline = 0.6;
+                            this.oscillators.integration = 0.5;
+                        }},
+                        { delay: 3000, action: () => {
+                            this.dangerLevel = 0.2;
+                            this.systemStatus = 'protected';
+                            this.safetyStatus = 'محمي';
+                            this.ariadneStatus = 'مراقبة وقائية نشطة';
+                            this.addEvent('intervention', '✅ تم استعادة الاستقرار بنجاح');
+                        }}
+                    ];
+                    
+                    steps.forEach(step => {
+                        setTimeout(step.action, step.delay);
+                    });
+        

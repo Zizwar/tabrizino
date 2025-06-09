@@ -8,3 +8,8 @@
 
 * **إعادة قراءة التاريخ: مقارنة الأطر(Gemini flash 2.5)**
     * [https://g.co/gemini/share/f9a7da1dabc7](https://g.co/gemini/share/f9a7da1dabc7)
+
+* **إعادة قراءة الماضي: مقارنة الأطر(Grok)**
+    * 
+[https://x.com/i/grok/share/9eGXfqTehp4d7xlYxNQt1vAic](https://g.co/gemini/share/f9a7da1dabc7)
+

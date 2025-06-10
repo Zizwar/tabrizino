@@ -1,11 +1,246 @@
-{
-  "id": "motivation_core",
-  "title": "نواة الدوافع والأهداف - المحرك الداخلي للسلوك",
-  "description": "نموذج نظري للمنظومة الداخلية التي تولد وتدير الدوافع والأهداف الأساسية والعليا، وتوجه السلوك بشكل استباقي.",
+"id": "motivation_core",
+  "title": "نواة الدوافع والأهداف مع بولينجر الديناميكي",
+  "description": "نموذج نظري للمنظومة الداخلية مع نطاقات بولينجر الأهداف الديناميكية",
+  "version": "2.0",
   "category": "core-engine",
-  "version": "1.0",
+ 
   "safety_level": "low_risk",
   "status": "new_concept_draft",
+
+
+  
+  "bollinger_goal_dynamics": {
+    "description": "نظام ديناميكي لإدارة الأهداف باستخدام نطاقات بولينجر",
+    "innovation_credit": "فكرة إبراهيم الأصلية - تطبيق مؤشر بولينجر على الدوافع",
+    
+    "core_bands": {
+      "middle_band": {
+        "description": "المسار المستدام طويل المدى",
+        "calculation": "moving_average(goal_achievement_over_21_days)",
+        "represents": "الأهداف والقيم الأساسية المستقرة",
+        "stability": "يتغير ببطء مع التطور الشخصي"
+      },
+      
+      "upper_band": {
+        "description": "حد الطموح الزائد - منطقة الإرهاق المحتمل",
+        "calculation": "middle_band + (volatility * 2)",
+        "warning_triggers": [
+          "oscillators.cognitive_score > 0.85",
+          "embodiment_interface.fatigue_level > 0.7",
+          "sustained_high_effort > 7_days"
+        ],
+        "system_response": "تحفيز أهداف الراحة والتوازن"
+      },
+      
+      "lower_band": {
+        "description": "حد الركود المحتمل - منطقة فقدان الدافع",
+        "calculation": "middle_band - (volatility * 2)",
+        "warning_triggers": [
+          "oscillators.cognitive_score < 0.2",
+          "goal_generation_failures > 3_consecutive",
+          "prolonged_inactivity > 5_days"
+        ],
+        "system_response": "تحفيز أهداف صغيرة قابلة للتحقيق"
+      }
+    },
+    
+    "volatility_engine": {
+      "description": "محرك حساب التقلب في الدوافع",
+      "factors": {
+        "life_transitions": {
+          "weight": 0.4,
+          "examples": ["job_change", "relationship_change", "location_change"],
+          "impact": "توسع كبير في النطاقات"
+        },
+        "learning_phases": {
+          "weight": 0.3,
+          "examples": ["skill_acquisition_active", "new_challenge_phase"],
+          "impact": "توسع متوسط لاستيعاب التجريب"
+        },
+        "external_pressure": {
+          "weight": 0.2,
+          "examples": ["deadline_pressure", "social_expectations"],
+          "impact": "توسع مؤقت في النطاقات"
+        },
+        "noise_factor_influence": {
+          "weight": 0.1,
+          "source": "من مفهوم noise_factor الموجود",
+          "impact": "تذبذب عشوائي صحي"
+        }
+      },
+      "calculation": "weighted_standard_deviation(recent_goal_pursuit_intensity)"
+    },
+    
+    "zone_management": {
+      "current_zone_detection": {
+        "method": "compare_current_motivation_level_with_bands",
+        "data_source": "oscillators.cognitive_score + recent_goal_achievement",
+        "update_frequency": "real_time_with_daily_recalculation"
+      },
+      
+      "zone_based_goal_generation": {
+        "upper_zone_goals": [
+          "rest_and_recovery_targets",
+          "sustainability_focused_objectives",
+          "energy_conservation_goals",
+          "social_connection_for_support"
+        ],
+        "middle_zone_goals": [
+          "progressive_skill_development",
+          "balanced_growth_challenges",
+          "long_term_project_advancement",
+          "routine_optimization"
+        ],
+        "lower_zone_goals": [
+          "small_quick_wins",
+          "motivation_building_activities",
+          "energy_boosting_targets",
+          "external_inspiration_seeking"
+        ]
+      },
+      
+      "intervention_protocols": {
+        "approaching_upper_band": {
+          "threshold": "90% of upper_band_value",
+          "actions": [
+            "meta_cognition.flag_burnout_risk",
+            "generate_rest_goals_with_high_priority",
+            "reduce_goal_complexity_temporarily",
+            "embodiment_interface.request_energy_conservation"
+          ]
+        },
+        "touching_upper_band": {
+          "threshold": "exceeds upper_band_value",
+          "actions": [
+            "ariadne_thread.gentle_pull_toward_balance",
+            "mandatory_rest_period_goals",
+            "noise_factor.reduce_stimulation",
+            "attention_manager.redirect_to_calming_activities"
+          ]
+        },
+        "approaching_lower_band": {
+          "threshold": "110% of lower_band_value",
+          "actions": [
+            "meta_cognition.flag_motivation_decline",
+            "generate_easy_achievement_goals",
+            "increase_goal_reward_perception",
+            "environmental_variables.seek_inspiring_context"
+          ]
+        },
+        "touching_lower_band": {
+          "threshold": "below lower_band_value",
+          "actions": [
+            "ariadne_thread.activation_intervention",
+            "noise_factor.increase_creative_stimulation",
+            "generate_micro_goals_for_momentum",
+            "simulators.explore_new_possibilities"
+          ]
+        }
+      }
+    },
+    
+    "band_evolution_patterns": {
+      "expansion_periods": {
+        "description": "فترات توسع النطاقات - التعلم والنمو",
+        "characteristics": [
+          "high_volatility_index",
+          "frequent_zone_transitions",
+          "experimental_goal_setting",
+          "tolerance_for_uncertainty"
+        ],
+        "typical_duration": "weeks_to_months",
+        "management_strategy": "embrace_exploration_with_safety_monitoring"
+      },
+      
+      "contraction_periods": {
+        "description": "فترات تضييق النطاقات - الاستقرار والإتقان",
+        "characteristics": [
+          "low_volatility_index",
+          "predictable_goal_patterns",
+          "skill_script_dominance",
+          "efficiency_optimization"
+        ],
+        "typical_duration": "months_to_years",
+        "management_strategy": "optimize_performance_within_stable_patterns"
+      }
+    },
+    
+    "integration_interfaces": {
+      "to_oscillators": {
+        "data_provided": "current_band_position_and_zone_status",
+        "data_received": "real_time_emotional_and_cognitive_state",
+        "feedback_loop": "oscillator_state_influences_band_position_calculation"
+      },
+      
+      "to_embodiment_interface": {
+        "data_provided": "energy_demands_based_on_current_goals",
+        "data_received": "physical_capacity_and_fatigue_levels",
+        "influence": "physical_state_modulates_band_boundaries"
+      },
+      
+      "to_meta_cognition": {
+        "alerts_sent": [
+          "zone_violation_warnings",
+          "volatility_change_notifications",
+          "band_evolution_pattern_shifts"
+        ],
+        "suggestions_received": "optimization_recommendations_for_goal_strategies"
+      },
+      
+      "to_ariadne_thread": {
+        "safety_data": "extreme_zone_positions_and_duration",
+        "intervention_requests": "when_bands_indicate_unsustainable_patterns",
+        "reality_anchoring": "ground_goals_in_practical_constraints"
+      }
+    }
+  },
+  
+  "enhanced_parameters": {
+    "bollinger_period": {
+      "type": "integer",
+      "range": [7, 90],
+      "default": 21,
+      "description": "عدد الأيام لحساب المتوسط المتحرك للأهداف"
+    },
+    
+    "band_width_multiplier": {
+      "type": "float", 
+      "range": [1.0, 3.0],
+      "default": 2.0,
+      "description": "مضاعف الانحراف المعياري لحساب عرض النطاقات"
+    },
+    
+    "zone_sensitivity": {
+      "type": "float",
+      "range": [0.1, 0.9], 
+      "default": 0.8,
+      "description": "حساسية اكتشاف دخول المناطق الحرجة"
+    },
+    
+    "reversion_strength": {
+      "type": "float",
+      "range": [0.2, 1.0],
+      "default": 0.6,
+      "description": "قوة الجذب للعودة نحو الخط الأوسط"
+    },
+    
+    "volatility_adaptation_rate": {
+      "type": "float",
+      "range": [0.01, 0.3],
+      "default": 0.05,
+      "description": "سرعة تكيف النطاقات مع التغيرات الجديدة"
+    }
+  },
+  
+  "practical_applications": {
+    "personal_development_tracking": "تتبع دورات النمو الشخصي الطبيعية",
+    "burnout_prevention": "اكتشاف مبكر لعلامات الإرهاق",
+    "motivation_optimization": "تحسين استراتيجيات تحفيز الذات",
+    "goal_setting_intelligence": "أهداف ذكية تتكيف مع الحالة الحالية",
+    "life_phase_understanding": "فهم الانتقالات الطبيعية في الحياة"
+  },
+  
+  
 
   "scientific_relations": {
     "psychology": {
@@ -163,7 +398,7 @@
 
   "meta": {
     "created": "2025-06-05",
-    "author": "AI Language Model (Gemini) & Ibrahim",
+    "author": " Brahim bidi  Vibing (Gemini + claude) ",
     "inspiration": "Maslow, Cybernetics, Reinforcement Learning Theory",
     "purpose": "To model the internal drive and goal-setting mechanisms within CPF."
   }

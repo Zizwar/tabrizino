@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF~ - محاكاة إدراك الصرصار</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webppl/0.9.15/webppl.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #e0e6ed;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .title h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #64b5f6, #42a5f5, #2196f3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+        
+        .cockroach-world {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .perception-panel, .controls-panel {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .cockroach-arena {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #2d4a3e, #1a2f24);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #4caf50;
+            margin-bottom: 20px;
+        }
+        
+        .cockroach {
+            width: 30px;
+            height: 20px;
+            background: #8d6e63;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .cockroach::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 15px;
+            background: #5d4037;
+            border-radius: 50%;
+            top: -8px;
+            left: 12px;
+        }
+        
+        .threat {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #f44336, #d32f2f);
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .perception-data {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .probability-bar {
+            margin: 10px 0;
+        }
+        
+        .probability-bar label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .bar-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 20px;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #66bb6a);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .controls button {
+            background: linear-gradient(45deg, #2196f3, #42a5f5);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+        
+        .webppl-output {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" x-data="cockroachSimulation()">
+    <div class="title">
+        <h1>CPF~ محاكاة إدراك الصرصار</h1>
+        <p>WebPPL + Alpine.js = برمجة احتمالية تفاعلية</p>
+    </div>
+
+    <div class="cockroach-world">
+        <div class="perception-panel">
+            <h3>🧠 البيانات الإدراكية الاحتمالية</h3>
+            
+            <div class="cockroach-arena" @click="addThreat($event)">
+                <div class="cockroach" 
+                     :style="`left: ${cockroach.x}px; top: ${cockroach.y}px; transform: rotate(${cockroach.angle}deg)`"
+                     @click.stop="moveCockroach()">
+                </div>
+                
+                <template x-for="threat in threats">
+                    <div class="threat" 
+                         :style="`left: ${threat.x}px; top: ${threat.y}px`"
+                         @click.stop="removeThreat(threat)">
+                    </div>
+                </template>
+            </div>
+
+            <div class="perception-data">
+                <div class="probability-bar">
+                    <label>احتمالية الخطر:</label>
+                    <div class="bar-container">
+                        <div class="bar-fill" :style="`width: ${perception.danger * 100}%`"></div>
+                    </div>
+                    <span x-text="`${(perception.danger * 100).toFixed(1)}%`"></span>
+                </div>
+
+                <div class="probability-bar">
+                    <label>مستوى اليقظة:</label>
+                    <div class="bar-container">
+                        <div class="bar-fill" :style="`width: ${perception.alertness * 100}%`"></div>
+                    </div>
+                    <span x-text="`${(perception.alertness * 100).toFixed(1)}%`"></span>
+                </div>
+
+                <div class="probability-bar">
+                    <label>احتمالية الهروب:</label>
+                    <div class="bar-container">
+                        <div class="bar-fill" :style="`width: ${perception.escape_probability * 100}%`"></div>
+                    </div>
+                    <span x-text="`${(perception.escape_probability * 100).toFixed(1)}%`"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <h3>⚙️ عناصر التحكم</h3>
+            
+            <div class="controls">
+                <button @click="runWebPPLSimulation()">🧮 تشغيل WebPPL</button>
+                <button @click="addRandomThreat()">⚠️ إضافة تهديد</button>
+                <button @click="clearThreats()">🧹 مسح التهديدات</button>
+                <button @click="resetSimulation()">🔄 إعادة تعيين</button>
+            </div>
+
+            <div class="webppl-output" x-show="webpplResult">
+                <h4>🎯 نتائج WebPPL:</h4>
+                <pre x-text="webpplResult"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning">
+        ⚠️ <strong>إطار نظري تجريبي:</strong> هذه محاكاة تعليمية لفهم العمليات الإدراكية وليست تمثيل دقيق للسلوك الحقيقي للحشرات
+    </div>
+</div>
+
+<script>
+function cockroachSimulation() {
+    return {
+        cockroach: {
+            x: 150,
+            y: 140,
+            angle: 0
+        },
+        threats: [],
+        perception: {
+            danger: 0.1,
+            alertness: 0.3,
+            escape_probability: 0.2
+        },
+        webpplResult: '',
+
+        init() {
+            this.updatePerception();
+        },
+
+        addThreat(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left - 20;
+            const y = event.clientY - rect.top - 20;
+            
+            this.threats.push({
+                id: Date.now(),
+                x: Math.max(0, Math.min(x, 360)),
+                y: Math.max(0, Math.min(y, 260))
+            });
+            
+            this.updatePerception();
+        },
+
+        removeThreat(threat) {
+            this.threats = this.threats.filter(t => t.id !== threat.id);
+            this.updatePerception();
+        },
+
+        addRandomThreat() {
+            this.threats.push({
+                id: Date.now(),
+                x: Math.random() * 360,
+                y: Math.random() * 260
+            });
+            this.updatePerception();
+        },
+
+        clearThreats() {
+            this.threats = [];
+            this.updatePerception();
+        },
+
+        moveCockroach() {
+            // محاكاة حركة احتمالية
+            const moveDistance = 20 + Math.random() * 30;
+            const angle = Math.random() * 2 * Math.PI;
+            
+            this.cockroach.x = Math.max(10, Math.min(this.cockroach.x + Math.cos(angle) * moveDistance, 370));
+            this.cockroach.y = Math.max(10, Math.min(this.cockroach.y + Math.sin(angle) * moveDistance, 270));
+            this.cockroach.angle = (angle * 180 / Math.PI) % 360;
+            
+            this.updatePerception();
+        },
+
+        updatePerception() {
+            // حساب المسافات من التهديدات
+            let minDistance = Infinity;
+            let totalThreat = 0;
+
+            this.threats.forEach(threat => {
+                const dx = threat.x - this.cockroach.x;
+                const dy = threat.y - this.cockroach.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                minDistance = Math.min(minDistance, distance);
+                totalThreat += 1 / Math.max(distance, 10); // تأثير عكسي للمسافة
+            });
+
+            // نموذج احتمالي بسيط
+            this.perception.danger = Math.min(0.9, totalThreat * 0.3 + this.threats.length * 0.1);
+            this.perception.alertness = Math.min(0.95, this.perception.danger * 1.2 + 0.1);
+            this.perception.escape_probability = Math.min(0.9, this.perception.danger * 0.8 + Math.random() * 0.2);
+        },
+
+        runWebPPLSimulation() {
+            // WebPPL code للنمذجة الاحتمالية
+            const webpplCode = `
+            var cockroachPerception = function() {
+                var threats = ${this.threats.length};
+                var minDistance = ${this.threats.length > 0 ? 50 : 200};
+                
+                // نموذج احتمالي للقرار
+                var stress = gaussian(threats * 0.3, 0.1);
+                var fear = beta(2, 3);
+                var confidence = uniform(0, 1);
+                
+                var decision = stress > 0.6 ? 
+                    (fear > 0.7 ? 'panic_flight' : 'cautious_retreat') :
+                    (confidence > 0.5 ? 'explore' : 'stay_alert');
+                
+                var escape_angle = uniform(0, 360);
+                var speed = stress > 0.5 ? gaussian(80, 20) : gaussian(30, 10);
+                
+                return {
+                    decision: decision,
+                    stress_level: stress,
+                    fear_level: fear,
+                    escape_angle: escape_angle,
+                    movement_speed: speed,
+                    survival_priority: stress * fear
+                };
+            };
+            
+            cockroachPerception();
+            `;
+
+            try {
+                // محاكاة نتيجة WebPPL (في التطبيق الحقيقي سنستخدم webppl.run)
+                const simulatedResult = {
+                    decision: this.perception.danger > 0.6 ? 'panic_flight' : 'explore',
+                    stress_level: this.perception.danger,
+                    fear_level: this.perception.alertness,
+                    escape_angle: Math.random() * 360,
+                    movement_speed: 30 + this.perception.danger * 50,
+                    survival_priority: this.perception.danger * this.perception.alertness
+                };
+
+                this.webpplResult = JSON.stringify(simulatedResult, null, 2);
+                
+                // تطبيق نتيجة القرار على الصرصار
+                if (simulatedResult.decision === 'panic_flight') {
+                    this.moveCockroach();
+                }
+                
+            } catch (error) {
+                this.webpplResult = 'خطأ في تشغيل WebPPL: ' + error.message;
+            }
+        },
+
+        resetSimulation() {
+            this.cockroach = { x: 150, y: 140, angle: 0 };
+            this.threats = [];
+            this.webpplResult = '';
+            this.updatePerception();
+        }
+    }
+}
+</script>
+
+</body>
+</html>

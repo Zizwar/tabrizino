@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF~ - ذاكرة العقيق الاحتمالية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webppl/0.9.15/webppl.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a23, #1a1a3a, #2d1b3d, #3e1a3e);
+            color: #e8e3f3;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(75, 0, 130, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(148, 0, 211, 0.1) 0%, transparent 50%);
+            animation: cosmicDrift 20s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes cosmicDrift {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .title h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #6c5ce7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+            animation: titlePulse 3s infinite ease-in-out;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .memory-workspace {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .memory-chamber {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .memory-chamber::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #6c5ce7);
+            border-radius: 25px;
+            z-index: -1;
+            animation: borderFlow 4s infinite linear;
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .memory-crystals-container {
+            height: 400px;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.1), transparent);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .memory-crystal {
+            position: absolute;
+            background: linear-gradient(45deg, var(--crystal-color-1), var(--crystal-color-2));
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--crystal-glow);
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: crystalFloat 6s infinite ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .memory-crystal:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 40px var(--crystal-glow);
+        }
+
+        @keyframes crystalFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(120deg); }
+            66% { transform: translateY(5px) rotate(240deg); }
+        }
+
+        .memory-recall-panel {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 107, 157, 0.2);
+        }
+
+        .emotional-state-controls {
+            margin-bottom: 25px;
+        }
+
+        .emotion-slider {
+            margin: 15px 0;
+        }
+
+        .emotion-slider label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ff6b9d;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+        }
+
+        .recall-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #6c5ce7, #a55eea);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .recall-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .memory-reconstruction {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #ff6b9d;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .memory-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 107, 157, 0.2);
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff6b9d;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        .distortion-effects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .distortion-tag {
+            background: rgba(196, 69, 105, 0.3);
+            border: 1px solid #c44569;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.85em;
+            animation: tagPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes tagPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .memory-layer {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 3px solid var(--layer-color);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .control-button {
+            padding: 10px;
+            background: rgba(255, 107, 157, 0.2);
+            border: 1px solid #ff6b9d;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 107, 157, 0.4);
+            transform: scale(1.05);
+        }
+
+        .webppl-section {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #6c5ce7;
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cosmic-bg"></div>
+
+<div class="container" x-data="agateMemorySimulator()">
+    <div class="title">
+        <h1>🔮 ذاكرة العقيق الاحتمالية</h1>
+        <p>كل استدعاء = بلورة جديدة للماضي | WebPPL + Alpine.js</p>
+    </div>
+
+    <div class="memory-workspace">
+        <div class="memory-chamber">
+            <h3>💎 بلورات الذاكرة الاحتمالية</h3>
+            
+            <div class="memory-crystals-container" @click="createMemoryCrystal($event)">
+                <template x-for="crystal in memoryCrystals">
+                    <div class="memory-crystal"
+                         :style="`
+                             left: ${crystal.x}px; 
+                             top: ${crystal.y}px; 
+                             width: ${crystal.size}px; 
+                             height: ${crystal.size}px;
+                             --crystal-color-1: ${crystal.color1};
+                             --crystal-color-2: ${crystal.color2};
+                             --crystal-glow: ${crystal.glow};
+                             animation-delay: ${crystal.delay}s;
+                         `"
+                         @click.stop="recallMemory(crystal)"
+                         x-text="crystal.label">
+                    </div>
+                </template>
+            </div>
+
+            <div class="memory-stats">
+                <div class="stat-card">
+                    <div class="stat-value" x-text="memoryCrystals.length"></div>
+                    <div class="stat-label">بلورات الذاكرة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" x-text="recallAttempts"></div>
+                    <div class="stat-label">محاولات الاستدعاء</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" x-text="`${(memoryAccuracy * 100).toFixed(1)}%`"></div>
+                    <div class="stat-label">دقة التذكر</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" x-text="`${(emotionalDistortion * 100).toFixed(1)}%`"></div>
+                    <div class="stat-label">التشويه العاطفي</div>
+                </div>
+            </div>
+
+            <div class="controls-grid">
+                <button class="control-button" @click="addPresetMemory('childhood')">🧸 ذكرى طفولة</button>
+                <button class="control-button" @click="addPresetMemory('achievement')">🏆 إنجاز</button>
+                <button class="control-button" @click="addPresetMemory('heartbreak')">💔 ألم عاطفي</button>
+                <button class="control-button" @click="addPresetMemory('adventure')">🌄 مغامرة</button>
+            </div>
+
+            <div class="distortion-effects">
+                <template x-for="effect in activeDistortions">
+                    <span class="distortion-tag" x-text="effect"></span>
+                </template>
+            </div>
+        </div>
+
+        <div class="memory-recall-panel">
+            <h3>🎛️ لوحة الاستدعاء العاطفي</h3>
+            
+            <div class="emotional-state-controls">
+                <div class="emotion-slider">
+                    <label>😢 مستوى اليأس/الإحباط:</label>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="emotionalState.despair" 
+                           class="slider">
+                    <span x-text="`${(emotionalState.despair * 100).toFixed(0)}%`"></span>
+                </div>
+
+                <div class="emotion-slider">
+                    <label>😊 المزاج الحالي:</label>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="emotionalState.mood" 
+                           class="slider">
+                    <span x-text="`${(emotionalState.mood * 100).toFixed(0)}%`"></span>
+                </div>
+
+                <div class="emotion-slider">
+                    <label>🧠 الوضوح الذهني:</label>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="emotionalState.clarity" 
+                           class="slider">
+                    <span x-text="`${(emotionalState.clarity * 100).toFixed(0)}%`"></span>
+                </div>
+
+                <div class="emotion-slider">
+                    <label>⚡ شدة التركيز:</label>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="emotionalState.intensity" 
+                           class="slider">
+                    <span x-text="`${(emotionalState.intensity * 100).toFixed(0)}%`"></span>
+                </div>
+            </div>
+
+            <button class="recall-button" @click="triggerGlobalRecall()">
+                🔮 استدعاء احتمالي شامل
+            </button>
+
+            <button class="recall-button" @click="runWebPPLMemoryModel()" 
+                    style="background: linear-gradient(45deg, #e17055, #fd79a8);">
+                🧮 تشغيل نموذج WebPPL
+            </button>
+
+            <button class="recall-button" @click="clearAllMemories()"
+                    style="background: linear-gradient(45deg, #636e72, #2d3436);">
+                🗑️ مسح الذكريات
+            </button>
+
+            <div class="memory-reconstruction" x-show="lastRecall">
+                <h4>📜 إعادة البناء الاحتمالي:</h4>
+                <div x-html="lastRecall"></div>
+            </div>
+
+            <div class="webppl-section" x-show="webpplResult">
+                <h4>🎯 تحليل WebPPL:</h4>
+                <pre x-text="webpplResult" style="font-size: 0.85em; line-height: 1.4;"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning">
+        ⚠️ <strong>محاكاة نظرية تجريبية:</strong> هذا نموذج تعليمي لفهم الطبيعة الاحتمالية للذاكرة البشرية، وليس أداة تشخيصية أو علاجية حقيقية
+    </div>
+</div>
+
+<script>
+function agateMemorySimulator() {
+    return {
+        memoryCrystals: [],
+        emotionalState: {
+            despair: 0.3,
+            mood: 0.6,
+            clarity: 0.7,
+            intensity: 0.5
+        },
+        recallAttempts: 0,
+        memoryAccuracy: 0.8,
+        emotionalDistortion: 0.2,
+        activeDistortions: [],
+        lastRecall: '',
+        webpplResult: '',
+
+        init() {
+            this.addPresetMemory('childhood');
+            this.addPresetMemory('achievement');
+            this.updateDistortions();
+        },
+
+        createMemoryCrystal(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left - 25;
+            const y = event.clientY - rect.top - 25;
+            
+            const crystalTypes = [
+                { label: '🎈', type: 'joy', color1: '#ff9ff3', color2: '#feca57' },
+                { label: '😢', type: 'sadness', color1: '#3742fa', color2: '#70a1ff' },
+                { label: '😰', type: 'fear', color1: '#5f27cd', color2: '#00d2d3' },
+                { label: '😡', type: 'anger', color1: '#ff3838', color2: '#ff9500' },
+                { label: '🤔', type: 'contemplation', color1: '#8395a7', color2: '#222f3e' }
+            ];
+            
+            const randomType = crystalTypes[Math.floor(Math.random() * crystalTypes.length)];
+            
+            this.memoryCrystals.push({
+                id: Date.now(),
+                x: Math.max(0, Math.min(x, 350)),
+                y: Math.max(0, Math.min(y, 350)),
+                size: 30 + Math.random() * 20,
+                ...randomType,
+                intensity: Math.random(),
+                age: Math.random() * 10, // سنوات
+                glow: randomType.color1,
+                delay: Math.random() * 2,
+                originalContent: this.generateMemoryContent(randomType.type),
+                recallCount: 0
+            });
+        },
+
+        addPresetMemory(type) {
+            const presets = {
+                childhood: {
+                    label: '🧸', type: 'childhood', 
+                    color1: '#feca57', color2: '#ff9ff3',
+                    x: 50 + Math.random() * 100, y: 50 + Math.random() * 100,
+                    originalContent: 'ذكرى طفولة سعيدة: اللعب في الحديقة مع الأصدقاء، ضحكات عالية، آيس كريم بنكهة الفانيليا'
+                },
+                achievement: {
+                    label: '🏆', type: 'achievement', 
+                    color1: '#ffd700', color2: '#ff6348',
+                    x: 200 + Math.random() * 100, y: 100 + Math.random() * 100,
+                    originalContent: 'لحظة إنجاز عظيمة: الحصول على الدرجة المثالية، فرحة لا توصف، اعتراف الآخرين'
+                },
+                heartbreak: {
+                    label: '💔', type: 'heartbreak', 
+                    color1: '#e55039', color2: '#3c6382',
+                    x: 150 + Math.random() * 100, y: 200 + Math.random() * 100,
+                    originalContent: 'ألم الفراق: نهاية علاقة مهمة، دموع، إحساس بالخسارة والندم'
+                },
+                adventure: {
+                    label: '🌄', type: 'adventure', 
+                    color1: '#00d2d3', color2: '#ff9500',
+                    x: 100 + Math.random() * 150, y: 250 + Math.random() * 100,
+                    originalContent: 'مغامرة لا تُنسى: رحلة للجبال، منظر شروق الشمس، إحساس بالحرية والاكتشاف'
+                }
+            };
+
+            const preset = presets[type];
+            if (preset) {
+                this.memoryCrystals.push({
+                    id: Date.now(),
+                    size: 40 + Math.random() * 15,
+                    intensity: 0.8 + Math.random() * 0.2,
+                    age: Math.random() * 15,
+                    glow: preset.color1,
+                    delay: Math.random() * 2,
+                    recallCount: 0,
+                    ...preset
+                });
+            }
+        },
+
+        recallMemory(crystal) {
+            this.recallAttempts++;
+            crystal.recallCount++;
+            
+            // حساب التشويه بناءً على الحالة العاطفية والاستدعاءات السابقة
+            const distortionFactor = this.calculateDistortion(crystal);
+            
+            // إعادة بناء احتمالية للذكرى
+            const reconstruction = this.probabilisticReconstruction(crystal, distortionFactor);
+            
+            this.lastRecall = reconstruction;
+            this.updateMemoryStats(distortionFactor);
+            this.updateDistortions();
+        },
+
+        calculateDistortion(crystal) {
+            // كلما زاد اليأس والاستدعاءات، زاد التشويه
+            const despairImpact = this.emotionalState.despair * 0.4;
+            const recallImpact = Math.min(crystal.recallCount * 0.1, 0.5);
+            const ageImpact = crystal.age * 0.05;
+            const clarityReduction = (1 - this.emotionalState.clarity) * 0.3;
+            
+            return Math.min(despairImpact + recallImpact + ageImpact + clarityReduction, 0.9);
+        },
+
+        probabilisticReconstruction(crystal, distortion) {
+            const originalWords = crystal.originalContent.split(' ');
+            let reconstruction = '';
+            
+            // تطبيق تشويهات مختلفة حسب النوع والحالة العاطفية
+            if (this.emotionalState.despair > 0.6) {
+                reconstruction += `<div style="color: #e55039;">🌧️ الذكرى ملوثة باليأس الحالي:</div>`;
+            }
+            
+            reconstruction += `<div class="memory-layer" style="--layer-color: ${crystal.color1};">`;
+            reconstruction += `<strong>النسخة ${crystal.recallCount + 1} (تشويه: ${(distortion * 100).toFixed(1)}%):</strong><br>`;
+            
+            // إعادة بناء احتمالية للمحتوى
+            originalWords.forEach((word, index) => {
+                if (Math.random() < distortion) {
+                    // تطبيق تشويهات حسب نوع الذكرى والحالة العاطفية
+                    if (this.emotionalState.despair > 0.5 && crystal.type === 'joy') {
+                        word = this.applyEmotionalFilter(word, 'sadness');
+                    } else if (this.emotionalState.mood < 0.3) {
+                        word = this.applyEmotionalFilter(word, 'negative');
+                    } else if (Math.random() < 0.3) {
+                        word = '(غير واضح)';
+                    }
+                }
+                reconstruction += word + ' ';
+            });
+            
+            reconstruction += `</div>`;
+            
+            // إضافة تحليل احتمالي
+            const confidence = (1 - distortion) * 100;
+            reconstruction += `<div style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">`;
+            reconstruction += `📊 مستوى الثقة: ${confidence.toFixed(1)}%<br>`;
+            reconstruction += `🔄 عدد الاستدعاءات: ${crystal.recallCount}<br>`;
+            reconstruction += `⏳ عمر الذكرى: ${crystal.age.toFixed(1)} سنة<br>`;
+            reconstruction += `🎭 تأثير المزاج: ${(this.emotionalState.mood * 100).toFixed(0)}%`;
+            reconstruction += `</div>`;
+            
+            return reconstruction;
+        },
+
+        applyEmotionalFilter(word, filterType) {
+            const filters = {
+                sadness: ['محزن', 'كئيب', 'مؤلم', 'قاتم'],
+                negative: ['سيء', 'مخيب', 'مؤسف', 'مقلق'],
+                positive: ['جميل', 'رائع', 'مذهل', 'ساحر']
+            };
+            
+            if (filters[filterType] && Math.random() < 0.5) {
+                return filters[filterType][Math.floor(Math.random() * filters[filterType].length)];
+            }
+            return word;
+        },
+
+        updateMemoryStats(lastDistortion) {
+            this.emotionalDistortion = (this.emotionalDistortion + lastDistortion) / 2;
+            this.memoryAccuracy = 1 - this.emotionalDistortion;
+        },
+
+        updateDistortions() {
+            this.activeDistortions = [];
+            
+            if (this.emotionalState.despair > 0.6) {
+                this.activeDistortions.push('تلوين بالإحباط');
+            }
+            if (this.emotionalState.clarity < 0.4) {
+                this.activeDistortions.push('ضبابية الذاكرة');
+            }
+            if (this.emotionalState.mood < 0.3) {
+                this.activeDistortions.push('تحيز سلبي');
+            }
+            if (this.emotionalState.intensity > 0.8) {
+                this.activeDistortions.push('تضخيم الأحداث');
+            }
+            if (this.recallAttempts > 10) {
+                this.activeDistortions.push('تآكل الذاكرة');
+            }
+        },
+
+        triggerGlobalRecall() {
+            this.lastRecall = `<div style="color: #ff6b9d; font-weight: bold;">🌊 موجة استدعاء شاملة:</div>`;
+            
+            this.memoryCrystals.forEach((crystal, index) => {
+                setTimeout(() => {
+                    const miniRecall = this.probabilisticReconstruction(crystal, this.calculateDistortion(crystal));
+                    this.lastRecall += `<hr style="margin: 10px 0; border-color: ${crystal.color1};">` + miniRecall;
+                }, index * 500);
+            });
+        },
+
+        runWebPPLMemoryModel() {
+            // نموذج WebPPL لمحاكاة عملية الذاكرة الاحتمالية
+            const memories = this.memoryCrystals.length;
+            const avgAge = this.memoryCrystals.reduce((sum, c) => sum + c.age, 0) / memories || 0;
+            
+            const simulatedWebPPL = {
+                model: "Agate Memory Probabilistic Reconstruction",
+                parameters: {
+                    despair_level: this.emotionalState.despair,
+                    mood_state: this.emotionalState.mood,
+                    clarity_factor: this.emotionalState.clarity,
+                    memory_count: memories,
+                    average_age: avgAge
+                },
+                results: {
+                    reconstruction_accuracy: Math.max(0.1, this.emotionalState.clarity - this.emotionalState.despair * 0.5),
+                    emotional_bias: this.emotionalState.despair > 0.5 ? 'negative_distortion' : 'neutral_reconstruction',
+                    memory_stability: Math.max(0.2, 1 - (this.recallAttempts * 0.05)),
+                    predicted_next_recall: {
+                        accuracy_drop: this.emotionalState.despair * 0.1,
+                        new_details_probability: Math.random() * 0.3,
+                        emotional_contamination: this.emotionalState.despair * this.emotionalState.intensity
+                    }
+                },
+                probabilistic_insights: [
+                    `احتمالية التشويه العاطفي: ${(this.emotionalState.despair * 100).toFixed(1)}%`,
+                    `مؤشر استقرار الذاكرة: ${((1 - this.recallAttempts * 0.05) * 100).toFixed(1)}%`,
+                    `تأثير الوضوح الذهني: ${(this.emotionalState.clarity * 100).toFixed(1)}%`,
+                    `احتمالية إضافة تفاصيل جديدة: ${(Math.random() * 30).toFixed(1)}%`
+                ]
+            };
+
+            this.webpplResult = JSON.stringify(simulatedWebPPL, null, 2);
+        },
+
+        clearAllMemories() {
+            this.memoryCrystals = [];
+            this.lastRecall = '';
+            this.webpplResult = '';
+            this.recallAttempts = 0;
+            this.activeDistortions = [];
+        },
+
+        generateMemoryContent(type) {
+            const templates = {
+                joy: 'لحظة سعادة: ضحكات، أجواء مرحة، مشاعر إيجابية',
+                sadness: 'لحظة حزن: دموع، ألم، إحساس بالفقدان',
+                fear: 'لحظة خوف: قلق، توتر، ترقب',
+                anger: 'لحظة غضب: إحباط، انفعال، رد فعل قوي',
+                contemplation: 'لحظة تأمل: تفكير عميق، استبطان، تساؤلات'
+            };
+            return templates[type] || 'ذكرى غامضة غير محددة المعالم';
+        }
+    }
+}
+</script>
+
+</body>
+</html>

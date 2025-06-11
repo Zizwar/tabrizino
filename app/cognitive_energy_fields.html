@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF~ - حقول الطاقة المعرفية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webppl/0.9.15/webppl.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cosmic-gradient {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 25%, #2d1b69 50%, #1e3c72 75%, #2a5298 100%);
+        }
+
+        .energy-field {
+            position: absolute;
+            border-radius: 50%;
+            opacity: var(--field-opacity, 0.7);
+            background: var(--field-gradient);
+            animation: var(--field-animation) ease-in-out infinite;
+            filter: blur(var(--field-blur, 1px));
+            box-shadow: var(--field-glow);
+        }
+
+        .energy-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--particle-color);
+            border-radius: 50%;
+            animation: particle-flow var(--flow-duration, 3s) linear infinite;
+            box-shadow: 0 0 8px var(--particle-color);
+        }
+
+        @keyframes particle-flow {
+            0% { 
+                transform: translateX(0) translateY(0) scale(0.5);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateX(var(--flow-x, 100px)) translateY(var(--flow-y, 100px)) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .field-trust {
+            --field-gradient: radial-gradient(circle, rgba(34, 197, 94, 0.8) 0%, rgba(34, 197, 94, 0.4) 40%, transparent 80%);
+            --field-glow: 0 0 30px rgba(34, 197, 94, 0.5);
+            --field-animation: trust-pulse 3s;
+        }
+
+        .field-fear {
+            --field-gradient: radial-gradient(circle, rgba(239, 68, 68, 0.8) 0%, rgba(239, 68, 68, 0.4) 40%, transparent 80%);
+            --field-glow: 0 0 30px rgba(239, 68, 68, 0.5);
+            --field-animation: fear-fluctuation 2s;
+        }
+
+        .field-focus {
+            --field-gradient: radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, rgba(59, 130, 246, 0.4) 40%, transparent 80%);
+            --field-glow: 0 0 30px rgba(59, 130, 246, 0.5);
+            --field-animation: focus-concentrate 4s;
+        }
+
+        .field-creativity {
+            --field-gradient: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(168, 85, 247, 0.4) 40%, transparent 80%);
+            --field-glow: 0 0 30px rgba(168, 85, 247, 0.5);
+            --field-animation: creativity-chaos 1.5s;
+        }
+
+        .field-memory {
+            --field-gradient: radial-gradient(circle, rgba(245, 158, 11, 0.8) 0%, rgba(245, 158, 11, 0.4) 40%, transparent 80%);
+            --field-glow: 0 0 30px rgba(245, 158, 11, 0.5);
+            --field-animation: memory-drift 5s;
+        }
+
+        @keyframes trust-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes fear-fluctuation {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.3) rotate(90deg); }
+            75% { transform: scale(0.8) rotate(270deg); }
+        }
+
+        @keyframes focus-concentrate {
+            0%, 100% { transform: scale(0.8); filter: blur(2px); }
+            50% { transform: scale(1); filter: blur(0px); }
+        }
+
+        @keyframes creativity-chaos {
+            0% { transform: scale(1) rotate(0deg) skew(0deg); }
+            25% { transform: scale(1.4) rotate(90deg) skew(15deg); }
+            50% { transform: scale(0.7) rotate(180deg) skew(-15deg); }
+            75% { transform: scale(1.2) rotate(270deg) skew(10deg); }
+            100% { transform: scale(1) rotate(360deg) skew(0deg); }
+        }
+
+        @keyframes memory-drift {
+            0%, 100% { transform: translateX(0) translateY(0) scale(1); }
+            25% { transform: translateX(20px) translateY(-10px) scale(1.1); }
+            75% { transform: translateX(-15px) translateY(15px) scale(0.9); }
+        }
+
+        .force-line {
+            position: absolute;
+            height: 2px;
+            background: var(--line-gradient);
+            transform-origin: left center;
+            animation: force-flow 2s ease-in-out infinite;
+            opacity: var(--line-opacity, 0.6);
+        }
+
+        @keyframes force-flow {
+            0%, 100% { opacity: 0.3; transform: scaleX(1); }
+            50% { opacity: 0.8; transform: scaleX(1.1); }
+        }
+
+        .energy-vortex {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--vortex-color);
+            animation: vortex-spin 3s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes vortex-spin {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(360deg) scale(1.1); }
+        }
+
+        .overload-explosion {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 107, 107, 0.6) 30%, transparent 80%);
+            animation: explosion 1s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes explosion {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .neural-network-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 30% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 70%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+            animation: neural-drift 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes neural-drift {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .energy-gauge {
+            position: relative;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            background: var(--gauge-gradient);
+            transition: width 0.5s ease, background 0.3s ease;
+            position: relative;
+        }
+
+        .gauge-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+            animation: gauge-shimmer 2s linear infinite;
+        }
+
+        @keyframes gauge-shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .resonance-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--resonance-color);
+            animation: var(--resonance-animation);
+            box-shadow: 0 0 15px var(--resonance-color);
+        }
+
+        .resonance-low {
+            --resonance-color: #ef4444;
+            --resonance-animation: resonance-unstable 1s ease-in-out infinite;
+        }
+
+        .resonance-medium {
+            --resonance-color: #f59e0b;
+            --resonance-animation: resonance-moderate 2s ease-in-out infinite;
+        }
+
+        .resonance-high {
+            --resonance-color: #22c55e;
+            --resonance-animation: resonance-stable 3s ease-in-out infinite;
+        }
+
+        @keyframes resonance-unstable {
+            0%, 100% { transform: scale(0.8); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        @keyframes resonance-moderate {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @keyframes resonance-stable {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .field-interaction-line {
+            position: absolute;
+            height: 1px;
+            background: var(--interaction-gradient);
+            transform-origin: left center;
+            animation: interaction-pulse var(--pulse-duration, 2s) ease-in-out infinite;
+        }
+
+        @keyframes interaction-pulse {
+            0%, 100% { opacity: 0.2; transform: scaleY(1); }
+            50% { opacity: 0.8; transform: scaleY(3); }
+        }
+
+        .cognitive-storm {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(239, 68, 68, 0.2) 70%, transparent 100%);
+            animation: storm-rotation 2s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes storm-rotation {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(360deg) scale(1.2); }
+        }
+
+        .cognitive-storm.active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="cosmic-gradient min-h-screen text-white overflow-x-hidden">
+
+<div class="neural-network-bg"></div>
+
+<div class="container mx-auto p-6 max-w-7xl relative z-10" x-data="cognitiveEnergyFields()">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-green-400 bg-clip-text text-transparent mb-4">
+            ⚡ حقول الطاقة المعرفية
+        </h1>
+        <p class="text-xl text-gray-300 mb-2">فيزياء العمليات المعرفية - حقول مغناطيسية للعقل</p>
+        <p class="text-lg text-gray-400">WebPPL يحسب التفاعلات، CSS يرسم الطاقة الحية</p>
+    </div>
+
+    <!-- Main Interface -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        
+        <!-- Energy Field Visualization -->
+        <div class="lg:col-span-2 glass-panel rounded-2xl p-6">
+            <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                🌌 مختبر الحقول المعرفية
+                <span class="ml-auto text-sm text-gray-400">النقر = إضافة طاقة</span>
+            </h3>
+            
+            <div class="relative w-full h-96 bg-black/30 rounded-xl overflow-hidden border border-white/10" 
+                 @click="addEnergyDisturbance($event)">
+                
+                <!-- Energy Fields -->
+                <template x-for="field in activeFields">
+                    <div class="energy-field"
+                         :class="field.type"
+                         :style="`
+                             left: ${field.x}px; 
+                             top: ${field.y}px; 
+                             width: ${field.size}px; 
+                             height: ${field.size}px;
+                             --field-opacity: ${field.intensity};
+                             --field-blur: ${field.blur}px;
+                         `">
+                    </div>
+                </template>
+
+                <!-- Energy Particles -->
+                <template x-for="particle in energyParticles">
+                    <div class="energy-particle"
+                         :style="`
+                             left: ${particle.x}px; 
+                             top: ${particle.y}px;
+                             --particle-color: ${particle.color};
+                             --flow-duration: ${particle.duration}s;
+                             --flow-x: ${particle.flowX}px;
+                             --flow-y: ${particle.flowY}px;
+                         `">
+                    </div>
+                </template>
+
+                <!-- Force Lines -->
+                <template x-for="line in forceLines">
+                    <div class="force-line"
+                         :style="`
+                             left: ${line.x1}px; 
+                             top: ${line.y1}px;
+                             width: ${line.length}px;
+                             transform: rotate(${line.angle}deg);
+                             --line-gradient: ${line.gradient};
+                             --line-opacity: ${line.opacity};
+                         `">
+                    </div>
+                </template>
+
+                <!-- Field Interaction Lines -->
+                <template x-for="interaction in fieldInteractions">
+                    <div class="field-interaction-line"
+                         :style="`
+                             left: ${interaction.x1}px; 
+                             top: ${interaction.y1}px;
+                             width: ${interaction.length}px;
+                             transform: rotate(${interaction.angle}deg);
+                             --interaction-gradient: ${interaction.gradient};
+                             --pulse-duration: ${interaction.duration}s;
+                         `">
+                    </div>
+                </template>
+
+                <!-- Cognitive Storm (appears during overload) -->
+                <div class="cognitive-storm" 
+                     :class="{ 'active': systemState.overload }"
+                     :style="`left: ${stormCenter.x}px; top: ${stormCenter.y}px;`">
+                </div>
+
+                <!-- Energy Vortices -->
+                <template x-for="vortex in energyVortices">
+                    <div class="energy-vortex"
+                         :style="`
+                             left: ${vortex.x}px; 
+                             top: ${vortex.y}px;
+                             width: ${vortex.size}px;
+                             height: ${vortex.size}px;
+                             --vortex-color: ${vortex.color};
+                         `">
+                    </div>
+                </template>
+
+                <!-- Explosion Effects -->
+                <template x-for="explosion in explosions">
+                    <div class="overload-explosion"
+                         :style="`left: ${explosion.x}px; top: ${explosion.y}px;`">
+                    </div>
+                </template>
+            </div>
+
+            <!-- Real-time Metrics -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                <div class="glass-panel rounded-lg p-3 text-center">
+                    <div class="text-sm text-gray-400 mb-1">مجموع الطاقة</div>
+                    <div class="text-lg font-bold text-blue-400" x-text="`${systemState.totalEnergy.toFixed(1)}J`"></div>
+                </div>
+                <div class="glass-panel rounded-lg p-3 text-center">
+                    <div class="text-sm text-gray-400 mb-1">كفاءة النظام</div>
+                    <div class="text-lg font-bold" 
+                         :class="systemState.efficiency > 0.7 ? 'text-green-400' : systemState.efficiency > 0.4 ? 'text-yellow-400' : 'text-red-400'"
+                         x-text="`${(systemState.efficiency * 100).toFixed(0)}%`"></div>
+                </div>
+                <div class="glass-panel rounded-lg p-3 text-center">
+                    <div class="text-sm text-gray-400 mb-1">معدل الرنين</div>
+                    <div class="flex justify-center items-center">
+                        <div class="resonance-indicator"
+                             :class="`resonance-${systemState.resonance > 0.7 ? 'high' : systemState.resonance > 0.4 ? 'medium' : 'low'}`">
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel rounded-lg p-3 text-center">
+                    <div class="text-sm text-gray-400 mb-1">حالة النظام</div>
+                    <div class="text-sm font-semibold"
+                         :class="systemState.overload ? 'text-red-400' : systemState.resonance > 0.6 ? 'text-green-400' : 'text-yellow-400'"
+                         x-text="getSystemStatus()"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="glass-panel rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-4">🎛️ لوحة التحكم</h3>
+            
+            <!-- Field Generators -->
+            <div class="space-y-4 mb-6">
+                <template x-for="(generator, name) in fieldGenerators">
+                    <div class="glass-panel rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm font-semibold" x-text="generator.label"></span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" x-model="generator.active" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <label class="block text-xs text-gray-400 mb-1">شدة الحقل</label>
+                            <input type="range" min="0" max="1" step="0.1" 
+                                   x-model="generator.intensity"
+                                   class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        
+                        <div class="energy-gauge rounded-full">
+                            <div class="gauge-fill rounded-full"
+                                 :style="`
+                                     width: ${generator.intensity * 100}%;
+                                     --gauge-gradient: ${generator.color};
+                                 `">
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- WebPPL Analysis Controls -->
+            <div class="space-y-3 mb-6">
+                <button @click="runEnergyFieldAnalysis()" 
+                        class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 px-4 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    🧮 تحليل حقول الطاقة
+                </button>
+                
+                <button @click="predictFieldCollapse()" 
+                        class="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 px-4 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    ⚠️ توقع انهيار الحقل
+                </button>
+                
+                <button @click="optimizeFieldHarmony()" 
+                        class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 px-4 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    ✨ تحسين التوافق
+                </button>
+            </div>
+
+            <!-- Environmental Factors -->
+            <div class="glass-panel rounded-lg p-4">
+                <h4 class="text-sm font-semibold mb-3 text-gray-300">العوامل البيئية</h4>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">مستوى الضغط</label>
+                        <input type="range" min="0" max="1" step="0.1" 
+                               x-model="environmentalFactors.stress"
+                               class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">التشويش الخارجي</label>
+                        <input type="range" min="0" max="1" step="0.1" 
+                               x-model="environmentalFactors.noise"
+                               class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">الطاقة المتاحة</label>
+                        <input type="range" min="0" max="1" step="0.1" 
+                               x-model="environmentalFactors.energy"
+                               class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Results -->
+    <div class="glass-panel rounded-2xl p-6 mb-8" x-show="analysisResults.visible">
+        <h3 class="text-2xl font-semibold mb-4">🔬 نتائج التحليل المعرفي</h3>
+        
+        <!-- Visual Analysis Results -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Field Strength Visualization -->
+            <div class="glass-panel rounded-lg p-4">
+                <h4 class="text-lg font-semibold mb-3 text-center">قوة الحقول</h4>
+                <div class="space-y-3">
+                    <template x-for="field in analysisResults.fieldStrengths">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm" x-text="field.name"></span>
+                            <div class="flex-1 mx-3">
+                                <div class="energy-gauge rounded-full">
+                                    <div class="gauge-fill rounded-full"
+                                         :style="`
+                                             width: ${field.strength * 100}%;
+                                             --gauge-gradient: ${field.color};
+                                         `">
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold" x-text="`${(field.strength * 100).toFixed(0)}%`"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Interaction Matrix -->
+            <div class="glass-panel rounded-lg p-4">
+                <h4 class="text-lg font-semibold mb-3 text-center">مصفوفة التفاعلات</h4>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <template x-for="interaction in analysisResults.interactionMatrix">
+                        <div class="aspect-square rounded border border-white/20 flex items-center justify-center text-center p-1"
+                             :style="`
+                                 background: ${interaction.color};
+                                 opacity: ${Math.abs(interaction.value)};
+                             `">
+                            <span class="font-bold" x-text="interaction.symbol"></span>
+                        </div>
+                    </template>
+                </div>
+                <div class="mt-2 text-xs text-gray-400 text-center">
+                    <span class="text-green-400">●</span> انجذاب 
+                    <span class="text-red-400 ml-2">●</span> تنافر
+                    <span class="text-blue-400 ml-2">●</span> رنين
+                </div>
+            </div>
+
+            <!-- Probability Distributions -->
+            <div class="glass-panel rounded-lg p-4">
+                <h4 class="text-lg font-semibold mb-3 text-center">التوزيعات الاحتمالية</h4>
+                <div class="space-y-3">
+                    <template x-for="prob in analysisResults.probabilities">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs" x-text="prob.label"></span>
+                                <span class="text-xs font-bold" x-text="`${(prob.value * 100).toFixed(1)}%`"></span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full transition-all duration-500"
+                                     :style="`
+                                         width: ${prob.value * 100}%;
+                                         background: ${prob.color};
+                                     `">
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <template x-for="rec in analysisResults.recommendations">
+                <div class="glass-panel rounded-lg p-4 border-l-4"
+                     :style="`border-left-color: ${rec.color};`">
+                    <div class="flex items-start">
+                        <span class="text-lg mr-2" x-text="rec.icon"></span>
+                        <div>
+                            <h5 class="font-semibold mb-1" x-text="rec.title"></h5>
+                            <p class="text-sm text-gray-300" x-text="rec.description"></p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Warning -->
+    <div class="glass-panel rounded-xl p-6 border border-yellow-500/30 bg-yellow-500/5">
+        <div class="text-center">
+            <span class="text-2xl mb-2 block">⚠️</span>
+            <p class="text-yellow-200 font-semibold mb-2">محاكي تجريبي لحقول الطاقة المعرفية</p>
+            <p class="text-gray-300 text-sm">
+                هذا نموذج نظري لفهم التفاعلات المعرفية من منظور فيزيائي، وليس أداة تشخيصية أو علاجية حقيقية
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+function cognitiveEnergyFields() {
+    return {
+        // Field Generators (CPF~ Concepts as Energy Sources)
+        fieldGenerators: {
+            trust: { 
+                label: '🤝 حقل الثقة', 
+                active: true, 
+                intensity: 0.7, 
+                color: 'linear-gradient(90deg, #22c55e, #16a34a)',
+                type: 'field-trust',
+                frequency: 0.8
+            },
+            fear: { 
+                label: '😰 حقل الخوف', 
+                active: false, 
+                intensity: 0.3, 
+                color: 'linear-gradient(90deg, #ef4444, #dc2626)',
+                type: 'field-fear',
+                frequency: 1.2
+            },
+            focus: { 
+                label: '🎯 حقل التركيز', 
+                active: true, 
+                intensity: 0.8, 
+                color: 'linear-gradient(90deg, #3b82f6, #2563eb)',
+                type: 'field-focus',
+                frequency: 0.5
+            },
+            creativity: { 
+                label: '✨ حقل الإبداع', 
+                active: false, 
+                intensity: 0.6, 
+                color: 'linear-gradient(90deg, #a855f7, #9333ea)',
+                type: 'field-creativity',
+                frequency: 1.5
+            },
+            memory: { 
+                label: '💭 حقل الذاكرة', 
+                active: true, 
+                intensity: 0.5, 
+                color: 'linear-gradient(90deg, #f59e0b, #d97706)',
+                type: 'field-memory',
+                frequency: 0.3
+            }
+        },
+
+        environmentalFactors: {
+            stress: 0.3,
+            noise: 0.2,
+            energy: 0.8
+        },
+
+        systemState: {
+            totalEnergy: 0,
+            efficiency: 0.75,
+            resonance: 0.6,
+            overload: false
+        },
+
+        activeFields: [],
+        energyParticles: [],
+        forceLines: [],
+        fieldInteractions: [],
+        energyVortices: [],
+        explosions: [],
+        stormCenter: { x: 200, y: 150 },
+
+        analysisResults: {
+            visible: false,
+            fieldStrengths: [],
+            interactionMatrix: [],
+            probabilities: [],
+            recommendations: []
+        },
+
+        init() {
+            this.updateSystemState();
+            this.generateEnergyFields();
+            this.startEnergySimulation();
+            
+            // Watch for changes in field generators
+            this.$watch('fieldGenerators', () => {
+                this.updateSystemState();
+                this.generateEnergyFields();
+            }, { deep: true });
+
+            this.$watch('environmentalFactors', () => {
+                this.updateSystemState();
+            }, { deep: true });
+        },
+
+        updateSystemState() {
+            const activeGenerators = Object.values(this.fieldGenerators).filter(g => g.active);
+            
+            // Calculate total energy
+            this.systemState.totalEnergy = activeGenerators.reduce((sum, g) => sum + g.intensity, 0) * 
+                                          this.environmentalFactors.energy;
+            
+            // Calculate efficiency (affected by stress and field conflicts)
+            const fieldConflicts = this.calculateFieldConflicts();
+            this.systemState.efficiency = Math.max(0.1, 
+                (1 - this.environmentalFactors.stress * 0.4) - 
+                (fieldConflicts * 0.3) - 
+                (this.environmentalFactors.noise * 0.2)
+            );
+            
+            // Calculate resonance
+            this.systemState.resonance = this.calculateFieldResonance();
+            
+            // Check for overload
+            this.systemState.overload = this.systemState.totalEnergy > 3.5 || fieldConflicts > 0.7;
+        },
+
+        calculateFieldConflicts() {
+            const active = Object.entries(this.fieldGenerators).filter(([_, g]) => g.active);
+            let conflicts = 0;
+            
+            // Fear vs Trust conflict
+            if (this.fieldGenerators.fear.active && this.fieldGenerators.trust.active) {
+                conflicts += Math.abs(this.fieldGenerators.fear.intensity - this.fieldGenerators.trust.intensity) * 0.5;
+            }
+            
+            // Creativity vs Focus conflict (mild)
+            if (this.fieldGenerators.creativity.active && this.fieldGenerators.focus.active) {
+                conflicts += Math.abs(this.fieldGenerators.creativity.intensity - this.fieldGenerators.focus.intensity) * 0.2;
+            }
+            
+            return Math.min(conflicts, 1);
+        },
+
+        calculateFieldResonance() {
+            const active = Object.values(this.fieldGenerators).filter(g => g.active);
+            if (active.length < 2) return 1;
+            
+            let resonance = 0;
+            const baseFrequency = 1.0;
+            
+            active.forEach(field => {
+                const harmonic = field.frequency / baseFrequency;
+                const nearestInteger = Math.round(harmonic);
+                const harmonicError = Math.abs(harmonic - nearestInteger);
+                resonance += (1 - harmonicError) * field.intensity;
+            });
+            
+            return Math.min(resonance / active.length, 1);
+        },
+
+        generateEnergyFields() {
+            this.activeFields = [];
+            this.energyParticles = [];
+            this.forceLines = [];
+            this.fieldInteractions = [];
+            this.energyVortices = [];
+            
+            const activeGenerators = Object.entries(this.fieldGenerators).filter(([_, g]) => g.active);
+            
+            activeGenerators.forEach(([name, generator], index) => {
+                const baseX = 100 + (index * 120) % 400;
+                const baseY = 100 + Math.floor(index / 4) * 120;
+                
+                // Create main energy field
+                this.activeFields.push({
+                    id: name,
+                    type: generator.type,
+                    x: baseX,
+                    y: baseY,
+                    size: 80 + generator.intensity * 60,
+                    intensity: generator.intensity,
+                    blur: 2 - generator.intensity,
+                    color: generator.color
+                });
+                
+                // Generate energy particles
+                for (let i = 0; i < generator.intensity * 10; i++) {
+                    this.energyParticles.push({
+                        x: baseX + (Math.random() - 0.5) * 40,
+                        y: baseY + (Math.random() - 0.5) * 40,
+                        color: this.getParticleColor(name),
+                        duration: 2 + Math.random() * 3,
+                        flowX: (Math.random() - 0.5) * 200,
+                        flowY: (Math.random() - 0.5) * 200
+                    });
+                }
+                
+                // Create energy vortex if high intensity
+                if (generator.intensity > 0.7) {
+                    this.energyVortices.push({
+                        x: baseX - 15,
+                        y: baseY - 15,
+                        size: 30,
+                        color: this.getVortexColor(name)
+                    });
+                }
+            });
+            
+            // Generate field interactions
+            this.generateFieldInteractions(activeGenerators);
+        },
+
+        generateFieldInteractions(activeGenerators) {
+            for (let i = 0; i < activeGenerators.length; i++) {
+                for (let j = i + 1; j < activeGenerators.length; j++) {
+                    const [name1, gen1] = activeGenerators[i];
+                    const [name2, gen2] = activeGenerators[j];
+                    
+                    const x1 = 100 + (i * 120) % 400;
+                    const y1 = 100 + Math.floor(i / 4) * 120;
+                    const x2 = 100 + (j * 120) % 400;
+                    const y2 = 100 + Math.floor(j / 4) * 120;
+                    
+                    const dx = x2 - x1;
+                    const dy = y2 - y1;
+                    const length = Math.sqrt(dx * dx + dy * dy);
+                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                    
+                    const interactionType = this.getInteractionType(name1, name2);
+                    
+                    this.fieldInteractions.push({
+                        x1: x1,
+                        y1: y1,
+                        length: length,
+                        angle: angle,
+                        gradient: this.getInteractionGradient(interactionType),
+                        duration: 2 + Math.random() * 2,
+                        type: interactionType
+                    });
+                }
+            }
+        },
+
+        getInteractionType(field1, field2) {
+            const conflicts = {
+                'trust-fear': 'repulsion',
+                'focus-creativity': 'weak_repulsion',
+                'trust-focus': 'attraction',
+                'memory-trust': 'resonance',
+                'creativity-memory': 'attraction'
+            };
+            
+            const key = [field1, field2].sort().join('-');
+            return conflicts[key] || 'neutral';
+        },
+
+        getInteractionGradient(type) {
+            const gradients = {
+                'attraction': 'linear-gradient(90deg, rgba(34, 197, 94, 0.8), rgba(34, 197, 94, 0.3))',
+                'repulsion': 'linear-gradient(90deg, rgba(239, 68, 68, 0.8), rgba(239, 68, 68, 0.3))',
+                'weak_repulsion': 'linear-gradient(90deg, rgba(245, 158, 11, 0.6), rgba(245, 158, 11, 0.2))',
+                'resonance': 'linear-gradient(90deg, rgba(59, 130, 246, 0.8), rgba(168, 85, 247, 0.8))',
+                'neutral': 'linear-gradient(90deg, rgba(156, 163, 175, 0.4), rgba(156, 163, 175, 0.2))'
+            };
+            return gradients[type] || gradients.neutral;
+        },
+
+        getParticleColor(fieldName) {
+            const colors = {
+                trust: '#22c55e',
+                fear: '#ef4444',
+                focus: '#3b82f6',
+                creativity: '#a855f7',
+                memory: '#f59e0b'
+            };
+            return colors[fieldName] || '#ffffff';
+        },
+
+        getVortexColor(fieldName) {
+            const colors = {
+                trust: '#22c55e',
+                fear: '#ef4444',
+                focus: '#3b82f6',
+                creativity: '#a855f7',
+                memory: '#f59e0b'
+            };
+            return colors[fieldName] || '#ffffff';
+        },
+
+        addEnergyDisturbance(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // Add explosion effect
+            this.explosions.push({ x: x - 50, y: y - 50 });
+            
+            // Remove explosion after animation
+            setTimeout(() => {
+                this.explosions.shift();
+            }, 1000);
+            
+            // Add energy particles at click location
+            for (let i = 0; i < 15; i++) {
+                this.energyParticles.push({
+                    x: x + (Math.random() - 0.5) * 20,
+                    y: y + (Math.random() - 0.5) * 20,
+                    color: '#ffffff',
+                    duration: 1 + Math.random() * 2,
+                    flowX: (Math.random() - 0.5) * 150,
+                    flowY: (Math.random() - 0.5) * 150
+                });
+            }
+            
+            // Increase system energy temporarily
+            this.systemState.totalEnergy += 0.5;
+            setTimeout(() => {
+                this.systemState.totalEnergy = Math.max(0, this.systemState.totalEnergy - 0.5);
+            }, 2000);
+        },
+
+        startEnergySimulation() {
+            setInterval(() => {
+                // Clean up old particles
+                this.energyParticles = this.energyParticles.filter((_, index) => index < 100);
+                
+                // Add new particles if fields are active
+                Object.entries(this.fieldGenerators).forEach(([name, gen], index) => {
+                    if (gen.active && Math.random() < gen.intensity * 0.1) {
+                        const baseX = 100 + (index * 120) % 400;
+                        const baseY = 100 + Math.floor(index / 4) * 120;
+                        
+                        this.energyParticles.push({
+                            x: baseX + (Math.random() - 0.5) * 60,
+                            y: baseY + (Math.random() - 0.5) * 60,
+                            color: this.getParticleColor(name),
+                            duration: 2 + Math.random() * 2,
+                            flowX: (Math.random() - 0.5) * 100,
+                            flowY: (Math.random() - 0.5) * 100
+                        });
+                    }
+                });
+                
+                // Update storm center if overloaded
+                if (this.systemState.overload) {
+                    this.stormCenter.x += (Math.random() - 0.5) * 40;
+                    this.stormCenter.y += (Math.random() - 0.5) * 40;
+                    this.stormCenter.x = Math.max(50, Math.min(this.stormCenter.x, 350));
+                    this.stormCenter.y = Math.max(50, Math.min(this.stormCenter.y, 250));
+                }
+            }, 200);
+        },
+
+        runEnergyFieldAnalysis() {
+            // Simulate WebPPL analysis with visual results
+            const activeGenerators = Object.entries(this.fieldGenerators).filter(([_, g]) => g.active);
+            
+            // Field Strengths
+            this.analysisResults.fieldStrengths = activeGenerators.map(([name, gen]) => ({
+                name: gen.label,
+                strength: gen.intensity * this.systemState.efficiency,
+                color: gen.color
+            }));
+            
+            // Interaction Matrix (9 cells for 3x3 grid)
+            this.analysisResults.interactionMatrix = [];
+            const interactions = ['🤝', '⚡', '🌊', '💥', '✨', '🔥', '❄️', '🌪️', '💎'];
+            const colors = ['rgba(34, 197, 94, 0.5)', 'rgba(239, 68, 68, 0.5)', 'rgba(59, 130, 246, 0.5)'];
+            
+            for (let i = 0; i < 9; i++) {
+                this.analysisResults.interactionMatrix.push({
+                    symbol: interactions[i],
+                    value: (Math.random() - 0.5) * 2, // -1 to 1
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+            
+            // Probabilities
+            this.analysisResults.probabilities = [
+                {
+                    label: 'احتمالية الانهيار',
+                    value: this.systemState.overload ? 0.8 : Math.random() * 0.3,
+                    color: 'linear-gradient(90deg, #ef4444, #dc2626)'
+                },
+                {
+                    label: 'احتمالية الإبداع',
+                    value: this.fieldGenerators.creativity.active ? 0.7 : Math.random() * 0.4,
+                    color: 'linear-gradient(90deg, #a855f7, #9333ea)'
+                },
+                {
+                    label: 'استقرار النظام',
+                    value: this.systemState.efficiency,
+                    color: 'linear-gradient(90deg, #22c55e, #16a34a)'
+                },
+                {
+                    label: 'كفاءة الطاقة',
+                    value: this.systemState.resonance,
+                    color: 'linear-gradient(90deg, #3b82f6, #2563eb)'
+                }
+            ];
+            
+            // Recommendations
+            this.analysisResults.recommendations = this.generateSmartRecommendations();
+            
+            this.analysisResults.visible = true;
+        },
+
+        generateSmartRecommendations() {
+            const recommendations = [];
+            
+            if (this.systemState.overload) {
+                recommendations.push({
+                    icon: '⚠️',
+                    title: 'تحذير من الحمل الزائد',
+                    description: 'قلل شدة الحقول النشطة لتجنب انهيار النظام',
+                    color: '#ef4444'
+                });
+            }
+            
+            if (this.fieldGenerators.fear.active && this.fieldGenerators.trust.active) {
+                recommendations.push({
+                    icon: '⚔️',
+                    title: 'تضارب الحقول',
+                    description: 'حقل الخوف يتعارض مع حقل الثقة - قد يحدث عدم استقرار',
+                    color: '#f59e0b'
+                });
+            }
+            
+            if (this.systemState.resonance > 0.8) {
+                recommendations.push({
+                    icon: '🎵',
+                    title: 'رنين مثالي',
+                    description: 'النظام في حالة رنين ممتازة - وقت مثالي للإنتاجية',
+                    color: '#22c55e'
+                });
+            }
+            
+            if (this.fieldGenerators.creativity.active && this.fieldGenerators.focus.active) {
+                recommendations.push({
+                    icon: '💡',
+                    title: 'توازن إبداعي',
+                    description: 'التوازن بين الإبداع والتركيز يحفز الابتكار',
+                    color: '#a855f7'
+                });
+            }
+            
+            return recommendations.slice(0, 6); // أظهر 6 توصيات كحد أقصى
+        },
+
+        predictFieldCollapse() {
+            // Simulate field collapse prediction
+            const collapseRisk = this.systemState.overload ? 0.9 : 
+                               this.systemState.efficiency < 0.3 ? 0.7 : 
+                               Math.random() * 0.4;
+            
+            this.analysisResults.probabilities = [
+                {
+                    label: 'خطر الانهيار خلال 10 ثوان',
+                    value: collapseRisk,
+                    color: collapseRisk > 0.6 ? 'linear-gradient(90deg, #dc2626, #991b1b)' : 'linear-gradient(90deg, #22c55e, #16a34a)'
+                },
+                {
+                    label: 'وقت الاستقرار المتوقع',
+                    value: 1 - collapseRisk,
+                    color: 'linear-gradient(90deg, #3b82f6, #1d4ed8)'
+                },
+                {
+                    label: 'احتمالية التعافي التلقائي',
+                    value: this.environmentalFactors.energy * 0.8,
+                    color: 'linear-gradient(90deg, #059669, #047857)'
+                }
+            ];
+            
+            this.analysisResults.recommendations = [
+                {
+                    icon: collapseRisk > 0.6 ? '🚨' : '✅',
+                    title: collapseRisk > 0.6 ? 'خطر عالي' : 'نظام مستقر',
+                    description: collapseRisk > 0.6 ? 
+                        'اتخذ إجراءات فورية لتقليل الحمل' : 
+                        'النظام يعمل ضمن المعايير الآمنة',
+                    color: collapseRisk > 0.6 ? '#dc2626' : '#059669'
+                }
+            ];
+            
+            this.analysisResults.visible = true;
+        },
+
+        optimizeFieldHarmony() {
+            // Auto-optimize field settings for maximum harmony
+            const targetResonance = 0.85;
+            
+            Object.keys(this.fieldGenerators).forEach(fieldName => {
+                if (this.fieldGenerators[fieldName].active) {
+                    // Adjust intensity based on field harmony
+                    const harmonyFactor = this.calculateFieldHarmonyFactor(fieldName);
+                    this.fieldGenerators[fieldName].intensity = Math.min(0.9, 
+                        this.fieldGenerators[fieldName].intensity * harmonyFactor
+                    );
+                }
+            });
+            
+            // Show optimization results
+            this.analysisResults.recommendations = [
+                {
+                    icon: '✨',
+                    title: 'تم تحسين التوافق',
+                    description: 'تم ضبط شدة الحقول لتحقيق أفضل رنين ممكن',
+                    color: '#22c55e'
+                },
+                {
+                    icon: '🎯',
+                    title: 'كفاءة محسنة',
+                    description: `تحسنت كفاءة النظام إلى ${(this.systemState.efficiency * 100).toFixed(0)}%`,
+                    color: '#3b82f6'
+                }
+            ];
+            
+            this.analysisResults.visible = true;
+            
+            // Update system state after optimization
+            setTimeout(() => {
+                this.updateSystemState();
+            }, 100);
+        },
+
+        calculateFieldHarmonyFactor(fieldName) {
+            // Calculate how much this field contributes to overall harmony
+            const baseHarmony = 1.0;
+            const conflictPenalty = this.calculateFieldConflicts() * 0.3;
+            const resonanceBonus = this.systemState.resonance * 0.2;
+            
+            return Math.max(0.3, baseHarmony - conflictPenalty + resonanceBonus);
+        },
+
+        getSystemStatus() {
+            if (this.systemState.overload) return '🚨 حمل زائد';
+            if (this.systemState.resonance > 0.7) return '🎵 رنين مثالي';
+            if (this.systemState.efficiency > 0.6) return '✅ مستقر';
+            return '⚠️ غير مستقر';
+        }
+    }
+}
+</script>
+
+</body>
+</html>

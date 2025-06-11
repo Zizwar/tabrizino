@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF~ - أنماط التداخل المعرفي</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webppl/0.9.15/webppl.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e, #0f3460);
+            color: #f0f0f0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .neural-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(64, 181, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 85% 75%, rgba(156, 39, 176, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 45% 15%, rgba(255, 193, 7, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 45%, rgba(76, 175, 80, 0.05) 0%, transparent 50%);
+            animation: neuralPulse 15s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes neuralPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title h1 {
+            font-size: 3.5em;
+            background: linear-gradient(45deg, #40b5f6, #9c27b0, #ffc107, #4caf50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleShimmer 4s infinite ease-in-out;
+            margin-bottom: 10px;
+        }
+
+        @keyframes titleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .wave-chamber {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px;
+            border: 2px solid rgba(64, 181, 246, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-chamber::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #40b5f6, #9c27b0, #ffc107, #4caf50);
+            border-radius: 25px;
+            z-index: -1;
+            animation: borderPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .interference-canvas {
+            width: 100%;
+            height: 500px;
+            background: radial-gradient(circle at center, rgba(64, 181, 246, 0.05), transparent);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .simulator-wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            opacity: var(--wave-opacity, 0.7);
+            animation: var(--wave-animation) ease-in-out infinite;
+            background: var(--wave-gradient);
+            mix-blend-mode: screen;
+        }
+
+        .wave-reality {
+            --wave-gradient: radial-gradient(ellipse at var(--center-x, 50%) var(--center-y, 50%), 
+                           rgba(64, 181, 246, 0.8) 0%, 
+                           rgba(64, 181, 246, 0.4) 30%, 
+                           transparent 70%);
+            --wave-animation: waveReality var(--frequency, 3s);
+        }
+
+        .wave-memory {
+            --wave-gradient: radial-gradient(ellipse at var(--center-x, 30%) var(--center-y, 70%), 
+                           rgba(156, 39, 176, 0.8) 0%, 
+                           rgba(156, 39, 176, 0.4) 35%, 
+                           transparent 75%);
+            --wave-animation: waveMemory var(--frequency, 4s);
+        }
+
+        .wave-prediction {
+            --wave-gradient: radial-gradient(ellipse at var(--center-x, 70%) var(--center-y, 30%), 
+                           rgba(255, 193, 7, 0.8) 0%, 
+                           rgba(255, 193, 7, 0.4) 25%, 
+                           transparent 60%);
+            --wave-animation: wavePrediction var(--frequency, 2.5s);
+        }
+
+        .wave-fantasy {
+            --wave-gradient: radial-gradient(ellipse at var(--center-x, 80%) var(--center-y, 80%), 
+                           rgba(76, 175, 80, 0.8) 0%, 
+                           rgba(76, 175, 80, 0.4) 40%, 
+                           transparent 80%);
+            --wave-animation: waveFantasy var(--frequency, 5s);
+        }
+
+        @keyframes waveReality {
+            0%, 100% { transform: scale(0.8) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+        }
+
+        @keyframes waveMemory {
+            0%, 100% { transform: scale(1.1) rotate(0deg) skew(10deg); }
+            50% { transform: scale(0.9) rotate(-180deg) skew(-10deg); }
+        }
+
+        @keyframes wavePrediction {
+            0%, 100% { transform: scale(1) rotate(0deg) translateX(0px); }
+            25% { transform: scale(1.3) rotate(90deg) translateX(20px); }
+            75% { transform: scale(0.7) rotate(270deg) translateX(-20px); }
+        }
+
+        @keyframes waveFantasy {
+            0%, 100% { transform: scale(0.9) rotate(0deg) translateY(0px); }
+            33% { transform: scale(1.4) rotate(120deg) translateY(-15px); }
+            66% { transform: scale(0.6) rotate(240deg) translateY(15px); }
+        }
+
+        .interference-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--interference-pattern);
+            border-radius: 15px;
+            mix-blend-mode: multiply;
+            opacity: var(--interference-intensity, 0.5);
+        }
+
+        .control-panel {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .simulator-controls {
+            margin-bottom: 25px;
+        }
+
+        .simulator-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-right: 4px solid var(--sim-color);
+        }
+
+        .sim-reality { --sim-color: #40b5f6; }
+        .sim-memory { --sim-color: #9c27b0; }
+        .sim-prediction { --sim-color: #ffc107; }
+        .sim-fantasy { --sim-color: #4caf50; }
+
+        .simulator-name {
+            font-weight: bold;
+            color: var(--sim-color);
+        }
+
+        .intensity-slider {
+            width: 100px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            margin-left: 10px;
+        }
+
+        .intensity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--sim-color);
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--sim-color);
+        }
+
+        .webppl-controls {
+            margin-bottom: 25px;
+        }
+
+        .compute-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #40b5f6, #9c27b0);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .compute-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(64, 181, 246, 0.4);
+        }
+
+        .interference-metrics {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #40b5f6;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        .metric-label {
+            font-weight: bold;
+        }
+
+        .metric-value {
+            color: var(--metric-color, #40b5f6);
+            font-weight: bold;
+        }
+
+        .cognitive-state-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .state-indicator {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            background: var(--state-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        .clarity-high { --state-color: #4caf50; }
+        .clarity-medium { --state-color: #ffc107; }
+        .clarity-low { --state-color: #f44336; }
+
+        .analysis-section {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .webppl-output {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            border-left: 4px solid #9c27b0;
+            margin-top: 20px;
+        }
+
+        .visual-insights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .insight-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--insight-color);
+            transition: transform 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .insight-constructive { --insight-color: #4caf50; }
+        .insight-destructive { --insight-color: #f44336; }
+        .insight-neutral { --insight-color: #ffc107; }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .wave-legend {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 8px;
+            box-shadow: 0 0 10px var(--legend-glow);
+        }
+
+        .legend-reality { background: #40b5f6; --legend-glow: #40b5f6; }
+        .legend-memory { background: #9c27b0; --legend-glow: #9c27b0; }
+        .legend-prediction { background: #ffc107; --legend-glow: #ffc107; }
+        .legend-fantasy { background: #4caf50; --legend-glow: #4caf50; }
+    </style>
+</head>
+<body>
+
+<div class="neural-background"></div>
+
+<div class="container" x-data="cognitiveInterference()">
+    <div class="title">
+        <h1>🌊 أنماط التداخل المعرفي</h1>
+        <div class="subtitle">عندما تتداخل المحاكيات - Wave Function Collapse في الزمن الحقيقي</div>
+        <div class="subtitle">WebPPL + إبداع CPF~ = محاكي الموجات المعرفية</div>
+    </div>
+
+    <div class="main-interface">
+        <div class="wave-chamber">
+            <h3>🎛️ غرفة الموجات المعرفية</h3>
+            
+            <div class="wave-legend">
+                <div class="legend-item">
+                    <span>محاكي الواقع</span>
+                    <div class="legend-color legend-reality"></div>
+                </div>
+                <div class="legend-item">
+                    <span>محاكي الذاكرة</span>
+                    <div class="legend-color legend-memory"></div>
+                </div>
+                <div class="legend-item">
+                    <span>محاكي التنبؤ</span>
+                    <div class="legend-color legend-prediction"></div>
+                </div>
+                <div class="legend-item">
+                    <span>محاكي الخيال</span>
+                    <div class="legend-color legend-fantasy"></div>
+                </div>
+            </div>
+
+            <div class="interference-canvas" @click="createWaveDisturbance($event)">
+                <div class="simulator-wave wave-reality" 
+                     :style="`
+                         --wave-opacity: ${simulators.reality.intensity};
+                         --frequency: ${3 / simulators.reality.frequency}s;
+                         --center-x: ${simulators.reality.centerX}%;
+                         --center-y: ${simulators.reality.centerY}%;
+                     `" 
+                     x-show="simulators.reality.active">
+                </div>
+                
+                <div class="simulator-wave wave-memory" 
+                     :style="`
+                         --wave-opacity: ${simulators.memory.intensity};
+                         --frequency: ${4 / simulators.memory.frequency}s;
+                         --center-x: ${simulators.memory.centerX}%;
+                         --center-y: ${simulators.memory.centerY}%;
+                     `" 
+                     x-show="simulators.memory.active">
+                </div>
+                
+                <div class="simulator-wave wave-prediction" 
+                     :style="`
+                         --wave-opacity: ${simulators.prediction.intensity};
+                         --frequency: ${2.5 / simulators.prediction.frequency}s;
+                         --center-x: ${simulators.prediction.centerX}%;
+                         --center-y: ${simulators.prediction.centerY}%;
+                     `" 
+                     x-show="simulators.prediction.active">
+                </div>
+                
+                <div class="simulator-wave wave-fantasy" 
+                     :style="`
+                         --wave-opacity: ${simulators.fantasy.intensity};
+                         --frequency: ${5 / simulators.fantasy.frequency}s;
+                         --center-x: ${simulators.fantasy.centerX}%;
+                         --center-y: ${simulators.fantasy.centerY}%;
+                     `" 
+                     x-show="simulators.fantasy.active">
+                </div>
+
+                <div class="interference-overlay" 
+                     :style="`
+                         --interference-pattern: ${interferencePattern};
+                         --interference-intensity: ${interferenceMetrics.overall_intensity};
+                     `">
+                </div>
+            </div>
+
+            <div class="cognitive-state-display">
+                <h4>🧠 الحالة المعرفية الحالية:</h4>
+                <template x-for="state in cognitiveStates">
+                    <span class="state-indicator" :class="state.class" x-text="state.label"></span>
+                </template>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h3>⚙️ تحكم في المحاكيات</h3>
+            
+            <div class="simulator-controls">
+                <div class="simulator-control sim-reality">
+                    <div>
+                        <div class="simulator-name">🌍 محاكي الواقع</div>
+                        <input type="checkbox" x-model="simulators.reality.active">
+                    </div>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="simulators.reality.intensity" 
+                           class="intensity-slider sim-reality">
+                </div>
+
+                <div class="simulator-control sim-memory">
+                    <div>
+                        <div class="simulator-name">💭 محاكي الذاكرة</div>
+                        <input type="checkbox" x-model="simulators.memory.active">
+                    </div>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="simulators.memory.intensity" 
+                           class="intensity-slider sim-memory">
+                </div>
+
+                <div class="simulator-control sim-prediction">
+                    <div>
+                        <div class="simulator-name">🔮 محاكي التنبؤ</div>
+                        <input type="checkbox" x-model="simulators.prediction.active">
+                    </div>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="simulators.prediction.intensity" 
+                           class="intensity-slider sim-prediction">
+                </div>
+
+                <div class="simulator-control sim-fantasy">
+                    <div>
+                        <div class="simulator-name">✨ محاكي الخيال</div>
+                        <input type="checkbox" x-model="simulators.fantasy.active">
+                    </div>
+                    <input type="range" min="0" max="1" step="0.1" 
+                           x-model="simulators.fantasy.intensity" 
+                           class="intensity-slider sim-fantasy">
+                </div>
+            </div>
+
+            <div class="webppl-controls">
+                <button class="compute-button" @click="runInterferenceAnalysis()">
+                    🧮 تحليل التداخل بـ WebPPL
+                </button>
+                <button class="compute-button" @click="predictDecisionOutcome()"
+                        style="background: linear-gradient(45deg, #ffc107, #4caf50);">
+                    🎯 توقع نتيجة القرار
+                </button>
+            </div>
+
+            <div class="interference-metrics">
+                <h4>📊 مقاييس التداخل الحية</h4>
+                
+                <div class="metric-row">
+                    <span class="metric-label">الوضوح المعرفي:</span>
+                    <span class="metric-value" 
+                          :style="`--metric-color: ${interferenceMetrics.clarity > 0.7 ? '#4caf50' : interferenceMetrics.clarity > 0.4 ? '#ffc107' : '#f44336'}`"
+                          x-text="`${(interferenceMetrics.clarity * 100).toFixed(1)}%`"></span>
+                </div>
+                
+                <div class="metric-row">
+                    <span class="metric-label">شدة التداخل:</span>
+                    <span class="metric-value" 
+                          :style="`--metric-color: ${interferenceMetrics.interference_strength > 0.6 ? '#f44336' : '#ffc107'}`"
+                          x-text="`${(interferenceMetrics.interference_strength * 100).toFixed(1)}%`"></span>
+                </div>
+                
+                <div class="metric-row">
+                    <span class="metric-label">معامل التشويش:</span>
+                    <span class="metric-value" 
+                          :style="`--metric-color: #9c27b0`"
+                          x-text="`${(interferenceMetrics.noise_factor * 100).toFixed(1)}%`"></span>
+                </div>
+                
+                <div class="metric-row">
+                    <span class="metric-label">استقرار القرار:</span>
+                    <span class="metric-value" 
+                          :style="`--metric-color: ${interferenceMetrics.decision_stability > 0.6 ? '#4caf50' : '#f44336'}`"
+                          x-text="`${(interferenceMetrics.decision_stability * 100).toFixed(1)}%`"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analysis-section">
+        <h3>🔬 تحليل أنماط التداخل المعرفي</h3>
+        
+        <div class="visual-insights">
+            <template x-for="insight in visualInsights">
+                <div class="insight-card" :class="insight.type">
+                    <h4 x-text="insight.title"></h4>
+                    <p x-text="insight.description"></p>
+                    <div style="margin-top: 10px; font-weight: bold;" x-text="insight.impact"></div>
+                </div>
+            </template>
+        </div>
+
+        <div class="webppl-output" x-show="webpplAnalysis">
+            <h4>🎯 تحليل WebPPL المفصل:</h4>
+            <pre x-text="webpplAnalysis"></pre>
+        </div>
+    </div>
+
+    <div class="warning">
+        ⚠️ <strong>نموذج تجريبي لأنماط التداخل المعرفي:</strong> 
+        هذا محاكي تعليمي لفهم تفاعل العمليات المعرفية وليس أداة تشخيصية طبية
+    </div>
+</div>
+
+<script>
+function cognitiveInterference() {
+    return {
+        simulators: {
+            reality: { active: true, intensity: 0.8, frequency: 1.0, centerX: 50, centerY: 50 },
+            memory: { active: true, intensity: 0.6, frequency: 0.8, centerX: 30, centerY: 70 },
+            prediction: { active: false, intensity: 0.4, frequency: 1.2, centerX: 70, centerY: 30 },
+            fantasy: { active: false, intensity: 0.3, frequency: 0.6, centerX: 80, centerY: 80 }
+        },
+        
+        interferenceMetrics: {
+            clarity: 0.75,
+            interference_strength: 0.3,
+            noise_factor: 0.2,
+            decision_stability: 0.8,
+            overall_intensity: 0.5
+        },
+        
+        cognitiveStates: [],
+        visualInsights: [],
+        webpplAnalysis: '',
+        interferencePattern: 'radial-gradient(circle, rgba(255,255,255,0.1), transparent)',
+
+        init() {
+            this.updateInterferenceMetrics();
+            this.generateVisualInsights();
+            this.$watch('simulators', () => {
+                this.updateInterferenceMetrics();
+                this.generateVisualInsights();
+            }, { deep: true });
+        },
+
+        updateInterferenceMetrics() {
+            const activeSimulators = Object.values(this.simulators).filter(sim => sim.active);
+            const totalIntensity = activeSimulators.reduce((sum, sim) => sum + sim.intensity, 0);
+            const avgIntensity = totalIntensity / Math.max(activeSimulators.length, 1);
+            
+            // حساب التداخل بناءً على عدد المحاكيات النشطة وشدتها
+            this.interferenceMetrics.interference_strength = Math.min(
+                (activeSimulators.length - 1) * 0.3 + avgIntensity * 0.4, 1
+            );
+            
+            // الوضوح يقل مع زيادة التداخل
+            this.interferenceMetrics.clarity = Math.max(
+                1 - this.interferenceMetrics.interference_strength * 0.8, 0.1
+            );
+            
+            // معامل التشويش يزيد مع عدم التوازن
+            const intensityVariance = this.calculateVariance(activeSimulators.map(s => s.intensity));
+            this.interferenceMetrics.noise_factor = Math.min(
+                this.interferenceMetrics.interference_strength * 0.6 + intensityVariance * 0.4, 1
+            );
+            
+            // استقرار القرار يعتمد على الوضوح والتوازن
+            this.interferenceMetrics.decision_stability = 
+                this.interferenceMetrics.clarity * 0.7 + (1 - intensityVariance) * 0.3;
+
+            this.interferenceMetrics.overall_intensity = avgIntensity;
+            
+            this.updateCognitiveStates();
+            this.updateInterferencePattern();
+        },
+
+        calculateVariance(values) {
+            if (values.length === 0) return 0;
+            const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
+            const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+            return Math.sqrt(variance);
+        },
+
+        updateCognitiveStates() {
+            this.cognitiveStates = [];
+            
+            if (this.interferenceMetrics.clarity > 0.7) {
+                this.cognitiveStates.push({ label: 'وضوح عالي', class: 'clarity-high' });
+            } else if (this.interferenceMetrics.clarity > 0.4) {
+                this.cognitiveStates.push({ label: 'وضوح متوسط', class: 'clarity-medium' });
+            } else {
+                this.cognitiveStates.push({ label: 'تشويش', class: 'clarity-low' });
+            }
+            
+            if (this.interferenceMetrics.interference_strength > 0.6) {
+                this.cognitiveStates.push({ label: 'تداخل مدمر', class: 'clarity-low' });
+            } else if (this.interferenceMetrics.interference_strength > 0.3) {
+                this.cognitiveStates.push({ label: 'تداخل معتدل', class: 'clarity-medium' });
+            }
+            
+            if (this.interferenceMetrics.decision_stability > 0.7) {
+                this.cognitiveStates.push({ label: 'قرارات مستقرة', class: 'clarity-high' });
+            } else {
+                this.cognitiveStates.push({ label: 'تذبذب في القرار', class: 'clarity-low' });
+            }
+        },
+
+        updateInterferencePattern() {
+            const patterns = [];
+            
+            // إنشاء نمط تداخل بناءً على الحالة الحالية
+            if (this.interferenceMetrics.interference_strength > 0.5) {
+                patterns.push('repeating-conic-gradient(from 0deg, rgba(244, 67, 54, 0.3) 0deg, transparent 60deg)');
+            }
+            
+            if (this.interferenceMetrics.noise_factor > 0.4) {
+                patterns.push('repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0px, transparent 10px)');
+            }
+            
+            this.interferencePattern = patterns.length > 0 ? patterns.join(', ') : 
+                'radial-gradient(circle, rgba(255,255,255,0.05), transparent)';
+        },
+
+        generateVisualInsights() {
+            this.visualInsights = [];
+            
+            const activeCount = Object.values(this.simulators).filter(sim => sim.active).length;
+            
+            if (activeCount === 1) {
+                this.visualInsights.push({
+                    title: '🎯 محاكي واحد نشط',
+                    description: 'وضوح مثالي، لا توجد تداخلات مدمرة',
+                    impact: 'التأثير: قرارات واضحة ومباشرة',
+                    type: 'insight-constructive'
+                });
+            } else if (activeCount === 2) {
+                this.visualInsights.push({
+                    title: '⚖️ تداخل ثنائي',
+                    description: 'توازن بين وجهتي نظر، قد ينتج رؤى جديدة',
+                    impact: 'التأثير: إبداع معتدل مع بعض التردد',
+                    type: 'insight-neutral'
+                });
+            } else if (activeCount >= 3) {
+                this.visualInsights.push({
+                    title: '🌪️ تداخل متعدد',
+                    description: 'عدة محاكيات تتنافس، قد يحدث تشويش',
+                    impact: 'التأثير: إما إبداع فائق أو شلل في القرار',
+                    type: 'insight-destructive'
+                });
+            }
+            
+            // تحليل أنماط محددة
+            if (this.simulators.reality.active && this.simulators.fantasy.active) {
+                this.visualInsights.push({
+                    title: '🌈 تداخل الواقع-الخيال',
+                    description: 'صراع بين الحقيقة والإمكانيات اللامحدودة',
+                    impact: 'النتيجة: قد ينتج أفكار إبداعية أو أوهام',
+                    type: 'insight-neutral'
+                });
+            }
+            
+            if (this.simulators.memory.active && this.simulators.prediction.active) {
+                this.visualInsights.push({
+                    title: '⏰ تداخل الماضي-المستقبل',
+                    description: 'الذكريات تشكل توقعات المستقبل',
+                    impact: 'النتيجة: قرارات مبنية على التجربة',
+                    type: 'insight-constructive'
+                });
+            }
+        },
+
+        createWaveDisturbance(event) {
+            // إضافة تأثير تفاعلي عند النقر
+            const rect = event.target.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / rect.width) * 100;
+            const y = ((event.clientY - rect.top) / rect.height) * 100;
+            
+            // تأثير مؤقت على المحاكيات النشطة
+            Object.keys(this.simulators).forEach(key => {
+                if (this.simulators[key].active) {
+                    this.simulators[key].centerX = x;
+                    this.simulators[key].centerY = y;
+                    this.simulators[key].frequency += Math.random() * 0.5;
+                    
+                    // إعادة تعيين بعد فترة
+                    setTimeout(() => {
+                        this.simulators[key].frequency = Math.max(0.5, this.simulators[key].frequency - 0.3);
+                    }, 2000);
+                }
+            });
+        },
+
+        runInterferenceAnalysis() {
+            // محاكاة تحليل WebPPL لأنماط التداخل
+            const activeSimulators = Object.entries(this.simulators)
+                .filter(([name, sim]) => sim.active)
+                .map(([name, sim]) => ({ name, ...sim }));
+            
+            const webpplSimulation = {
+                model: "Cognitive Interference Pattern Analysis",
+                timestamp: new Date().toISOString(),
+                active_simulators: activeSimulators.map(s => s.name),
+                parameters: {
+                    total_cognitive_load: activeSimulators.reduce((sum, s) => sum + s.intensity, 0),
+                    interference_complexity: activeSimulators.length ** 2,
+                    frequency_harmony: this.calculateFrequencyHarmony(activeSimulators)
+                },
+                probabilistic_outcomes: {
+                    constructive_interference: this.calculateConstructiveInterference(),
+                    destructive_interference: this.calculateDestructiveInterference(),
+                    cognitive_clarity_probability: this.interferenceMetrics.clarity,
+                    decision_paralysis_risk: 1 - this.interferenceMetrics.decision_stability,
+                    creative_breakthrough_chance: this.calculateCreativeBreakthrough()
+                },
+                wave_function_analysis: {
+                    dominant_frequency: this.findDominantFrequency(activeSimulators),
+                    amplitude_distribution: activeSimulators.map(s => ({
+                        simulator: s.name,
+                        amplitude: s.intensity,
+                        phase_shift: s.frequency * Math.PI
+                    })),
+                    interference_pattern: this.describeInterferencePattern()
+                },
+                recommendations: this.generateRecommendations()
+            };
+
+            this.webpplAnalysis = JSON.stringify(webpplSimulation, null, 2);
+        },
+
+        calculateFrequencyHarmony(simulators) {
+            if (simulators.length < 2) return 1.0;
+            
+            const frequencies = simulators.map(s => s.frequency);
+            let harmony = 0;
+            
+            for (let i = 0; i < frequencies.length; i++) {
+                for (let j = i + 1; j < frequencies.length; j++) {
+                    const ratio = frequencies[i] / frequencies[j];
+                    const nearestRatio = Math.round(ratio * 4) / 4; // تقريب لأقرب ربع
+                    harmony += 1 / Math.abs(ratio - nearestRatio + 0.01);
+                }
+            }
+            
+            return Math.min(harmony / (simulators.length * (simulators.length - 1) / 2), 1);
+        },
+
+        calculateConstructiveInterference() {
+            const activeCount = Object.values(this.simulators).filter(s => s.active).length;
+            const avgIntensity = Object.values(this.simulators)
+                .filter(s => s.active)
+                .reduce((sum, s) => sum + s.intensity, 0) / Math.max(activeCount, 1);
+            
+            return Math.max(0, avgIntensity - (activeCount - 1) * 0.15);
+        },
+
+        calculateDestructiveInterference() {
+            const activeCount = Object.values(this.simulators).filter(s => s.active).length;
+            return Math.min((activeCount - 1) * 0.25, 1);
+        },
+
+        calculateCreativeBreakthrough() {
+            const diversity = Object.values(this.simulators).filter(s => s.active).length;
+            const intensity = this.interferenceMetrics.overall_intensity;
+            const chaos = this.interferenceMetrics.noise_factor;
+            
+            return Math.max(0, (diversity * 0.3 + intensity * 0.4 + chaos * 0.3) - 0.5);
+        },
+
+        findDominantFrequency(simulators) {
+            if (simulators.length === 0) return 0;
+            
+            return simulators.reduce((max, current) => 
+                current.intensity > max.intensity ? current : max
+            ).frequency;
+        },
+
+        describeInterferencePattern() {
+            const activeCount = Object.values(this.simulators).filter(s => s.active).length;
+            
+            if (activeCount === 1) return "Single Wave - Pure Pattern";
+            if (activeCount === 2) return "Standing Wave - Stable Interference";
+            if (activeCount === 3) return "Complex Standing Wave - Multiple Nodes";
+            return "Chaotic Superposition - Unpredictable Pattern";
+        },
+
+        generateRecommendations() {
+            const recommendations = [];
+            
+            if (this.interferenceMetrics.clarity < 0.4) {
+                recommendations.push("تقليل عدد المحاكيات النشطة لزيادة الوضوح");
+            }
+            
+            if (this.interferenceMetrics.interference_strength > 0.7) {
+                recommendations.push("تطبيق تقنيات التركيز لتقليل التداخل المدمر");
+            }
+            
+            if (this.interferenceMetrics.decision_stability < 0.5) {
+                recommendations.push("استخدام تقنيات ariadne-thread للعودة للواقع");
+            }
+            
+            const creativeChance = this.calculateCreativeBreakthrough();
+            if (creativeChance > 0.6) {
+                recommendations.push("الوضع مثالي للعصف الذهني والإبداع");
+            }
+            
+            return recommendations;
+        },
+
+        predictDecisionOutcome() {
+            // توقع نتيجة القرار بناءً على التداخل الحالي
+            const prediction = {
+                scenario: "Decision Making Under Cognitive Interference",
+                current_state: {
+                    clarity: this.interferenceMetrics.clarity,
+                    stability: this.interferenceMetrics.decision_stability,
+                    noise: this.interferenceMetrics.noise_factor
+                },
+                predicted_outcomes: {
+                    quick_decision: this.interferenceMetrics.clarity < 0.3 ? 0.8 : 0.2,
+                    thorough_analysis: this.interferenceMetrics.clarity > 0.7 ? 0.9 : 0.3,
+                    decision_paralysis: this.interferenceMetrics.decision_stability < 0.4 ? 0.7 : 0.1,
+                    creative_solution: this.calculateCreativeBreakthrough(),
+                    regret_probability: 1 - this.interferenceMetrics.clarity
+                },
+                recommended_strategy: this.getRecommendedStrategy()
+            };
+
+            this.webpplAnalysis = JSON.stringify(prediction, null, 2);
+        },
+
+        getRecommendedStrategy() {
+            if (this.interferenceMetrics.clarity > 0.7) {
+                return "استغلال الوضوح العالي لاتخاذ قرارات مهمة";
+            } else if (this.interferenceMetrics.noise_factor > 0.6) {
+                return "استخدام الفوضى الإبداعية للابتكار";
+            } else if (this.interferenceMetrics.decision_stability < 0.4) {
+                return "تأجيل القرارات المهمة حتى استقرار النظام";
+            } else {
+                return "حالة متوازنة - مناسبة للقرارات العادية";
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>

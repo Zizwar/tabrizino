@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF~ - حالات انهيار الثقة الكمومية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webppl/0.9.15/webppl.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e, #0f3460);
+            color: #e8e3f3;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .quantum-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(219, 10, 91, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            animation: quantumFluctuation 15s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes quantumFluctuation {
+            0%, 100% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
+            33% { transform: scale(1.1) rotate(120deg); filter: hue-rotate(120deg); }
+            66% { transform: scale(0.9) rotate(240deg); filter: hue-rotate(240deg); }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .title h1 {
+            font-size: 3.5em;
+            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(255, 0, 110, 0.6);
+            animation: quantumTitle 4s infinite ease-in-out;
+        }
+
+        @keyframes quantumTitle {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.2); }
+        }
+
+        .quantum-workspace {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .trust-quantum-chamber {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 35px;
+            border: 2px solid rgba(255, 0, 110, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trust-quantum-chamber::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ff006e);
+            border-radius: 30px;
+            z-index: -1;
+            animation: quantumBorder 3s infinite linear;
+            background-size: 400% 400%;
+        }
+
+        @keyframes quantumBorder {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .wave-function-display {
+            height: 300px;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.1), transparent);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 0, 110, 0.2);
+        }
+
+        .trust-wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--wave-color), transparent);
+            border-radius: 50%;
+            animation: waveOscillation var(--wave-speed) infinite ease-in-out;
+            transform-origin: center;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes waveOscillation {
+            0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.6; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.9; }
+        }
+
+        .collapse-event {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--event-color), transparent);
+            animation: collapseRipple 2s infinite ease-out;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            z-index: 10;
+        }
+
+        @keyframes collapseRipple {
+            0% { transform: scale(0.8); box-shadow: 0 0 0 0 var(--event-color); }
+            50% { transform: scale(1.1); box-shadow: 0 0 0 20px transparent; }
+            100% { transform: scale(0.8); box-shadow: 0 0 0 0 transparent; }
+        }
+
+        .quantum-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 110, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 110, 0.1), transparent);
+            animation: metricScan 3s infinite linear;
+        }
+
+        @keyframes metricScan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff006e, #8338ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .relationship-timeline {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 0, 110, 0.2);
+        }
+
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid var(--event-border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-event:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .event-icon {
+            font-size: 1.5em;
+            margin-left: 15px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .event-details {
+            flex-grow: 1;
+        }
+
+        .event-impact {
+            font-size: 0.9em;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: var(--impact-bg);
+            color: var(--impact-color);
+        }
+
+        .control-panel {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px;
+            border: 2px solid rgba(255, 0, 110, 0.2);
+        }
+
+        .scenario-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .scenario-button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background: linear-gradient(45deg, var(--btn-color-1), var(--btn-color-2));
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scenario-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .scenario-button:hover::before {
+            left: 100%;
+        }
+
+        .scenario-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 110, 0.4);
+        }
+
+        .webppl-visualization {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 2px solid #8338ec;
+            position: relative;
+        }
+
+        .probability-bars {
+            margin: 20px 0;
+        }
+
+        .prob-bar {
+            margin: 12px 0;
+            position: relative;
+        }
+
+        .prob-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .prob-track {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .prob-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--prob-color-1), var(--prob-color-2));
+            border-radius: 6px;
+            transition: width 1s ease-in-out;
+            position: relative;
+        }
+
+        .prob-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: probShimmer 2s infinite ease-in-out;
+        }
+
+        @keyframes probShimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .quantum-state-display {
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #8a2be2;
+        }
+
+        .state-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .state-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--state-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .state-probability {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--state-color);
+            text-shadow: 0 0 10px var(--state-glow);
+        }
+
+        .collapse-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            border: 3px solid #ff006e;
+            border-radius: 50%;
+            border-top: 3px solid transparent;
+            animation: collapse-spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+
+        .collapse-animation.active {
+            opacity: 1;
+        }
+
+        @keyframes collapse-spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.5); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="quantum-field"></div>
+
+<div class="container" x-data="trustCollapseQuantum()">
+    <div class="title">
+        <h1>⚛️ حالات انهيار الثقة الكمومية</h1>
+        <p>كل تفاعل = wave function collapse | الحب والخيانة في superposition</p>
+    </div>
+
+    <div class="quantum-workspace">
+        <div class="trust-quantum-chamber">
+            <h3>🌊 مجال الثقة الكمومي</h3>
+            
+            <div class="wave-function-display" @click="triggerQuantumEvent($event)">
+                <!-- Trust Wave Functions -->
+                <div class="trust-wave" 
+                     :style="`
+                         --wave-color: ${trustWaves.love.color}; 
+                         --wave-speed: ${trustWaves.love.speed}s;
+                         opacity: ${trustWaves.love.amplitude};
+                     `"></div>
+                
+                <div class="trust-wave" 
+                     :style="`
+                         --wave-color: ${trustWaves.betrayal.color}; 
+                         --wave-speed: ${trustWaves.betrayal.speed}s;
+                         opacity: ${trustWaves.betrayal.amplitude};
+                         animation-delay: -1s;
+                     `"></div>
+                
+                <div class="trust-wave" 
+                     :style="`
+                         --wave-color: ${trustWaves.uncertainty.color}; 
+                         --wave-speed: ${trustWaves.uncertainty.speed}s;
+                         opacity: ${trustWaves.uncertainty.amplitude};
+                         animation-delay: -2s;
+                     `"></div>
+
+                <!-- Collapse Events -->
+                <template x-for="event in collapseEvents">
+                    <div class="collapse-event"
+                         :style="`
+                             left: ${event.x}px; 
+                             top: ${event.y}px;
+                             --event-color: ${event.color};
+                         `"
+                         @click.stop="triggerCollapse(event)"
+                         x-text="event.icon">
+                    </div>
+                </template>
+
+                <!-- Collapse Animation -->
+                <div class="collapse-animation" :class="{ 'active': isCollapsing }"></div>
+            </div>
+
+            <div class="quantum-metrics">
+                <div class="metric-card">
+                    <div class="metric-value" x-text="`${(quantumState.coherence * 100).toFixed(1)}%`"></div>
+                    <div class="metric-label">التماسك الكمومي</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" x-text="`${(quantumState.entanglement * 100).toFixed(1)}%`"></div>
+                    <div class="metric-label">التشابك العاطفي</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" x-text="collapseEvents.length"></div>
+                    <div class="metric-label">أحداث الانهيار</div>
+                </div>
+            </div>
+
+            <div class="relationship-timeline">
+                <h4>📈 خط زمني العلاقة</h4>
+                <template x-for="event in relationshipHistory">
+                    <div class="timeline-event" 
+                         :style="`
+                             --event-border-color: ${event.borderColor};
+                             --impact-bg: ${event.impactBg};
+                             --impact-color: ${event.impactColor};
+                         `"
+                         @click="replayEvent(event)">
+                        <div class="event-icon" x-text="event.icon"></div>
+                        <div class="event-details">
+                            <div x-text="event.description"></div>
+                            <div style="font-size: 0.8em; opacity: 0.7;" x-text="event.timestamp"></div>
+                        </div>
+                        <div class="event-impact" x-text="event.impact"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h3>🎛️ محاكي الأحداث</h3>
+            
+            <div class="scenario-buttons">
+                <button class="scenario-button" 
+                        :style="`
+                            --btn-color-1: #ff006e; 
+                            --btn-color-2: #f72585;
+                        `"
+                        @click="triggerScenario('betrayal')">
+                    💔 محاكاة خيانة
+                </button>
+                
+                <button class="scenario-button" 
+                        :style="`
+                            --btn-color-1: #06ffa5; 
+                            --btn-color-2: #3a86ff;
+                        `"
+                        @click="triggerScenario('love_deepening')">
+                    💖 تعميق الحب
+                </button>
+                
+                <button class="scenario-button" 
+                        :style="`
+                            --btn-color-1: #8338ec; 
+                            --btn-color-2: #3a0ca3;
+                        `"
+                        @click="triggerScenario('uncertainty')">
+                    🤔 عدم يقين
+                </button>
+
+                <button class="scenario-button" 
+                        :style="`
+                            --btn-color-1: #ffd60a; 
+                            --btn-color-2: #ff8500;
+                        `"
+                        @click="runWebPPLAnalysis()">
+                    🧮 تحليل WebPPL
+                </button>
+            </div>
+
+            <div class="quantum-state-display">
+                <h4>🎯 حالة الثقة الكمومية الحالية</h4>
+                <div class="state-grid">
+                    <div class="state-card" 
+                         :style="`
+                             --state-border: #06ffa5;
+                             --state-color: #06ffa5;
+                             --state-glow: rgba(6, 255, 165, 0.5);
+                         `">
+                        <div class="state-probability" x-text="`${(trustProbabilities.love * 100).toFixed(1)}%`"></div>
+                        <div>حب عميق</div>
+                    </div>
+                    <div class="state-card" 
+                         :style="`
+                             --state-border: #ff006e;
+                             --state-color: #ff006e;
+                             --state-glow: rgba(255, 0, 110, 0.5);
+                         `">
+                        <div class="state-probability" x-text="`${(trustProbabilities.betrayal * 100).toFixed(1)}%`"></div>
+                        <div>خيانة/انكسار</div>
+                    </div>
+                    <div class="state-card" 
+                         :style="`
+                             --state-border: #8338ec;
+                             --state-color: #8338ec;
+                             --state-glow: rgba(131, 56, 236, 0.5);
+                         `">
+                        <div class="state-probability" x-text="`${(trustProbabilities.uncertainty * 100).toFixed(1)}%`"></div>
+                        <div>عدم يقين</div>
+                    </div>
+                    <div class="state-card" 
+                         :style="`
+                             --state-border: #ffd60a;
+                             --state-color: #ffd60a;
+                             --state-glow: rgba(255, 214, 10, 0.5);
+                         `">
+                        <div class="state-probability" x-text="`${(trustProbabilities.stability * 100).toFixed(1)}%`"></div>
+                        <div>استقرار</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="webppl-visualization" x-show="webpplResults">
+                <h4>📊 نتائج التحليل الاحتمالي</h4>
+                <div class="probability-bars">
+                    <template x-for="(result, key) in webpplResults">
+                        <div class="prob-bar">
+                            <div class="prob-label">
+                                <span x-text="result.label"></span>
+                                <span x-text="`${(result.value * 100).toFixed(1)}%`"></span>
+                            </div>
+                            <div class="prob-track">
+                                <div class="prob-fill" 
+                                     :style="`
+                                         width: ${result.value * 100}%;
+                                         --prob-color-1: ${result.color1};
+                                         --prob-color-2: ${result.color2};
+                                     `"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div style="margin-top: 20px; font-family: 'Courier New', monospace; font-size: 0.9em;">
+                    <div x-text="webpplAnalysis"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning">
+        ⚠️ <strong>نموذج نظري تجريبي:</strong> هذا تمثيل تعليمي للطبيعة الاحتمالية للثقة في العلاقات البشرية، وليس أداة تنبؤ أو تحليل نفسي حقيقية
+    </div>
+</div>
+
+<script>
+function trustCollapseQuantum() {
+    return {
+        // Quantum Trust State
+        trustWaves: {
+            love: { color: 'rgba(6, 255, 165, 0.6)', speed: 4, amplitude: 0.7 },
+            betrayal: { color: 'rgba(255, 0, 110, 0.6)', speed: 3, amplitude: 0.4 },
+            uncertainty: { color: 'rgba(131, 56, 236, 0.6)', speed: 5, amplitude: 0.6 }
+        },
+        
+        quantumState: {
+            coherence: 0.8,      // مدى تماسك النظام الكمومي
+            entanglement: 0.6,   // مدى التشابك العاطفي
+            superposition: 0.75  // مدى وجود الثقة في حالات متعددة
+        },
+        
+        trustProbabilities: {
+            love: 0.4,
+            betrayal: 0.2,
+            uncertainty: 0.25,
+            stability: 0.15
+        },
+        
+        collapseEvents: [],
+        relationshipHistory: [],
+        isCollapsing: false,
+        webpplResults: null,
+        webpplAnalysis: '',
+
+        init() {
+            this.initializeQuantumField();
+            this.startQuantumFluctuation();
+        },
+
+        initializeQuantumField() {
+            // إنشاء أحداث انهيار أولية
+            this.collapseEvents = [
+                { id: 1, x: 100, y: 100, icon: '💝', color: 'rgba(6, 255, 165, 0.8)', type: 'love' },
+                { id: 2, x: 300, y: 200, icon: '🤝', color: 'rgba(255, 214, 10, 0.8)', type: 'trust' },
+                { id: 3, x: 500, y: 150, icon: '❓', color: 'rgba(131, 56, 236, 0.8)', type: 'uncertainty' }
+            ];
+
+            // تاريخ العلاقة الأولي
+            this.relationshipHistory = [
+                {
+                    id: 1,
+                    timestamp: 'البداية',
+                    description: 'لقاء أول - تكوين انطباع إيجابي',
+                    icon: '✨',
+                    impact: '+20%',
+                    borderColor: '#06ffa5',
+                    impactBg: 'rgba(6, 255, 165, 0.2)',
+                    impactColor: '#06ffa5'
+                }
+            ];
+        },
+
+        startQuantumFluctuation() {
+            setInterval(() => {
+                // تذبذب طبيعي في الحالة الكمومية
+                this.quantumState.coherence += (Math.random() - 0.5) * 0.05;
+                this.quantumState.entanglement += (Math.random() - 0.5) * 0.03;
+                
+                // تقييد القيم بين 0 و 1
+                this.quantumState.coherence = Math.max(0.1, Math.min(0.95, this.quantumState.coherence));
+                this.quantumState.entanglement = Math.max(0.1, Math.min(0.95, this.quantumState.entanglement));
+                
+                // تحديث احتمالات الثقة بناءً على الحالة الكمومية
+                this.updateTrustProbabilities();
+            }, 2000);
+        },
+
+        updateTrustProbabilities() {
+            const coherence = this.quantumState.coherence;
+            const entanglement = this.quantumState.entanglement;
+            
+            // الحب يزيد مع التماسك والتشابك
+            this.trustProbabilities.love = Math.min(0.8, coherence * entanglement * 1.2);
+            
+            // الخيانة تزيد مع قلة التماسك
+            this.trustProbabilities.betrayal = Math.max(0.05, (1 - coherence) * 0.6);
+            
+            // عدم اليقين يزيد مع عدم الاستقرار
+            this.trustProbabilities.uncertainty = Math.abs(coherence - entanglement) * 0.8;
+            
+            // الاستقرار
+            this.trustProbabilities.stability = 1 - this.trustProbabilities.love - 
+                                                this.trustProbabilities.betrayal - 
+                                                this.trustProbabilities.uncertainty;
+            
+            // تطبيع الاحتمالات
+            const total = Object.values(this.trustProbabilities).reduce((sum, val) => sum + val, 0);
+            Object.keys(this.trustProbabilities).forEach(key => {
+                this.trustProbabilities[key] /= total;
+            });
+        },
+
+        triggerQuantumEvent(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left - 30;
+            const y = event.clientY - rect.top - 30;
+            
+            // إنشاء حدث انهيار جديد
+            const eventTypes = [
+                { icon: '💕', color: 'rgba(6, 255, 165, 0.8)', type: 'love' },
+                { icon: '😔', color: 'rgba(255, 0, 110, 0.8)', type: 'disappointment' },
+                { icon: '🤷', color: 'rgba(131, 56, 236, 0.8)', type: 'confusion' },
+                { icon: '🎉', color: 'rgba(255, 214, 10, 0.8)', type: 'joy' }
+            ];
+            
+            const randomEvent = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+            
+            this.collapseEvents.push({
+                id: Date.now(),
+                x: Math.max(0, Math.min(x, 600)),
+                y: Math.max(0, Math.min(y, 250)),
+                ...randomEvent
+            });
+            
+            // محاكاة تأثير الحدث على النظام الكمومي
+            this.triggerCollapse(randomEvent);
+        },
+
+        triggerCollapse(event) {
+            this.isCollapsing = true;
+            
+            // تأثير الانهيار على النظام الكمومي
+            switch(event.type) {
+                case 'love':
+                    this.quantumState.entanglement += 0.1;
+                    this.quantumState.coherence += 0.05;
+                    break;
+                case 'disappointment':
+                    this.quantumState.coherence -= 0.15;
+                    this.quantumState.entanglement -= 0.1;
+                    break;
+                case 'confusion':
+                    this.quantumState.coherence -= 0.05;
+                    break;
+                case 'joy':
+                    this.quantumState.coherence += 0.1;
+                    break;
+            }
+            
+            // تقييد القيم
+            this.quantumState.coherence = Math.max(0.1, Math.min(0.95, this.quantumState.coherence));
+            this.quantumState.entanglement = Math.max(0.1, Math.min(0.95, this.quantumState.entanglement));
+            
+            setTimeout(() => {
+                this.isCollapsing = false;
+            }, 1000);
+            
+            this.updateTrustProbabilities();
+        },
+
+        triggerScenario(scenarioType) {
+            let scenario;
+            
+            switch(scenarioType) {
+                case 'betrayal':
+                    scenario = {
+                        timestamp: new Date().toLocaleTimeString('ar'),
+                        description: 'اكتشاف خيانة/كذب - انهيار ثقة مفاجئ',
+                        icon: '💔',
+                        impact: '-60%',
+                        borderColor: '#ff006e',
+                        impactBg: 'rgba(255, 0, 110, 0.2)',
+                        impactColor: '#ff006e'
+                    };
+                    
+                    // تأثير مدمر على النظام الكمومي
+                    this.quantumState.coherence *= 0.3;
+                    this.quantumState.entanglement *= 0.4;
+                    
+                    // إضافة أحداث انهيار
+                    this.collapseEvents.push({
+                        id: Date.now(),
+                        x: Math.random() * 600,
+                        y: Math.random() * 250,
+                        icon: '💔',
+                        color: 'rgba(255, 0, 110, 0.9)',
+                        type: 'betrayal'
+                    });
+                    break;
+                    
+                case 'love_deepening':
+                    scenario = {
+                        timestamp: new Date().toLocaleTimeString('ar'),
+                        description: 'موقف يعمق الثقة والحب - تعزيز الرابط',
+                        icon: '💖',
+                        impact: '+40%',
+                        borderColor: '#06ffa5',
+                        impactBg: 'rgba(6, 255, 165, 0.2)',
+                        impactColor: '#06ffa5'
+                    };
+                    
+                    // تأثير إيجابي قوي
+                    this.quantumState.coherence = Math.min(0.95, this.quantumState.coherence + 0.2);
+                    this.quantumState.entanglement = Math.min(0.95, this.quantumState.entanglement + 0.25);
+                    
+                    // إضافة أحداث إيجابية
+                    this.collapseEvents.push({
+                        id: Date.now(),
+                        x: Math.random() * 600,
+                        y: Math.random() * 250,
+                        icon: '💖',
+                        color: 'rgba(6, 255, 165, 0.9)',
+                        type: 'deep_love'
+                    });
+                    break;
+                    
+                case 'uncertainty':
+                    scenario = {
+                        timestamp: new Date().toLocaleTimeString('ar'),
+                        description: 'موقف غامض يثير الشكوك - تذبذب الثقة',
+                        icon: '🤔',
+                        impact: '±20%',
+                        borderColor: '#8338ec',
+                        impactBg: 'rgba(131, 56, 236, 0.2)',
+                        impactColor: '#8338ec'
+                    };
+                    
+                    // تأثير متذبذب
+                    this.quantumState.coherence += (Math.random() - 0.5) * 0.3;
+                    this.quantumState.entanglement += (Math.random() - 0.5) * 0.2;
+                    
+                    break;
+            }
+            
+            this.relationshipHistory.unshift(scenario);
+            this.triggerCollapse({ type: scenarioType });
+        },
+
+        replayEvent(event) {
+            // إعادة تشغيل تأثير الحدث
+            this.triggerCollapse({ type: 'replay' });
+        },
+
+        runWebPPLAnalysis() {
+            // محاكاة تحليل WebPPL المعقد
+            const currentCoherence = this.quantumState.coherence;
+            const currentEntanglement = this.quantumState.entanglement;
+            const historyLength = this.relationshipHistory.length;
+            
+            // حساب احتمالات مختلفة باستخدام نماذج احتمالية
+            const analysisResults = {
+                future_trust_stability: {
+                    label: 'استقرار الثقة المستقبلي',
+                    value: Math.max(0.1, currentCoherence * currentEntanglement),
+                    color1: '#06ffa5',
+                    color2: '#3a86ff'
+                },
+                betrayal_resistance: {
+                    label: 'مقاومة الخيانة',
+                    value: Math.max(0.1, currentEntanglement * 0.8 + currentCoherence * 0.6),
+                    color1: '#8338ec',
+                    color2: '#3a0ca3'
+                },
+                love_deepening_potential: {
+                    label: 'إمكانية تعميق الحب',
+                    value: Math.min(0.9, currentCoherence * 1.2 + (historyLength > 5 ? 0.2 : 0)),
+                    color1: '#ff006e',
+                    color2: '#f72585'
+                },
+                emotional_volatility: {
+                    label: 'التقلب العاطفي',
+                    value: Math.abs(currentCoherence - currentEntanglement) + (historyLength * 0.05),
+                    color1: '#ffd60a',
+                    color2: '#ff8500'
+                },
+                quantum_entanglement_strength: {
+                    label: 'قوة التشابك الكمومي',
+                    value: currentEntanglement,
+                    color1: '#06ffa5',
+                    color2: '#8338ec'
+                }
+            };
+            
+            this.webpplResults = analysisResults;
+            
+            // تحليل نصي متقدم
+            let analysis = `🧮 تحليل WebPPL المتقدم:\n\n`;
+            analysis += `• النظام الكمومي يظهر ${currentCoherence > 0.7 ? 'تماسك عالي' : 'تماسك منخفض'}\n`;
+            analysis += `• التشابك العاطفي ${currentEntanglement > 0.6 ? 'قوي' : 'ضعيف'}\n`;
+            analysis += `• تاريخ العلاقة يحتوي على ${historyLength} أحداث مؤثرة\n\n`;
+            
+            if (analysisResults.future_trust_stability.value > 0.7) {
+                analysis += `🎯 توقع: العلاقة مستقرة مع احتمالية عالية للنمو\n`;
+            } else if (analysisResults.future_trust_stability.value < 0.4) {
+                analysis += `⚠️ تحذير: النظام غير مستقر وعرضة للانهيار\n`;
+            } else {
+                analysis += `📊 الوضع: متوسط مع حاجة لمزيد من الاستثمار العاطفي\n`;
+            }
+            
+            analysis += `\n🔮 معادلة الثقة الكمومية:\n`;
+            analysis += `Trust = α|Love⟩ + β|Stability⟩ + γ|Uncertainty⟩\n`;
+            analysis += `حيث α=${currentEntanglement.toFixed(2)}, β=${currentCoherence.toFixed(2)}`;
+            
+            this.webpplAnalysis = analysis;
+        }
+    }
+}
+</script>
+
+</body>
+</html>

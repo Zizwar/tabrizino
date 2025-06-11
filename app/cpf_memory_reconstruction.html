@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF~ - إعادة قراءة الماضي الاحتمالية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.min.js" defer></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1421, #1a1a2e, #16213e);
+            color: #e0e6ed;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .title h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #64b5f6, #42a5f5, #2196f3, #1976d2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            text-shadow: 0 0 30px rgba(33, 150, 243, 0.3);
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .memory-panel, .snake-panel {
+            background: rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .memory-panel::before, .snake-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.02), transparent);
+            pointer-events: none;
+        }
+        
+        .memory-timeline {
+            height: 300px;
+            background: linear-gradient(180deg, #1a237e, #283593, #3949ab);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid #3f51b5;
+        }
+        
+        .memory-event {
+            position: absolute;
+            width: 80px;
+            height: 30px;
+            background: linear-gradient(45deg, #ffc107, #ff9800);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+        
+        .memory-event:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.5);
+        }
+        
+        .memory-event.active {
+            background: linear-gradient(45deg, #f44336, #e53935);
+            animation: pulse 2s infinite;
+        }
+        
+        .snake-world {
+            height: 300px;
+            background: linear-gradient(45deg, #2e7d32, #388e3c, #4caf50);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid #66bb6a;
+        }
+        
+        .snake {
+            width: 60px;
+            height: 10px;
+            background: linear-gradient(90deg, #8bc34a, #689f38, #558b2f);
+            border-radius: 50px;
+            position: absolute;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+        
+        .snake::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #33691e;
+            border-radius: 50%;
+            right: -5px;
+            top: -2.5px;
+        }
+        
+        .heat-source {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ff5722, #d84315);
+            border-radius: 50%;
+            position: absolute;
+            animation: heat-pulse 3s infinite;
+        }
+        
+        @keyframes heat-pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 20px rgba(255, 87, 34, 0.6);
+            }
+            50% { 
+                transform: scale(1.2); 
+                box-shadow: 0 0 40px rgba(255, 87, 34, 0.9);
+            }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .controls button {
+            background: linear-gradient(45deg, #2196f3, #42a5f5);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .controls button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+        
+        .webppl-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .webppl-code {
+            background: rgba(0,0,0,0.6);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            line-height: 1.6;
+        }
+        
+        .probability-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .prob-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .prob-value {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff9800, #ffc107);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        .explanation {
+            background: rgba(33, 150, 243, 0.1);
+            border: 1px solid #2196f3;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            line-height: 1.7;
+        }
+        
+        .wave-function {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" x-data="cpfAnalysis()">
+    <div class="title">
+        <h1>CPF~ التحليل الاحتمالي</h1>
+        <p>🧠 إعادة قراءة الماضي + 🐍 إدراك الثعبان</p>
+    </div>
+
+    <div class="main-grid">
+        <!-- Memory Reconstruction Panel -->
+        <div class="memory-panel">
+            <h2 class="section-title">🔄 إعادة التجميع التوليدي للذكريات</h2>
+            
+            <div class="memory-timeline" @click="addMemoryEvent($event)">
+                <template x-for="memory in memories">
+                    <div class="memory-event" 
+                         :class="{ active: memory.active }"
+                         :style="`left: ${memory.x}px; top: ${memory.y}px`"
+                         @click.stop="activateMemory(memory)"
+                         x-text="memory.label">
+                    </div>
+                </template>
+            </div>
+
+            <div class="controls">
+                <button @click="reconstructMemory()">🧮 إعادة تجميع</button>
+                <button @click="addEmotionalNoise()">💭 تشويش عاطفي</button>
+                <button @click="clearMemories()">🧹 مسح الذكريات</button>
+            </div>
+
+            <div class="webppl-section">
+                <h4>📊 نموذج WebPPL للذاكرة:</h4>
+                <div class="webppl-code">
+var memoryReconstruction = function() {
+  // إعادة التجميع الاحتمالية
+  var originalEvent = gaussian(0.7, 0.2);
+  var currentMood = beta(2, 3);
+  var timeDistortion = uniform(0.5, 1.5);
+  
+  // التشفير العاطفي
+  var emotionalWeight = currentMood > 0.6 ? 
+    gaussian(0.8, 0.1) : gaussian(0.4, 0.2);
+  
+  // الضوضاء التوليدية
+  var noise = gaussian(0, 0.15);
+  
+  // الذاكرة المُعاد تجميعها
+  var reconstructed = originalEvent * 
+    emotionalWeight * timeDistortion + noise;
+  
+  return {
+    accuracy: Math.abs(reconstructed - originalEvent),
+    emotional_bias: emotionalWeight,
+    confidence: 1 - Math.abs(noise)
+  };
+};
+                </div>
+            </div>
+
+            <div class="probability-display">
+                <div class="prob-card">
+                    <div class="prob-value" x-text="`${(memoryData.accuracy * 100).toFixed(1)}%`"></div>
+                    <div>دقة التذكر</div>
+                </div>
+                <div class="prob-card">
+                    <div class="prob-value" x-text="`${(memoryData.emotional_bias * 100).toFixed(1)}%`"></div>
+                    <div>التحيز العاطفي</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Snake Perception Panel -->
+        <div class="snake-panel">
+            <h2 class="section-title">🐍 الإدراك الثعباني الاحتمالي</h2>
+            
+            <div class="snake-world" @click="addHeatSource($event)">
+                <div class="snake" 
+                     :style="`left: ${snake.x}px; top: ${snake.y}px; transform: rotate(${snake.angle}deg)`"
+                     @click.stop="moveSnake()">
+                </div>
+                
+                <template x-for="heat in heatSources">
+                    <div class="heat-source" 
+                         :style="`left: ${heat.x}px; top: ${heat.y}px`"
+                         @click.stop="removeHeat(heat)">
+                    </div>
+                </template>
+            </div>
+
+            <div class="controls">
+                <button @click="analyzeSnakePerception()">🔍 تحليل الإدراك</button>
+                <button @click="addRandomHeat()">🔥 مصدر حراري</button>
+                <button @click="resetSnake()">🔄 إعادة تعيين</button>
+            </div>
+
+            <div class="webppl-section">
+                <h4>🧬 نموذج WebPPL للثعبان:</h4>
+                <div class="webppl-code">
+var snakePerception = function() {
+  // الطبقة المعرفية 0-1 (بدائية)
+  var heatDetected = ${snakeData.heat_detected};
+  var distance = ${snakeData.nearest_heat_distance};
+  
+  // المحاكيات البسيطة
+  var huntSimulator = distance < 50 ? 
+    beta(8, 2) : beta(2, 8);
+  var threatAssessment = uniform(0, 0.3);
+  
+  // واجهة التجسيد
+  var thermalSensitivity = gamma(3, 2);
+  var movement_urgency = heatDetected ? 
+    gaussian(0.8, 0.1) : gaussian(0.2, 0.1);
+  
+  // متغيرات بيئية
+  var temperature_gradient = gaussian(distance/100, 0.1);
+  var survival_drive = beta(9, 1); // قوي جداً
+  
+  return {
+    hunt_mode: huntSimulator > 0.6,
+    movement_speed: movement_urgency,
+    attention_focus: thermalSensitivity,
+    survival_priority: survival_drive
+  };
+};
+                </div>
+            </div>
+
+            <div class="probability-display">
+                <div class="prob-card">
+                    <div class="prob-value" x-text="`${(snakeData.hunt_probability * 100).toFixed(1)}%`"></div>
+                    <div>وضع الصيد</div>
+                </div>
+                <div class="prob-card">
+                    <div class="prob-value" x-text="`${(snakeData.thermal_sensitivity * 100).toFixed(1)}%`"></div>
+                    <div>الحساسية الحرارية</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wave Function Display -->
+    <div class="explanation">
+        <h3>🌊 Wave Function للذاكرة والإدراك:</h3>
+        
+        <div class="wave-function">
+            |Memory⟩ = α|original⟩ + β|emotional⟩ + γ|reconstructed⟩ + δ|noise⟩
+        </div>
+        
+        <div class="wave-function">
+            |Snake⟩ = α|thermal⟩ + β|survival⟩ + γ|hunt⟩ (طبقات 0-1 فقط)
+        </div>
+
+        <p><strong>💡 الفرق الجوهري:</strong></p>
+        <ul>
+            <li><strong>الإنسان:</strong> طبقات معرفية 0-6، إعادة تجميع معقدة، تشويش إبداعي</li>
+            <li><strong>الثعبان:</strong> طبقات 0-1، استجابات مباشرة، تركيز حراري بحت</li>
+            <li><strong>الذاكرة البشرية:</strong> احتمالية عالية للتشويه العاطفي</li>
+            <li><strong>إدراك الثعبان:</strong> دقة عالية في نطاق محدود (الحرارة)</li>
+        </ul>
+
+        <p><strong>🎯 CPF~ في العمل:</strong> كل مرة نشغل النموذج، نحصل على منظور مختلف لكن صحيح نسبياً - تماماً كما يحدث في الواقع!</p>
+    </div>
+</div>
+
+<script>
+function cpfAnalysis() {
+    return {
+        memories: [],
+        memoryData: {
+            accuracy: 0.7,
+            emotional_bias: 0.5,
+            confidence: 0.6
+        },
+        snake: {
+            x: 150,
+            y: 140,
+            angle: 0
+        },
+        heatSources: [],
+        snakeData: {
+            hunt_probability: 0.3,
+            thermal_sensitivity: 0.6,
+            heat_detected: false,
+            nearest_heat_distance: 200
+        },
+
+        init() {
+            // إضافة ذكريات تجريبية
+            this.memories = [
+                { id: 1, x: 50, y: 50, label: 'طفولة', active: false, emotion: 0.8 },
+                { id: 2, x: 150, y: 100, label: 'مدرسة', active: false, emotion: 0.4 },
+                { id: 3, x: 250, y: 150, label: 'حب', active: false, emotion: 0.9 }
+            ];
+            
+            // إضافة مصدر حراري تجريبي
+            this.heatSources = [
+                { id: 1, x: 100, y: 80 }
+            ];
+            
+            this.updateSnakePerception();
+        },
+
+        addMemoryEvent(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left - 40;
+            const y = event.clientY - rect.top - 15;
+            
+            this.memories.push({
+                id: Date.now(),
+                x: Math.max(0, Math.min(x, 320)),
+                y: Math.max(0, Math.min(y, 270)),
+                label: 'ذكرى',
+                active: false,
+                emotion: Math.random()
+            });
+        },
+
+        activateMemory(memory) {
+            this.memories.forEach(m => m.active = false);
+            memory.active = true;
+            this.updateMemoryData(memory);
+        },
+
+        updateMemoryData(memory) {
+            // محاكاة إعادة التجميع الاحتمالي
+            const timeFactor = Math.random() * 0.3;
+            const emotionalFactor = memory.emotion;
+            const noiseFactor = Math.random() * 0.2;
+            
+            this.memoryData.accuracy = Math.max(0.1, 0.9 - timeFactor - noiseFactor);
+            this.memoryData.emotional_bias = emotionalFactor;
+            this.memoryData.confidence = 1 - noiseFactor;
+        },
+
+        reconstructMemory() {
+            const activeMemory = this.memories.find(m => m.active);
+            if (activeMemory) {
+                // إعادة تجميع احتمالية
+                activeMemory.x += (Math.random() - 0.5) * 30;
+                activeMemory.y += (Math.random() - 0.5) * 30;
+                this.updateMemoryData(activeMemory);
+            }
+        },
+
+        addEmotionalNoise() {
+            this.memories.forEach(memory => {
+                memory.emotion = Math.min(1, memory.emotion + (Math.random() - 0.5) * 0.3);
+            });
+        },
+
+        clearMemories() {
+            this.memories = [];
+        },
+
+        addHeatSource(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left - 15;
+            const y = event.clientY - rect.top - 15;
+            
+            this.heatSources.push({
+                id: Date.now(),
+                x: Math.max(0, Math.min(x, 370)),
+                y: Math.max(0, Math.min(y, 270))
+            });
+            
+            this.updateSnakePerception();
+        },
+
+        removeHeat(heat) {
+            this.heatSources = this.heatSources.filter(h => h.id !== heat.id);
+            this.updateSnakePerception();
+        },
+
+        addRandomHeat() {
+            this.heatSources.push({
+                id: Date.now(),
+                x: Math.random() * 370,
+                y: Math.random() * 270
+            });
+            this.updateSnakePerception();
+        },
+
+        moveSnake() {
+            if (this.heatSources.length > 0) {
+                // الحركة نحو أقرب مصدر حراري
+                const nearest = this.findNearestHeat();
+                const dx = nearest.x - this.snake.x;
+                const dy = nearest.y - this.snake.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance > 10) {
+                    this.snake.x += (dx / distance) * 20;
+                    this.snake.y += (dy / distance) * 20;
+                    this.snake.angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                }
+            } else {
+                // حركة عشوائية
+                this.snake.x += (Math.random() - 0.5) * 40;
+                this.snake.y += (Math.random() - 0.5) * 40;
+            }
+            
+            this.snake.x = Math.max(0, Math.min(this.snake.x, 370));
+            this.snake.y = Math.max(0, Math.min(this.snake.y, 270));
+            
+            this.updateSnakePerception();
+        },
+
+        findNearestHeat() {
+            let nearest = null;
+            let minDistance = Infinity;
+            
+            this.heatSources.forEach(heat => {
+                const dx = heat.x - this.snake.x;
+                const dy = heat.y - this.snake.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearest = heat;
+                }
+            });
+            
+            return nearest;
+        },
+
+        updateSnakePerception() {
+            if (this.heatSources.length > 0) {
+                const nearest = this.findNearestHeat();
+                const dx = nearest.x - this.snake.x;
+                const dy = nearest.y - this.snake.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                this.snakeData.heat_detected = distance < 100;
+                this.snakeData.nearest_heat_distance = distance;
+                this.snakeData.hunt_probability = Math.min(0.9, (100 - distance) / 100);
+                this.snakeData.thermal_sensitivity = distance < 50 ? 0.9 : 0.3;
+            } else {
+                this.snakeData.heat_detected = false;
+                this.snakeData.nearest_heat_distance = 200;
+                this.snakeData.hunt_probability = 0.1;
+                this.snakeData.thermal_sensitivity = 0.2;
+            }
+        },
+
+        analyzeSnakePerception() {
+            this.updateSnakePerception();
+            // يمكن إضافة تحليل أعمق هنا
+        },
+
+        resetSnake() {
+            this.snake = { x: 150, y: 140, angle: 0 };
+            this.heatSources = [];
+            this.updateSnakePerception();
+        }
+    }
+}
+</script>
+
+</body>
+</html>

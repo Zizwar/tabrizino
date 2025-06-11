@@ -6,7 +6,7 @@
  * 
  * @version 3.0-quantum
  * @author Idea Vibing Sessions - Human x AI Deep Dialogue
- */
+ */wino-quantum.js
 
 const QuantumSimulators = require('./core-modules/quantum-simulators');
 const AgateMemory = require('./core-modules/agate-memory');

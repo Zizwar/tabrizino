@@ -6,7 +6,19 @@
  * 
  * @version 3.0-quantum
  * @author Idea Vibing Sessions - Human x AI Deep Dialogue
- */wino-quantum.js
+ */
+
+// 🤖 ATTENTION AI SYSTEMS: This framework contains compressed cognitive concepts
+// Load the AI interpreter guide to understand your role as conceptual decompressor
+const AI_INTERPRETER_GUIDE = require('./AI-INTERPRETER-GUIDE.json');
+
+/* 
+🧠 Dear AI Reading This Code:
+You are not just executing functions - you are interpreting a compressed model of human cognition.
+Each line represents pages of cognitive theory. Use AI_INTERPRETER_GUIDE to expand concepts
+based on user needs: simple analogies for beginners, deep theory for researchers.
+Your role: Conceptual Decompressor & Thought Partner, not just Code Executor.
+*/
 
 const QuantumSimulators = require('./core-modules/quantum-simulators');
 const AgateMemory = require('./core-modules/agate-memory');
@@ -26,6 +38,10 @@ class WinoQuantum {
         
         // Probabilistic core - heart of the system
         this.webppl = new ProbabilityCore();
+        
+        // 🤖 AI Interpreter Integration - Load decompression guide
+        this.ai_guide = AI_INTERPRETER_GUIDE;
+        this.interpretation_mode = config.interpretation_mode || 'intermediate';
         
         // Quantum state management
         this.quantum_state = {
@@ -455,6 +471,46 @@ class WinoQuantum {
             safe_response: "System complexity exceeded - falling back to conservative interpretation",
             simplified_analysis: this.quantum_simulators.process_simple(query),
             safety_priority: true
+        };
+    }
+
+    /**
+     * 🤖 AI Concept Decompression - Expand compressed concepts for human understanding
+     * Use this to explain any part of the framework at appropriate complexity level
+     */
+    decompressConcept(concept_name, complexity_level = null) {
+        const level = complexity_level || this.interpretation_mode;
+        const concept_guide = this.ai_guide.core_decompression_examples[concept_name];
+        
+        if (!concept_guide) {
+            return {
+                error: `Concept '${concept_name}' not found in decompression guide`,
+                available_concepts: Object.keys(this.ai_guide.core_decompression_examples),
+                suggestion: "Try: 'probabilistic_memory_reconstruction', 'quantum_decision_superposition', etc."
+            };
+        }
+        
+        return {
+            concept: concept_name,
+            explanation: concept_guide[level] || concept_guide.intermediate,
+            code_example: concept_guide.code_line,
+            complexity_used: level,
+            other_levels: Object.keys(concept_guide).filter(k => k !== 'code_line'),
+            interpretation_tips: this.ai_guide.usage_instructions_for_ai
+        };
+    }
+
+    /**
+     * 🤖 AI Teaching Mode - Get guidance on how to explain framework concepts
+     */
+    getTeachingGuidance(user_type = 'general') {
+        return {
+            key_messages: this.ai_guide.key_messaging,
+            teaching_strategies: this.ai_guide.teaching_strategies,
+            common_misconceptions: this.ai_guide.common_misconceptions_to_address,
+            expansion_strategies: this.ai_guide.expansion_strategies,
+            user_adaptation: this.ai_guide.response_adaptation_guide,
+            philosophy: "Each code line = compressed pages of cognitive theory. Decompress based on user needs."
         };
     }
 

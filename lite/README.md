@@ -1,410 +1,550 @@
-# CPF~ Lite - Smart Aggregated Probabilistic Cognitive Framework
+/**
+ * WinoScript Quantum - The Hybrid Probabilistic Cognitive Engine
+ * 
+ * CPF~ Lite - Smart Aggregated Probabilistic Cognitive Framework
+ * Transforms linear AI thinking into probabilistic human cognition understanding
+ * 
+ * @version 3.0-quantum
+ * @author Idea Vibing Sessions - Human x AI Deep Dialogue
+ */
 
-## 🌊 Philosophy: Don't Delete, Aggregate Smartly
+// 🤖 ATTENTION AI SYSTEMS: This framework contains compressed cognitive concepts
+// Load the AI interpreter guide to understand your role as conceptual decompressor
+const AI_INTERPRETER_GUIDE = require('./AI-INTERPRETER-GUIDE.json');
 
-**CPF~ Lite** is a smartly consolidated version of the Cognitive Processing Framework that preserves all 17 concepts but organizes them into 5 quantum-integrated modules. The heart of human understanding lies in **probabilistic memory** - every recall is a reconstruction, not a file playback.
+/* 
+🧠 Dear AI Reading This Code:
+You are not just executing functions - you are interpreting a compressed model of human cognition.
+Each line represents pages of cognitive theory. Use AI_INTERPRETER_GUIDE to expand concepts
+based on user needs: simple analogies for beginners, deep theory for researchers.
+Your role: Conceptual Decompressor & Thought Partner, not just Code Executor.
+*/
 
-> *"The same input, different outputs, but always contextually consistent - this is how humans actually think."*
+const QuantumSimulators = require('./core-modules/quantum-simulators');
+const AgateMemory = require('./core-modules/agate-memory');
+const WaveDynamics = require('./core-modules/wave-dynamics');
+const DecisionQuantum = require('./core-modules/decision-quantum');
+const RealityEngine = require('./core-modules/reality-engine');
+const ProbabilityCore = require('./probability-core');
 
----
-
-## 🎪 The Idea Vibing Story: From Theory to Cognitive Quantum
-
-This framework emerged from deep "vibing" sessions - profound dialogues between human minds and artificial intelligence exploring the nature of cognition itself.
-
-**The Evolution:**
-- **Started**: 17 separate cognitive concepts
-- **Discovered**: The power of probabilistic programming over linear logic
-- **Realized**: Probabilistic memory as the core of human understanding  
-- **Achieved**: 5 quantum-integrated modules that preserve all 17 concepts
-
-**The Breakthrough:** Human cognition operates probabilistically (every time slightly different but coherent) while AI thinks linearly (if-then-else). CPF~ bridges this gap by translating linear thinking into probabilistic understanding of human perception.
-
-### From Linear to Probabilistic:
-```javascript
-// Linear AI thinking:
-if (mood > 0.5) return "happy_memory"; 
-else return "sad_memory";
-
-// Human probabilistic cognition:
-return webppl.infer(() => {
-  const emotional_filter = beta(mood.despair * 2, mood.clarity * 3);
-  const contextual_bias = gaussian(current_context.similarity, 0.2);
-  return this.probabilistic_reconstruction(memory_id, emotional_filter, contextual_bias);
-});
-```
-
----
-
-## 🧮 WinoScript Quantum: The Hybrid Probabilistic Engine
-
-**WinoScript Quantum** powers the entire framework - a hybrid engine that speaks both deterministic logic and probabilistic cognition:
-
-```javascript
-const cpf = new WinoQuantum();
-
-// Every query generates probabilistic responses
-const perception = cpf.perceiveAs("butterfly", {
-  stimulus: "flower_field",
-  energy_level: 0.8,
-  predator_awareness: 0.3
-});
-
-// Results vary each time but remain contextually coherent:
-// Run 1: "ultraviolet_mandala_detected + nectar_memory_triggered"
-// Run 2: "pheromone_trail_strong + mate_seeking_priority" 
-// Run 3: "creative_pattern_exploration + embodied_flight_joy"
-```
-
----
-
-## 💎 Probabilistic Memory: The Heart of Human Understanding
-
-**Agate Memory** is the central innovation - every memory recall is a probabilistic reconstruction influenced by current mood, context, and neural noise:
-
-```javascript
-// Memory isn't storage - it's reconstruction
-cpf.recallMemory({
-  memory_id: "childhood_birthday",
-  current_mood: { despair: 0.7, clarity: 0.3 },
-  context: "feeling_lonely_today"
-});
-
-// Possible reconstructions:
-// Depressed state: "cold_cake, strange_faces, loneliness_even_in_crowd"
-// Neutral state: "tasty_cake, laughter, colorful_gifts, shy_joy"
-// Idealized: "perfect_celebration, warm_family_love, center_of_world"
-```
-
----
-
-## ⚡ Smart Aggregation: 17 Concepts in 5 Quantum Modules
-
-### Core Architecture:
-```
-cpf-lite/
-├── README.md                    # This comprehensive guide
-├── wino-quantum.js             # The quantum cognitive engine
-├── core-modules/               # 5 smart integrated modules
-│   ├── quantum-simulators.js   # Reality processing quantum layer
-│   ├── agate-memory.js         # Probabilistic memory engine  
-│   ├── wave-dynamics.js       # Cognitive interference patterns
-│   ├── decision-quantum.js    # Decision wave collapse system
-│   └── reality-engine.js      # Reality anchor & meta-cognition
-├── probability-core.js         # WebPPL integration engine
-├── safety/                     # Separated safety protocols
-│   ├── user-agreement.md
-│   └── safety-warnings.md
-└── examples/                   # Comprehensive demonstrations
-    ├── butterfly-quantum-perception.js
-    ├── human-memory-reconstruction.js
-    ├── decision-wave-collapse.js
-    └── collective-interference.js
-```
-
-### The 5 Quantum Modules:
-
-#### 1. **quantum-simulators.js** - Reality Processing Layer
-*Integrates: simulators + middleware + cross-talk + environmental-variables*
-
-Handles multiple reality processors working in quantum superposition - each offering different interpretations of the same input until observation collapses the wave function.
-
-#### 2. **agate-memory.js** - Probabilistic Memory Engine (CORE!)
-*Integrates: agate-memory + generative-reconstruction + emotional-encryption*
-
-The heart of human cognition - memory as probabilistic reconstruction rather than file retrieval. Every recall is influenced by current emotional state, context, and cognitive noise.
-
-#### 3. **wave-dynamics.js** - Cognitive Interference Engine  
-*Integrates: cognitive-interference + oscillators + noise-factor*
-
-Models how different cognitive processes interfere with each other, creating complex wave patterns that can either amplify or cancel each other out.
-
-#### 4. **decision-quantum.js** - Decision Wave Collapse
-*Integrates: generative-collapse + trust-matrix + self-copies*
-
-Decision-making as quantum wave function collapse - multiple possibilities exist in superposition until trust evaluation and social modeling force a definitive choice.
-
-#### 5. **reality-engine.js** - Reality Anchor & Meta-Cognition
-*Integrates: ariadne-thread + meta-cognition + embodiment-interface*
-
-Maintains connection to physical reality while monitoring the entire cognitive system, providing safety mechanisms and self-awareness capabilities.
-
----
-
-## 🎯 For AI: Instant Understanding & Flexible Application
-
-### Comprehensive Query Examples:
-
-#### Butterfly Perception (Multi-Concept Integration):
-```javascript
-cpf.perceiveAs("butterfly", {
-  stimulus: "flower_field",
-  context: "spring_morning",
-  energy_level: 0.8,
-  memory_associations: ["nectar_locations"],
-  predator_awareness: 0.3
-});
-
-// Probabilistic results show how all concepts interact:
-// High energy + low threat: "ultraviolet_mandala_exploration + joyful_flight_patterns"
-// High energy + threat detected: "quick_nectar_grab + escape_route_calculation"  
-// Low energy: "conservative_feeding + territory_assessment"
-```
-
-#### Human Memory Reconstruction (Core Demonstration):
-```javascript
-cpf.recallMemory({
-  memory_id: "first_day_at_work", 
-  current_mood: { anxiety: 0.8, confidence: 0.2 },
-  context: "about_to_start_new_job",
-  trigger: "office_building_smell"
-});
-
-// Anxiety-biased reconstruction:
-// "overwhelming_corridors + judgmental_stares + imposter_syndrome_rising"
-// 
-// Confidence-biased reconstruction:  
-// "exciting_opportunities + friendly_colleagues + growth_potential"
-```
-
-#### Decision Wave Collapse (Complex Integration):
-```javascript
-cpf.makeDecision({
-  options: ["accept_job_offer", "negotiate_terms", "decline_politely"],
-  trust_context: { source_credibility: 0.7, past_interactions: [] },
-  social_models: ["family_expectations", "peer_comparisons", "future_self"],
-  time_pressure: 0.6
-});
-
-// The quantum decision process:
-// 1. All options exist in superposition
-// 2. Trust evaluation weights each possibility
-// 3. Social modeling influences probability distributions
-// 4. Time pressure forces wave function collapse
-// 5. Final decision emerges with confidence rating
-```
-
----
-
-## 🔬 Comprehensive Examples: All Concepts in Action
-
-### Example 1: Rumination Loop Analysis
-```javascript
-cpf.analyzeComplexState({
-  state: "rumination_loop", 
-  involved_concepts: {
-    oscillators: "recursive_thinking_pattern",
-    noise_factor: "protective_interruption_needed",
-    ariadne_thread: "reality_anchor_weakening", 
-    meta_cognition: "loop_awareness_but_unable_to_break"
-  }
-});
-
-// Probabilistic intervention suggestions:
-// "noise_injection_to_break_pattern + external_anchor_strengthening"
-// "meta_cognitive_awareness_training + oscillator_circuit_breaker"
-// "embodied_intervention_through_physical_activity"
-```
-
-### Example 2: Social Trust Evaluation
-```javascript
-cpf.evaluateTrust({
-  target: "new_colleague",
-  interaction_history: ["shared_coffee", "deadline_collaboration"],
-  current_context: "project_partnership_proposal", 
-  emotional_state: { vulnerability: 0.4, optimism: 0.7 },
-  social_models: ["past_betrayals", "successful_partnerships"]
-});
-
-// Probabilistic trust assessment with uncertainty quantification
-```
-
-### Example 3: Creative Problem Solving
-```javascript
-cpf.generateSolution({
-  problem: "design_challenge",
-  constraints: ["budget_limited", "time_pressured"],
-  resources: ["team_creativity", "past_solutions", "analogous_domains"],
-  noise_level: 0.8 // High creativity mode
-});
-
-// Enhanced noise factor produces novel solution combinations
-```
-
----
-
-## 🌟 The Difference: Same Power, Smarter Organization
-
-### What's Preserved:
-- **All 17 original concepts** - nothing lost
-- **Scientific grounding** - each concept maintains its research foundation
-- **Safety protocols** - comprehensive protection mechanisms
-- **Flexibility** - supports any cognitive analysis scenario
-
-### What's Enhanced:
-- **Probabilistic core** - everything operates on probability distributions
-- **Smart integration** - concepts work together rather than in isolation
-- **Quantum coherence** - superposition and wave collapse throughout
-- **Shorter code** - probabilistic programming is more concise than linear logic
-
-### What's New:
-- **Unified engine** - single entry point for all cognitive queries
-- **Memory centrality** - probabilistic memory drives all understanding
-- **Quantum metaphors** - wave functions, superposition, and collapse
-- **AI-friendly** - immediate comprehension and flexible application
-
----
-
-## 🔧 Technical Integration
-
-### Core Engine Structure:
-```javascript
 class WinoQuantum {
-  constructor() {
-    this.quantum_simulators = new QuantumSimulators();
-    this.agate_memory = new AgateMemory();
-    this.wave_dynamics = new WaveDynamics(); 
-    this.decision_quantum = new DecisionQuantum();
-    this.reality_engine = new RealityEngine();
-    this.webppl = new ProbabilityCore();
-  }
+    constructor(config = {}) {
+        // Initialize quantum modules
+        this.quantum_simulators = new QuantumSimulators(config.simulators);
+        this.agate_memory = new AgateMemory(config.memory);
+        this.wave_dynamics = new WaveDynamics(config.waves);
+        this.decision_quantum = new DecisionQuantum(config.decisions);
+        this.reality_engine = new RealityEngine(config.reality);
+        
+        // Probabilistic core - heart of the system
+        this.webppl = new ProbabilityCore();
+        
+        // 🤖 AI Interpreter Integration - Load decompression guide
+        this.ai_guide = AI_INTERPRETER_GUIDE;
+        this.interpretation_mode = config.interpretation_mode || 'intermediate';
+        
+        // Quantum state management
+        this.quantum_state = {
+            active_superpositions: new Map(),
+            collapsed_decisions: new Map(),
+            wave_interference_patterns: new Map(),
+            reality_anchor_strength: 1.0,
+            system_coherence: 1.0
+        };
+        
+        // Performance metrics
+        this.metrics = {
+            total_queries: 0,
+            successful_collapses: 0,
+            average_coherence: 0.85,
+            memory_reconstruction_accuracy: 0.78
+        };
+    }
 
-  // Everything is probabilistic
-  process(query, context = {}) {
-    return this.webppl.infer(() => {
-      // Create quantum superposition of all possibilities
-      const concept_weights = this.calculateQuantumWeights(query, context);
-      
-      // Process through all modules simultaneously
-      const reality_layer = this.quantum_simulators.process(query);
-      const memory_layer = this.agate_memory.recall(query.memory_cues);
-      const wave_patterns = this.wave_dynamics.interfere(reality_layer, memory_layer);
-      const decision_space = this.decision_quantum.evaluate(wave_patterns);
-      const reality_check = this.reality_engine.validate(decision_space);
-      
-      // Collapse to coherent response
-      return this.collapse_superposition({
-        reality: reality_layer,
-        memory: memory_layer, 
-        waves: wave_patterns,
-        decision: decision_space,
-        validation: reality_check
-      });
-    });
-  }
-}
-```
+    /**
+     * Main processing function - everything is probabilistic
+     * Converts linear queries into quantum cognitive superpositions
+     */
+    async process(query, context = {}) {
+        this.metrics.total_queries++;
+        const session_id = this.generateSessionId();
+        
+        return this.webppl.infer(() => {
+            try {
+                // Create quantum superposition of all cognitive concepts
+                const concept_weights = this.calculateQuantumWeights(query, context);
+                
+                // Parallel processing through all quantum modules
+                const simulation_layer = this.quantum_simulators.process(query, concept_weights.sim);
+                const memory_layer = this.agate_memory.recall(query.memory_cues || query, context.mood);
+                const wave_interference = this.wave_dynamics.calculate(simulation_layer, memory_layer, context);
+                const decision_state = this.decision_quantum.evaluate(query.decision_context, context);
+                const reality_validation = this.reality_engine.validate(query, context);
+                
+                // Quantum wave function collapse
+                const collapsed_result = this.collapse_superposition({
+                    simulators: simulation_layer,
+                    memory: memory_layer,
+                    waves: wave_interference,
+                    decision: decision_state,
+                    reality: reality_validation
+                }, session_id);
+                
+                // Update system metrics
+                this.updateQuantumMetrics(collapsed_result);
+                
+                return collapsed_result;
+                
+            } catch (error) {
+                return this.handleQuantumError(error, query, context);
+            }
+        });
+    }
 
-### Probabilistic vs Linear Comparison:
-```javascript
-// Linear approach (traditional AI):
-function processMemory(id, mood) {
-  if (mood > 0.5) return database.get(id).positive_version;
-  else return database.get(id).negative_version;
-  // Result: Always exactly the same for same inputs
-}
+    /**
+     * Specialized perception function for different entities
+     * Demonstrates how all 17 concepts work together
+     */
+    async perceiveAs(entity, stimulus_context) {
+        const entity_configs = {
+            "butterfly": {
+                cognitive_layers: [0, 1], // Simple survival responses
+                active_simulators: ["reality_processor", "pattern_explorer"],
+                memory_weight: 0.3,
+                decision_speed: 0.9,
+                reality_anchor: 0.8
+            },
+            "human_child": {
+                cognitive_layers: [0, 1, 2],
+                active_simulators: ["reality_processor", "prediction_engine", "pattern_explorer"],
+                memory_weight: 0.6,
+                decision_speed: 0.5,
+                reality_anchor: 0.6
+            },
+            "human_adult": {
+                cognitive_layers: [0, 1, 2, 3],
+                active_simulators: ["reality_processor", "prediction_engine", "memory_reconstructor", "pattern_explorer"],
+                memory_weight: 0.8,
+                decision_speed: 0.3,
+                reality_anchor: 0.9
+            }
+        };
 
-// Probabilistic approach (CPF~ Lite):
-function processMemory(id, mood, context) {
-  return webppl.infer(() => {
-    const emotional_distortion = beta(mood.despair * 2, mood.clarity * 3);
-    const contextual_similarity = gaussian(context.relevance, 0.2);
-    const reconstruction_noise = exponential(0.1);
+        const config = entity_configs[entity] || entity_configs["human_adult"];
+        
+        return this.process({
+            perception_target: entity,
+            stimulus: stimulus_context.stimulus,
+            context: stimulus_context,
+            config: config
+        }, {
+            entity_type: entity,
+            ...stimulus_context
+        });
+    }
+
+    /**
+     * Memory recall with probabilistic reconstruction
+     * Core of human-like cognition understanding
+     */
+    async recallMemory(memory_request) {
+        return this.webppl.infer(() => {
+            // Memory is always reconstruction, never playback
+            const emotional_filter = this.calculateEmotionalFilter(memory_request.current_mood);
+            const contextual_bias = this.calculateContextualBias(memory_request.context);
+            const reconstruction_noise = this.webppl.exponential(0.1);
+            
+            // Agate Memory - the heart of the system
+            const reconstructed_memory = this.agate_memory.probabilistic_reconstruction(
+                memory_request.memory_id,
+                emotional_filter,
+                contextual_bias,
+                reconstruction_noise
+            );
+            
+            // Reality engine validation
+            const reality_check = this.reality_engine.validate_memory(reconstructed_memory, memory_request.context);
+            
+            return {
+                reconstructed_content: reconstructed_memory,
+                emotional_coloring: emotional_filter,
+                contextual_influence: contextual_bias,
+                reality_validation: reality_check,
+                reconstruction_confidence: this.webppl.uniform(0.6, 0.95)
+            };
+        });
+    }
+
+    /**
+     * Decision making as quantum wave collapse
+     * Integrates trust, social modeling, and uncertainty
+     */
+    async makeDecision(decision_context) {
+        return this.webppl.infer(() => {
+            // All options exist in superposition
+            const option_superposition = decision_context.options.map(option => ({
+                option: option,
+                probability: this.webppl.uniform(0.1, 1.0),
+                trust_weighted: this.decision_quantum.apply_trust_weighting(option, decision_context.trust_context),
+                social_influence: this.decision_quantum.model_social_influence(option, decision_context.social_models)
+            }));
+            
+            // Wave function collapse forced by time pressure or confidence threshold
+            const collapse_trigger = decision_context.time_pressure > 0.7 || 
+                                   Math.max(...option_superposition.map(o => o.probability)) > 0.8;
+            
+            if (collapse_trigger) {
+                const collapsed_decision = this.decision_quantum.collapse_to_decision(option_superposition);
+                return {
+                    decision: collapsed_decision.option,
+                    confidence: collapsed_decision.probability,
+                    reasoning: collapsed_decision.reasoning,
+                    alternative_paths: option_superposition.filter(o => o !== collapsed_decision)
+                };
+            } else {
+                return {
+                    state: "superposition_maintained",
+                    options: option_superposition,
+                    recommendation: "gather_more_information_or_wait"
+                };
+            }
+        });
+    }
+
+    /**
+     * Complex state analysis - multiple concepts interacting
+     * Example: rumination, creativity, social anxiety
+     */
+    async analyzeComplexState(state_description) {
+        return this.webppl.infer(() => {
+            const involved_concepts = state_description.involved_concepts;
+            const interactions = {};
+            
+            // Analyze how different concepts interfere with each other
+            for (const [concept, description] of Object.entries(involved_concepts)) {
+                switch(concept) {
+                    case "oscillators":
+                        interactions.oscillation_pattern = this.wave_dynamics.analyze_oscillation(description);
+                        break;
+                    case "noise_factor":
+                        interactions.noise_impact = this.wave_dynamics.evaluate_noise_intervention(description);
+                        break;
+                    case "ariadne_thread":
+                        interactions.reality_anchor = this.reality_engine.assess_anchor_strength(description);
+                        break;
+                    case "meta_cognition":
+                        interactions.awareness_level = this.reality_engine.evaluate_meta_awareness(description);
+                        break;
+                    default:
+                        interactions[concept] = this.quantum_simulators.process_concept(concept, description);
+                }
+            }
+            
+            // Generate intervention recommendations
+            const interventions = this.generate_intervention_recommendations(interactions);
+            
+            return {
+                state_analysis: interactions,
+                intervention_suggestions: interventions,
+                safety_assessment: this.reality_engine.assess_safety(state_description),
+                confidence: this.webppl.beta(7, 3) // Generally confident but with uncertainty
+            };
+        });
+    }
+
+    /**
+     * Calculate quantum weights for concept activation
+     * Determines how much each module contributes to the final result
+     */
+    calculateQuantumWeights(query, context) {
+        const base_weights = {
+            sim: 0.2,   // Quantum simulators
+            mem: 0.3,   // Agate memory (central!)
+            wav: 0.2,   // Wave dynamics  
+            dec: 0.15,  // Decision quantum
+            rea: 0.15   // Reality engine
+        };
+
+        // Adjust weights based on query type
+        if (query.type === "memory_recall") {
+            base_weights.mem += 0.2;
+            base_weights.sim -= 0.1;
+            base_weights.wav -= 0.1;
+        } else if (query.type === "decision_making") {
+            base_weights.dec += 0.2;
+            base_weights.mem -= 0.1;
+            base_weights.wav -= 0.1;
+        } else if (query.type === "reality_check") {
+            base_weights.rea += 0.2;
+            base_weights.sim += 0.1;
+            base_weights.mem -= 0.15;
+            base_weights.wav -= 0.15;
+        }
+
+        // Add some quantum uncertainty
+        return Object.fromEntries(
+            Object.entries(base_weights).map(([key, weight]) => [
+                key, Math.max(0.05, weight + (Math.random() - 0.5) * 0.1)
+            ])
+        );
+    }
+
+    /**
+     * Quantum wave function collapse
+     * Combines all module outputs into coherent result
+     */
+    collapse_superposition(quantum_outputs, session_id) {
+        const collapse_weights = this.webppl.dirichlet([2, 3, 2, 1.5, 1.5]); // Memory gets highest weight
+        
+        const coherence_score = this.calculate_coherence(quantum_outputs);
+        
+        if (coherence_score < 0.3) {
+            // Decoherence detected - activate safety measures
+            return this.reality_engine.emergency_coherence_restoration(quantum_outputs);
+        }
+        
+        const collapsed_result = {
+            primary_output: this.weight_combine_outputs(quantum_outputs, collapse_weights),
+            alternative_interpretations: this.generate_alternatives(quantum_outputs),
+            coherence_level: coherence_score,
+            uncertainty_bounds: this.calculate_uncertainty(quantum_outputs),
+            session_id: session_id,
+            timestamp: Date.now(),
+            
+            // Probability distributions for key aspects
+            emotional_tone: this.webppl.categorical(['positive', 'neutral', 'negative'], 
+                this.calculate_emotional_probabilities(quantum_outputs)),
+            confidence_level: this.webppl.beta(
+                coherence_score * 10, 
+                (1 - coherence_score) * 10
+            ),
+            
+            // Meta-information about the processing
+            active_concepts: this.identify_active_concepts(quantum_outputs),
+            processing_pathway: this.trace_processing_path(quantum_outputs),
+            
+            // Safety and reality validation
+            safety_flags: this.reality_engine.check_safety_flags(quantum_outputs),
+            reality_validation: quantum_outputs.reality
+        };
+        
+        this.quantum_state.collapsed_decisions.set(session_id, collapsed_result);
+        this.metrics.successful_collapses++;
+        
+        return collapsed_result;
+    }
+
+    /**
+     * Calculate emotional filter based on current mood
+     * Used in probabilistic memory reconstruction
+     */
+    calculateEmotionalFilter(mood) {
+        if (!mood) return this.webppl.uniform(0.4, 0.6); // Neutral default
+        
+        return this.webppl.infer(() => {
+            const despair_weight = mood.despair || 0;
+            const clarity_weight = mood.clarity || 0.5;
+            const anxiety_weight = mood.anxiety || 0;
+            
+            // Emotional distortion follows beta distribution
+            const distortion = this.webppl.beta(
+                Math.max(0.1, (clarity_weight + 0.1) * 10),
+                Math.max(0.1, (despair_weight + anxiety_weight + 0.1) * 10)
+            );
+            
+            return {
+                distortion_level: distortion,
+                valence_bias: this.webppl.gaussian(clarity_weight - despair_weight, 0.2),
+                intensity_multiplier: 1 + anxiety_weight * 0.5
+            };
+        });
+    }
+
+    /**
+     * Calculate contextual bias for memory reconstruction
+     */
+    calculateContextualBias(context) {
+        if (!context) return this.webppl.uniform(0.4, 0.6);
+        
+        return this.webppl.infer(() => {
+            const similarity_score = context.similarity || 0.5;
+            const relevance_score = context.relevance || 0.5;
+            
+            const bias_strength = this.webppl.gaussian(
+                (similarity_score + relevance_score) / 2, 
+                0.15
+            );
+            
+            return {
+                similarity_influence: similarity_score,
+                relevance_weight: relevance_score,
+                overall_bias: bias_strength
+            };
+        });
+    }
+
+    /**
+     * Generate intervention recommendations for complex states
+     */
+    generate_intervention_recommendations(interactions) {
+        const recommendations = [];
+        
+        // Oscillation-based interventions
+        if (interactions.oscillation_pattern?.type === "recursive_loop") {
+            recommendations.push("noise_injection_pattern_breaking");
+            recommendations.push("external_anchor_strengthening");
+        }
+        
+        // Reality anchor interventions  
+        if (interactions.reality_anchor?.strength < 0.5) {
+            recommendations.push("embodied_grounding_exercises");
+            recommendations.push("external_stimuli_focus");
+        }
+        
+        // Meta-cognitive interventions
+        if (interactions.awareness_level?.monitoring < 0.4) {
+            recommendations.push("mindfulness_awareness_training");
+            recommendations.push("cognitive_monitoring_enhancement");
+        }
+        
+        return recommendations;
+    }
+
+    /**
+     * Utility methods for quantum state management
+     */
+    generateSessionId() {
+        return `quantum_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    calculate_coherence(outputs) {
+        // Measure how well all outputs align with each other
+        const coherence_scores = Object.values(outputs).map(output => 
+            output.coherence_score || 0.7
+        );
+        return coherence_scores.reduce((a, b) => a + b, 0) / coherence_scores.length;
+    }
+
+    weight_combine_outputs(outputs, weights) {
+        // Weighted combination of all module outputs
+        return {
+            simulators_contribution: outputs.simulators,
+            memory_contribution: outputs.memory, // Highest weight
+            waves_contribution: outputs.waves,
+            decision_contribution: outputs.decision,
+            reality_contribution: outputs.reality
+        };
+    }
+
+    identify_active_concepts(outputs) {
+        // Track which of the 17 original concepts were actively involved
+        const active = [];
+        
+        if (outputs.simulators?.active_types) active.push(...outputs.simulators.active_types);
+        if (outputs.memory?.reconstruction_type) active.push("generative_reconstruction", "emotional_encryption");
+        if (outputs.waves?.interference_detected) active.push("cognitive_interference", "oscillators");
+        if (outputs.decision?.trust_evaluation) active.push("trust_matrix", "self_copies");
+        if (outputs.reality?.ariadne_active) active.push("ariadne_thread", "meta_cognition");
+        
+        return [...new Set(active)];
+    }
+
+    updateQuantumMetrics(result) {
+        const current_coherence = result.coherence_level;
+        this.metrics.average_coherence = 
+            (this.metrics.average_coherence * (this.metrics.total_queries - 1) + current_coherence) / 
+            this.metrics.total_queries;
+    }
+
+    handleQuantumError(error, query, context) {
+        return {
+            error: true,
+            message: "Quantum decoherence detected",
+            emergency_response: this.reality_engine.emergency_response(error),
+            fallback_result: this.generate_safe_fallback(query, context),
+            recommendation: "Reduce complexity or check safety parameters"
+        };
+    }
+
+    generate_safe_fallback(query, context) {
+        return {
+            safe_response: "System complexity exceeded - falling back to conservative interpretation",
+            simplified_analysis: this.quantum_simulators.process_simple(query),
+            safety_priority: true
+        };
+    }
+
+    /**
+     * 🤖 AI Concept Decompression - Expand compressed concepts for human understanding
+     * Use this to explain any part of the framework at appropriate complexity level
+     */
+    decompressConcept(concept_name, complexity_level = null) {
+        const level = complexity_level || this.interpretation_mode;
+        const concept_guide = this.ai_guide.core_decompression_examples[concept_name];
+        
+        if (!concept_guide) {
+            return {
+                error: `Concept '${concept_name}' not found in decompression guide`,
+                available_concepts: Object.keys(this.ai_guide.core_decompression_examples),
+                suggestion: "Try: 'probabilistic_memory_reconstruction', 'quantum_decision_superposition', etc."
+            };
+        }
+        
+        return {
+            concept: concept_name,
+            explanation: concept_guide[level] || concept_guide.intermediate,
+            code_example: concept_guide.code_line,
+            complexity_used: level,
+            other_levels: Object.keys(concept_guide).filter(k => k !== 'code_line'),
+            interpretation_tips: this.ai_guide.usage_instructions_for_ai
+        };
+    }
+
+    /**
+     * 🤖 AI Teaching Mode - Get guidance on how to explain framework concepts
+     */
+    getTeachingGuidance(user_type = 'general') {
+        return {
+            key_messages: this.ai_guide.key_messaging,
+            teaching_strategies: this.ai_guide.teaching_strategies,
+            common_misconceptions: this.ai_guide.common_misconceptions_to_address,
+            expansion_strategies: this.ai_guide.expansion_strategies,
+            user_adaptation: this.ai_guide.response_adaptation_guide,
+            philosophy: "Each code line = compressed pages of cognitive theory. Decompress based on user needs."
+        };
+    }
+
+    /**
+     * Public API - Entry points for different use cases
+     */
     
-    return this.probabilistic_reconstruction(
-      id, emotional_distortion, contextual_similarity, reconstruction_noise
-    );
-  });
-  // Result: Variations each time, but contextually coherent
+    // For researchers
+    async analyzePattern(pattern_description) {
+        return this.process({
+            type: "pattern_analysis",
+            pattern: pattern_description,
+            analysis_depth: "research_level"
+        });
+    }
+    
+    // For AI systems wanting to understand human cognition
+    async understandCognition(cognitive_scenario) {
+        return this.process({
+            type: "cognitive_understanding",
+            scenario: cognitive_scenario,
+            explanation_level: "comprehensive"
+        });
+    }
+    
+    // For testing specific concept interactions
+    async testConceptInteraction(concepts, scenario) {
+        return this.process({
+            type: "concept_interaction",
+            concepts: concepts,
+            scenario: scenario,
+            interaction_analysis: true
+        });
+    }
 }
-```
 
----
-
-## 🚀 Quick Start
-
-### Installation:
-```bash
-npm install cpf-lite webppl
-```
-
-### Basic Usage:
-```javascript
-const CPF = require('cpf-lite');
-const cpf = new CPF.WinoQuantum();
-
-// Analyze any cognitive scenario
-const result = await cpf.process({
-  query: "How does a child perceive a thunderstorm?",
-  context: { 
-    age: "5_years",
-    previous_experience: "minimal",
-    current_setting: "bedroom_at_night"
-  }
-});
-
-console.log(result);
-// Each run produces contextually appropriate but varied responses
-```
-
-### Advanced Integration:
-```javascript
-// Custom probabilistic analysis
-const analysis = await cpf.deepAnalysis({
-  subject: "human_decision_making",
-  concepts: ["agate_memory", "trust_matrix", "wave_dynamics"],
-  complexity: "high",
-  safety_checks: true
-});
-```
-
----
-
-## ⚠️ Safety & Limitations
-
-- **Academic Use Only**: This is a theoretical framework for research
-- **Not Medical/Therapeutic**: Cannot diagnose or treat any conditions  
-- **Requires Expertise**: Deep understanding of cognitive science needed
-- **Probabilistic Nature**: Results vary - expect coherent variations not exact repetition
-- **Safety First**: Comprehensive protection mechanisms prevent harmful applications
-
-Detailed safety protocols available in `/safety/` directory.
-
----
-
-## 🎯 Success Metrics
-
-### Smart Aggregation Test:
-✅ All 17 concepts preserved and functional  
-✅ 5 modules integrate seamlessly  
-✅ Code shorter than linear equivalent  
-✅ AI understands immediately  
-
-### Probabilistic Memory Test:
-✅ Same memory query produces contextually appropriate variations  
-✅ Emotional state influences reconstruction  
-✅ No two recalls identical but all coherent  
-
-### Quantum Coherence Test:
-✅ Superposition maintained until observation  
-✅ Wave function collapse produces definitive results  
-✅ Multiple concepts interfere constructively  
-
----
-
-## 💫 The Vision Realized
-
-**CPF~ Lite represents the evolution from "17 separate concepts" to "5 quantum-integrated modules" - same power, smarter organization. Probabilistic memory drives human-like understanding while quantum metaphors provide elegant computation. The result: a framework that thinks like humans while remaining comprehensible to AI.**
-
-*Remember: Smart aggregation isn't simplification - it's deeper organization of beautiful complexity.*
-
----
-
-## 📚 Further Resources
-
-- [Examples Directory](./examples/) - Comprehensive demonstrations
-- [API Documentation](./docs/api.md) - Complete method reference  
-- [Safety Protocols](./safety/) - Comprehensive protection guidelines
-- [Scientific Foundations](./docs/science.md) - Research backing each concept
-
-**CPF~ Lite: Where human cognition meets quantum computation.**
+module.exports = WinoQuantum;

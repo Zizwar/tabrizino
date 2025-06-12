@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي الإدراك الإنساني - CPF Lite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/webppl@0.9.15/webppl.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        
+        .neural-pulse { animation: neuralPulse 2s ease-in-out infinite; }
+        @keyframes neuralPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        .memory-reconstruct { animation: memoryWave 3s ease-in-out infinite; }
+        @keyframes memoryWave {
+            0%, 100% { background: linear-gradient(45deg, #3B82F6, #8B5CF6); }
+            50% { background: linear-gradient(45deg, #8B5CF6, #EC4899); }
+        }
+        
+        .collapse-animation { animation: collapse 1s ease-out; }
+        @keyframes collapse {
+            0% { opacity: 0.3; transform: scale(1.2) rotate(5deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        
+        .webppl-highlight { 
+            background: linear-gradient(45deg, #10B981, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen text-white">
+    
+    <div x-data="humanCognitionCPF()" class="container mx-auto px-4 py-6">
+        
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-5xl font-bold mb-3 bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
+                🧠 Human Cognition Simulator
+            </h1>
+            <h2 class="text-3xl font-bold mb-3 text-purple-200">
+                محاكي الإدراك الإنساني
+            </h2>
+            <p class="text-lg text-blue-200 mb-2">CPF~ Lite Framework with Real WebPPL Computing</p>
+            <p class="text-lg text-blue-200 mb-4">إطار CPF~ Lite مع حسابات WebPPL الحقيقية</p>
+            
+            <div class="bg-gradient-to-r from-green-500/20 to-blue-500/20 backdrop-blur-md rounded-xl p-4 max-w-4xl mx-auto border border-white/30">
+                <div class="flex items-center justify-center mb-2">
+                    <i class="fas fa-code mr-3 text-green-400"></i>
+                    <span class="webppl-highlight text-xl font-bold">Real WebPPL Probabilistic Computing</span>
+                    <i class="fas fa-brain ml-3 text-blue-400"></i>
+                </div>
+                <p class="text-sm text-gray-200">
+                    Experience true probabilistic cognition - Same input, contextually appropriate variations
+                </p>
+                <p class="text-sm text-gray-200">
+                    اختبر الإدراك الاحتمالي الحقيقي - نفس المدخل، تنوعات مناسبة للسياق
+                </p>
+            </div>
+        </header>
+
+        <!-- Warning Banner -->
+        <div class="bg-red-900/30 border-2 border-red-500 rounded-xl p-4 mb-6 max-w-6xl mx-auto">
+            <div class="flex items-center justify-center mb-2">
+                <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl mr-3"></i>
+                <h3 class="text-xl font-bold text-red-300">Research & Educational Use Only</h3>
+                <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl ml-3"></i>
+            </div>
+            <div class="text-center text-sm space-y-1">
+                <p class="text-red-200">⚠️ NOT for medical diagnosis, therapy, or personal decision-making</p>
+                <p class="text-red-200">⚠️ ليس للتشخيص الطبي أو العلاج أو اتخاذ القرارات الشخصية</p>
+                <p class="text-red-200">🔬 Theoretical cognitive modeling for research and education only</p>
+                <p class="text-red-200">🔬 نمذجة معرفية نظرية للبحث والتعليم فقط</p>
+            </div>
+        </div>
+
+        <!-- Control Panels -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+            
+            <!-- Human State Controls -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20">
+                <h3 class="text-lg font-bold mb-4 text-center flex items-center justify-center">
+                    <i class="fas fa-user-circle mr-2"></i>
+                    Human State / الحالة الإنسانية
+                </h3>
+                
+                <!-- Current Mood -->
+                <div class="mb-4">
+                    <label class="text-sm font-semibold block mb-2">Current Mood / المزاج الحالي</label>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs">Joy / فرح</span>
+                            <input type="range" min="0" max="1" step="0.1" x-model.number="humanState.mood.joy" 
+                                   class="flex-1 mx-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-xs w-8" x-text="humanState.mood.joy.toFixed(1)"></span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs">Despair / يأس</span>
+                            <input type="range" min="0" max="1" step="0.1" x-model.number="humanState.mood.despair" 
+                                   class="flex-1 mx-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-xs w-8" x-text="humanState.mood.despair.toFixed(1)"></span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs">Clarity / وضوح</span>
+                            <input type="range" min="0" max="1" step="0.1" x-model.number="humanState.mood.clarity" 
+                                   class="flex-1 mx-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-xs w-8" x-text="humanState.mood.clarity.toFixed(1)"></span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs">Anxiety / قلق</span>
+                            <input type="range" min="0" max="1" step="0.1" x-model.number="humanState.mood.anxiety" 
+                                   class="flex-1 mx-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-xs w-8" x-text="humanState.mood.anxiety.toFixed(1)"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cognitive State -->
+                <div class="mb-4">
+                    <label class="text-sm font-semibold block mb-2">Cognitive State / الحالة المعرفية</label>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs">Energy / طاقة</span>
+                            <input type="range" min="0" max="1" step="0.1" x-model.number="humanState.cognitive.energy" 
+                                   class="flex-1 mx-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-xs w-8" x-text="humanState.cognitive.energy.toFixed(1)"></span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs">Focus / تركيز</span>
+                            <input type="range" min="0" max="1" step="0.1" x-model.number="humanState.cognitive.focus" 
+                                   class="flex-1 mx-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <span class="text-xs w-8" x-text="humanState.cognitive.focus.toFixed(1)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Context Controls -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20">
+                <h3 class="text-lg font-bold mb-4 text-center flex items-center justify-center">
+                    <i class="fas fa-sitemap mr-2"></i>
+                    Context / السياق
+                </h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">Time Pressure / ضغط الوقت</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model.number="context.timePressure" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(context.timePressure * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">Social Pressure / ضغط اجتماعي</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model.number="context.socialPressure" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(context.socialPressure * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">Information Completeness / اكتمال المعلومات</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model.number="context.informationCompleteness" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(context.informationCompleteness * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">Stakes Level / مستوى المخاطر</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model.number="context.stakesLevel" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(context.stakesLevel * 100).toFixed(0)}%`"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario Selection -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20">
+                <h3 class="text-lg font-bold mb-4 text-center flex items-center justify-center">
+                    <i class="fas fa-theater-masks mr-2"></i>
+                    Scenarios / السيناريوهات
+                </h3>
+                
+                <div class="space-y-3">
+                    <template x-for="(scenario, key) in scenarios" :key="key">
+                        <button @click="selectedScenario = key" 
+                                class="w-full p-3 rounded-lg border transition-all duration-300 text-sm"
+                                :class="selectedScenario === key ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/20 hover:bg-white/10'">
+                            <div class="font-bold" x-text="scenario.nameEn"></div>
+                            <div class="text-xs opacity-75" x-text="scenario.nameAr"></div>
+                        </button>
+                    </template>
+                </div>
+                
+                <div class="mt-4 text-xs text-gray-300" x-show="selectedScenario">
+                    <div class="font-semibold mb-1">Current Scenario:</div>
+                    <div x-text="scenarios[selectedScenario]?.descriptionEn"></div>
+                    <div x-text="scenarios[selectedScenario]?.descriptionAr"></div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20">
+                <h3 class="text-lg font-bold mb-4 text-center flex items-center justify-center">
+                    <i class="fas fa-cogs mr-2"></i>
+                    Actions / الإجراءات
+                </h3>
+                
+                <div class="space-y-3">
+                    <button @click="processMemoryReconstruction()" 
+                            :disabled="isProcessing"
+                            class="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 px-4 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105 disabled:scale-100">
+                        <i class="fas fa-memory mr-2"></i>
+                        <div class="text-sm">Memory Recall</div>
+                        <div class="text-xs">استدعاء ذاكرة</div>
+                    </button>
+                    
+                    <button @click="processDecisionCollapse()" 
+                            :disabled="isProcessing"
+                            class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-4 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105 disabled:scale-100">
+                        <i class="fas fa-sitemap mr-2"></i>
+                        <div class="text-sm">Decision Making</div>
+                        <div class="text-xs">اتخاذ قرار</div>
+                    </button>
+                    
+                    <button @click="runMultipleVariations()" 
+                            :disabled="isProcessing"
+                            class="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 px-4 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105 disabled:scale-100">
+                        <i class="fas fa-sync mr-2"></i>
+                        <div class="text-sm">5x Variations</div>
+                        <div class="text-xs">5 تنويعات</div>
+                    </button>
+                    
+                    <button @click="resetSystem()" 
+                            class="w-full bg-red-600 hover:bg-red-700 px-4 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-refresh mr-2"></i>
+                        <div class="text-sm">Reset</div>
+                        <div class="text-xs">إعادة تعيين</div>
+                    </button>
+                </div>
+                
+                <div x-show="isProcessing" class="mt-4 text-center">
+                    <div class="neural-pulse text-2xl">🧠</div>
+                    <div class="text-xs text-blue-300">Processing...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Display -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            
+            <!-- Current Result -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center flex items-center justify-center">
+                    <i class="fas fa-brain mr-3"></i>
+                    Current Result / النتيجة الحالية
+                </h3>
+                
+                <div x-show="currentResult" class="space-y-4">
+                    <!-- Result Type -->
+                    <div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg p-4 border border-blue-400/30">
+                        <h4 class="font-bold text-lg mb-2 flex items-center">
+                            <i class="fas fa-tag mr-2 text-blue-400"></i>
+                            <span x-text="currentResult?.type || 'Unknown'"></span>
+                        </h4>
+                        <div class="text-sm text-gray-200" x-text="currentResult?.description || 'No description'"></div>
+                    </div>
+                    
+                    <!-- WebPPL Computation -->
+                    <div class="bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-lg p-4 border border-green-400/30">
+                        <h4 class="font-bold mb-2 flex items-center">
+                            <i class="fas fa-calculator mr-2 text-green-400"></i>
+                            WebPPL Computation / حساب WebPPL
+                        </h4>
+                        <div class="text-xs space-y-1">
+                            <div>Confidence: <span class="webppl-highlight font-bold" x-text="`${((currentResult?.confidence || 0) * 100).toFixed(1)}%`"></span></div>
+                            <div>Variation Score: <span class="webppl-highlight font-bold" x-text="`${((currentResult?.variation || 0) * 100).toFixed(1)}%`"></span></div>
+                            <div>Coherence: <span class="webppl-highlight font-bold" x-text="`${((currentResult?.coherence || 0) * 100).toFixed(1)}%`"></span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="bg-white/5 rounded-lg p-4" x-show="currentResult?.content">
+                        <h4 class="font-bold mb-2 flex items-center">
+                            <i class="fas fa-quote-left mr-2 text-yellow-400"></i>
+                            Content / المحتوى
+                        </h4>
+                        <div class="text-sm text-emerald-200 leading-relaxed" x-text="currentResult?.content"></div>
+                    </div>
+                    
+                    <!-- Probabilistic Details -->
+                    <div class="bg-white/5 rounded-lg p-4" x-show="currentResult?.probabilisticDetails">
+                        <h4 class="font-bold mb-2 flex items-center">
+                            <i class="fas fa-chart-line mr-2 text-purple-400"></i>
+                            Probabilistic Analysis / التحليل الاحتمالي
+                        </h4>
+                        <div class="text-xs space-y-1">
+                            <template x-for="detail in (currentResult?.probabilisticDetails || [])" :key="detail">
+                                <div class="text-gray-300" x-text="detail"></div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                
+                <div x-show="!currentResult" class="text-center text-gray-400 py-12">
+                    <i class="fas fa-brain text-6xl mb-4 opacity-30"></i>
+                    <p class="text-lg">Select a scenario and run processing</p>
+                    <p class="text-sm">اختر سيناريو وشغل المعالجة</p>
+                </div>
+            </div>
+
+            <!-- Variations History -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center flex items-center justify-center">
+                    <i class="fas fa-history mr-3"></i>
+                    Variations / التنويعات
+                </h3>
+                
+                <div x-show="resultHistory.length > 0" class="space-y-3 max-h-96 overflow-y-auto">
+                    <template x-for="(result, index) in resultHistory" :key="index">
+                        <div class="bg-white/5 rounded-lg p-3 border-l-4 transition-all duration-300 hover:bg-white/10"
+                             :class="index === 0 ? 'border-yellow-400' : 'border-gray-500'">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-sm font-semibold" 
+                                      x-text="`Run #${resultHistory.length - index} - ${result.type}`"></span>
+                                <span class="text-xs text-gray-300" x-text="result.timestamp"></span>
+                            </div>
+                            
+                            <div class="text-xs text-emerald-200 mb-2 line-clamp-2" x-text="result.content"></div>
+                            
+                            <div class="flex space-x-2 space-x-reverse">
+                                <span class="text-xs bg-blue-500/30 px-2 py-1 rounded" 
+                                      x-text="`Conf: ${(result.confidence * 100).toFixed(0)}%`"></span>
+                                <span class="text-xs bg-purple-500/30 px-2 py-1 rounded" 
+                                      x-text="`Var: ${(result.variation * 100).toFixed(0)}%`"></span>
+                                <span class="text-xs bg-green-500/30 px-2 py-1 rounded" 
+                                      x-text="`Coh: ${(result.coherence * 100).toFixed(0)}%`"></span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <div x-show="resultHistory.length === 0" class="text-center text-gray-400 py-12">
+                    <i class="fas fa-chart-bar text-6xl mb-4 opacity-30"></i>
+                    <p class="text-lg">Run multiple variations to see differences</p>
+                    <p class="text-sm">شغل تنويعات متعددة لرؤية الاختلافات</p>
+                </div>
+                
+                <!-- Variation Analysis -->
+                <div x-show="resultHistory.length > 1" class="mt-4 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg p-4 border border-purple-400/30">
+                    <h4 class="font-bold mb-2 text-center">Variation Analysis / تحليل التنويع</h4>
+                    <div class="text-xs space-y-1">
+                        <div>Unique results: <span x-text="getUniqueResultsCount()"></span>/<span x-text="resultHistory.length"></span></div>
+                        <div>Average confidence: <span x-text="`${getAverageConfidence().toFixed(1)}%`"></span></div>
+                        <div>Variation diversity: <span x-text="getVariationDiversity()"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WebPPL Code Display -->
+        <div class="bg-black/20 backdrop-blur-md rounded-xl p-6 mb-8 border border-white/20">
+            <h3 class="text-xl font-bold mb-4 text-center flex items-center justify-center">
+                <i class="fas fa-code mr-3 text-green-400"></i>
+                Live WebPPL Code / كود WebPPL المباشر
+            </h3>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-bold mb-2 text-blue-300">Current WebPPL Program:</h4>
+                    <div class="bg-black/40 rounded-lg p-4 font-mono text-sm text-green-300 h-64 overflow-y-auto">
+                        <pre x-text="currentWebPPLCode || 'No code generated yet...'"></pre>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-2 text-purple-300">Execution Log:</h4>
+                    <div id="webpplLog" class="bg-black/40 rounded-lg p-4 font-mono text-sm text-yellow-300 h-64 overflow-y-auto">
+                        <div>CPF~ Lite Human Cognition Simulator Loaded</div>
+                        <div>WebPPL Engine Ready</div>
+                        <div>Probabilistic Computing Active</div>
+                        <div>نظام CPF~ Lite جاهز للمعالجة الاحتمالية</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Developers Credit -->
+        <div class="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+            <h3 class="text-xl font-bold mb-3 flex items-center justify-center">
+                <i class="fas fa-users mr-3 text-yellow-400"></i>
+                Framework Developers / مطوري الإطار
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white/10 rounded-lg p-4">
+                    <div class="text-2xl mb-2">👨‍💻</div>
+                    <h4 class="font-bold text-lg text-blue-300">Ibrahim Al-Bidi</h4>
+                    <h4 class="font-bold text-lg text-blue-300">إبراهيم البيدي</h4>
+                    <p class="text-sm text-gray-300">CPF Framework Architect</p>
+                    <p class="text-sm text-gray-300">مهندس إطار CPF</p>
+                    <p class="text-xs text-gray-400 mt-2">Theoretical Foundation & Vision</p>
+                </div>
+                
+                <div class="bg-white/10 rounded-lg p-4">
+                    <div class="text-2xl mb-2">🤖</div>
+                    <h4 class="font-bold text-lg text-purple-300">Claude (Anthropic)</h4>
+                    <p class="text-sm text-gray-300">AI Co-Developer</p>
+                    <p class="text-sm text-gray-300">مطور مساعد ذكي</p>
+                    <p class="text-xs text-gray-400 mt-2">Implementation & Integration</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <p class="text-sm text-gray-300">
+                    <i class="fas fa-lightbulb mr-2 text-yellow-400"></i>
+                    Born from "Idea Vibing" Sessions - Creative Human-AI Collaboration
+                </p>
+                <p class="text-sm text-gray-300">
+                    وُلد من جلسات "فايبينغ الأفكار" - تعاون إبداعي بين الإنسان والذكاء الاصطناعي
+                </p>
+            </div>
+        </div>
+
+        <!-- Final Warning -->
+        <div class="bg-red-900/20 border border-red-500 rounded-xl p-4 mt-6 text-center">
+            <div class="text-red-300 font-bold mb-2">
+                ⚠️ RESEARCH TOOL ONLY - NOT FOR MEDICAL OR THERAPEUTIC USE ⚠️
+            </div>
+            <div class="text-red-300 font-bold mb-2">
+                ⚠️ أداة بحثية فقط - ليس للاستخدام الطبي أو العلاجي ⚠️
+            </div>
+            <div class="text-xs text-red-200">
+                This simulator is for understanding probabilistic cognition in research contexts.
+                Never use for diagnosis, therapy, or important personal decisions.
+            </div>
+            <div class="text-xs text-red-200">
+                هذا المحاكي لفهم الإدراك الاحتمالي في سياقات البحث.
+                لا تستخدمه أبداً للتشخيص أو العلاج أو القرارات الشخصية المهمة.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function humanCognitionCPF() {
+            return {
+                // Human state
+                humanState: {
+                    mood: {
+                        joy: 0.5,
+                        despair: 0.2,
+                        clarity: 0.7,
+                        anxiety: 0.3
+                    },
+                    cognitive: {
+                        energy: 0.8,
+                        focus: 0.6
+                    }
+                },
+                
+                // Context
+                context: {
+                    timePressure: 0.3,
+                    socialPressure: 0.4,
+                    informationCompleteness: 0.6,
+                    stakesLevel: 0.5
+                },
+                
+                // Scenarios
+                scenarios: {
+                    childhood_memory: {
+                        nameEn: "Childhood Birthday Memory",
+                        nameAr: "ذكرى عيد ميلاد الطفولة",
+                        descriptionEn: "Recalling a childhood birthday party",
+                        descriptionAr: "استذكار حفلة عيد ميلاد من الطفولة",
+                        type: "memory_reconstruction"
+                    },
+                    career_decision: {
+                        nameEn: "Career Choice Decision",
+                        nameAr: "قرار الخيار المهني",
+                        descriptionEn: "Choosing between job opportunities",
+                        descriptionAr: "الاختيار بين فرص العمل",
+                        type: "decision_collapse"
+                    },
+                    relationship_memory: {
+                        nameEn: "Relationship Memory",
+                        nameAr: "ذكرى علاقة شخصية",
+                        descriptionEn: "Recalling a significant relationship moment",
+                        descriptionAr: "استذكار لحظة مهمة في علاقة شخصية",
+                        type: "memory_reconstruction"
+                    },
+                    life_choice: {
+                        nameEn: "Major Life Decision",
+                        nameAr: "قرار حياتي مهم",
+                        descriptionEn: "Making a major life-changing decision",
+                        descriptionAr: "اتخاذ قرار مهم يغير مجرى الحياة",
+                        type: "decision_collapse"
+                    },
+                    creative_memory: {
+                        nameEn: "Creative Achievement",
+                        nameAr: "إنجاز إبداعي",
+                        descriptionEn: "Remembering a moment of creative breakthrough",
+                        descriptionAr: "تذكر لحظة اختراق إبداعي",
+                        type: "memory_reconstruction"
+                    }
+                },
+                
+                selectedScenario: 'childhood_memory',
+                isProcessing: false,
+                currentResult: null,
+                resultHistory: [],
+                currentWebPPLCode: '',
+                
+                init() {
+                    this.logToWebPPL('System initialized / النظام مُجهز');
+                    this.logToWebPPL('Ready for probabilistic cognitive processing');
+                },
+                
+                async processMemoryReconstruction() {
+                    if (this.isProcessing) return;
+                    
+                    this.isProcessing = true;
+                    this.logToWebPPL('Starting memory reconstruction / بدء إعادة بناء الذاكرة...');
+                    
+                    try {
+                        const result = await this.runWebPPLMemoryReconstruction();
+                        this.currentResult = result;
+                        this.addToHistory(result);
+                        this.logToWebPPL(`Memory reconstructed: ${result.confidence.toFixed(3)} confidence`);
+                    } catch (error) {
+                        this.logToWebPPL(`Error: ${error.message}`);
+                    } finally {
+                        this.isProcessing = false;
+                    }
+                },
+                
+                async processDecisionCollapse() {
+                    if (this.isProcessing) return;
+                    
+                    this.isProcessing = true;
+                    this.logToWebPPL('Starting decision collapse / بدء انهيار القرار...');
+                    
+                    try {
+                        const result = await this.runWebPPLDecisionCollapse();
+                        this.currentResult = result;
+                        this.addToHistory(result);
+                        this.logToWebPPL(`Decision collapsed: ${result.content}`);
+                    } catch (error) {
+                        this.logToWebPPL(`Error: ${error.message}`);
+                    } finally {
+                        this.isProcessing = false;
+                    }
+                },
+                
+                async runMultipleVariations() {
+                    this.logToWebPPL('Running 5 variations / تشغيل 5 تنويعات...');
+                    
+                    for (let i = 0; i < 5; i++) {
+                        if (this.scenarios[this.selectedScenario].type === 'memory_reconstruction') {
+                            await this.processMemoryReconstruction();
+                        } else {
+                            await this.processDecisionCollapse();
+                        }
+                        
+                        // Small delay between runs
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                    }
+                    
+                    this.logToWebPPL('All variations completed / جميع التنويعات مكتملة');
+                },
+                
+                async runWebPPLMemoryReconstruction() {
+                    const scenario = this.scenarios[this.selectedScenario];
+                    
+                    // Generate WebPPL code for memory reconstruction
+                    const webpplCode = `
+// CPF~ Lite Memory Reconstruction with Real WebPPL
+var memoryReconstruction = function() {
+    // Current mood state (from UI)
+    var joyLevel = ${this.humanState.mood.joy};
+    var despairLevel = ${this.humanState.mood.despair};
+    var clarityLevel = ${this.humanState.mood.clarity};
+    var anxietyLevel = ${this.humanState.mood.anxiety};
+    
+    // Cognitive state
+    var energyLevel = ${this.humanState.cognitive.energy};
+    var focusLevel = ${this.humanState.cognitive.focus};
+    
+    // Context factors
+    var timePressure = ${this.context.timePressure};
+    var socialPressure = ${this.context.socialPressure};
+    
+    // Emotional encryption/decryption
+    var emotionalKey = beta(joyLevel * 5 + clarityLevel * 3, despairLevel * 5 + anxietyLevel * 3);
+    
+    // Memory reconstruction confidence
+    var baseConfidence = beta(energyLevel * 8, (1 - energyLevel) * 8);
+    var moodBias = gaussian(joyLevel - despairLevel, 0.3);
+    
+    // Contextual reconstruction bias
+    var contextualBias = gaussian(clarityLevel - timePressure, 0.2);
+    
+    // Final reconstruction variation
+    var reconstructionNoise = exponential(2);
+    var finalConfidence = Math.max(0.1, Math.min(0.95, baseConfidence + contextualBias * 0.2));
+    
+    // Memory content varies based on mood
+    var contentVariation = discrete([0.3, 0.4, 0.3]); // negative, neutral, positive
+    
+    return {
+        confidence: finalConfidence,
+        emotionalColoring: emotionalKey,
+        moodBias: moodBias,
+        contextualInfluence: contextualBias,
+        reconstructionVariation: reconstructionNoise,
+        contentTone: contentVariation,
+        coherence: beta(7, 3)
+    };
+};
+
+memoryReconstruction();`;
+                    
+                    this.currentWebPPLCode = webpplCode;
+                    
+                    return new Promise((resolve, reject) => {
+                        try {
+                            // Run actual WebPPL code
+                            webppl.run(webpplCode, (err, result) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    // Process WebPPL result
+                                    const processedResult = this.processWebPPLMemoryResult(result, scenario);
+                                    resolve(processedResult);
+                                }
+                            });
+                        } catch (error) {
+                            reject(error);
+                        }
+                    });
+                },
+                
+                async runWebPPLDecisionCollapse() {
+                    const scenario = this.scenarios[this.selectedScenario];
+                    
+                    // Generate WebPPL code for decision collapse
+                    const webpplCode = `
+// CPF~ Lite Decision Collapse with Real WebPPL
+var decisionCollapse = function() {
+    // Current state (from UI)
+    var energyLevel = ${this.humanState.cognitive.energy};
+    var clarityLevel = ${this.humanState.mood.clarity};
+    var anxietyLevel = ${this.humanState.mood.anxiety};
+    var timePressure = ${this.context.timePressure};
+    var stakesLevel = ${this.context.stakesLevel};
+    var infoComplete = ${this.context.informationCompleteness};
+    
+    // Decision options in superposition
+    var option1Prob = beta(5, 3); // Conservative choice
+    var option2Prob = beta(3, 5); // Risky choice
+    var option3Prob = beta(4, 4); // Balanced choice
+    
+    // Collapse conditions
+    var collapseThreshold = 0.7;
+    var pressureCollapse = timePressure > 0.6 || anxietyLevel > 0.7;
+    var confidenceCollapse = Math.max(option1Prob, option2Prob, option3Prob) > collapseThreshold;
+    
+    // Trust matrix influence
+    var trustFactor = beta(clarityLevel * 6, anxietyLevel * 4);
+    
+    // Social modeling influence
+    var socialInfluence = gaussian(0, ${this.context.socialPressure} * 0.3);
+    
+    // Final decision collapse
+    var shouldCollapse = pressureCollapse || confidenceCollapse;
+    
+    if (shouldCollapse) {
+        // Collapse to most probable option
+        var options = [option1Prob, option2Prob, option3Prob];
+        var maxIndex = options.indexOf(Math.max(...options));
+        
+        return {
+            collapsed: true,
+            chosenOption: maxIndex,
+            confidence: Math.max(...options),
+            collapseReason: pressureCollapse ? "pressure" : "confidence",
+            trustInfluence: trustFactor,
+            socialInfluence: socialInfluence,
+            coherence: beta(6, 4),
+            variation: exponential(1.5)
+        };
+    } else {
+        return {
+            collapsed: false,
+            superpositionState: [option1Prob, option2Prob, option3Prob],
+            collapseProb: Math.max(...[option1Prob, option2Prob, option3Prob]),
+            confidence: 0.5,
+            coherence: beta(8, 2),
+            variation: exponential(2)
+        };
+    }
+};
+
+decisionCollapse();`;
+                    
+                    this.currentWebPPLCode = webpplCode;
+                    
+                    return new Promise((resolve, reject) => {
+                        try {
+                            // Run actual WebPPL code
+                            webppl.run(webpplCode, (err, result) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    // Process WebPPL result
+                                    const processedResult = this.processWebPPLDecisionResult(result, scenario);
+                                    resolve(processedResult);
+                                }
+                            });
+                        } catch (error) {
+                            reject(error);
+                        }
+                    });
+                },
+                
+                processWebPPLMemoryResult(webpplResult, scenario) {
+                    // Generate memory content based on WebPPL calculations
+                    const contents = {
+                        childhood_memory: [
+                            {
+                                negative: "كانت الحفلة غريبة نوعاً ما، أشعر أن هناك شيئاً كان مفقوداً رغم وجود الجميع",
+                                neutral: "حفلة عيد ميلاد عادية مع العائلة، كعكة شوكولاتة وبعض الهدايا الجميلة",
+                                positive: "أجمل حفلة في حياتي! الشمس الذهبية، ضحكات الأحباء، طعم الكعكة السحري الذي لا يُنسى"
+                            }
+                        ],
+                        relationship_memory: [
+                            {
+                                negative: "تلك المحادثة الطويلة... كان هناك توتر خفي، كلمات لم تُقل، مسافة رغم القُرب",
+                                neutral: "محادثة صريحة ومفيدة، وضحنا بعض الأمور وفهمنا بعضنا أكثر",
+                                positive: "لحظة سحرية من التواصل الحقيقي، عيون تتكلم، قلوب تتفهم، روابط تتقوى إلى الأبد"
+                            }
+                        ],
+                        creative_memory: [
+                            {
+                                negative: "ذلك اليوم عندما ظننت أنني أبدعت شيئاً، لكن ربما كان مجرد وهم أو تقليد لا واعي",
+                                neutral: "لحظة إنجاز جميلة، عمل جيد استغرق وقتاً وجهداً، شعور بالرضا والإكمال",
+                                positive: "انفجار إبداعي لا يُوصف! كأن الكون فتح أبوابه، الأفكار تتدفق كالنهر، سحر الخلق في أبهى صوره"
+                            }
+                        ]
+                    };
+                    
+                    const scenarioContents = contents[this.selectedScenario] || contents.childhood_memory;
+                    const contentArray = scenarioContents[0];
+                    
+                    let selectedContent;
+                    if (webpplResult.contentTone === 0) {
+                        selectedContent = contentArray.negative;
+                    } else if (webpplResult.contentTone === 1) {
+                        selectedContent = contentArray.neutral;
+                    } else {
+                        selectedContent = contentArray.positive;
+                    }
+                    
+                    return {
+                        type: "Memory Reconstruction",
+                        description: `${scenario.nameEn} / ${scenario.nameAr}`,
+                        content: selectedContent,
+                        confidence: webpplResult.confidence,
+                        variation: webpplResult.reconstructionVariation,
+                        coherence: webpplResult.coherence,
+                        probabilisticDetails: [
+                            `Emotional encryption key: ${webpplResult.emotionalColoring.toFixed(3)}`,
+                            `Mood bias influence: ${webpplResult.moodBias.toFixed(3)}`,
+                            `Contextual reconstruction: ${webpplResult.contextualInfluence.toFixed(3)}`,
+                            `Content emotional tone: ${['Negative', 'Neutral', 'Positive'][webpplResult.contentTone]}`,
+                            `Reconstruction noise: ${webpplResult.reconstructionVariation.toFixed(3)}`
+                        ],
+                        timestamp: new Date().toLocaleTimeString('ar-SA')
+                    };
+                },
+                
+                processWebPPLDecisionResult(webpplResult, scenario) {
+                    const decisions = {
+                        career_decision: [
+                            "اختيار الوظيفة الآمنة في الشركة الكبيرة - استقرار مالي وأمان وظيفي",
+                            "الانضمام للشركة الناشئة - مخاطرة محسوبة مع إمكانيات نمو هائلة",
+                            "العمل الحر والاستشارات - حرية كاملة مع مسؤولية شخصية أكبر"
+                        ],
+                        life_choice: [
+                            "البقاء في المدينة الحالية - الحفاظ على الروابط والاستقرار الحالي",
+                            "الانتقال لمدينة جديدة - مغامرة جديدة وفرص للنمو والتطور",
+                            "السفر لفترة قبل اتخاذ قرار نهائي - استكشاف الخيارات أكثر"
+                        ]
+                    };
+                    
+                    const scenarioDecisions = decisions[this.selectedScenario] || decisions.career_decision;
+                    
+                    if (webpplResult.collapsed) {
+                        const chosenDecision = scenarioDecisions[webpplResult.chosenOption];
+                        const collapseReasonAr = webpplResult.collapseReason === "pressure" ? "ضغط الوقت" : "وصول للثقة المطلوبة";
+                        
+                        return {
+                            type: "Decision Collapse",
+                            description: `${scenario.nameEn} / ${scenario.nameAr}`,
+                            content: chosenDecision,
+                            confidence: webpplResult.confidence,
+                            variation: webpplResult.variation,
+                            coherence: webpplResult.coherence,
+                            probabilisticDetails: [
+                                `Decision collapsed: ${webpplResult.collapsed}`,
+                                `Chosen option index: ${webpplResult.chosenOption}`,
+                                `Collapse reason: ${webpplResult.collapseReason} / ${collapseReasonAr}`,
+                                `Trust matrix influence: ${webpplResult.trustInfluence.toFixed(3)}`,
+                                `Social modeling effect: ${webpplResult.socialInfluence.toFixed(3)}`,
+                                `Final confidence: ${webpplResult.confidence.toFixed(3)}`
+                            ],
+                            timestamp: new Date().toLocaleTimeString('ar-SA')
+                        };
+                    } else {
+                        return {
+                            type: "Decision Superposition",
+                            description: `${scenario.nameEn} / ${scenario.nameAr}`,
+                            content: "القرار لا يزال في حالة تراكب كمي - الخيارات متعددة ولم يحدث انهيار بعد",
+                            confidence: webpplResult.confidence,
+                            variation: webpplResult.variation,
+                            coherence: webpplResult.coherence,
+                            probabilisticDetails: [
+                                `Superposition maintained: ${!webpplResult.collapsed}`,
+                                `Option 1 probability: ${webpplResult.superpositionState[0].toFixed(3)}`,
+                                `Option 2 probability: ${webpplResult.superpositionState[1].toFixed(3)}`,
+                                `Option 3 probability: ${webpplResult.superpositionState[2].toFixed(3)}`,
+                                `Collapse probability: ${webpplResult.collapseProb.toFixed(3)}`,
+                                `System coherence: ${webpplResult.coherence.toFixed(3)}`
+                            ],
+                            timestamp: new Date().toLocaleTimeString('ar-SA')
+                        };
+                    }
+                },
+                
+                addToHistory(result) {
+                    this.resultHistory.unshift(result);
+                    if (this.resultHistory.length > 20) {
+                        this.resultHistory = this.resultHistory.slice(0, 20);
+                    }
+                },
+                
+                getUniqueResultsCount() {
+                    const uniqueContents = new Set(this.resultHistory.map(r => r.content.substring(0, 50)));
+                    return uniqueContents.size;
+                },
+                
+                getAverageConfidence() {
+                    if (this.resultHistory.length === 0) return 0;
+                    const sum = this.resultHistory.reduce((acc, r) => acc + (r.confidence || 0), 0);
+                    return (sum / this.resultHistory.length) * 100;
+                },
+                
+                getVariationDiversity() {
+                    if (this.resultHistory.length < 2) return "N/A";
+                    const variations = this.resultHistory.map(r => r.variation || 0);
+                    const avg = variations.reduce((a, b) => a + b, 0) / variations.length;
+                    return avg > 2 ? "High" : avg > 1 ? "Medium" : "Low";
+                },
+                
+                resetSystem() {
+                    this.humanState = {
+                        mood: { joy: 0.5, despair: 0.2, clarity: 0.7, anxiety: 0.3 },
+                        cognitive: { energy: 0.8, focus: 0.6 }
+                    };
+                    this.context = {
+                        timePressure: 0.3,
+                        socialPressure: 0.4,
+                        informationCompleteness: 0.6,
+                        stakesLevel: 0.5
+                    };
+                    this.currentResult = null;
+                    this.resultHistory = [];
+                    this.currentWebPPLCode = '';
+                    this.selectedScenario = 'childhood_memory';
+                    
+                    this.logToWebPPL('System reset / إعادة تعيين النظام');
+                },
+                
+                logToWebPPL(message) {
+                    const log = document.getElementById('webpplLog');
+                    if (log) {
+                        const timestamp = new Date().toLocaleTimeString('ar-SA');
+                        log.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                        log.scrollTop = log.scrollHeight;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

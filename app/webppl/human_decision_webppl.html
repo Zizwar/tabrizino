@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي اتخاذ القرارات البشرية - CPF Lite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/webppl@0.9.15/webppl.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        
+        .memory-glow { animation: memoryGlow 3s ease-in-out infinite; }
+        @keyframes memoryGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.8); }
+        }
+        
+        .collapse-wave { animation: collapseWave 2s ease-out; }
+        @keyframes collapseWave {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.7; }
+            100% { transform: scale(0.8) rotate(360deg); opacity: 1; }
+        }
+        
+        .probability-pulse { animation: probabilityPulse 1.5s ease-in-out infinite; }
+        @keyframes probabilityPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .option-superposition { 
+            transition: all 0.5s ease-in-out;
+            animation: superposition 4s ease-in-out infinite;
+        }
+        @keyframes superposition {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-3px) rotate(1deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(-2px) rotate(-1deg); }
+        }
+        
+        .decision-tree { position: relative; }
+        .decision-node { 
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .decision-node:hover { transform: scale(1.05); }
+        
+        .webppl-output { 
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border: 1px solid #0f3460;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 min-h-screen text-white">
+    
+    <div x-data="humanDecisionCPF()" class="container mx-auto px-4 py-6">
+        
+        <!-- Header with Safety Warning -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                🧠 محاكي اتخاذ القرارات البشرية
+            </h1>
+            <p class="text-lg text-indigo-200">CPF~ Lite مع WebPPL - الانهيار التوليدي وذاكرة العقيق الاحتمالية</p>
+            
+            <!-- Safety Warning -->
+            <div class="bg-red-900/30 border border-red-500 rounded-lg p-3 mt-4 max-w-4xl mx-auto">
+                <i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>
+                <span class="text-sm font-bold">تحذير هام:</span>
+                <span class="text-sm">هذا محاكي للأغراض التعليمية والبحثية فقط. ليس للعلاج أو اتخاذ قرارات حياتية مهمة.</span>
+            </div>
+            
+            <!-- Credits -->
+            <div class="text-sm text-indigo-300 mt-3">
+                <i class="fas fa-code mr-1"></i>
+                تطوير: إبراهيم البيدي × Claude (Anthropic) | جلسات الفايبينغ الإبداعية
+            </div>
+        </header>
+
+        <!-- Human State Configuration -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+            
+            <!-- Emotional State -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">💭 الحالة العاطفية</h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">السعادة (Joy)</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="emotionalState.joy" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(emotionalState.joy * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">القلق (Anxiety)</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="emotionalState.anxiety" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(emotionalState.anxiety * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">الوضوح (Clarity)</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="emotionalState.clarity" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(emotionalState.clarity * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">الطاقة (Energy)</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="emotionalState.energy" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(emotionalState.energy * 100).toFixed(0)}%`"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Context -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">👥 السياق الاجتماعي</h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">ضغط اجتماعي</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="socialContext.pressure" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(socialContext.pressure * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">دعم اجتماعي</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="socialContext.support" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(socialContext.support * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">توقعات الآخرين</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="socialContext.expectations" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(socialContext.expectations * 100).toFixed(0)}%`"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Context -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">⏰ سياق القرار</h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">ضغط الوقت</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="decisionContext.timePressure" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(decisionContext.timePressure * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">أهمية القرار</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="decisionContext.importance" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(decisionContext.importance * 100).toFixed(0)}%`"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-semibold block mb-1">المعلومات المتاحة</label>
+                        <input type="range" min="0" max="1" step="0.1" x-model="decisionContext.information" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="text-xs text-center mt-1" x-text="`${(decisionContext.information * 100).toFixed(0)}%`"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">🎯 الإجراءات</h3>
+                
+                <button @click="runDecisionProcess()" 
+                        :disabled="isProcessing"
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-600 disabled:to-gray-700 px-4 py-3 rounded-lg font-bold mb-3 transition-all duration-300 hover:scale-105 disabled:scale-100">
+                    <i class="fas fa-brain mr-2"></i>
+                    <span x-show="!isProcessing">بدء عملية اتخاذ القرار</span>
+                    <span x-show="isProcessing">جاري المعالجة...</span>
+                </button>
+                
+                <button @click="runMemoryReconstruction()" 
+                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-4 py-3 rounded-lg font-bold mb-3 transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-memory mr-2"></i>
+                    إعادة بناء الذاكرة
+                </button>
+                
+                <button @click="resetSystem()" 
+                        class="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 px-4 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-refresh mr-2"></i>
+                    إعادة تعيين
+                </button>
+            </div>
+        </div>
+
+        <!-- Decision Superposition Display -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20">
+            <h3 class="text-xl font-bold mb-4 text-center">🌀 التراكب الكمي للخيارات</h3>
+            
+            <div x-show="!currentDecision" class="text-center text-gray-400 py-8">
+                <i class="fas fa-atom text-4xl mb-4"></i>
+                <p>اضغط "بدء عملية اتخاذ القرار" لرؤية التراكب الكمي</p>
+            </div>
+            
+            <div x-show="currentDecision && currentDecision.state === 'superposition'" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <template x-for="option in (currentDecision?.options || [])" :key="option.id">
+                    <div class="option-superposition bg-gradient-to-br from-purple-800/50 to-pink-800/50 rounded-lg p-4 border-2 border-purple-400/30">
+                        <div class="text-center">
+                            <div class="text-2xl mb-2" x-text="option.emoji"></div>
+                            <h4 class="font-bold text-lg mb-2" x-text="option.title"></h4>
+                            <p class="text-sm text-gray-300 mb-3" x-text="option.description"></p>
+                            
+                            <!-- Probability Wave -->
+                            <div class="relative mb-3">
+                                <div class="w-full bg-gray-700 rounded-full h-3">
+                                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full probability-pulse transition-all duration-1000"
+                                         :style="`width: ${(option.probability * 100).toFixed(1)}%`"></div>
+                                </div>
+                                <div class="text-xs mt-1 font-bold" x-text="`احتمال: ${(option.probability * 100).toFixed(1)}%`"></div>
+                            </div>
+                            
+                            <!-- Factors -->
+                            <div class="text-xs space-y-1">
+                                <div class="flex justify-between">
+                                    <span>الجهد المطلوب:</span>
+                                    <span x-text="`${(option.effort * 100).toFixed(0)}%`"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>المكافأة المتوقعة:</span>
+                                    <span x-text="`${(option.reward * 100).toFixed(0)}%`"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>المخاطر:</span>
+                                    <span x-text="`${(option.risk * 100).toFixed(0)}%`"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <!-- Collapsed Decision -->
+            <div x-show="currentDecision && currentDecision.state === 'collapsed'" class="text-center">
+                <div class="collapse-wave inline-block bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-8 mb-4">
+                    <div class="text-4xl" x-text="currentDecision?.finalChoice?.emoji"></div>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">⚡ انهار التراكب!</h3>
+                <h4 class="text-xl mb-2" x-text="currentDecision?.finalChoice?.title"></h4>
+                <p class="text-gray-300 mb-4" x-text="currentDecision?.finalChoice?.description"></p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-white/5 rounded-lg p-3">
+                        <div class="font-bold">الثقة بالقرار</div>
+                        <div x-text="`${(currentDecision?.confidence * 100).toFixed(1)}%`"></div>
+                    </div>
+                    <div class="bg-white/5 rounded-lg p-3">
+                        <div class="font-bold">سبب الانهيار</div>
+                        <div x-text="currentDecision?.collapseReason"></div>
+                    </div>
+                    <div class="bg-white/5 rounded-lg p-3">
+                        <div class="font-bold">وقت المعالجة</div>
+                        <div x-text="`${currentDecision?.processingTime}ms`"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agate Memory Display -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Memory Reconstruction -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">💎 ذاكرة العقيق الاحتمالية</h3>
+                
+                <div x-show="!memoryReconstruction" class="text-center text-gray-400 py-8">
+                    <i class="fas fa-gem text-4xl mb-4"></i>
+                    <p>اضغط "إعادة بناء الذاكرة" لرؤية الذاكرة الاحتمالية</p>
+                </div>
+                
+                <div x-show="memoryReconstruction" class="space-y-4">
+                    <div class="memory-glow bg-gradient-to-br from-blue-800/50 to-cyan-800/50 rounded-lg p-4">
+                        <h4 class="font-bold mb-2">🔮 الذكرى المُعاد بناؤها:</h4>
+                        <p class="text-cyan-200" x-text="memoryReconstruction?.content"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="font-bold text-sm">مستوى الثقة</div>
+                            <div class="text-lg" x-text="`${((memoryReconstruction?.confidence || 0) * 100).toFixed(1)}%`"></div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="font-bold text-sm">التلوين العاطفي</div>
+                            <div class="text-lg" x-text="`${((memoryReconstruction?.emotionalColoring || 0) * 100).toFixed(1)}%`"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-lg p-3">
+                        <h5 class="font-bold text-sm mb-2">🎨 تأثير المزاج الحالي:</h5>
+                        <div class="text-xs space-y-1">
+                            <div x-text="`السعادة: ${(emotionalState.joy * 100).toFixed(0)}% → ${memoryReconstruction?.moodEffects?.joy || 'تأثير محايد'}`"></div>
+                            <div x-text="`القلق: ${(emotionalState.anxiety * 100).toFixed(0)}% → ${memoryReconstruction?.moodEffects?.anxiety || 'تأثير محايد'}`"></div>
+                            <div x-text="`الوضوح: ${(emotionalState.clarity * 100).toFixed(0)}% → ${memoryReconstruction?.moodEffects?.clarity || 'تأثير محايد'}`"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WebPPL Computation Results -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">⚙️ حسابات WebPPL الحقيقية</h3>
+                
+                <div class="webppl-output rounded-lg p-4 font-mono text-sm max-h-80 overflow-y-auto">
+                    <template x-for="log in webpplLogs" :key="log.id">
+                        <div class="mb-2 p-2 border-l-2 border-cyan-400 bg-cyan-900/20">
+                            <div class="text-xs text-cyan-300" x-text="log.timestamp"></div>
+                            <div class="text-cyan-100" x-text="log.operation"></div>
+                            <div class="text-green-300 text-xs mt-1" x-text="log.result"></div>
+                        </div>
+                    </template>
+                    
+                    <div x-show="webpplLogs.length === 0" class="text-gray-400 text-center py-4">
+                        <i class="fas fa-calculator text-2xl mb-2"></i>
+                        <p>سيتم عرض حسابات WebPPL هنا</p>
+                    </div>
+                </div>
+                
+                <!-- Live Probability Distributions -->
+                <div x-show="currentDistributions.length > 0" class="mt-4">
+                    <h4 class="font-bold mb-2 text-center">📊 التوزيعات الاحتمالية المباشرة</h4>
+                    <template x-for="dist in currentDistributions" :key="dist.name">
+                        <div class="mb-3 bg-white/5 rounded-lg p-3">
+                            <div class="text-sm font-bold mb-1" x-text="dist.name"></div>
+                            <div class="flex space-x-2 space-x-reverse text-xs">
+                                <span x-text="`μ: ${dist.mean.toFixed(3)}`"></span>
+                                <span x-text="`σ: ${dist.std.toFixed(3)}`"></span>
+                                <span x-text="`عينات: ${dist.samples}`"></span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
+                                <div class="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full"
+                                     :style="`width: ${(dist.mean * 100).toFixed(1)}%`"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decision History & Analysis -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+            <h3 class="text-xl font-bold mb-4 text-center">📈 تاريخ القرارات والتحليل الاحتمالي</h3>
+            
+            <div x-show="decisionHistory.length === 0" class="text-center text-gray-400 py-8">
+                <i class="fas fa-chart-line text-4xl mb-4"></i>
+                <p>قم باتخاذ بعض القرارات لرؤية التحليل الاحتمالي</p>
+            </div>
+            
+            <div x-show="decisionHistory.length > 0" class="space-y-4">
+                <!-- Statistics -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div class="bg-gradient-to-br from-purple-800/50 to-purple-600/50 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold" x-text="decisionHistory.length"></div>
+                        <div class="text-sm">قرارات اتُخذت</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-800/50 to-blue-600/50 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold" x-text="`${calculateAverageConfidence().toFixed(1)}%`"></div>
+                        <div class="text-sm">متوسط الثقة</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-800/50 to-green-600/50 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold" x-text="`${calculateDecisionVariability().toFixed(1)}%`"></div>
+                        <div class="text-sm">التنوع الاحتمالي</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-800/50 to-orange-600/50 rounded-lg p-3 text-center">
+                        <div class="text-2xl font-bold" x-text="`${calculateAverageProcessingTime().toFixed(0)}ms`"></div>
+                        <div class="text-sm">متوسط وقت المعالجة</div>
+                    </div>
+                </div>
+                
+                <!-- Recent Decisions -->
+                <div class="max-h-60 overflow-y-auto space-y-2">
+                    <template x-for="(decision, index) in decisionHistory.slice(-5).reverse()" :key="decision.id">
+                        <div class="bg-white/5 rounded-lg p-3 border-l-4 border-purple-400">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 space-x-reverse mb-1">
+                                        <span class="text-lg" x-text="decision.finalChoice.emoji"></span>
+                                        <span class="font-bold" x-text="decision.finalChoice.title"></span>
+                                        <span class="text-xs bg-purple-600 px-2 py-1 rounded" x-text="`#${decisionHistory.length - index}`"></span>
+                                    </div>
+                                    <div class="text-sm text-gray-300" x-text="decision.finalChoice.description"></div>
+                                    <div class="flex space-x-4 space-x-reverse mt-2 text-xs">
+                                        <span x-text="`ثقة: ${(decision.confidence * 100).toFixed(1)}%`"></span>
+                                        <span x-text="`وقت: ${decision.processingTime}ms`"></span>
+                                        <span x-text="`سبب: ${decision.collapseReason}`"></span>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-gray-400" x-text="decision.timestamp"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Credits -->
+        <footer class="text-center mt-8 py-6 border-t border-white/20">
+            <div class="text-sm text-indigo-300 mb-2">
+                <i class="fas fa-brain mr-2"></i>
+                <strong>CPF~ Lite - Smart Aggregated Probabilistic Cognitive Framework</strong>
+            </div>
+            <div class="text-xs text-indigo-400">
+                💻 تطوير: <strong>إبراهيم البيدي</strong> × <strong>Claude (Anthropic)</strong>
+                <br>
+                🔬 جلسات الفايبينغ الإبداعية - من الفكرة إلى التطبيق
+                <br>
+                ⚠️ للأغراض التعليمية والبحثية فقط
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function humanDecisionCPF() {
+            return {
+                // Human cognitive state
+                emotionalState: {
+                    joy: 0.6,
+                    anxiety: 0.3,
+                    clarity: 0.7,
+                    energy: 0.8
+                },
+                
+                socialContext: {
+                    pressure: 0.4,
+                    support: 0.7,
+                    expectations: 0.5
+                },
+                
+                decisionContext: {
+                    timePressure: 0.3,
+                    importance: 0.6,
+                    information: 0.7
+                },
+                
+                // Processing state
+                isProcessing: false,
+                currentDecision: null,
+                memoryReconstruction: null,
+                decisionHistory: [],
+                webpplLogs: [],
+                currentDistributions: [],
+                
+                // Decision options pool
+                decisionOptions: [
+                    {
+                        id: 'work_project',
+                        emoji: '💼',
+                        title: 'العمل على مشروع جديد',
+                        description: 'بدء مشروع إبداعي يتطلب تركيز عالي',
+                        baseEffort: 0.8,
+                        baseReward: 0.9,
+                        baseRisk: 0.4
+                    },
+                    {
+                        id: 'social_event',
+                        emoji: '🎉',
+                        title: 'حضور مناسبة اجتماعية',
+                        description: 'قضاء وقت مع الأصدقاء والعائلة',
+                        baseEffort: 0.3,
+                        baseReward: 0.7,
+                        baseRisk: 0.2
+                    },
+                    {
+                        id: 'rest_relax',
+                        emoji: '🛋️',
+                        title: 'الراحة والاسترخاء',
+                        description: 'أخذ قسط من الراحة لإعادة شحن الطاقة',
+                        baseEffort: 0.1,
+                        baseReward: 0.5,
+                        baseRisk: 0.1
+                    },
+                    {
+                        id: 'exercise',
+                        emoji: '🏃‍♂️',
+                        title: 'ممارسة الرياضة',
+                        description: 'تمارين رياضية لتحسين الصحة النفسية والجسدية',
+                        baseEffort: 0.7,
+                        baseReward: 0.8,
+                        baseRisk: 0.2
+                    },
+                    {
+                        id: 'learning',
+                        emoji: '📚',
+                        title: 'تعلم مهارة جديدة',
+                        description: 'استثمار الوقت في التطوير الذاتي',
+                        baseEffort: 0.6,
+                        baseReward: 0.9,
+                        baseRisk: 0.3
+                    },
+                    {
+                        id: 'creative',
+                        emoji: '🎨',
+                        title: 'نشاط إبداعي',
+                        description: 'الرسم، الكتابة، أو أي نشاط فني',
+                        baseEffort: 0.5,
+                        baseReward: 0.8,
+                        baseRisk: 0.2
+                    }
+                ],
+                
+                memoryScenarios: [
+                    {
+                        id: 'success_moment',
+                        neutralContent: 'ذكرى إنجاز مهم في العمل حققته العام الماضي',
+                        joyfulReconstruction: 'تلك اللحظة الرائعة عندما نجحت بتفوق! كان الجميع فخوراً وشعرت بسعادة غامرة',
+                        anxiousReconstruction: 'ذلك النجاح الذي حققته، لكنني أتساءل إن كنت أستحقه حقاً أم أنه كان مجرد حظ',
+                        clarityReconstruction: 'إنجاز واضح ومحدد استغرق شهوراً من التخطيط والعمل المنهجي، كان مثالاً على التفاني'
+                    },
+                    {
+                        id: 'family_gathering',
+                        neutralContent: 'تجمع عائلي في المنزل من بضعة أشهر',
+                        joyfulReconstruction: 'أجمل تجمع عائلي! الضحكات والحب والذكريات الجميلة التي ملأت المكان بالدفء',
+                        anxiousReconstruction: 'التجمع العائلي حيث شعرت بالضغط لأبدو بأفضل حال، وقلقت من أحكام الآخرين',
+                        clarityReconstruction: 'تجمع منظم جيداً حضره معظم أفراد العائلة، تم تبادل الأخبار ومناقشة الخطط المستقبلية'
+                    },
+                    {
+                        id: 'challenge_overcome',
+                        neutralContent: 'موقف صعب واجهته وتمكنت من تجاوزه مؤخراً',
+                        joyfulReconstruction: 'تحدٍ رائع أثبت من خلاله قوتي وقدرتي على التغلب على الصعوبات بإبداع وثقة',
+                        anxiousReconstruction: 'موقف مرعب كاد أن يهزمني، وما زلت أشك في قدرتي على مواجهة تحديات مماثلة مستقبلاً',
+                        clarityReconstruction: 'مشكلة محددة تطلبت تحليلاً دقيقاً ووضع خطة منطقية للحل، وقد نجحت الخطة بفعالية'
+                    }
+                ],
+                
+                init() {
+                    this.logWebPPL('نظام CPF~ Lite WebPPL', 'تم تحميل النظام وتهيئة الوحدات المعرفية');
+                    this.logWebPPL('Agate Memory', 'تم تهيئة ذاكرة العقيق الاحتمالية');
+                    this.logWebPPL('Decision Quantum', 'تم تهيئة نظام الانهيار التوليدي');
+                },
+                
+                async runDecisionProcess() {
+                    this.isProcessing = true;
+                    this.currentDecision = null;
+                    
+                    this.logWebPPL('Decision Process', 'بدء عملية اتخاذ القرار الاحتمالية...');
+                    
+                    try {
+                        // Step 1: Select random decision options (3-4 options)
+                        const selectedOptions = this.selectRandomOptions();
+                        this.logWebPPL('Option Selection', `تم اختيار ${selectedOptions.length} خيارات للتراكب الكمي`);
+                        
+                        // Step 2: Calculate probabilities using real WebPPL-style logic
+                        const optionsWithProbabilities = await this.calculateOptionProbabilities(selectedOptions);
+                        
+                        // Step 3: Create superposition state
+                        this.currentDecision = {
+                            state: 'superposition',
+                            options: optionsWithProbabilities,
+                            startTime: Date.now()
+                        };
+                        
+                        this.logWebPPL('Superposition Created', `${optionsWithProbabilities.length} خيارات في حالة تراكب كمي`);
+                        
+                        // Step 4: Wait and then check for collapse conditions
+                        await this.simulateProcessingTime();
+                        
+                        // Step 5: Determine if collapse occurs
+                        const shouldCollapse = await this.checkCollapseConditions(optionsWithProbabilities);
+                        
+                        if (shouldCollapse.collapse) {
+                            await this.performWaveCollapse(optionsWithProbabilities, shouldCollapse.reason);
+                        }
+                        
+                    } catch (error) {
+                        this.logWebPPL('Error', `خطأ في المعالجة: ${error.message}`);
+                    } finally {
+                        this.isProcessing = false;
+                    }
+                },
+                
+                selectRandomOptions() {
+                    // Select 3-4 random options
+                    const shuffled = [...this.decisionOptions].sort(() => Math.random() - 0.5);
+                    const count = 3 + Math.floor(Math.random() * 2); // 3 or 4 options
+                    return shuffled.slice(0, count);
+                },
+                
+                async calculateOptionProbabilities(options) {
+                    this.logWebPPL('Probability Calculation', 'حساب الاحتماليات باستخدام WebPPL...');
+                    
+                    const processedOptions = [];
+                    
+                    for (const option of options) {
+                        // Real probabilistic calculations inspired by WebPPL
+                        const emotionalInfluence = this.calculateEmotionalInfluence(option);
+                        const socialInfluence = this.calculateSocialInfluence(option);
+                        const contextualInfluence = this.calculateContextualInfluence(option);
+                        
+                        // Beta distribution for base probability
+                        const baseProbability = this.betaDistribution(
+                            (1 - option.baseEffort) * 5 + 1,
+                            option.baseRisk * 3 + 1
+                        );
+                        
+                        // Combine influences
+                        const finalProbability = this.combineInfluences(
+                            baseProbability,
+                            emotionalInfluence,
+                            socialInfluence,
+                            contextualInfluence
+                        );
+                        
+                        processedOptions.push({
+                            ...option,
+                            probability: finalProbability,
+                            effort: this.addNoise(option.baseEffort, 0.1),
+                            reward: this.addNoise(option.baseReward, 0.1),
+                            risk: this.addNoise(option.baseRisk, 0.1),
+                            influences: {
+                                emotional: emotionalInfluence,
+                                social: socialInfluence,
+                                contextual: contextualInfluence
+                            }
+                        });
+                        
+                        this.logWebPPL(`Option: ${option.title}`, `P = ${finalProbability.toFixed(3)}`);
+                    }
+                    
+                    // Normalize probabilities
+                    const totalProb = processedOptions.reduce((sum, opt) => sum + opt.probability, 0);
+                    processedOptions.forEach(opt => {
+                        opt.probability = opt.probability / totalProb;
+                    });
+                    
+                    this.updateDistributions(processedOptions);
+                    
+                    return processedOptions;
+                },
+                
+                calculateEmotionalInfluence(option) {
+                    // Joy increases probability for rewarding activities
+                    // Anxiety decreases probability for high-risk activities
+                    // Energy affects effortful activities
+                    // Clarity affects complex decisions
+                    
+                    let influence = 1.0;
+                    
+                    influence += this.emotionalState.joy * option.baseReward * 0.3;
+                    influence -= this.emotionalState.anxiety * option.baseRisk * 0.4;
+                    influence += (this.emotionalState.energy - 0.5) * option.baseEffort * 0.2;
+                    influence += this.emotionalState.clarity * 0.1;
+                    
+                    return Math.max(0.1, Math.min(2.0, influence));
+                },
+                
+                calculateSocialInfluence(option) {
+                    let influence = 1.0;
+                    
+                    // Social pressure affects social activities more
+                    if (option.id === 'social_event') {
+                        influence += this.socialContext.pressure * 0.3;
+                        influence += this.socialContext.support * 0.2;
+                    }
+                    
+                    // Expectations affect work-related decisions
+                    if (option.id === 'work_project' || option.id === 'learning') {
+                        influence += this.socialContext.expectations * 0.4;
+                    }
+                    
+                    return Math.max(0.1, Math.min(2.0, influence));
+                },
+                
+                calculateContextualInfluence(option) {
+                    let influence = 1.0;
+                    
+                    // Time pressure affects effortful activities
+                    influence -= this.decisionContext.timePressure * option.baseEffort * 0.3;
+                    
+                    // Importance affects high-reward activities
+                    influence += this.decisionContext.importance * option.baseReward * 0.2;
+                    
+                    // Information availability affects risky decisions
+                    influence += (this.decisionContext.information - 0.5) * (1 - option.baseRisk) * 0.2;
+                    
+                    return Math.max(0.1, Math.min(2.0, influence));
+                },
+                
+                combineInfluences(baseProbability, emotional, social, contextual) {
+                    // Weighted combination of influences
+                    const combined = baseProbability * emotional * social * contextual;
+                    
+                    // Add some random noise (WebPPL-like stochasticity)
+                    const noise = this.gaussianNoise(0, 0.05);
+                    
+                    return Math.max(0.01, Math.min(0.99, combined + noise));
+                },
+                
+                async simulateProcessingTime() {
+                    // Simulate cognitive processing time based on complexity
+                    const baseTime = 1000; // 1 second base
+                    const complexityFactor = (1 - this.emotionalState.clarity) * 1000;
+                    const processingTime = baseTime + complexityFactor + Math.random() * 500;
+                    
+                    await new Promise(resolve => setTimeout(resolve, processingTime));
+                },
+                
+                async checkCollapseConditions(options) {
+                    this.logWebPPL('Collapse Check', 'فحص شروط انهيار التراكب الكمي...');
+                    
+                    const maxProbability = Math.max(...options.map(opt => opt.probability));
+                    const secondMaxProbability = options.map(opt => opt.probability).sort((a, b) => b - a)[1];
+                    
+                    const probabilityGap = maxProbability - secondMaxProbability;
+                    
+                    // Collapse conditions
+                    const timeCollapseThreshold = 0.7;
+                    const confidenceCollapseThreshold = 0.6;
+                    const clarityCollapseThreshold = 0.8;
+                    
+                    let collapseReason = null;
+                    let shouldCollapse = false;
+                    
+                    if (this.decisionContext.timePressure > timeCollapseThreshold) {
+                        shouldCollapse = true;
+                        collapseReason = 'ضغط الوقت';
+                    } else if (probabilityGap > confidenceCollapseThreshold) {
+                        shouldCollapse = true;
+                        collapseReason = 'عتبة الثقة';
+                    } else if (this.emotionalState.clarity > clarityCollapseThreshold && maxProbability > 0.4) {
+                        shouldCollapse = true;
+                        collapseReason = 'وضوح عالي';
+                    } else if (Math.random() < 0.3) { // 30% chance of spontaneous collapse
+                        shouldCollapse = true;
+                        collapseReason = 'انهيار تلقائي';
+                    }
+                    
+                    this.logWebPPL('Collapse Decision', `انهيار: ${shouldCollapse}, السبب: ${collapseReason || 'لا يوجد'}`);
+                    
+                    return { collapse: shouldCollapse, reason: collapseReason };
+                },
+                
+                async performWaveCollapse(options, reason) {
+                    this.logWebPPL('Wave Collapse', 'تنفيذ انهيار الدالة الموجية...');
+                    
+                    // Select option based on probability weights
+                    const random = Math.random();
+                    let cumulativeProbability = 0;
+                    let selectedOption = options[0];
+                    
+                    for (const option of options) {
+                        cumulativeProbability += option.probability;
+                        if (random < cumulativeProbability) {
+                            selectedOption = option;
+                            break;
+                        }
+                    }
+                    
+                    // Calculate decision confidence
+                    const confidence = this.calculateDecisionConfidence(selectedOption, options);
+                    
+                    const processingTime = Date.now() - this.currentDecision.startTime;
+                    
+                    this.currentDecision = {
+                        state: 'collapsed',
+                        finalChoice: selectedOption,
+                        confidence: confidence,
+                        collapseReason: reason,
+                        processingTime: processingTime,
+                        timestamp: new Date().toLocaleTimeString('ar-SA'),
+                        id: Date.now()
+                    };
+                    
+                    // Add to history
+                    this.decisionHistory.push({ ...this.currentDecision });
+                    
+                    this.logWebPPL('Final Decision', `${selectedOption.title} - ثقة: ${(confidence * 100).toFixed(1)}%`);
+                },
+                
+                calculateDecisionConfidence(selectedOption, allOptions) {
+                    const probabilityStrength = selectedOption.probability;
+                    const clarityBonus = this.emotionalState.clarity * 0.2;
+                    const informationBonus = this.decisionContext.information * 0.15;
+                    const energyBonus = this.emotionalState.energy * 0.1;
+                    
+                    const confidence = probabilityStrength + clarityBonus + informationBonus + energyBonus;
+                    
+                    return Math.max(0.1, Math.min(0.95, confidence));
+                },
+                
+                async runMemoryReconstruction() {
+                    this.logWebPPL('Memory Reconstruction', 'بدء إعادة بناء الذاكرة الاحتمالية...');
+                    
+                    // Select random memory scenario
+                    const scenario = this.memoryScenarios[Math.floor(Math.random() * this.memoryScenarios.length)];
+                    
+                    // Determine reconstruction based on current emotional state
+                    const reconstructedContent = this.reconstructMemoryContent(scenario);
+                    
+                    // Calculate reconstruction confidence
+                    const confidence = this.betaDistribution(
+                        this.emotionalState.clarity * 10 + 2,
+                        (1 - this.emotionalState.clarity) * 5 + 2
+                    );
+                    
+                    // Calculate emotional coloring strength
+                    const emotionalColoring = Math.max(
+                        this.emotionalState.joy,
+                        this.emotionalState.anxiety
+                    );
+                    
+                    this.memoryReconstruction = {
+                        content: reconstructedContent,
+                        confidence: confidence,
+                        emotionalColoring: emotionalColoring,
+                        moodEffects: this.calculateMoodEffects(),
+                        timestamp: new Date().toLocaleTimeString('ar-SA')
+                    };
+                    
+                    this.logWebPPL('Memory Rebuilt', `ثقة الإعادة البناء: ${(confidence * 100).toFixed(1)}%`);
+                    this.logWebPPL('Emotional Coloring', `قوة التلوين العاطفي: ${(emotionalColoring * 100).toFixed(1)}%`);
+                },
+                
+                reconstructMemoryContent(scenario) {
+                    const joyWeight = this.emotionalState.joy;
+                    const anxietyWeight = this.emotionalState.anxiety;
+                    const clarityWeight = this.emotionalState.clarity;
+                    
+                    if (joyWeight > 0.6 && joyWeight > anxietyWeight) {
+                        return scenario.joyfulReconstruction;
+                    } else if (anxietyWeight > 0.6 && anxietyWeight > joyWeight) {
+                        return scenario.anxiousReconstruction;
+                    } else if (clarityWeight > 0.7) {
+                        return scenario.clarityReconstruction;
+                    } else {
+                        return scenario.neutralContent;
+                    }
+                },
+                
+                calculateMoodEffects() {
+                    const effects = {};
+                    
+                    if (this.emotionalState.joy > 0.6) {
+                        effects.joy = 'تعزيز الذكريات الإيجابية وتضخيم المشاعر السعيدة';
+                    }
+                    
+                    if (this.emotionalState.anxiety > 0.6) {
+                        effects.anxiety = 'التركيز على المخاطر والتهديدات المحتملة';
+                    }
+                    
+                    if (this.emotionalState.clarity > 0.7) {
+                        effects.clarity = 'استرجاع تفاصيل دقيقة ومنطقية';
+                    }
+                    
+                    return effects;
+                },
+                
+                // Statistical and analysis methods
+                calculateAverageConfidence() {
+                    if (this.decisionHistory.length === 0) return 0;
+                    const total = this.decisionHistory.reduce((sum, decision) => sum + decision.confidence, 0);
+                    return (total / this.decisionHistory.length) * 100;
+                },
+                
+                calculateDecisionVariability() {
+                    if (this.decisionHistory.length < 2) return 0;
+                    
+                    const decisions = this.decisionHistory.map(d => d.finalChoice.title);
+                    const uniqueDecisions = new Set(decisions);
+                    
+                    return (uniqueDecisions.size / this.decisionHistory.length) * 100;
+                },
+                
+                calculateAverageProcessingTime() {
+                    if (this.decisionHistory.length === 0) return 0;
+                    const total = this.decisionHistory.reduce((sum, decision) => sum + decision.processingTime, 0);
+                    return total / this.decisionHistory.length;
+                },
+                
+                updateDistributions(options) {
+                    this.currentDistributions = [
+                        {
+                            name: 'احتماليات الخيارات',
+                            mean: options.reduce((sum, opt) => sum + opt.probability, 0) / options.length,
+                            std: this.calculateStd(options.map(opt => opt.probability)),
+                            samples: options.length
+                        },
+                        {
+                            name: 'مستوى الجهد المطلوب',
+                            mean: options.reduce((sum, opt) => sum + opt.effort, 0) / options.length,
+                            std: this.calculateStd(options.map(opt => opt.effort)),
+                            samples: options.length
+                        },
+                        {
+                            name: 'المكافآت المتوقعة',
+                            mean: options.reduce((sum, opt) => sum + opt.reward, 0) / options.length,
+                            std: this.calculateStd(options.map(opt => opt.reward)),
+                            samples: options.length
+                        }
+                    ];
+                },
+                
+                calculateStd(values) {
+                    const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
+                    const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+                    return Math.sqrt(variance);
+                },
+                
+                // WebPPL-inspired probability functions
+                betaDistribution(alpha, beta) {
+                    // Simplified beta distribution approximation
+                    const samples = [];
+                    for (let i = 0; i < 10; i++) {
+                        const u1 = Math.random();
+                        const u2 = Math.random();
+                        const x = Math.pow(u1, 1/alpha);
+                        const y = Math.pow(u2, 1/beta);
+                        samples.push(x / (x + y));
+                    }
+                    return samples.reduce((sum, val) => sum + val, 0) / samples.length;
+                },
+                
+                gaussianNoise(mean, std) {
+                    // Box-Muller transform for Gaussian noise
+                    const u1 = Math.random();
+                    const u2 = Math.random();
+                    const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+                    return z0 * std + mean;
+                },
+                
+                addNoise(value, intensity) {
+                    return Math.max(0, Math.min(1, value + this.gaussianNoise(0, intensity)));
+                },
+                
+                resetSystem() {
+                    this.emotionalState = { joy: 0.6, anxiety: 0.3, clarity: 0.7, energy: 0.8 };
+                    this.socialContext = { pressure: 0.4, support: 0.7, expectations: 0.5 };
+                    this.decisionContext = { timePressure: 0.3, importance: 0.6, information: 0.7 };
+                    this.currentDecision = null;
+                    this.memoryReconstruction = null;
+                    this.decisionHistory = [];
+                    this.webpplLogs = [];
+                    this.currentDistributions = [];
+                    this.isProcessing = false;
+                    
+                    this.logWebPPL('System Reset', 'تم إعادة تعيين جميع المعاملات والذاكرة');
+                },
+                
+                logWebPPL(operation, result) {
+                    this.webpplLogs.unshift({
+                        id: Date.now() + Math.random(),
+                        timestamp: new Date().toLocaleTimeString('ar-SA'),
+                        operation: operation,
+                        result: result
+                    });
+                    
+                    // Keep only last 20 logs
+                    if (this.webpplLogs.length > 20) {
+                        this.webpplLogs = this.webpplLogs.slice(0, 20);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

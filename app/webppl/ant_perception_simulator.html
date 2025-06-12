@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ant Perception Simulator - CPF</title>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uuid@9.0.0/dist/umd/uuidv4.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .trail-dot {
+      r: 3;
+      fill: rgba(0,255,0,0.4);
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+  <h1 class="text-3xl font-bold mb-4 text-green-300">🐜 Ant Cognitive Flow (CPF Lite)</h1>
+  <div class="w-full max-w-4xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-gray-800 p-4 rounded-xl shadow-xl" x-data="window.antSim()">
+        <h2 class="text-xl font-semibold mb-2">Environment</h2>
+        <svg viewBox="0 0 300 300" class="w-full h-64 bg-gray-900 rounded" @click="dropPheromone($event)">
+          <circle cx="150" cy="150" r="8" fill="red" :cx="ant.x" :cy="ant.y"/>
+          <template x-for="p in pheromones" :key="p.id">
+            <circle class="trail-dot" :cx="p.x" :cy="p.y"></circle>
+          </template>
+        </svg>
+        <div class="mt-4 text-sm text-gray-300">
+          Position: (<span x-text="ant.x.toFixed(1)"></span>, <span x-text="ant.y.toFixed(1)"></span>)<br>
+          Heading: <span x-text="ant.heading"></span>°<br>
+          Signal Strength: <span x-text="signalStrength"></span>
+        </div>
+        <button @click="tick()" class="mt-2 px-4 py-1 bg-green-600 hover:bg-green-500 rounded">Move Ant</button>
+      </div>
+
+      <div class="bg-gray-800 p-4 rounded-xl shadow-xl">
+        <h2 class="text-xl font-semibold mb-2">Cognitive Stats</h2>
+        <canvas id="cognitiveChart" class="w-full h-48"></canvas>
+        <div class="text-sm text-gray-300 mt-2">
+          Each step simulates a simple decision: toward stronger pheromone.
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+window.addEventListener('alpine:init', () => {
+  Alpine.data('antSim', window.antSim);
+});
+
+window.antSim = function () {
+  const pheromones = [];
+  const ant = {
+    x: 150,
+    y: 150,
+    heading: 0 // degrees
+  };
+
+  return {
+    ant,
+    pheromones,
+    signalStrength: 0,
+    dropPheromone(e) {
+      const rect = e.target.getBoundingClientRect();
+      this.pheromones.push({
+        id: crypto.randomUUID(),
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    },
+    tick() {
+      let best = null;
+      let minDist = Infinity;
+      for (let p of this.pheromones) {
+        const dx = p.x - this.ant.x;
+        const dy = p.y - this.ant.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < minDist) {
+          minDist = dist;
+          best = p;
+        }
+      }
+      this.signalStrength = best ? (100 - minDist).toFixed(2) : 0;
+      if (best) {
+        const angle = Math.atan2(best.y - this.ant.y, best.x - this.ant.x);
+        this.ant.heading = (angle * 180 / Math.PI).toFixed(2);
+        this.ant.x += Math.cos(angle) * 5;
+        this.ant.y += Math.sin(angle) * 5;
+        updateChart(minDist);
+      }
+    }
+  }
+}
+
+let chart;
+window.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('cognitiveChart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Signal Distance',
+        borderColor: 'rgba(34,197,94,0.8)',
+        data: [],
+        fill: false,
+      }]
+    },
+    options: {
+      animation: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          reverse: true
+        }
+      }
+    }
+  });
+});
+
+function updateChart(dist) {
+  chart.data.labels.push('');
+  chart.data.datasets[0].data.push(dist);
+  if (chart.data.labels.length > 30) {
+    chart.data.labels.shift();
+    chart.data.datasets[0].data.shift();
+  }
+  chart.update();
+}
+</script>
+</body>
+</html>

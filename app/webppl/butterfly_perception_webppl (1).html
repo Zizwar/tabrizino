@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي إدراك الفراشة - CPF Lite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/webppl@0.9.15/webppl.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        .butterfly-wing { animation: flutter 0.3s ease-in-out infinite alternate; }
+        @keyframes flutter {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(15deg); }
+        }
+        .flower-bloom { 
+            animation: bloom 2s ease-in-out infinite; 
+            transform-origin: center;
+        }
+        @keyframes bloom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .probability-wave { 
+            animation: wave 3s ease-in-out infinite; 
+        }
+        @keyframes wave {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        .butterfly-wing {
+            animation: flutter 0.3s ease-in-out infinite alternate;
+        }
+        .clouds {
+            animation: float 8s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-900 via-emerald-800 to-teal-700 min-h-screen text-white">
+    
+    <div x-data="butterflyPerceptionCPF()" class="container mx-auto px-4 py-6">
+        
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                🦋 محاكي إدراك الفراشة
+            </h1>
+            <p class="text-lg text-emerald-200">CPF~ Lite مع WebPPL - الإدراك الاحتمالي في الطبيعة</p>
+            <div class="text-sm text-emerald-300 mt-2">
+                <i class="fas fa-brain mr-2"></i>
+                مساهمة: بإبراهيم البيدي × Claude (Anthropic) - جلسات الفايبينغ الإبداعية
+            </div>
+        </header>
+
+        <!-- Control Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+            
+            <!-- Butterfly State Controls -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">🦋 حالة الفراشة</h3>
+                
+                <!-- Energy Level -->
+                <div class="mb-3">
+                    <label class="text-sm font-semibold block mb-1">طاقة الفراشة</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="butterflyState.energy" 
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs mt-1">
+                        <span>منهكة</span>
+                        <span x-text="`${(butterflyState.energy * 100).toFixed(0)}%`"></span>
+                        <span>نشيطة</span>
+                    </div>
+                </div>
+                
+                <!-- Hunger -->
+                <div class="mb-3">
+                    <label class="text-sm font-semibold block mb-1">مستوى الجوع</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="butterflyState.hunger" 
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs mt-1">
+                        <span>شبعانة</span>
+                        <span x-text="`${(butterflyState.hunger * 100).toFixed(0)}%`"></span>
+                        <span>جائعة</span>
+                    </div>
+                </div>
+                
+                <!-- Mating Drive -->
+                <div class="mb-3">
+                    <label class="text-sm font-semibold block mb-1">دافع التزاوج</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="butterflyState.mating" 
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs mt-1">
+                        <span>منخفض</span>
+                        <span x-text="`${(butterflyState.mating * 100).toFixed(0)}%`"></span>
+                        <span>عالي</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Environmental Controls -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">🌿 البيئة المحيطة</h3>
+                
+                <!-- Predator Risk -->
+                <div class="mb-3">
+                    <label class="text-sm font-semibold block mb-1">خطر الحيوانات المفترسة</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="environment.predatorRisk" 
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs mt-1">
+                        <span>آمن</span>
+                        <span x-text="`${(environment.predatorRisk * 100).toFixed(0)}%`"></span>
+                        <span>خطر</span>
+                    </div>
+                </div>
+                
+                <!-- Wind Strength -->
+                <div class="mb-3">
+                    <label class="text-sm font-semibold block mb-1">قوة الرياح</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="environment.wind" 
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs mt-1">
+                        <span>هادئ</span>
+                        <span x-text="`${(environment.wind * 100).toFixed(0)}%`"></span>
+                        <span>عاصف</span>
+                    </div>
+                </div>
+                
+                <!-- Flower Density -->
+                <div class="mb-3">
+                    <label class="text-sm font-semibold block mb-1">كثافة الأزهار</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="environment.flowerDensity" 
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs mt-1">
+                        <span>قليلة</span>
+                        <span x-text="`${(environment.flowerDensity * 100).toFixed(0)}%`"></span>
+                        <span>كثيفة</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CPF Modules Status -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">🧠 وحدات CPF</h3>
+                
+                <template x-for="module in cpfModules" :key="module.name">
+                    <div class="mb-2 p-2 bg-white/5 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold" x-text="module.name"></span>
+                            <span class="text-xs" x-text="`${(module.activity * 100).toFixed(0)}%`"></span>
+                        </div>
+                        <div class="w-full bg-gray-300 rounded-full h-1 mt-1">
+                            <div class="h-1 rounded-full transition-all duration-500"
+                                 :class="module.activity > 0.7 ? 'bg-green-400' : module.activity > 0.4 ? 'bg-yellow-400' : 'bg-red-400'"
+                                 :style="`width: ${module.activity * 100}%`"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">⚡ الإجراءات</h3>
+                
+                <button @click="runPerception()" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-bold mb-3 transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-brain mr-2"></i>
+                    تشغيل الإدراك
+                </button>
+                
+                <button @click="runMultiplePerceptions()" 
+                        class="w-full bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg font-bold mb-3 transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-sync mr-2"></i>
+                    تشغيل متعدد (×5)
+                </button>
+                
+                <button @click="resetEnvironment()" 
+                        class="w-full bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-refresh mr-2"></i>
+                    إعادة تعيين
+                </button>
+            </div>
+        </div>
+
+        <!-- SVG Scene Container -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20">
+            <h3 class="text-xl font-bold mb-4 text-center">🌼 مشهد الحقل التفاعلي</h3>
+            <div class="w-full h-96 rounded-lg overflow-hidden bg-gradient-to-b from-sky-200 via-sky-100 to-green-300 relative">
+                <svg class="w-full h-full" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background elements -->
+                    <defs>
+                        <radialGradient id="sunGradient" cx="50%" cy="30%" r="15%">
+                            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FFA500;stop-opacity:0.3" />
+                        </radialGradient>
+                        
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge> 
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Sun -->
+                    <circle cx="700" cy="60" r="40" fill="url(#sunGradient)" filter="url(#glow)">
+                        <animate attributeName="r" values="38;42;38" dur="4s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Clouds -->
+                    <g class="clouds" opacity="0.7">
+                        <ellipse cx="150" cy="80" rx="30" ry="15" fill="white">
+                            <animateTransform attributeName="transform" type="translate" 
+                                            values="0,0; 20,0; 0,0" dur="10s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <ellipse cx="170" cy="75" rx="25" ry="12" fill="white">
+                            <animateTransform attributeName="transform" type="translate" 
+                                            values="0,0; 15,0; 0,0" dur="12s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <ellipse cx="500" cy="60" rx="35" ry="18" fill="white">
+                            <animateTransform attributeName="transform" type="translate" 
+                                            values="0,0; -25,0; 0,0" dur="15s" repeatCount="indefinite"/>
+                        </ellipse>
+                    </g>
+                    
+                    <!-- Ground/Grass -->
+                    <rect x="0" y="320" width="800" height="80" fill="#228B22"/>
+                    
+                    <!-- Flowers -->
+                    <g class="flowers">
+                        <!-- Flower 1 -->
+                        <g transform="translate(100, 280)">
+                            <line x1="0" y1="0" x2="0" y2="30" stroke="#228B22" stroke-width="3"/>
+                            <circle cx="-8" cy="-10" r="6" fill="#FF69B4" class="flower-bloom"/>
+                            <circle cx="8" cy="-10" r="6" fill="#FF69B4" class="flower-bloom"/>
+                            <circle cx="0" cy="-16" r="6" fill="#FF69B4" class="flower-bloom"/>
+                            <circle cx="0" cy="-4" r="6" fill="#FF69B4" class="flower-bloom"/>
+                            <circle cx="0" cy="-10" r="4" fill="#FFD700"/>
+                        </g>
+                        
+                        <!-- Flower 2 -->
+                        <g transform="translate(250, 290)">
+                            <line x1="0" y1="0" x2="0" y2="25" stroke="#228B22" stroke-width="3"/>
+                            <circle cx="-6" cy="-8" r="5" fill="#FFA500" class="flower-bloom"/>
+                            <circle cx="6" cy="-8" r="5" fill="#FFA500" class="flower-bloom"/>
+                            <circle cx="0" cy="-14" r="5" fill="#FFA500" class="flower-bloom"/>
+                            <circle cx="0" cy="-2" r="5" fill="#FFA500" class="flower-bloom"/>
+                            <circle cx="0" cy="-8" r="3" fill="#8B4513"/>
+                        </g>
+                        
+                        <!-- Flower 3 -->
+                        <g transform="translate(400, 285)">
+                            <line x1="0" y1="0" x2="0" y2="28" stroke="#228B22" stroke-width="3"/>
+                            <circle cx="-7" cy="-9" r="5.5" fill="#FF1493" class="flower-bloom"/>
+                            <circle cx="7" cy="-9" r="5.5" fill="#FF1493" class="flower-bloom"/>
+                            <circle cx="0" cy="-15" r="5.5" fill="#FF1493" class="flower-bloom"/>
+                            <circle cx="0" cy="-3" r="5.5" fill="#FF1493" class="flower-bloom"/>
+                            <circle cx="0" cy="-9" r="3.5" fill="#FFFF00"/>
+                        </g>
+                        
+                        <!-- Flower 4 -->
+                        <g transform="translate(600, 290)">
+                            <line x1="0" y1="0" x2="0" y2="24" stroke="#228B22" stroke-width="3"/>
+                            <circle cx="-5" cy="-7" r="4.5" fill="#FFB6C1" class="flower-bloom"/>
+                            <circle cx="5" cy="-7" r="4.5" fill="#FFB6C1" class="flower-bloom"/>
+                            <circle cx="0" cy="-12" r="4.5" fill="#FFB6C1" class="flower-bloom"/>
+                            <circle cx="0" cy="-2" r="4.5" fill="#FFB6C1" class="flower-bloom"/>
+                            <circle cx="0" cy="-7" r="3" fill="#FF6347"/>
+                        </g>
+                        
+                        <!-- More flowers -->
+                        <g transform="translate(150, 300)">
+                            <line x1="0" y1="0" x2="0" y2="20" stroke="#228B22" stroke-width="2"/>
+                            <circle cx="-4" cy="-6" r="3" fill="#9370DB" class="flower-bloom"/>
+                            <circle cx="4" cy="-6" r="3" fill="#9370DB" class="flower-bloom"/>
+                            <circle cx="0" cy="-10" r="3" fill="#9370DB" class="flower-bloom"/>
+                            <circle cx="0" cy="-2" r="3" fill="#9370DB" class="flower-bloom"/>
+                            <circle cx="0" cy="-6" r="2" fill="#FFD700"/>
+                        </g>
+                        
+                        <g transform="translate(500, 295)">
+                            <line x1="0" y1="0" x2="0" y2="22" stroke="#228B22" stroke-width="2"/>
+                            <circle cx="-4.5" cy="-7" r="4" fill="#FF4500" class="flower-bloom"/>
+                            <circle cx="4.5" cy="-7" r="4" fill="#FF4500" class="flower-bloom"/>
+                            <circle cx="0" cy="-12" r="4" fill="#FF4500" class="flower-bloom"/>
+                            <circle cx="0" cy="-2" r="4" fill="#FF4500" class="flower-bloom"/>
+                            <circle cx="0" cy="-7" r="2.5" fill="#32CD32"/>
+                        </g>
+                    </g>
+                    
+                    <!-- Butterfly -->
+                    <g id="butterfly" transform="translate(300, 150)" class="butterfly-wing">
+                        <!-- Body -->
+                        <ellipse cx="0" cy="0" rx="2" ry="15" fill="#8B4513"/>
+                        
+                        <!-- Left wings -->
+                        <ellipse cx="-12" cy="-5" rx="8" ry="12" fill="#FF6347" opacity="0.9" 
+                                transform="rotate(-20)">
+                            <animateTransform attributeName="transform" type="rotate" 
+                                            values="-20; -10; -20" dur="0.3s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <ellipse cx="-10" cy="8" rx="6" ry="9" fill="#FF6347" opacity="0.9" 
+                                transform="rotate(-10)">
+                            <animateTransform attributeName="transform" type="rotate" 
+                                            values="-10; 0; -10" dur="0.3s" repeatCount="indefinite"/>
+                        </ellipse>
+                        
+                        <!-- Right wings -->
+                        <ellipse cx="12" cy="-5" rx="8" ry="12" fill="#FF6347" opacity="0.9" 
+                                transform="rotate(20)">
+                            <animateTransform attributeName="transform" type="rotate" 
+                                            values="20; 10; 20" dur="0.3s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <ellipse cx="10" cy="8" rx="6" ry="9" fill="#FF6347" opacity="0.9" 
+                                transform="rotate(10)">
+                            <animateTransform attributeName="transform" type="rotate" 
+                                            values="10; 0; 10" dur="0.3s" repeatCount="indefinite"/>
+                        </ellipse>
+                        
+                        <!-- Wing patterns -->
+                        <circle cx="-12" cy="-5" r="3" fill="#FFD700" opacity="0.8"/>
+                        <circle cx="12" cy="-5" r="3" fill="#FFD700" opacity="0.8"/>
+                        <circle cx="-10" cy="8" r="2" fill="#FFD700" opacity="0.8"/>
+                        <circle cx="10" cy="8" r="2" fill="#FFD700" opacity="0.8"/>
+                        
+                        <!-- Antennae -->
+                        <line x1="-1" y1="-15" x2="-3" y2="-20" stroke="#8B4513" stroke-width="1"/>
+                        <line x1="1" y1="-15" x2="3" y2="-20" stroke="#8B4513" stroke-width="1"/>
+                        <circle cx="-3" cy="-20" r="1" fill="#8B4513"/>
+                        <circle cx="3" cy="-20" r="1" fill="#8B4513"/>
+                        
+                        <!-- Floating animation -->
+                        <animateTransform attributeName="transform" type="translate" 
+                                        values="300,150; 300,140; 300,150" dur="2s" repeatCount="indefinite"/>
+                    </g>
+                    
+                    <!-- Perception waves (visible during processing) -->
+                    <g id="perceptionWaves" style="display: none;">
+                        <circle cx="300" cy="150" r="30" fill="none" stroke="#00BFFF" stroke-width="2" opacity="0.6" class="probability-wave">
+                            <animate attributeName="r" values="30;60;30" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="300" cy="150" r="50" fill="none" stroke="#FF69B4" stroke-width="2" opacity="0.4" class="probability-wave">
+                            <animate attributeName="r" values="50;80;50" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="300" cy="150" r="70" fill="none" stroke="#32CD32" stroke-width="2" opacity="0.3" class="probability-wave">
+                            <animate attributeName="r" values="70;100;70" dur="2.5s" repeatCount="indefinite"/>
+                        </circle>
+                    </g>
+                    
+                    <!-- Text overlay for behavior -->
+                    <text id="behaviorText" x="400" y="50" text-anchor="middle" font-family="Cairo" font-size="16" font-weight="bold" fill="#2D4A22" opacity="0">
+                        سلوك الفراشة
+                    </text>
+                </svg>
+                
+                <!-- Floating elements with CSS -->
+                <div class="absolute top-4 left-4 text-2xl animate-bounce">🌸</div>
+                <div class="absolute top-16 right-20 text-xl animate-pulse">🌺</div>
+                <div class="absolute bottom-20 left-16 text-lg animate-bounce" style="animation-delay: 0.5s;">🌻</div>
+                <div class="absolute bottom-12 right-12 text-xl animate-pulse" style="animation-delay: 1s;">🌷</div>
+            </div>
+        </div>
+
+        <!-- Perception Results -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Current Perception -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">🎯 الإدراك الحالي</h3>
+                
+                <div x-show="currentPerception" class="space-y-4">
+                    <div class="bg-white/5 rounded-lg p-4">
+                        <h4 class="font-bold text-lg mb-2">السلوك المتوقع:</h4>
+                        <p class="text-emerald-200" x-text="currentPerception?.behavior || 'غير محدد'"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold" x-text="`${((currentPerception?.confidence || 0) * 100).toFixed(1)}%`"></div>
+                            <div class="text-sm text-gray-300">الثقة</div>
+                        </div>
+                        <div class="bg-white/5 rounded-lg p-3 text-center">
+                            <div class="text-lg font-bold" x-text="`${((currentPerception?.novelty || 0) * 100).toFixed(1)}%`"></div>
+                            <div class="text-sm text-gray-300">الجدة</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-lg p-4">
+                        <h4 class="font-bold mb-2">التفاصيل المعرفية:</h4>
+                        <template x-for="detail in (currentPerception?.details || [])" :key="detail">
+                            <div class="text-sm text-emerald-200 mb-1" x-text="detail"></div>
+                        </template>
+                    </div>
+                </div>
+                
+                <div x-show="!currentPerception" class="text-center text-gray-400 py-8">
+                    <i class="fas fa-brain text-4xl mb-4"></i>
+                    <p>قم بتشغيل الإدراك لرؤية النتائج</p>
+                </div>
+            </div>
+
+            <!-- Perception Variations -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">🔄 التنوعات الاحتمالية</h3>
+                
+                <div x-show="perceptionHistory.length > 0" class="space-y-3 max-h-80 overflow-y-auto">
+                    <template x-for="(perception, index) in perceptionHistory" :key="index">
+                        <div class="bg-white/5 rounded-lg p-3 border-l-4" 
+                             :class="index === 0 ? 'border-yellow-400' : 'border-gray-500'">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-sm font-semibold" x-text="`تشغيل #${perceptionHistory.length - index}`"></span>
+                                <span class="text-xs text-gray-300" x-text="perception.timestamp"></span>
+                            </div>
+                            <div class="text-sm text-emerald-200 mb-1" x-text="perception.behavior"></div>
+                            <div class="flex space-x-2 space-x-reverse">
+                                <span class="text-xs bg-blue-500/30 px-2 py-1 rounded" 
+                                      x-text="`ثقة: ${(perception.confidence * 100).toFixed(0)}%`"></span>
+                                <span class="text-xs bg-purple-500/30 px-2 py-1 rounded" 
+                                      x-text="`جدة: ${(perception.novelty * 100).toFixed(0)}%`"></span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <div x-show="perceptionHistory.length === 0" class="text-center text-gray-400 py-8">
+                    <i class="fas fa-history text-4xl mb-4"></i>
+                    <p>قم بتشغيل متعدد لرؤية التنوعات</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- WebPPL Console -->
+        <div class="bg-black/20 backdrop-blur-md rounded-xl p-6 mt-6 border border-white/20">
+            <h3 class="text-xl font-bold mb-4 text-center">💻 WebPPL Console</h3>
+            <div id="webpplConsole" class="bg-black/40 rounded-lg p-4 font-mono text-sm text-green-300 h-32 overflow-y-auto">
+                <div>CPF~ Lite Butterfly Perception Engine تم التحميل...</div>
+                <div>WebPPL متاح ومُفعّل</div>
+                <div>استخدم الأزرار أعلاه لبدء المحاكاة</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function butterflyPerceptionCPF() {
+            return {
+                // Butterfly internal state
+                butterflyState: {
+                    energy: 0.8,
+                    hunger: 0.4,
+                    mating: 0.3
+                },
+                
+                // Environmental factors
+                environment: {
+                    predatorRisk: 0.2,
+                    wind: 0.3,
+                    flowerDensity: 0.7
+                },
+                
+                // CPF modules
+                cpfModules: [
+                    { name: 'معالج الواقع', activity: 0.7 },
+                    { name: 'ذاكرة العقيق', activity: 0.5 },
+                    { name: 'ديناميات الموجة', activity: 0.6 },
+                    { name: 'كمية القرار', activity: 0.4 },
+                    { name: 'محرك الواقع', activity: 0.8 }
+                ],
+                
+                // Results
+                currentPerception: null,
+                perceptionHistory: [],
+                
+                // SVG elements
+                butterfly: null,
+                perceptionWaves: null,
+                behaviorText: null,
+                
+                init() {
+                    this.initSVGElements();
+                    this.logToConsole('نظام CPF~ Lite جاهز للعمل');
+                    this.updateModuleActivity();
+                    this.startButterflyIdleAnimation();
+                },
+                
+                initSVGElements() {
+                    this.butterfly = document.getElementById('butterfly');
+                    this.perceptionWaves = document.getElementById('perceptionWaves');
+                    this.behaviorText = document.getElementById('behaviorText');
+                },
+                
+                startButterflyIdleAnimation() {
+                    // Butterfly gentle floating movement
+                    setInterval(() => {
+                        if (this.butterfly && !this.butterfly.classList.contains('animating')) {
+                            const randomX = 250 + Math.random() * 300;
+                            const randomY = 120 + Math.random() * 80;
+                            this.moveButterflyTo(randomX, randomY, 3000);
+                        }
+                    }, 5000);
+                },
+                
+                moveButterflyTo(x, y, duration = 2000) {
+                    if (!this.butterfly) return;
+                    
+                    this.butterfly.classList.add('animating');
+                    
+                    // Create smooth animation
+                    const animation = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
+                    animation.setAttribute('attributeName', 'transform');
+                    animation.setAttribute('type', 'translate');
+                    animation.setAttribute('values', `${this.butterfly.transform.baseVal[0]?.matrix.e || 300},${this.butterfly.transform.baseVal[0]?.matrix.f || 150}; ${x},${y}`);
+                    animation.setAttribute('dur', `${duration/1000}s`);
+                    animation.setAttribute('repeatCount', '1');
+                    animation.setAttribute('fill', 'freeze');
+                    
+                    this.butterfly.appendChild(animation);
+                    animation.beginElement();
+                    
+                    setTimeout(() => {
+                        this.butterfly.classList.remove('animating');
+                        if (animation.parentNode) {
+                            animation.parentNode.removeChild(animation);
+                        }
+                    }, duration);
+                },
+                
+                showPerceptionWaves() {
+                    if (this.perceptionWaves) {
+                        this.perceptionWaves.style.display = 'block';
+                        setTimeout(() => {
+                            this.perceptionWaves.style.display = 'none';
+                        }, 3000);
+                    }
+                },
+                
+                displayBehaviorText(text) {
+                    if (this.behaviorText) {
+                        this.behaviorText.textContent = text;
+                        this.behaviorText.style.opacity = '1';
+                        
+                        setTimeout(() => {
+                            this.behaviorText.style.opacity = '0';
+                        }, 4000);
+                    }
+                },
+                
+                async runPerception() {
+                    this.logToConsole('🧠 بدء تشغيل الإدراك الاحتمالي...');
+                    this.updateModuleActivity();
+                    
+                    // Show visual feedback
+                    this.showPerceptionWaves();
+                    
+                    try {
+                        const perception = await this.calculatePerceptionWithWebPPL();
+                        this.currentPerception = perception;
+                        this.addToHistory(perception);
+                        this.animateButterflyBehavior(perception);
+                        this.logToConsole(`✅ تم الإدراك: ${perception.behavior}`);
+                        
+                        // Update environment based on behavior
+                        this.updateEnvironmentAfterBehavior(perception);
+                        
+                    } catch (error) {
+                        this.logToConsole(`❌ خطأ في الإدراك: ${error.message}`);
+                    }
+                },
+                
+                async runMultiplePerceptions() {
+                    this.logToConsole('🔄 تشغيل متعدد للإدراك (5 مرات)...');
+                    
+                    for (let i = 0; i < 5; i++) {
+                        await this.runPerception();
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                    
+                    this.logToConsole('✅ انتهاء التشغيل المتعدد');
+                    this.analyzeVariations();
+                },
+                
+                async calculatePerceptionWithWebPPL() {
+                    return new Promise((resolve) => {
+                        // Simulate WebPPL probabilistic calculation
+                        const webpplCode = `
+                            var butterflyPerception = function() {
+                                // Energy influence on behavior
+                                var energyFactor = ${this.butterflyState.energy};
+                                var hungerFactor = ${this.butterflyState.hunger};
+                                var predatorRisk = ${this.environment.predatorRisk};
+                                var flowerDensity = ${this.environment.flowerDensity};
+                                
+                                // Probabilistic decision making
+                                var confidence = beta(energyFactor * 10, (1 - energyFactor) * 10);
+                                var novelty = beta(hungerFactor * 5, (1 - hungerFactor) * 5);
+                                
+                                // Behavior selection based on multiple factors
+                                var behaviorProbs = [
+                                    predatorRisk > 0.7 ? 0.8 : 0.2, // escape
+                                    hungerFactor > 0.6 ? 0.9 : 0.3, // feed
+                                    energyFactor > 0.7 ? 0.7 : 0.2, // explore
+                                    flowerDensity > 0.8 ? 0.6 : 0.1  // social
+                                ];
+                                
+                                var behaviorIndex = discrete(behaviorProbs);
+                                var behaviors = [
+                                    'هروب سريع نحو مكان آمن',
+                                    'البحث عن الرحيق بحذر',
+                                    'استكشاف منطقة جديدة بثقة',
+                                    'طيران اجتماعي مع فراشات أخرى'
+                                ];
+                                
+                                return {
+                                    behavior: behaviors[behaviorIndex],
+                                    confidence: confidence,
+                                    novelty: novelty,
+                                    energyUsed: energyFactor * 0.1
+                                };
+                            };
+                            
+                            butterflyPerception();
+                        `;
+                        
+                        // Simulate calculation (since WebPPL in browser is complex)
+                        setTimeout(() => {
+                            const result = this.simulateWebPPLResult();
+                            resolve(result);
+                        }, 300);
+                    });
+                },
+                
+                simulateWebPPLResult() {
+                    // Simulate WebPPL-like probabilistic results
+                    const energyFactor = this.butterflyState.energy;
+                    const hungerFactor = this.butterflyState.hunger;
+                    const predatorRisk = this.environment.predatorRisk;
+                    const flowerDensity = this.environment.flowerDensity;
+                    
+                    // Probabilistic behavior selection
+                    const behaviors = [
+                        { 
+                            text: 'هروب سريع نحو مكان آمن 🏃‍♀️', 
+                            prob: predatorRisk > 0.7 ? 0.8 : 0.2,
+                            details: ['تجنب الحيوانات المفترسة', 'طيران متعرج', 'البحث عن غطاء']
+                        },
+                        { 
+                            text: 'البحث عن الرحيق بتركيز 🌸', 
+                            prob: hungerFactor > 0.6 ? 0.9 : 0.3,
+                            details: ['فحص الأزهار بعناية', 'امتصاص الرحيق', 'تحسين كفاءة الطاقة']
+                        },
+                        { 
+                            text: 'استكشاف منطقة جديدة بثقة ✨', 
+                            prob: energyFactor > 0.7 ? 0.7 : 0.2,
+                            details: ['طيران استطلاعي', 'فضول طبيعي', 'توسيع نطاق المعرفة']
+                        },
+                        { 
+                            text: 'طيران اجتماعي مع فراشات أخرى 👥', 
+                            prob: flowerDensity > 0.8 ? 0.6 : 0.1,
+                            details: ['تفاعل اجتماعي', 'رقصة التزاوج', 'مشاركة المعلومات']
+                        }
+                    ];
+                    
+                    // Add randomness (probabilistic nature)
+                    const randomFactor = Math.random();
+                    const weightedBehaviors = behaviors.map(b => ({
+                        ...b,
+                        finalProb: b.prob * (0.7 + randomFactor * 0.6) // Add variation
+                    }));
+                    
+                    // Select behavior based on probabilities
+                    const totalProb = weightedBehaviors.reduce((sum, b) => sum + b.finalProb, 0);
+                    let rand = Math.random() * totalProb;
+                    let selectedBehavior = weightedBehaviors[0];
+                    
+                    for (const behavior of weightedBehaviors) {
+                        rand -= behavior.finalProb;
+                        if (rand <= 0) {
+                            selectedBehavior = behavior;
+                            break;
+                        }
+                    }
+                    
+                    // Calculate confidence and novelty
+                    const confidence = Math.min(0.95, Math.max(0.1, 
+                        energyFactor * 0.7 + (1 - predatorRisk) * 0.3 + Math.random() * 0.2
+                    ));
+                    
+                    const novelty = Math.min(0.95, Math.max(0.1,
+                        hungerFactor * 0.4 + energyFactor * 0.3 + Math.random() * 0.3
+                    ));
+                    
+                    return {
+                        behavior: selectedBehavior.text,
+                        confidence: confidence,
+                        novelty: novelty,
+                        details: selectedBehavior.details,
+                        timestamp: new Date().toLocaleTimeString('ar-SA')
+                    };
+                },
+                
+                updateModuleActivity() {
+                    // Update CPF module activity based on current state
+                    this.cpfModules[0].activity = 0.6 + this.environment.predatorRisk * 0.4; // Reality processor
+                    this.cpfModules[1].activity = 0.4 + this.butterflyState.energy * 0.5; // Agate memory
+                    this.cpfModules[2].activity = 0.5 + Math.random() * 0.3; // Wave dynamics
+                    this.cpfModules[3].activity = 0.3 + this.butterflyState.hunger * 0.6; // Decision quantum
+                    this.cpfModules[4].activity = 0.7 + (1 - this.environment.predatorRisk) * 0.3; // Reality engine
+                },
+                
+                animateButterflyBehavior(perception) {
+                    if (!this.butterfly) return;
+                    
+                    // Show perception waves
+                    this.showPerceptionWaves();
+                    
+                    // Display behavior text
+                    this.displayBehaviorText(perception.behavior);
+                    
+                    // Animate based on behavior
+                    let targetX, targetY;
+                    
+                    if (perception.behavior.includes('هروب')) {
+                        // Quick escape animation - move to upper corner
+                        targetX = 650;
+                        targetY = 80;
+                        this.moveButterflyTo(targetX, targetY, 1000);
+                        this.logToConsole('🏃‍♀️ الفراشة تهرب بسرعة!');
+                        
+                    } else if (perception.behavior.includes('استكشاف')) {
+                        // Exploration animation - zigzag movement
+                        this.exploreAnimation();
+                        this.logToConsole('✨ الفراشة تستكشف بثقة!');
+                        
+                    } else if (perception.behavior.includes('البحث') || perception.behavior.includes('الرحيق')) {
+                        // Feeding animation - move to flowers
+                        this.feedingAnimation();
+                        this.logToConsole('🌸 الفراشة تتغذى على الرحيق!');
+                        
+                    } else if (perception.behavior.includes('اجتماعي')) {
+                        // Social animation - circular movement
+                        this.socialAnimation();
+                        this.logToConsole('👥 الفراشة تتفاعل اجتماعياً!');
+                    }
+                },
+                
+                exploreAnimation() {
+                    // Zigzag exploration pattern
+                    const points = [
+                        {x: 200, y: 120},
+                        {x: 400, y: 100},
+                        {x: 300, y: 180},
+                        {x: 500, y: 140},
+                        {x: 350, y: 160}
+                    ];
+                    
+                    this.animateAlongPath(points, 500);
+                },
+                
+                feedingAnimation() {
+                    // Move to different flowers
+                    const flowerPositions = [
+                        {x: 100, y: 190}, // Flower 1
+                        {x: 250, y: 200}, // Flower 2
+                        {x: 400, y: 195}, // Flower 3
+                        {x: 600, y: 200}  // Flower 4
+                    ];
+                    
+                    const randomFlower = flowerPositions[Math.floor(Math.random() * flowerPositions.length)];
+                    this.moveButterflyTo(randomFlower.x, randomFlower.y, 1500);
+                    
+                    // Add feeding effect
+                    setTimeout(() => {
+                        this.addFeedingEffect(randomFlower);
+                    }, 1500);
+                },
+                
+                socialAnimation() {
+                    // Circular social dance
+                    const centerX = 400;
+                    const centerY = 150;
+                    const radius = 80;
+                    const steps = 6;
+                    
+                    for (let i = 0; i < steps; i++) {
+                        setTimeout(() => {
+                            const angle = (i / steps) * Math.PI * 2;
+                            const x = centerX + Math.cos(angle) * radius;
+                            const y = centerY + Math.sin(angle) * radius;
+                            this.moveButterflyTo(x, y, 800);
+                        }, i * 800);
+                    }
+                },
+                
+                animateAlongPath(points, duration) {
+                    points.forEach((point, index) => {
+                        setTimeout(() => {
+                            this.moveButterflyTo(point.x, point.y, duration);
+                        }, index * duration);
+                    });
+                },
+                
+                addFeedingEffect(position) {
+                    // Create temporary feeding sparkles
+                    const svg = this.butterfly.ownerSVGElement;
+                    const sparkle = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    
+                    for (let i = 0; i < 5; i++) {
+                        const star = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        star.setAttribute('cx', position.x + (Math.random() - 0.5) * 20);
+                        star.setAttribute('cy', position.y + (Math.random() - 0.5) * 20);
+                        star.setAttribute('r', '2');
+                        star.setAttribute('fill', '#FFD700');
+                        star.setAttribute('opacity', '0.8');
+                        
+                        const animation = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+                        animation.setAttribute('attributeName', 'opacity');
+                        animation.setAttribute('values', '0.8;0;0.8;0');
+                        animation.setAttribute('dur', '1s');
+                        animation.setAttribute('repeatCount', '3');
+                        
+                        star.appendChild(animation);
+                        sparkle.appendChild(star);
+                    }
+                    
+                    svg.appendChild(sparkle);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.parentNode.removeChild(sparkle);
+                        }
+                    }, 3000);
+                },
+                
+                addToHistory(perception) {
+                    this.perceptionHistory.unshift(perception);
+                    if (this.perceptionHistory.length > 10) {
+                        this.perceptionHistory.pop();
+                    }
+                },
+                
+                analyzeVariations() {
+                    if (this.perceptionHistory.length < 2) return;
+                    
+                    const uniqueBehaviors = new Set(this.perceptionHistory.slice(0, 5).map(p => p.behavior.split(' ')[0]));
+                    const avgConfidence = this.perceptionHistory.slice(0, 5).reduce((sum, p) => sum + p.confidence, 0) / 5;
+                    
+                    this.logToConsole(`📊 تحليل التنوعات:`);
+                    this.logToConsole(`   - سلوكيات فريدة: ${uniqueBehaviors.size}/5`);
+                    this.logToConsole(`   - متوسط الثقة: ${(avgConfidence * 100).toFixed(1)}%`);
+                    this.logToConsole(`   - التنوع: ${uniqueBehaviors.size > 2 ? 'عالي' : 'متوسط'}`);
+                },
+                
+                resetEnvironment() {
+                    this.butterflyState = { energy: 0.8, hunger: 0.4, mating: 0.3 };
+                    this.environment = { predatorRisk: 0.2, wind: 0.3, flowerDensity: 0.7 };
+                    this.currentPerception = null;
+                    this.perceptionHistory = [];
+                    this.updateModuleActivity();
+                    
+                    // Reset butterfly to center position
+                    if (this.butterfly) {
+                        this.moveButterflyTo(300, 150, 1000);
+                    }
+                    
+                    // Hide perception waves
+                    if (this.perceptionWaves) {
+                        this.perceptionWaves.style.display = 'none';
+                    }
+                    
+                    // Clear behavior text
+                    if (this.behaviorText) {
+                        this.behaviorText.style.opacity = '0';
+                    }
+                    
+                    this.logToConsole('🔄 تم إعادة تعيين البيئة والفراشة');
+                },
+                
+                
+                updateEnvironmentAfterBehavior(perception) {
+                    // Simulate environment changes based on behavior
+                    if (perception.behavior.includes('هروب')) {
+                        // Decrease energy after escape
+                        this.butterflyState.energy = Math.max(0, this.butterflyState.energy - 0.1);
+                    } else if (perception.behavior.includes('البحث') || perception.behavior.includes('الرحيق')) {
+                        // Decrease hunger after feeding
+                        this.butterflyState.hunger = Math.max(0, this.butterflyState.hunger - 0.2);
+                        // Slightly decrease energy
+                        this.butterflyState.energy = Math.max(0, this.butterflyState.energy - 0.05);
+                    } else if (perception.behavior.includes('استكشاف')) {
+                        // Moderate energy decrease
+                        this.butterflyState.energy = Math.max(0, this.butterflyState.energy - 0.08);
+                    }
+                    
+                    // Natural energy/hunger changes over time
+                    this.butterflyState.energy = Math.max(0, this.butterflyState.energy - 0.02);
+                    this.butterflyState.hunger = Math.min(1, this.butterflyState.hunger + 0.03);
+                },
+                
+                logToConsole(message) {
+                    const console = document.getElementById('webpplConsole');
+                    const timestamp = new Date().toLocaleTimeString('ar-SA');
+                    console.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                    console.scrollTop = console.scrollHeight;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

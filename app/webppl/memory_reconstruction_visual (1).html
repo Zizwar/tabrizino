@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي إعادة بناء الذكريات - CPF Lite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        
+        .memory-scene {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .memory-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            transition: all 0.6s ease;
+        }
+        
+        .emotion-particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            animation: float 3s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); opacity: 0.7; }
+            50% { transform: translateY(-20px); opacity: 1; }
+        }
+        
+        .memory-element {
+            transition: all 0.6s ease;
+            transform-origin: center;
+        }
+        
+        .reconstruction-wave {
+            position: absolute;
+            border: 2px solid;
+            border-radius: 50%;
+            animation: wave-expand 2s infinite linear;
+        }
+        
+        @keyframes wave-expand {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        
+        .mood-filter {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            mix-blend-mode: overlay;
+            transition: all 0.8s ease;
+        }
+        
+        .glitch {
+            animation: glitch 0.3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .detail-highlight {
+            animation: highlight-pulse 2s infinite ease-in-out;
+        }
+        
+        @keyframes highlight-pulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.3); }
+        }
+        
+        .fade-memory {
+            animation: fade-in-out 4s ease-in-out;
+        }
+        
+        @keyframes fade-in-out {
+            0% { opacity: 0; transform: scale(0.8); }
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.7; transform: scale(0.95); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 min-h-screen text-white overflow-x-hidden">
+    
+    <div x-data="memoryReconstructionCPF()" class="container mx-auto px-4 py-6">
+        
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-300 via-pink-300 to-blue-300 bg-clip-text text-transparent">
+                🧠 محاكي إعادة بناء الذكريات
+            </h1>
+            <p class="text-lg text-purple-200">CPF~ Lite - الذاكرة كإعادة بناء احتمالية</p>
+            <div class="text-sm text-purple-300 mt-2">
+                <i class="fas fa-lightbulb mr-2"></i>
+                الذكريات ليست ملفات محفوظة، بل إعادة بناء تتأثر بمزاجك الحالي
+            </div>
+        </header>
+
+        <!-- Memory Selection & Controls -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+            
+            <!-- Memory Selection -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">📚 اختيار الذكرى</h3>
+                
+                <select x-model="selectedMemoryId" @change="loadMemory()" 
+                        class="w-full bg-white/20 border border-white/30 rounded-lg px-3 py-2 text-white">
+                    <template x-for="memory in availableMemories" :key="memory.id">
+                        <option :value="memory.id" x-text="memory.title"></option>
+                    </template>
+                </select>
+                
+                <div class="mt-3 text-sm text-purple-200" x-show="selectedMemory">
+                    <p><strong>النوع:</strong> <span x-text="selectedMemory?.type"></span></p>
+                    <p><strong>العمر:</strong> <span x-text="selectedMemory?.age"></span></p>
+                    <p><strong>الأهمية:</strong> <span x-text="selectedMemory?.importance"></span></p>
+                </div>
+            </div>
+
+            <!-- Current Mood Controls -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">🎭 المزاج الحالي</h3>
+                
+                <!-- Joy -->
+                <div class="mb-2">
+                    <label class="text-sm font-semibold block mb-1">😊 السعادة</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="currentMood.joy" 
+                           @input="updateEmotionalFilter()"
+                           class="w-full h-2 bg-gradient-to-r from-gray-300 to-yellow-400 rounded-lg appearance-none cursor-pointer">
+                    <div class="text-center text-xs mt-1" x-text="`${(currentMood.joy * 100).toFixed(0)}%`"></div>
+                </div>
+                
+                <!-- Sadness -->
+                <div class="mb-2">
+                    <label class="text-sm font-semibold block mb-1">😢 الحزن</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="currentMood.sadness" 
+                           @input="updateEmotionalFilter()"
+                           class="w-full h-2 bg-gradient-to-r from-gray-300 to-blue-500 rounded-lg appearance-none cursor-pointer">
+                    <div class="text-center text-xs mt-1" x-text="`${(currentMood.sadness * 100).toFixed(0)}%`"></div>
+                </div>
+                
+                <!-- Anxiety -->
+                <div class="mb-2">
+                    <label class="text-sm font-semibold block mb-1">😰 القلق</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="currentMood.anxiety" 
+                           @input="updateEmotionalFilter()"
+                           class="w-full h-2 bg-gradient-to-r from-gray-300 to-red-500 rounded-lg appearance-none cursor-pointer">
+                    <div class="text-center text-xs mt-1" x-text="`${(currentMood.anxiety * 100).toFixed(0)}%`"></div>
+                </div>
+                
+                <!-- Nostalgia -->
+                <div class="mb-2">
+                    <label class="text-sm font-semibold block mb-1">🌅 الحنين</label>
+                    <input type="range" min="0" max="1" step="0.1" x-model="currentMood.nostalgia" 
+                           @input="updateEmotionalFilter()"
+                           class="w-full h-2 bg-gradient-to-r from-gray-300 to-purple-400 rounded-lg appearance-none cursor-pointer">
+                    <div class="text-center text-xs mt-1" x-text="`${(currentMood.nostalgia * 100).toFixed(0)}%`"></div>
+                </div>
+            </div>
+
+            <!-- Reconstruction Metrics -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">📊 مقاييس الإعادة البناء</h3>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-sm">ثقة الإعادة البناء:</span>
+                        <span class="text-sm font-bold" x-text="`${(reconstructionMetrics.confidence * 100).toFixed(1)}%`"></span>
+                    </div>
+                    <div class="w-full bg-gray-300 rounded-full h-2">
+                        <div class="h-2 rounded-full transition-all duration-500"
+                             :class="reconstructionMetrics.confidence > 0.7 ? 'bg-green-400' : reconstructionMetrics.confidence > 0.4 ? 'bg-yellow-400' : 'bg-red-400'"
+                             :style="`width: ${reconstructionMetrics.confidence * 100}%`"></div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-sm">التشويه العاطفي:</span>
+                        <span class="text-sm font-bold" x-text="`${(reconstructionMetrics.distortion * 100).toFixed(1)}%`"></span>
+                    </div>
+                    <div class="w-full bg-gray-300 rounded-full h-2">
+                        <div class="h-2 rounded-full transition-all duration-500"
+                             :class="reconstructionMetrics.distortion > 0.6 ? 'bg-red-400' : reconstructionMetrics.distortion > 0.3 ? 'bg-yellow-400' : 'bg-green-400'"
+                             :style="`width: ${reconstructionMetrics.distortion * 100}%`"></div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-sm">تنوع التفاصيل:</span>
+                        <span class="text-sm font-bold" x-text="`${(reconstructionMetrics.variation * 100).toFixed(1)}%`"></span>
+                    </div>
+                    <div class="w-full bg-gray-300 rounded-full h-2">
+                        <div class="bg-purple-400 h-2 rounded-full transition-all duration-500"
+                             :style="`width: ${reconstructionMetrics.variation * 100}%`"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">⚡ الإجراءات</h3>
+                
+                <button @click="reconstructMemory()" 
+                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-2 rounded-lg font-bold mb-3 transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-brain mr-2"></i>
+                    إعادة بناء الذكرى
+                </button>
+                
+                <button @click="compareReconstructions()" 
+                        class="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 px-4 py-2 rounded-lg font-bold mb-3 transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-compare mr-2"></i>
+                    مقارنة إعادات البناء
+                </button>
+                
+                <button @click="randomizeMood()" 
+                        class="w-full bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-random mr-2"></i>
+                    مزاج عشوائي
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Memory Visualization -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20">
+            <h3 class="text-xl font-bold mb-4 text-center">🎨 مشهد الذكرى المُعاد بناؤها</h3>
+            
+            <div class="memory-scene relative h-96 rounded-lg overflow-hidden" 
+                 :style="memoryVisualization.sceneStyle">
+                
+                <!-- Mood Filter Overlay -->
+                <div class="mood-filter" :style="memoryVisualization.moodFilter"></div>
+                
+                <!-- Memory Elements -->
+                <template x-for="element in memoryVisualization.elements" :key="element.id">
+                    <div class="memory-element absolute" 
+                         :style="element.style"
+                         :class="element.classes">
+                        <div x-text="element.content" class="text-center"></div>
+                        
+                        <!-- Emotion Particles -->
+                        <template x-for="particle in element.particles" :key="particle.id">
+                            <div class="emotion-particle" 
+                                 :style="particle.style"></div>
+                        </template>
+                    </div>
+                </template>
+                
+                <!-- Reconstruction Waves -->
+                <template x-for="wave in reconstructionWaves" :key="wave.id">
+                    <div class="reconstruction-wave" 
+                         :style="wave.style"></div>
+                </template>
+                
+                <!-- Memory Text Overlay -->
+                <div class="absolute bottom-4 left-4 right-4 bg-black/40 rounded-lg p-4">
+                    <h4 class="font-bold text-lg mb-2">📝 السرد المُعاد بناؤه:</h4>
+                    <p class="text-white/90 leading-relaxed" x-text="reconstructedNarrative"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Grid -->
+        <div x-show="comparisonMode" class="mb-6">
+            <h3 class="text-xl font-bold mb-4 text-center">🔍 مقارنة إعادات البناء المختلفة</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <template x-for="(comparison, index) in reconstructionComparisons" :key="index">
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                        <h4 class="font-bold text-center mb-2" x-text="comparison.moodLabel"></h4>
+                        
+                        <!-- Mini visualization -->
+                        <div class="h-32 rounded-lg mb-3 relative overflow-hidden" 
+                             :style="comparison.miniScene">
+                            <div class="mood-filter" :style="comparison.moodFilter"></div>
+                            <div class="absolute inset-4 flex items-center justify-center text-center">
+                                <span x-text="comparison.dominantEmotion" class="text-2xl"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Key differences -->
+                        <div class="text-sm space-y-1">
+                            <div><strong>التركيز:</strong> <span x-text="comparison.focus"></span></div>
+                            <div><strong>الطابع:</strong> <span x-text="comparison.tone"></span></div>
+                            <div><strong>التفاصيل:</strong> <span x-text="comparison.details"></span></div>
+                        </div>
+                        
+                        <!-- Metrics -->
+                        <div class="mt-3 space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <span>الثقة:</span>
+                                <span x-text="`${(comparison.confidence * 100).toFixed(0)}%`"></span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span>التشويه:</span>
+                                <span x-text="`${(comparison.distortion * 100).toFixed(0)}%`"></span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Technical Details -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- WebPPL Console -->
+            <div class="bg-black/20 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">💻 WebPPL Engine</h3>
+                <div id="webpplConsole" class="bg-black/40 rounded-lg p-4 font-mono text-sm text-green-300 h-48 overflow-y-auto">
+                    <div>CPF~ Lite Memory Reconstruction Engine</div>
+                    <div>Agate Memory: الذكريات كإعادة بناء احتمالية</div>
+                    <div>WebPPL: جاهز للحسابات الاحتمالية</div>
+                </div>
+            </div>
+
+            <!-- Memory Analysis -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">📈 تحليل الذكرى</h3>
+                
+                <div class="space-y-4">
+                    <!-- Original vs Reconstructed -->
+                    <div>
+                        <h4 class="font-bold mb-2">🔄 مقارنة الأصل مع المُعاد البناء:</h4>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-white/5 rounded p-2">
+                                <div class="font-semibold">الذكرى الأصلية:</div>
+                                <div x-text="originalMemoryTone" class="text-gray-300"></div>
+                            </div>
+                            <div class="bg-white/5 rounded p-2">
+                                <div class="font-semibold">المُعاد بناؤها:</div>
+                                <div x-text="reconstructedMemoryTone" class="text-gray-300"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Emotional Encryption Analysis -->
+                    <div>
+                        <h4 class="font-bold mb-2">🔐 تحليل التشفير العاطفي:</h4>
+                        <div class="text-sm space-y-1">
+                            <div class="flex justify-between">
+                                <span>قوة التشفير:</span>
+                                <span x-text="`${(emotionalEncryption.strength * 100).toFixed(0)}%`"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>مطابقة المفتاح العاطفي:</span>
+                                <span x-text="`${(emotionalEncryption.keyMatch * 100).toFixed(0)}%`"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>مستوى الوصول:</span>
+                                <span x-text="emotionalEncryption.accessLevel"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reconstruction Quality -->
+                    <div>
+                        <h4 class="font-bold mb-2">⭐ جودة إعادة البناء:</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span>الاتساق المنطقي:</span>
+                                <span x-text="`${(qualityMetrics.logicalConsistency * 100).toFixed(0)}%`"></span>
+                            </div>
+                            <div class="w-full bg-gray-300 rounded-full h-1">
+                                <div class="bg-blue-400 h-1 rounded-full transition-all duration-500"
+                                     :style="`width: ${qualityMetrics.logicalConsistency * 100}%`"></div>
+                            </div>
+                            
+                            <div class="flex justify-between text-sm">
+                                <span>الأصالة العاطفية:</span>
+                                <span x-text="`${(qualityMetrics.emotionalAuthenticity * 100).toFixed(0)}%`"></span>
+                            </div>
+                            <div class="w-full bg-gray-300 rounded-full h-1">
+                                <div class="bg-pink-400 h-1 rounded-full transition-all duration-500"
+                                     :style="`width: ${qualityMetrics.emotionalAuthenticity * 100}%`"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning & Credits Footer -->
+        <div class="mt-8 space-y-4">
+            <!-- Academic Warning -->
+            <div class="bg-amber-900/30 border border-amber-500 rounded-xl p-6 backdrop-blur-md">
+                <div class="flex items-start space-x-3 space-x-reverse">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-amber-400 text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-amber-200 mb-2">⚠️ تحذير أكاديمي مهم</h3>
+                        <div class="text-amber-100 space-y-2 text-sm leading-relaxed">
+                            <p><strong>هذا محاكي نظري لعلم النفس الحاسوبي للأغراض التعليمية والبحثية فقط.</strong></p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                <div>
+                                    <p class="font-semibold text-amber-200 mb-1">✅ مُصمم للاستخدام في:</p>
+                                    <ul class="list-disc list-inside space-y-1 text-xs">
+                                        <li>البحث الأكاديمي في علم النفس المعرفي</li>
+                                        <li>التعليم والتدريب في الجامعات</li>
+                                        <li>فهم آليات الذاكرة البشرية نظرياً</li>
+                                        <li>تطوير الذكاء الاصطناعي المعرفي</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-amber-200 mb-1">❌ غير مُصمم للاستخدام في:</p>
+                                    <ul class="list-disc list-inside space-y-1 text-xs">
+                                        <li>التشخيص الطبي أو النفسي</li>
+                                        <li>العلاج النفسي أو التدخل الإكلينيكي</li>
+                                        <li>اتخاذ القرارات الشخصية المهمة</li>
+                                        <li>تقييم الحالة النفسية الفعلية</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-3 bg-amber-800/20 rounded-lg border border-amber-600/30">
+                                <p class="text-xs font-medium">
+                                    <i class="fas fa-stethoscope mr-2"></i>
+                                    إذا كنت تحتاج لمساعدة نفسية أو طبية حقيقية، يرجى التوجه لأخصائي مؤهل.
+                                    هذا النموذج محاكاة حاسوبية وليس بديلاً للخبرة الإنسانية المتخصصة.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credits & Contributors -->
+            <div class="bg-gradient-to-r from-purple-900/40 to-blue-900/40 border border-purple-500/30 rounded-xl p-4 backdrop-blur-md">
+                <div class="text-center">
+                    <h3 class="text-lg font-bold text-purple-200 mb-2">👨‍💻 فريق التطوير والإبداع</h3>
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-6 md:space-x-reverse">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <i class="fas fa-brain text-purple-400"></i>
+                            <span class="text-purple-200 font-semibold">الرؤية والتصور:</span>
+                            <span class="text-white font-bold">Brahim BIDI</span>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <i class="fas fa-code text-blue-400"></i>
+                            <span class="text-blue-200 font-semibold">التطوير والتنفيذ:</span>
+                            <span class="text-white font-bold">Claude (Anthropic)</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-sm text-gray-300">
+                        <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                        نتاج جلسات "الفايبينغ" الإبداعية - تلاقي الخيال البشري مع القدرات الحاسوبية
+                    </div>
+                    <div class="mt-2 text-xs text-gray-400">
+                        CPF~ Lite v3.0-quantum | إطار النمذجة المعرفية الاحتمالية المتطور
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function memoryReconstructionCPF() {
+            return {
+                // Available memories to choose from
+                availableMemories: [
+                    {
+                        id: 'childhood_birthday',
+                        title: 'عيد ميلاد الطفولة الثامن',
+                        type: 'احتفالية عائلية',
+                        age: '15 سنة مضت',
+                        importance: 'عالية',
+                        originalContext: {
+                            setting: 'حديقة المنزل',
+                            people: ['الأهل', 'الأصدقاء', 'الجيران'],
+                            activities: ['الكيك', 'الألعاب', 'الهدايا'],
+                            weather: 'مشمس ودافئ',
+                            emotions: { joy: 0.9, excitement: 0.8, gratitude: 0.7 }
+                        },
+                        baseNarrative: 'احتفال جميل في حديقة المنزل مع الأهل والأصدقاء، كيكة بالشوكولاتة وشموع ملونة، ألعاب وضحك وهدايا رائعة.'
+                    },
+                    {
+                        id: 'first_job_day',
+                        title: 'أول يوم في العمل',
+                        type: 'إنجاز مهني',
+                        age: '5 سنوات مضت',
+                        importance: 'متوسطة',
+                        originalContext: {
+                            setting: 'مكتب في المدينة',
+                            people: ['الزملاء الجدد', 'المدير', 'المرشد'],
+                            activities: ['التوجيه', 'التعارف', 'المهام الأولى'],
+                            weather: 'غائم قليلاً',
+                            emotions: { anxiety: 0.6, excitement: 0.7, uncertainty: 0.8 }
+                        },
+                        baseNarrative: 'توتر ممزوج بالحماس، وجوه جديدة ومهام جديدة، قهوة أولى في المكتب وشعور بالفخر والقلق معاً.'
+                    },
+                    {
+                        id: 'graduation_day',
+                        title: 'يوم التخرج من الجامعة',
+                        type: 'إنجاز أكاديمي',
+                        age: '3 سنوات مضت',
+                        importance: 'عالية جداً',
+                        originalContext: {
+                            setting: 'قاعة الاحتفالات الجامعية',
+                            people: ['الأهل', 'الأصدقاء', 'الأساتذة', 'زملاء الدراسة'],
+                            activities: ['استلام الشهادة', 'الصور التذكارية', 'الخطابات'],
+                            weather: 'مشمس ومثالي',
+                            emotions: { pride: 0.9, accomplishment: 0.9, nostalgia: 0.6, anxiety: 0.3 }
+                        },
+                        baseNarrative: 'لحظة فخر لا تُنسى، رداء التخرج الأسود، صوت اسمي يُنادى، دموع الفرح في عيون الأهل، وشعور بالإنجاز.'
+                    },
+                    {
+                        id: 'family_gathering',
+                        title: 'تجمع العائلة في العيد',
+                        type: 'مناسبة اجتماعية',
+                        age: 'سنة واحدة مضت',
+                        importance: 'عالية',
+                        originalContext: {
+                            setting: 'بيت الجدة',
+                            people: ['جميع أفراد العائلة الكبيرة'],
+                            activities: ['الطعام التقليدي', 'الحديث', 'اللعب مع الأطفال'],
+                            weather: 'بارد ولكن دافئ داخل البيت',
+                            emotions: { warmth: 0.8, belonging: 0.9, comfort: 0.8, melancholy: 0.3 }
+                        },
+                        baseNarrative: 'دفء العائلة الكبيرة، روائح الطعام التقليدي، ضحكات الأطفال، حكايات الكبار، وشعور عميق بالانتماء.'
+                    }
+                ],
+                
+                // Current state
+                selectedMemoryId: 'childhood_birthday',
+                selectedMemory: null,
+                currentMood: {
+                    joy: 0.5,
+                    sadness: 0.2,
+                    anxiety: 0.3,
+                    nostalgia: 0.4
+                },
+                
+                // Reconstruction results
+                reconstructionMetrics: {
+                    confidence: 0.7,
+                    distortion: 0.3,
+                    variation: 0.4
+                },
+                
+                memoryVisualization: {
+                    sceneStyle: '',
+                    moodFilter: '',
+                    elements: []
+                },
+                
+                reconstructedNarrative: '',
+                reconstructionWaves: [],
+                
+                // Comparison mode
+                comparisonMode: false,
+                reconstructionComparisons: [],
+                
+                // Analysis metrics
+                originalMemoryTone: 'محايد ومتوازن',
+                reconstructedMemoryTone: 'محايد ومتوازن',
+                emotionalEncryption: {
+                    strength: 0.5,
+                    keyMatch: 0.7,
+                    accessLevel: 'كامل'
+                },
+                qualityMetrics: {
+                    logicalConsistency: 0.8,
+                    emotionalAuthenticity: 0.7
+                },
+                
+                init() {
+                    // Initialize with safe defaults
+                    this.selectedMemory = this.availableMemories[0];
+                    this.emotionalEncryption = {
+                        strength: 0.5,
+                        keyMatch: 0.7,
+                        accessLevel: 'كامل'
+                    };
+                    this.reconstructionMetrics = {
+                        confidence: 0.7,
+                        distortion: 0.3,
+                        variation: 0.4
+                    };
+                    this.qualityMetrics = {
+                        logicalConsistency: 0.8,
+                        emotionalAuthenticity: 0.7
+                    };
+                    
+                    this.loadMemory();
+                    this.updateEmotionalFilter();
+                    this.logToConsole('نظام إعادة بناء الذكريات CPF~ Lite جاهز');
+                },
+                
+                loadMemory() {
+                    this.selectedMemory = this.availableMemories.find(m => m.id === this.selectedMemoryId);
+                    this.reconstructMemory();
+                },
+                
+                updateEmotionalFilter() {
+                    // Calculate emotional filter metrics
+                    const totalEmotion = Math.max(0.1, this.currentMood.joy + this.currentMood.sadness + 
+                                       this.currentMood.anxiety + this.currentMood.nostalgia);
+                    
+                    // Normalize emotions to prevent division by zero
+                    const normalizedMood = {
+                        joy: this.currentMood.joy / totalEmotion,
+                        sadness: this.currentMood.sadness / totalEmotion,
+                        anxiety: this.currentMood.anxiety / totalEmotion,
+                        nostalgia: this.currentMood.nostalgia / totalEmotion
+                    };
+                    
+                    // Update encryption metrics with safe calculations
+                    this.emotionalEncryption.strength = Math.max(0.1, Math.min(0.95, 
+                        Math.max(this.currentMood.sadness, this.currentMood.anxiety)));
+                    this.emotionalEncryption.keyMatch = this.calculateEmotionalKeyMatch();
+                    this.emotionalEncryption.accessLevel = this.getAccessLevel();
+                    
+                    // Update reconstruction if memory is loaded
+                    if (this.selectedMemory) {
+                        this.reconstructMemory();
+                    }
+                },
+                
+                async reconstructMemory() {
+                    if (!this.selectedMemory) return;
+                    
+                    this.logToConsole('🧠 بدء إعادة بناء الذكرى بالحالة المزاجية الحالية...');
+                    
+                    // Create reconstruction waves
+                    this.createReconstructionWaves();
+                    
+                    // Calculate reconstruction with WebPPL-like logic
+                    const reconstruction = await this.calculateReconstructionWithWebPPL();
+                    
+                    // Update visualization
+                    this.updateMemoryVisualization(reconstruction);
+                    
+                    // Update narrative
+                    this.reconstructedNarrative = reconstruction.narrative;
+                    
+                    // Update metrics
+                    this.reconstructionMetrics = reconstruction.metrics;
+                    this.originalMemoryTone = this.getOriginalTone();
+                    this.reconstructedMemoryTone = reconstruction.tone;
+                    this.qualityMetrics = reconstruction.quality;
+                    
+                    this.logToConsole(`✅ تم إعادة البناء بنجاح - الثقة: ${(reconstruction.metrics.confidence * 100).toFixed(1)}%`);
+                },
+                
+                async calculateReconstructionWithWebPPL() {
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            const memory = this.selectedMemory;
+                            const mood = this.currentMood;
+                            
+                            // Emotional filter calculation (WebPPL-like)
+                            const emotionalFilter = this.calculateEmotionalFilter(mood);
+                            const contextualBias = this.calculateContextualBias();
+                            const reconstructionNoise = Math.random() * 0.3;
+                            
+                            // Narrative reconstruction based on dominant emotion
+                            const dominantEmotion = this.getDominantEmotion();
+                            const narrative = this.reconstructNarrative(memory, dominantEmotion, emotionalFilter);
+                            
+                            // Calculate metrics with safe bounds
+                            const confidence = Math.max(0.1, Math.min(0.95, this.calculateReconstructionConfidence(emotionalFilter, mood)));
+                            const distortion = Math.max(0.05, Math.min(0.95, this.calculateEmotionalDistortion(memory, mood)));
+                            const variation = Math.max(0.1, Math.min(0.9, Math.random() * 0.6 + 0.2));
+                            
+                            // Calculate quality metrics with validation
+                            const logicalConsistency = Math.max(0.1, Math.min(0.95, 1 - distortion * 0.7));
+                            const emotionalAuthenticity = Math.max(0.1, Math.min(0.95, confidence * 0.9 + Math.random() * 0.1));
+                            
+                            const result = {
+                                narrative: narrative,
+                                tone: this.calculateReconstructedTone(dominantEmotion),
+                                metrics: {
+                                    confidence: confidence,
+                                    distortion: distortion,
+                                    variation: variation
+                                },
+                                quality: {
+                                    logicalConsistency: logicalConsistency,
+                                    emotionalAuthenticity: emotionalAuthenticity
+                                },
+                                emotionalFilter: emotionalFilter,
+                                dominantEmotion: dominantEmotion
+                            };
+                            
+                            resolve(result);
+                        }, 500);
+                    });
+                },
+                
+                calculateEmotionalFilter(mood) {
+                    const joyWeight = mood.joy || 0;
+                    const sadnessWeight = mood.sadness || 0;
+                    const anxietyWeight = mood.anxiety || 0;
+                    const nostalgiaWeight = mood.nostalgia || 0;
+                    
+                    const positiveEmotions = joyWeight + nostalgiaWeight;
+                    const negativeEmotions = sadnessWeight + anxietyWeight;
+                    const valenceBias = positiveEmotions - negativeEmotions;
+                    const maxEmotion = Math.max(sadnessWeight, anxietyWeight, joyWeight);
+                    
+                    return {
+                        valenceBias: Math.max(-1, Math.min(1, valenceBias)), // Bound between -1 and 1
+                        intensityMultiplier: Math.max(0.5, Math.min(2.0, 1 + maxEmotion * 0.5)),
+                        distortionLevel: Math.max(0.05, Math.min(0.95, Math.max(sadnessWeight, anxietyWeight) * 0.8)),
+                        nostalgicBlur: Math.max(0, Math.min(1, nostalgiaWeight * 0.6))
+                    };
+                },
+                
+                reconstructNarrative(memory, dominantEmotion, filter) {
+                    const baseNarrative = memory.baseNarrative;
+                    
+                    switch(dominantEmotion) {
+                        case 'joy':
+                            return this.applyJoyfulReconstruction(baseNarrative, filter);
+                        case 'sadness':
+                            return this.applySadReconstruction(baseNarrative, filter);
+                        case 'anxiety':
+                            return this.applyAnxiousReconstruction(baseNarrative, filter);
+                        case 'nostalgia':
+                            return this.applyNostalgicReconstruction(baseNarrative, filter);
+                        default:
+                            return baseNarrative;
+                    }
+                },
+                
+                applyJoyfulReconstruction(base, filter) {
+                    const joyfulElements = [
+                        'كان كل شيء يشع بالفرح والبهجة',
+                        'ابتسامات دافئة تملأ المكان',
+                        'شعور رائع بالسعادة والامتنان',
+                        'لحظات مضيئة لا تُنسى',
+                        'جو مفعم بالطاقة الإيجابية'
+                    ];
+                    
+                    const selectedElements = joyfulElements.slice(0, Math.floor(Math.random() * 3) + 1);
+                    return base + ' ' + selectedElements.join('، ') + '.';
+                },
+                
+                applySadReconstruction(base, filter) {
+                    const sadElements = [
+                        'رغم الجو الجميل، كان هناك شعور خفي بالوحدة',
+                        'ابتسامات مصطنعة تخفي حزناً عميقاً',
+                        'شعور بأن شيئاً ما كان مفقوداً',
+                        'لحظات جميلة ولكن عابرة',
+                        'حنين مؤلم لأوقات أبسط'
+                    ];
+                    
+                    const selectedElements = sadElements.slice(0, Math.floor(Math.random() * 3) + 1);
+                    return base.replace(/جميل|رائع|مذهل/g, 'حزين نوعاً ما') + ' ' + selectedElements.join('، ') + '.';
+                },
+                
+                applyAnxiousReconstruction(base, filter) {
+                    const anxiousElements = [
+                        'شعور بالتوتر والقلق من المجهول',
+                        'خوف خفي من عدم تلبية التوقعات',
+                        'قلق من أن الأمور قد تسوء',
+                        'توتر من كثرة الانتباه والتركيز',
+                        'شكوك حول ما إذا كان كل شيء على ما يرام'
+                    ];
+                    
+                    const selectedElements = anxiousElements.slice(0, Math.floor(Math.random() * 2) + 1);
+                    return base.replace(/مريح|هادئ/g, 'مقلق قليلاً') + ' مع ' + selectedElements.join(' و') + '.';
+                },
+                
+                applyNostalgicReconstruction(base, filter) {
+                    const nostalgicElements = [
+                        'أيام البراءة الجميلة التي لن تعود',
+                        'ذكريات ذهبية من زمن أبسط وأنقى',
+                        'شعور دافئ بالحنين لتلك الأوقات',
+                        'لحظات سحرية من الماضي العذب',
+                        'زمن جميل مضى وترك أثراً عميقاً'
+                    ];
+                    
+                    const selectedElements = nostalgicElements.slice(0, Math.floor(Math.random() * 2) + 1);
+                    return 'في ' + base + ' كانت تلك ' + selectedElements.join('، ') + '.';
+                },
+                
+                updateMemoryVisualization(reconstruction) {
+                    const mood = this.currentMood;
+                    const dominantEmotion = reconstruction.dominantEmotion;
+                    
+                    // Update scene style based on mood
+                    this.memoryVisualization.sceneStyle = this.calculateSceneStyle(dominantEmotion, mood);
+                    this.memoryVisualization.moodFilter = this.calculateMoodFilter(dominantEmotion, mood);
+                    
+                    // Update elements
+                    this.memoryVisualization.elements = this.generateMemoryElements(reconstruction);
+                },
+                
+                calculateSceneStyle(dominantEmotion, mood) {
+                    const emotionStyles = {
+                        joy: 'background: linear-gradient(135deg, #FFD700, #FFA500, #FF6347); filter: brightness(1.2) saturate(1.3);',
+                        sadness: 'background: linear-gradient(135deg, #4682B4, #2F4F4F, #708090); filter: brightness(0.7) saturate(0.8);',
+                        anxiety: 'background: linear-gradient(135deg, #DC143C, #B22222, #8B0000); filter: contrast(1.2) saturate(1.1);',
+                        nostalgia: 'background: linear-gradient(135deg, #DDA0DD, #D8BFD8, #E6E6FA); filter: sepia(0.3) blur(1px);'
+                    };
+                    
+                    return emotionStyles[dominantEmotion] || emotionStyles.nostalgia;
+                },
+                
+                calculateMoodFilter(dominantEmotion, mood) {
+                    const filterStyles = {
+                        joy: 'background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0.1) 50%, transparent 100%);',
+                        sadness: 'background: linear-gradient(0deg, rgba(70,130,180,0.3) 0%, rgba(47,79,79,0.2) 100%);',
+                        anxiety: 'background: radial-gradient(ellipse, rgba(220,20,60,0.2) 0%, transparent 70%);',
+                        nostalgia: 'background: linear-gradient(45deg, rgba(221,160,221,0.2) 0%, rgba(230,230,250,0.1) 100%);'
+                    };
+                    
+                    return filterStyles[dominantEmotion] || filterStyles.nostalgia;
+                },
+                
+                generateMemoryElements(reconstruction) {
+                    const elements = [];
+                    const memory = this.selectedMemory;
+                    const dominantEmotion = reconstruction.dominantEmotion;
+                    
+                    // Generate different elements based on memory type
+                    if (memory.id === 'childhood_birthday') {
+                        elements.push(
+                            {
+                                id: 'cake',
+                                content: '🎂',
+                                style: `top: 40%; left: 45%; font-size: 4rem; transform: scale(${reconstruction.metrics.confidence});`,
+                                classes: dominantEmotion === 'joy' ? 'detail-highlight' : dominantEmotion === 'sadness' ? 'glitch' : '',
+                                particles: this.generateEmotionParticles(dominantEmotion, 3)
+                            },
+                            {
+                                id: 'balloons',
+                                content: '🎈🎈🎈',
+                                style: `top: 20%; left: 20%; font-size: 2rem;`,
+                                classes: 'fade-memory',
+                                particles: this.generateEmotionParticles(dominantEmotion, 2)
+                            },
+                            {
+                                id: 'family',
+                                content: '👨‍👩‍👧‍👦',
+                                style: `top: 60%; left: 25%; font-size: 3rem;`,
+                                classes: dominantEmotion === 'nostalgia' ? 'detail-highlight' : '',
+                                particles: this.generateEmotionParticles(dominantEmotion, 4)
+                            }
+                        );
+                    } else if (memory.id === 'graduation_day') {
+                        elements.push(
+                            {
+                                id: 'diploma',
+                                content: '🎓',
+                                style: `top: 35%; left: 50%; font-size: 4rem;`,
+                                classes: dominantEmotion === 'joy' ? 'detail-highlight' : '',
+                                particles: this.generateEmotionParticles(dominantEmotion, 5)
+                            },
+                            {
+                                id: 'crowd',
+                                content: '👥👥👥',
+                                style: `top: 70%; left: 30%; font-size: 2rem;`,
+                                classes: dominantEmotion === 'anxiety' ? 'glitch' : '',
+                                particles: this.generateEmotionParticles(dominantEmotion, 3)
+                            }
+                        );
+                    }
+                    
+                    return elements;
+                },
+                
+                generateEmotionParticles(emotion, count) {
+                    const particles = [];
+                    const colors = {
+                        joy: '#FFD700',
+                        sadness: '#4682B4',
+                        anxiety: '#DC143C',
+                        nostalgia: '#DDA0DD'
+                    };
+                    
+                    for (let i = 0; i < count; i++) {
+                        particles.push({
+                            id: Math.random().toString(36),
+                            style: `
+                                left: ${Math.random() * 60 + 20}%; 
+                                top: ${Math.random() * 60 + 20}%; 
+                                background: ${colors[emotion]}; 
+                                animation-delay: ${Math.random() * 2}s;
+                            `
+                        });
+                    }
+                    
+                    return particles;
+                },
+                
+                createReconstructionWaves() {
+                    this.reconstructionWaves = [];
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            this.reconstructionWaves.push({
+                                id: Math.random().toString(36),
+                                style: `
+                                    left: ${Math.random() * 80 + 10}%; 
+                                    top: ${Math.random() * 80 + 10}%; 
+                                    width: 20px; height: 20px;
+                                    border-color: rgba(255,255,255,0.6);
+                                    animation-delay: ${i * 0.3}s;
+                                `
+                            });
+                        }, i * 300);
+                    }
+                    
+                    // Clear waves after animation
+                    setTimeout(() => {
+                        this.reconstructionWaves = [];
+                    }, 3000);
+                },
+                
+                async compareReconstructions() {
+                    this.logToConsole('🔍 بدء مقارنة إعادات البناء المختلفة...');
+                    
+                    const moodVariations = [
+                        { label: 'سعيد جداً', mood: { joy: 0.9, sadness: 0.0, anxiety: 0.1, nostalgia: 0.0 } },
+                        { label: 'حزين ومكتئب', mood: { joy: 0.0, sadness: 0.9, anxiety: 0.1, nostalgia: 0.0 } },
+                        { label: 'حنين للماضي', mood: { joy: 0.2, sadness: 0.1, anxiety: 0.0, nostalgia: 0.9 } }
+                    ];
+                    
+                    this.reconstructionComparisons = [];
+                    
+                    for (const variation of moodVariations) {
+                        // Temporarily change mood for reconstruction
+                        const originalMood = { ...this.currentMood };
+                        this.currentMood = variation.mood;
+                        
+                        const reconstruction = await this.calculateReconstructionWithWebPPL();
+                        
+                        this.reconstructionComparisons.push({
+                            moodLabel: variation.label,
+                            dominantEmotion: this.getDominantEmotionIcon(reconstruction.dominantEmotion),
+                            miniScene: this.calculateSceneStyle(reconstruction.dominantEmotion, variation.mood),
+                            moodFilter: this.calculateMoodFilter(reconstruction.dominantEmotion, variation.mood),
+                            focus: this.getReconstructionFocus(reconstruction.dominantEmotion),
+                            tone: reconstruction.tone,
+                            details: this.getDetailLevel(reconstruction.dominantEmotion),
+                            confidence: reconstruction.metrics.confidence,
+                            distortion: reconstruction.metrics.distortion
+                        });
+                        
+                        // Restore original mood
+                        this.currentMood = originalMood;
+                    }
+                    
+                    this.comparisonMode = true;
+                    this.logToConsole('✅ تم إنشاء مقارنة إعادات البناء');
+                },
+                
+                randomizeMood() {
+                    this.currentMood = {
+                        joy: Math.random(),
+                        sadness: Math.random(),
+                        anxiety: Math.random(),
+                        nostalgia: Math.random()
+                    };
+                    this.updateEmotionalFilter();
+                    this.logToConsole('🎲 تم تطبيق مزاج عشوائي جديد');
+                },
+                
+                // Utility methods
+                getDominantEmotion() {
+                    const mood = this.currentMood;
+                    const emotions = [
+                        { name: 'joy', value: mood.joy },
+                        { name: 'sadness', value: mood.sadness },
+                        { name: 'anxiety', value: mood.anxiety },
+                        { name: 'nostalgia', value: mood.nostalgia }
+                    ];
+                    
+                    return emotions.reduce((prev, current) => 
+                        current.value > prev.value ? current : prev
+                    ).name;
+                },
+                
+                getDominantEmotionIcon(emotion) {
+                    const icons = {
+                        joy: '😊',
+                        sadness: '😢',
+                        anxiety: '😰',
+                        nostalgia: '🌅'
+                    };
+                    return icons[emotion] || '😐';
+                },
+                
+                calculateEmotionalKeyMatch() {
+                    if (!this.selectedMemory || !this.selectedMemory.originalContext || !this.selectedMemory.originalContext.emotions) {
+                        return 0.5; // Default neutral match
+                    }
+                    
+                    const originalEmotions = this.selectedMemory.originalContext.emotions;
+                    const currentMood = this.currentMood;
+                    
+                    // Calculate similarity between original and current emotions
+                    let similarity = 0;
+                    let count = 0;
+                    
+                    // Map common emotions
+                    const emotionMap = {
+                        'joy': 'joy',
+                        'sadness': 'sadness', 
+                        'anxiety': 'anxiety',
+                        'nostalgia': 'nostalgia',
+                        'excitement': 'joy', // Map excitement to joy
+                        'pride': 'joy', // Map pride to joy
+                        'accomplishment': 'joy', // Map accomplishment to joy
+                        'uncertainty': 'anxiety' // Map uncertainty to anxiety
+                    };
+                    
+                    Object.keys(originalEmotions).forEach(originalEmotion => {
+                        const mappedEmotion = emotionMap[originalEmotion];
+                        if (mappedEmotion && currentMood[mappedEmotion] !== undefined) {
+                            const originalValue = originalEmotions[originalEmotion] || 0;
+                            const currentValue = currentMood[mappedEmotion] || 0;
+                            similarity += 1 - Math.abs(originalValue - currentValue);
+                            count++;
+                        }
+                    });
+                    
+                    return count > 0 ? Math.max(0.1, Math.min(0.95, similarity / count)) : 0.5;
+                },
+                
+                getAccessLevel() {
+                    const keyMatch = this.emotionalEncryption.keyMatch;
+                    if (keyMatch > 0.7) return 'كامل';
+                    if (keyMatch > 0.4) return 'جزئي';
+                    return 'محدود';
+                },
+                
+                calculateReconstructionConfidence(filter, mood) {
+                    const keyMatch = this.emotionalEncryption.keyMatch || 0.5;
+                    const valenceBias = filter.valenceBias || 0;
+                    const stability = 1 - Math.abs(valenceBias);
+                    const baseConfidence = (keyMatch * 0.6 + stability * 0.4);
+                    const randomVariation = 0.7 + Math.random() * 0.3;
+                    return Math.max(0.1, Math.min(0.95, baseConfidence * randomVariation));
+                },
+                
+                calculateEmotionalDistortion(memory, mood) {
+                    if (!memory || !memory.originalContext || !memory.originalContext.emotions) {
+                        return 0.3 + Math.random() * 0.2; // Default fallback
+                    }
+                    
+                    const originalValence = this.getOriginalValence(memory);
+                    const currentValence = ((mood.joy || 0) + (mood.nostalgia || 0)) - ((mood.sadness || 0) + (mood.anxiety || 0));
+                    const valenceDiff = Math.abs(originalValence - currentValence);
+                    return Math.max(0.05, Math.min(0.95, valenceDiff * 0.3 + Math.random() * 0.2));
+                },
+                
+                getOriginalValence(memory) {
+                    if (!memory || !memory.originalContext || !memory.originalContext.emotions) {
+                        return 0; // Default neutral valence
+                    }
+                    
+                    const emotions = memory.originalContext.emotions;
+                    const positive = (emotions.joy || 0) + (emotions.excitement || 0) + (emotions.pride || 0) + (emotions.accomplishment || 0);
+                    const negative = (emotions.anxiety || 0) + (emotions.sadness || 0) + (emotions.uncertainty || 0);
+                    return Math.max(-1, Math.min(1, positive - negative)); // Bound between -1 and 1
+                },
+                
+                getOriginalTone() {
+                    if (!this.selectedMemory) return 'محايد';
+                    const emotions = this.selectedMemory.originalContext.emotions;
+                    const positive = (emotions.joy || 0) + (emotions.excitement || 0) + (emotions.pride || 0);
+                    const negative = (emotions.anxiety || 0);
+                    
+                    if (positive > negative * 2) return 'إيجابي ومشرق';
+                    if (negative > positive) return 'مقلق ومتوتر';
+                    return 'متوازن ومحايد';
+                },
+                
+                calculateReconstructedTone(dominantEmotion) {
+                    const tones = {
+                        joy: 'مفعم بالفرح والبهجة',
+                        sadness: 'حزين ومؤثر',
+                        anxiety: 'مقلق ومتوتر',
+                        nostalgia: 'حنيني ودافئ'
+                    };
+                    return tones[dominantEmotion] || 'محايد';
+                },
+                
+                calculateContextualBias() {
+                    return {
+                        similarity: 0.6 + Math.random() * 0.3,
+                        relevance: 0.7 + Math.random() * 0.2
+                    };
+                },
+                
+                getReconstructionFocus(emotion) {
+                    const focuses = {
+                        joy: 'اللحظات السعيدة والإيجابية',
+                        sadness: 'الجوانب المؤلمة والفقدان',
+                        anxiety: 'المخاوف والتحديات',
+                        nostalgia: 'الذكريات الجميلة والحنين'
+                    };
+                    return focuses[emotion] || 'متوازن';
+                },
+                
+                getDetailLevel(emotion) {
+                    const levels = {
+                        joy: 'تفاصيل مشرقة ومكثفة',
+                        sadness: 'تفاصيل باهتة ومبهمة',
+                        anxiety: 'تفاصيل متقطعة ومشوشة',
+                        nostalgia: 'تفاصيل دافئة ومثالية'
+                    };
+                    return levels[emotion] || 'تفاصيل عادية';
+                },
+                
+                logToConsole(message) {
+                    const console = document.getElementById('webpplConsole');
+                    const timestamp = new Date().toLocaleTimeString('ar-SA');
+                    console.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                    console.scrollTop = console.scrollHeight;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

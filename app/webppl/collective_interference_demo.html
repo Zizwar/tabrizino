@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPF~ Lite: محاكي التداخل المعرفي الجماعي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/webppl@0.9.15/webppl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        
+        .agent-pulse { animation: agentPulse 3s ease-in-out infinite; }
+        @keyframes agentPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .interference-wave { animation: interferenceWave 2s ease-in-out infinite; }
+        @keyframes interferenceWave {
+            0%, 100% { stroke-dashoffset: 0; }
+            50% { stroke-dashoffset: 20; }
+        }
+        
+        .emergence-glow { animation: emergenceGlow 4s ease-in-out infinite; }
+        @keyframes emergenceGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+        }
+        
+        .collective-brain { animation: collectiveBrain 6s ease-in-out infinite; }
+        @keyframes collectiveBrain {
+            0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+            33% { filter: hue-rotate(120deg) brightness(1.2); }
+            66% { filter: hue-rotate(240deg) brightness(0.8); }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 min-h-screen text-white" 
+      x-data="collectiveInterference()">
+
+    <!-- العنوان الرئيسي -->
+    <div class="container mx-auto px-6 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                🧠🔗 التداخل المعرفي الجماعي
+            </h1>
+            <p class="text-xl text-purple-200 mb-4">CPF~ Lite: كيف تتداخل العقول لتخلق ذكاءً جماعياً طارئاً</p>
+            
+            <div class="bg-black/30 rounded-xl p-4 max-w-4xl mx-auto">
+                <p class="text-sm text-gray-300">
+                    <i class="fas fa-lightbulb text-yellow-400"></i>
+                    عندما تتفاعل عدة عقول، تنشأ خصائص جديدة لا توجد في أي عقل منفرد
+                </p>
+            </div>
+        </div>
+
+        <!-- الوكلاء المعرفيون -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-center mb-6 text-cyan-300">
+                <i class="fas fa-users"></i> الوكلاء المعرفيون الخمسة
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <template x-for="(agent, key) in agents" :key="key">
+                    <div @click="selectAgent(key)"
+                         :class="selectedAgents.includes(key) ? 'ring-4 ring-yellow-400 agent-pulse' : ''"
+                         class="bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-white/20 hover:scale-105">
+                        
+                        <div class="text-center">
+                            <div class="text-4xl mb-3" x-text="agent.emoji"></div>
+                            <h3 class="font-bold text-lg mb-2" x-text="agent.name"></h3>
+                            <p class="text-sm text-gray-300 mb-3" x-text="agent.description"></p>
+                            
+                            <!-- خصائص الوكيل -->
+                            <div class="space-y-1 text-xs">
+                                <div class="flex justify-between">
+                                    <span>التحليل:</span>
+                                    <div class="w-16 bg-gray-700 rounded-full h-2">
+                                        <div class="bg-blue-400 h-2 rounded-full" :style="`width: ${agent.traits.analytical * 100}%`"></div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>الإبداع:</span>
+                                    <div class="w-16 bg-gray-700 rounded-full h-2">
+                                        <div class="bg-purple-400 h-2 rounded-full" :style="`width: ${agent.traits.creative * 100}%`"></div>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>السرعة:</span>
+                                    <div class="w-16 bg-gray-700 rounded-full h-2">
+                                        <div class="bg-green-400 h-2 rounded-full" :style="`width: ${agent.traits.speed * 100}%`"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-sm text-gray-400">انقر على الوكلاء لاختيارهم للمحاكاة (اختر 2-5 وكلاء)</p>
+                <p class="text-xs text-gray-500">المختارون: <span x-text="selectedAgents.length"></span>/5</p>
+            </div>
+        </div>
+
+        <!-- السيناريوهات -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-center mb-6 text-purple-300">
+                <i class="fas fa-sitemap"></i> السيناريوهات التفاعلية
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <template x-for="(scenario, key) in scenarios" :key="key">
+                    <div @click="selectedScenario = key"
+                         :class="selectedScenario === key ? 'ring-4 ring-pink-400' : ''"
+                         class="bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-white/20">
+                        
+                        <div class="text-center">
+                            <div class="text-3xl mb-3" x-text="scenario.emoji"></div>
+                            <h3 class="font-bold mb-2" x-text="scenario.name"></h3>
+                            <p class="text-sm text-gray-300 mb-3" x-text="scenario.description"></p>
+                            
+                            <!-- مؤشرات السيناريو -->
+                            <div class="space-y-1 text-xs">
+                                <div>تعقيد: <span x-text="`${Math.round(scenario.complexity * 100)}%`"></span></div>
+                                <div>ضغط الوقت: <span x-text="`${Math.round(scenario.timePressure * 100)}%`"></span></div>
+                                <div>الأمان النفسي: <span x-text="`${Math.round(scenario.psychologicalSafety * 100)}%`"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- منطقة المحاكاة -->
+        <div class="mb-8">
+            <div class="bg-black/30 backdrop-blur-md rounded-2xl p-6">
+                <h2 class="text-3xl font-bold text-center mb-6 text-yellow-300">
+                    <i class="fas fa-flask"></i> محاكاة التداخل المعرفي
+                </h2>
+                
+                <!-- أزرار التحكم -->
+                <div class="text-center mb-6">
+                    <button @click="runSimulation()" 
+                            :disabled="selectedAgents.length < 2 || isSimulating"
+                            class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 mx-2">
+                        <i class="fas fa-play" :class="isSimulating ? 'animate-spin' : ''"></i>
+                        <span x-text="isSimulating ? 'جاري المحاكاة...' : 'بدء المحاكاة'"></span>
+                    </button>
+                    
+                    <button @click="resetSimulation()" 
+                            class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 px-6 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 mx-2">
+                        <i class="fas fa-undo"></i>
+                        إعادة تعيين
+                    </button>
+                </div>
+
+                <!-- منطقة عرض التداخل البصري -->
+                <div class="bg-black/40 rounded-xl p-4 mb-6" x-show="simulationResult">
+                    <canvas id="interferenceCanvas" width="800" height="400" class="w-full max-w-4xl mx-auto"></canvas>
+                </div>
+
+                <!-- نتائج المحاكاة -->
+                <div x-show="simulationResult" x-transition>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- أنماط التداخل -->
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <h3 class="font-bold text-lg mb-3 text-center text-blue-300">
+                                <i class="fas fa-wave-square"></i> أنماط التداخل
+                            </h3>
+                            <template x-if="simulationResult && simulationResult.interferencePatterns">
+                                <div class="space-y-2">
+                                    <template x-for="pattern in simulationResult.interferencePatterns" :key="pattern.type">
+                                        <div class="bg-black/30 rounded-lg p-3">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-sm font-semibold" x-text="getPatternName(pattern.type)"></span>
+                                                <span class="text-xs bg-blue-500/30 px-2 py-1 rounded" 
+                                                      x-text="`${Math.round(pattern.strength * 100)}%`"></span>
+                                            </div>
+                                            <div class="text-xs text-gray-400 mt-1" x-text="pattern.description"></div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- الخصائص الطارئة -->
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <h3 class="font-bold text-lg mb-3 text-center text-green-300">
+                                <i class="fas fa-magic"></i> الخصائص الطارئة
+                            </h3>
+                            <template x-if="simulationResult && simulationResult.emergentProperties">
+                                <div class="space-y-3">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-yellow-400 emergence-glow" 
+                                             x-text="`${Math.round((simulationResult.emergentProperties.collectiveIntelligence || 0) * 100)}%`"></div>
+                                        <div class="text-sm">الذكاء الجماعي</div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-2 text-xs">
+                                        <div class="text-center">
+                                            <div class="font-bold" x-text="`${Math.round((simulationResult.emergentProperties.creativity || 0) * 100)}%`"></div>
+                                            <div>الإبداع الجماعي</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="font-bold" x-text="`${Math.round((simulationResult.emergentProperties.coherence || 0) * 100)}%`"></div>
+                                            <div>التماسك</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="font-bold" x-text="`${Math.round((simulationResult.emergentProperties.efficiency || 0) * 100)}%`"></div>
+                                            <div>الكفاءة</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="font-bold" x-text="`${Math.round((simulationResult.emergentProperties.innovation || 0) * 100)}%`"></div>
+                                            <div>الابتكار</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- قياسات الأداء -->
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <h3 class="font-bold text-lg mb-3 text-center text-purple-300">
+                                <i class="fas fa-chart-line"></i> قياسات الأداء
+                            </h3>
+                            <template x-if="simulationResult && simulationResult.performance">
+                                <div class="space-y-3">
+                                    <template x-for="(value, metric) in simulationResult.performance" :key="metric">
+                                        <div>
+                                            <div class="flex justify-between text-sm mb-1">
+                                                <span x-text="getMetricName(metric)"></span>
+                                                <span x-text="`${Math.round(value * 100)}%`"></span>
+                                            </div>
+                                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                                <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-1000" 
+                                                     :style="`width: ${value * 100}%`"></div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- التحليل المقارن -->
+        <div x-show="simulationHistory.length > 1" class="mb-8">
+            <div class="bg-black/30 backdrop-blur-md rounded-2xl p-6">
+                <h2 class="text-3xl font-bold text-center mb-6 text-cyan-300">
+                    <i class="fas fa-analytics"></i> التحليل المقارن للمحاكاات
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-bold text-lg mb-3">تطور الذكاء الجماعي</h3>
+                        <div class="space-y-2">
+                            <template x-for="(sim, index) in simulationHistory.slice(-5)" :key="index">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm" x-text="`محاكاة ${index + 1}`"></span>
+                                    <div class="flex items-center space-x-2 space-x-reverse">
+                                        <div class="w-32 bg-gray-700 rounded-full h-2">
+                                            <div class="bg-yellow-400 h-2 rounded-full" 
+                                                 :style="`width: ${(sim.emergentProperties?.collectiveIntelligence || 0) * 100}%`"></div>
+                                        </div>
+                                        <span class="text-xs" x-text="`${Math.round((sim.emergentProperties?.collectiveIntelligence || 0) * 100)}%`"></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-bold text-lg mb-3">إحصائيات عامة</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>إجمالي المحاكاات:</span>
+                                <span x-text="simulationHistory.length"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>متوسط الذكاء الجماعي:</span>
+                                <span x-text="`${Math.round(getAverageCollectiveIntelligence() * 100)}%`"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>أعلى إبداع جماعي:</span>
+                                <span x-text="`${Math.round(getMaxCreativity() * 100)}%`"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>أفضل تماسك:</span>
+                                <span x-text="`${Math.round(getMaxCoherence() * 100)}%`"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- تفسير علمي -->
+        <div class="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 backdrop-blur-md rounded-2xl p-6">
+            <h2 class="text-3xl font-bold text-center mb-6 text-yellow-300">
+                <i class="fas fa-brain"></i> التفسير العلمي
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <h3 class="font-bold text-lg mb-3 text-green-300">المفاهيم الأساسية:</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><strong>التداخل البناء:</strong> عندما تتضافر الأفكار لتخلق حلولاً أقوى</li>
+                        <li><strong>التداخل المدمر:</strong> عندما تتصارع وجهات النظر وتلغي بعضها</li>
+                        <li><strong>الطوارئ:</strong> خصائص جديدة تنشأ من التفاعل الجماعي</li>
+                        <li><strong>الذكاء الجماعي:</strong> قدرة المجموعة تفوق مجموع قدرات الأفراد</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-lg mb-3 text-blue-300">التطبيقات العملية:</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>• تحسين أداء الفرق في الشركات</li>
+                        <li>• تصميم أنظمة الذكاء الاصطناعي الجماعي</li>
+                        <li>• فهم ديناميكيات اتخاذ القرار الجماعي</li>
+                        <li>• تطوير أدوات التعاون والإبداع</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-6 p-4 bg-black/30 rounded-xl">
+                <p class="text-center text-yellow-300 font-bold mb-2">
+                    <i class="fas fa-lightbulb"></i> نظرية CPF~ Lite
+                </p>
+                <p class="text-sm text-gray-300 text-center">
+                    التداخل المعرفي الجماعي ليس مجرد مجموع العقول الفردية، بل نظام معقد يخلق ذكاءً وإبداعاً طارئين 
+                    من خلال التفاعلات اللاخطية بين الأنماط المعرفية المختلفة، مما يؤدي إلى حلول مبتكرة لا يمكن لأي فرد 
+                    الوصول إليها بمفرده.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function collectiveInterference() {
+            return {
+                // الوكلاء المعرفيون
+                agents: {
+                    analytical: {
+                        name: 'المفكر التحليلي',
+                        emoji: '🔬',
+                        description: 'منهجي، منطقي، يعتمد على البيانات',
+                        traits: { analytical: 0.9, creative: 0.3, speed: 0.6, social: 0.5, caution: 0.8 }
+                    },
+                    creative: {
+                        name: 'المبدع البديهي',
+                        emoji: '🎨',
+                        description: 'خيالي، بديهي، استكشافي',
+                        traits: { analytical: 0.4, creative: 0.9, speed: 0.7, social: 0.6, caution: 0.3 }
+                    },
+                    cautious: {
+                        name: 'المحافظ الحذر',
+                        emoji: '🛡️',
+                        description: 'حذر، يتجنب المخاطر، تقليدي',
+                        traits: { analytical: 0.7, creative: 0.2, speed: 0.4, social: 0.5, caution: 0.9 }
+                    },
+                    social: {
+                        name: 'المنسق الاجتماعي',
+                        emoji: '🤝',
+                        description: 'تعاوني، متعاطف، يسعى للإجماع',
+                        traits: { analytical: 0.5, creative: 0.6, speed: 0.5, social: 0.9, caution: 0.6 }
+                    },
+                    rapid: {
+                        name: 'صانع القرار السريع',
+                        emoji: '⚡',
+                        description: 'سريع، حاسم، موجه للعمل',
+                        traits: { analytical: 0.6, creative: 0.5, speed: 0.9, social: 0.4, caution: 0.3 }
+                    }
+                },
+                
+                // السيناريوهات
+                scenarios: {
+                    brainstorm: {
+                        name: 'جلسة عصف ذهني',
+                        emoji: '💡',
+                        description: 'فريق يولد أفكار لحل مشكلة تصميم معقدة',
+                        complexity: 0.8,
+                        timePressure: 0.4,
+                        psychologicalSafety: 0.8
+                    },
+                    crisis: {
+                        name: 'الاستجابة للأزمة',
+                        emoji: '🚨',
+                        description: 'فريق طوارئ يستجيب لموقف حرج',
+                        complexity: 0.9,
+                        timePressure: 0.9,
+                        psychologicalSafety: 0.6
+                    },
+                    academic: {
+                        name: 'نقاش أكاديمي',
+                        emoji: '📚',
+                        description: 'باحثون يناقشون إطار نظري ومنهجية',
+                        complexity: 0.8,
+                        timePressure: 0.2,
+                        psychologicalSafety: 0.7
+                    },
+                    family: {
+                        name: 'قرار عائلي',
+                        emoji: '👨‍👩‍👧‍👦',
+                        description: 'عائلة تختار قرار حياتي مهم يؤثر على الجميع',
+                        complexity: 0.7,
+                        timePressure: 0.5,
+                        psychologicalSafety: 0.9
+                    }
+                },
+                
+                // حالة المحاكاة
+                selectedAgents: [],
+                selectedScenario: 'brainstorm',
+                isSimulating: false,
+                simulationResult: null,
+                simulationHistory: [],
+                
+                init() {
+                    this.selectedAgents = ['analytical', 'creative'];
+                },
+                
+                selectAgent(agentKey) {
+                    const index = this.selectedAgents.indexOf(agentKey);
+                    if (index > -1) {
+                        this.selectedAgents.splice(index, 1);
+                    } else if (this.selectedAgents.length < 5) {
+                        this.selectedAgents.push(agentKey);
+                    }
+                },
+                
+                async runSimulation() {
+                    if (this.selectedAgents.length < 2 || this.isSimulating) return;
+                    
+                    this.isSimulating = true;
+                    
+                    try {
+                        // محاكاة الحسابات باستخدام WebPPL
+                        const result = await this.calculateInterference();
+                        this.simulationResult = result;
+                        this.simulationHistory.push(result);
+                        
+                        // رسم التداخل البصري
+                        this.drawInterferencePattern();
+                        
+                    } catch (error) {
+                        console.error('خطأ في المحاكاة:', error);
+                    } finally {
+                        this.isSimulating = false;
+                    }
+                },
+                
+                async calculateInterference() {
+                    const selectedAgentData = this.selectedAgents.map(key => this.agents[key]);
+                    const scenario = this.scenarios[this.selectedScenario];
+                    
+                    return new Promise((resolve) => {
+                        // إنشاء كود WebPPL للحسابات الاحتمالية
+                        const webpplCode = `
+                            // حساب التداخل بين الوكلاء المعرفيين
+                            var calculateCollectiveInterference = function() {
+                                var agents = ${JSON.stringify(selectedAgentData.map(a => a.traits))};
+                                var scenario = ${JSON.stringify(scenario)};
+                                
+                                // حساب أنماط التداخل
+                                var interferencePatterns = [];
+                                
+                                for (var i = 0; i < agents.length; i++) {
+                                    for (var j = i + 1; j < agents.length; j++) {
+                                        var agent1 = agents[i];
+                                        var agent2 = agents[j];
+                                        
+                                        // حساب التوافق بين الوكلاء
+                                        var compatibility = gaussian(
+                                            0.5 + Math.abs(agent1.analytical - agent2.analytical) * -0.3 +
+                                            Math.abs(agent1.creative - agent2.creative) * -0.2,
+                                            0.2
+                                        );
+                                        
+                                        var patternType = compatibility > 0.7 ? 'constructive' :
+                                                        compatibility > 0.4 ? 'harmonious' :
+                                                        compatibility > 0.2 ? 'chaotic' : 'destructive';
+                                        
+                                        interferencePatterns.push({
+                                            type: patternType,
+                                            strength: Math.max(0.1, Math.min(1.0, compatibility)),
+                                            agents: [i, j]
+                                        });
+                                    }
+                                }
+                                
+                                // حساب الخصائص الطارئة
+                                var avgCompatibility = interferencePatterns.reduce(function(sum, p) { 
+                                    return sum + p.strength; 
+                                }, 0) / interferencePatterns.length;
+                                
+                                var collectiveIntelligence = beta(
+                                    Math.max(1, avgCompatibility * 10 + scenario.psychologicalSafety * 5),
+                                    Math.max(1, (1 - avgCompatibility) * 5 + scenario.timePressure * 3)
+                                );
+                                
+                                var creativity = beta(
+                                    Math.max(1, agents.reduce(function(sum, a) { return sum + a.creative; }, 0) * 2),
+                                    Math.max(1, (agents.length - agents.reduce(function(sum, a) { return sum + a.creative; }, 0)) * 2)
+                                );
+                                
+                                var coherence = beta(
+                                    Math.max(1, avgCompatibility * 8 + scenario.psychologicalSafety * 4),
+                                    Math.max(1, (1 - avgCompatibility) * 4 + scenario.complexity * 2)
+                                );
+                                
+                                var efficiency = beta(
+                                    Math.max(1, agents.reduce(function(sum, a) { return sum + a.speed; }, 0) * 2 - scenario.timePressure * 3),
+                                    Math.max(1, scenario.complexity * 4)
+                                );
+                                
+                                var innovation = creativity * collectiveIntelligence * uniform(0.7, 1.3);
+                                
+                                return {
+                                    interferencePatterns: interferencePatterns,
+                                    emergentProperties: {
+                                        collectiveIntelligence: collectiveIntelligence,
+                                        creativity: creativity,
+                                        coherence: coherence,
+                                        efficiency: efficiency,
+                                        innovation: Math.min(1.0, innovation)
+                                    },
+                                    performance: {
+                                        problemSolving: (collectiveIntelligence + creativity) / 2,
+                                        teamwork: (coherence + avgCompatibility) / 2,
+                                        decisionSpeed: efficiency,
+                                        qualityOfSolution: (collectiveIntelligence + coherence + creativity) / 3
+                                    }
+                                };
+                            };
+                            
+                            calculateCollectiveInterference();
+                        `;
+                        
+                        // تنفيذ الكود باستخدام WebPPL
+                        if (typeof webppl !== 'undefined') {
+                            webppl.run(webpplCode, (err, result) => {
+                                if (err) {
+                                    console.error('WebPPL Error:', err);
+                                    resolve(this.generateFallbackResult());
+                                } else {
+                                    resolve(this.processWebPPLResult(result));
+                                }
+                            });
+                        } else {
+                            resolve(this.generateFallbackResult());
+                        }
+                    });
+                },
+                
+                processWebPPLResult(result) {
+                    // معالجة نتائج WebPPL وإضافة التفاصيل
+                    const processedResult = {
+                        ...result,
+                        timestamp: new Date().toLocaleString('ar-SA'),
+                        selectedAgents: [...this.selectedAgents],
+                        scenario: this.selectedScenario
+                    };
+                    
+                    // إضافة أوصاف للأنماط
+                    processedResult.interferencePatterns.forEach(pattern => {
+                        pattern.description = this.getPatternDescription(pattern.type);
+                    });
+                    
+                    return processedResult;
+                },
+                
+                generateFallbackResult() {
+                    // نتائج احتياطية إذا فشل WebPPL
+                    const agentCount = this.selectedAgents.length;
+                    const scenario = this.scenarios[this.selectedScenario];
+                    
+                    return {
+                        interferencePatterns: [
+                            { type: 'constructive', strength: 0.6 + Math.random() * 0.3 },
+                            { type: 'harmonious', strength: 0.4 + Math.random() * 0.4 },
+                            { type: 'creative', strength: 0.5 + Math.random() * 0.3 }
+                        ].map(p => ({ ...p, description: this.getPatternDescription(p.type) })),
+                        emergentProperties: {
+                            collectiveIntelligence: 0.4 + Math.random() * 0.4,
+                            creativity: 0.3 + Math.random() * 0.5,
+                            coherence: 0.5 + Math.random() * 0.3,
+                            efficiency: 0.4 + Math.random() * 0.4,
+                            innovation: 0.3 + Math.random() * 0.5
+                        },
+                        performance: {
+                            problemSolving: 0.5 + Math.random() * 0.3,
+                            teamwork: 0.4 + Math.random() * 0.4,
+                            decisionSpeed: 0.6 + Math.random() * 0.3,
+                            qualityOfSolution: 0.5 + Math.random() * 0.3
+                        },
+                        timestamp: new Date().toLocaleString('ar-SA'),
+                        selectedAgents: [...this.selectedAgents],
+                        scenario: this.selectedScenario
+                    };
+                },
+                
+                drawInterferencePattern() {
+                    const canvas = document.getElementById('interferenceCanvas');
+                    if (!canvas) return;
+                    
+                    const ctx = canvas.getContext('2d');
+                    const width = canvas.width;
+                    const height = canvas.height;
+                    
+                    // مسح الكنفاس
+                    ctx.clearRect(0, 0, width, height);
+                    
+                    // رسم خلفية متدرجة
+                    const gradient = ctx.createLinearGradient(0, 0, width, height);
+                    gradient.addColorStop(0, 'rgba(99, 102, 241, 0.1)');
+                    gradient.addColorStop(1, 'rgba(139, 92, 246, 0.1)');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, width, height);
+                    
+                    // رسم الوكلاء
+                    const agentPositions = this.calculateAgentPositions(width, height);
+                    
+                    // رسم خطوط التداخل أولاً
+                    if (this.simulationResult && this.simulationResult.interferencePatterns) {
+                        this.simulationResult.interferencePatterns.forEach(pattern => {
+                            if (pattern.agents && pattern.agents.length === 2) {
+                                const agent1Pos = agentPositions[pattern.agents[0]];
+                                const agent2Pos = agentPositions[pattern.agents[1]];
+                                
+                                if (agent1Pos && agent2Pos) {
+                                    this.drawInterferenceLine(ctx, agent1Pos, agent2Pos, pattern);
+                                }
+                            }
+                        });
+                    }
+                    
+                    // رسم الوكلاء فوق الخطوط
+                    agentPositions.forEach((pos, index) => {
+                        if (pos) {
+                            const agentKey = this.selectedAgents[index];
+                            const agent = this.agents[agentKey];
+                            this.drawAgent(ctx, pos, agent, index);
+                        }
+                    });
+                    
+                    // رسم مؤشر الذكاء الجماعي في المركز
+                    if (this.simulationResult && this.simulationResult.emergentProperties) {
+                        this.drawCollectiveBrain(ctx, width / 2, height / 2, this.simulationResult.emergentProperties);
+                    }
+                },
+                
+                calculateAgentPositions(width, height) {
+                    const positions = [];
+                    const centerX = width / 2;
+                    const centerY = height / 2;
+                    const radius = Math.min(width, height) * 0.3;
+                    const agentCount = this.selectedAgents.length;
+                    
+                    for (let i = 0; i < agentCount; i++) {
+                        const angle = (i * 2 * Math.PI) / agentCount - Math.PI / 2;
+                        positions.push({
+                            x: centerX + radius * Math.cos(angle),
+                            y: centerY + radius * Math.sin(angle)
+                        });
+                    }
+                    
+                    return positions;
+                },
+                
+                drawAgent(ctx, pos, agent, index) {
+                    const size = 40;
+                    
+                    // رسم دائرة الوكيل
+                    ctx.beginPath();
+                    ctx.arc(pos.x, pos.y, size / 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = `hsl(${index * 60}, 70%, 60%)`;
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    
+                    // رسم رمز الوكيل
+                    ctx.fillStyle = 'white';
+                    ctx.font = '20px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(agent.emoji, pos.x, pos.y);
+                    
+                    // رسم اسم الوكيل
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.font = '12px Cairo';
+                    ctx.fillText(agent.name, pos.x, pos.y + size / 2 + 15);
+                },
+                
+                drawInterferenceLine(ctx, pos1, pos2, pattern) {
+                    const colors = {
+                        constructive: '#10B981',
+                        harmonious: '#3B82F6',
+                        creative: '#8B5CF6',
+                        chaotic: '#F59E0B',
+                        destructive: '#EF4444'
+                    };
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(pos1.x, pos1.y);
+                    ctx.lineTo(pos2.x, pos2.y);
+                    ctx.strokeStyle = colors[pattern.type] || '#6B7280';
+                    ctx.lineWidth = Math.max(2, pattern.strength * 8);
+                    ctx.globalAlpha = 0.3 + pattern.strength * 0.5;
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                    
+                    // رسم نمط التداخل في منتصف الخط
+                    const midX = (pos1.x + pos2.x) / 2;
+                    const midY = (pos1.y + pos2.y) / 2;
+                    
+                    ctx.beginPath();
+                    ctx.arc(midX, midY, 8, 0, 2 * Math.PI);
+                    ctx.fillStyle = colors[pattern.type] || '#6B7280';
+                    ctx.globalAlpha = 0.8;
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                },
+                
+                drawCollectiveBrain(ctx, x, y, properties) {
+                    const size = 60;
+                    const pulseSize = size * (0.8 + properties.collectiveIntelligence * 0.4);
+                    
+                    // رسم هالة الذكاء الجماعي
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, pulseSize);
+                    gradient.addColorStop(0, `rgba(255, 215, 0, ${properties.collectiveIntelligence * 0.6})`);
+                    gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, pulseSize, 0, 2 * Math.PI);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    // رسم المخ الجماعي
+                    ctx.beginPath();
+                    ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = '#FFD700';
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    
+                    // رسم رمز المخ
+                    ctx.fillStyle = 'white';
+                    ctx.font = '30px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('🧠', x, y);
+                    
+                    // رسم نسبة الذكاء الجماعي
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.font = 'bold 14px Cairo';
+                    ctx.fillText(`${Math.round(properties.collectiveIntelligence * 100)}%`, x, y + size / 2 + 20);
+                },
+                
+                resetSimulation() {
+                    this.simulationResult = null;
+                    this.selectedAgents = ['analytical', 'creative'];
+                    this.selectedScenario = 'brainstorm';
+                    
+                    // مسح الكنفاس
+                    const canvas = document.getElementById('interferenceCanvas');
+                    if (canvas) {
+                        const ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                },
+                
+                // وظائف مساعدة للعرض
+                getPatternName(type) {
+                    const names = {
+                        constructive: 'تضخيم بناء',
+                        harmonious: 'تكامل متناغم',
+                        creative: 'تركيب إبداعي',
+                        chaotic: 'استكشاف فوضوي',
+                        destructive: 'إلغاء مدمر'
+                    };
+                    return names[type] || type;
+                },
+                
+                getPatternDescription(type) {
+                    const descriptions = {
+                        constructive: 'الأفكار تبني وتضخم بعضها البعض',
+                        harmonious: 'وجهات النظر المختلفة تمتزج بسلاسة',
+                        creative: 'رؤى جديدة تنبثق من دمج وجهات النظر المتنوعة',
+                        chaotic: 'استكشاف إبداعي لا يمكن التنبؤ به مع إمكانيات كبيرة',
+                        destructive: 'المناهج المتصارعة تقلل من فعالية المجموعة العامة'
+                    };
+                    return descriptions[type] || 'نمط تفاعل جماعي قياسي';
+                },
+                
+                getMetricName(metric) {
+                    const names = {
+                        problemSolving: 'حل المشاكل',
+                        teamwork: 'العمل الجماعي',
+                        decisionSpeed: 'سرعة القرار',
+                        qualityOfSolution: 'جودة الحل'
+                    };
+                    return names[metric] || metric;
+                },
+                
+                // إحصائيات المحاكاة
+                getAverageCollectiveIntelligence() {
+                    if (this.simulationHistory.length === 0) return 0;
+                    const sum = this.simulationHistory.reduce((acc, sim) => 
+                        acc + (sim.emergentProperties?.collectiveIntelligence || 0), 0);
+                    return sum / this.simulationHistory.length;
+                },
+                
+                getMaxCreativity() {
+                    if (this.simulationHistory.length === 0) return 0;
+                    return Math.max(...this.simulationHistory.map(sim => 
+                        sim.emergentProperties?.creativity || 0));
+                },
+                
+                getMaxCoherence() {
+                    if (this.simulationHistory.length === 0) return 0;
+                    return Math.max(...this.simulationHistory.map(sim => 
+                        sim.emergentProperties?.coherence || 0));
+                }
+            }
+        }
+    </script>
+</body>
+</html>

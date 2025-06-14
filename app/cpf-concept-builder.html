@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 CPF Concept Builder</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            height: 100vh;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .concept-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .concept-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: #4ecdc4;
+        }
+
+        .concept-card.selected {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .concept-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .concept-category {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .concept-connections {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .canvas-container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .canvas-tools {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 15px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .tool-btn.active {
+            background: #ff6b6b;
+        }
+
+        .editor-panel {
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .connections-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .connection-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .connection-remove {
+            background: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .status-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-notification.show {
+            transform: translateX(0);
+        }
+
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .node:hover {
+            filter: brightness(1.3);
+        }
+
+        .node-label {
+            font-size: 12px;
+            fill: white;
+            text-anchor: middle;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .link {
+            stroke: rgba(255, 255, 255, 0.6);
+            stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+
+        .link:hover {
+            stroke: #4ecdc4;
+            stroke-width: 3;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .drag-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            opacity: 0.5;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .concept-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- قائمة المفاهيم -->
+        <div class="panel">
+            <h2>🧠 المفاهيم المعرفية</h2>
+            
+            <div class="concept-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalConcepts">11</div>
+                    <div class="stat-label">مفهوم</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalConnections">28</div>
+                    <div class="stat-label">رابط</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="selectedConcept">0</div>
+                    <div class="stat-label">مختار</div>
+                </div>
+            </div>
+
+            <input type="text" class="search-box" placeholder="🔍 البحث في المفاهيم..." id="searchBox">
+            
+            <div class="concepts-list" id="conceptsList">
+                <!-- سيتم ملؤها ديناميكياً -->
+            </div>
+
+            <button class="btn" onclick="createNewConcept()">✨ إنشاء مفهوم جديد</button>
+            <button class="btn btn-secondary" onclick="loadSampleData()">🔄 استرداد البيانات الوهمية</button>
+        </div>
+
+        <!-- منطقة الرسم التفاعلي -->
+        <div class="canvas-container">
+            <div class="canvas-tools">
+                <button class="tool-btn active" id="selectTool" onclick="setTool('select')">👆 اختيار</button>
+                <button class="tool-btn" id="connectTool" onclick="setTool('connect')">🔗 ربط</button>
+                <button class="tool-btn" id="moveTool" onclick="setTool('move')">🤏 تحريك</button>
+                <button class="tool-btn" onclick="exportData()">💾 تصدير</button>
+                <button class="tool-btn" onclick="importData()">📂 استيراد</button>
+                <button class="tool-btn" onclick="centerView()">🎯 توسيط</button>
+            </div>
+            
+            <div class="drag-hint" id="dragHint">
+                🌟 اسحب المفاهيم من القائمة أو انقر لإنشاء مفهوم جديد<br>
+                🔗 استخدم أداة الربط لإنشاء علاقات بين المفاهيم
+            </div>
+
+            <svg id="conceptCanvas" width="100%" height="100%"></svg>
+            
+            <div class="status-bar">
+                <span id="statusText">جاهز للإبداع ✨</span>
+                <span id="modeText">وضع الاختيار</span>
+            </div>
+        </div>
+
+        <!-- لوحة التحرير -->
+        <div class="panel editor-panel">
+            <h2>⚙️ محرر المفاهيم</h2>
+            
+            <div id="editorContent">
+                <div style="text-align: center; padding: 50px; opacity: 0.7;">
+                    🎨 اختر مفهوماً لتحريره<br>
+                    أو أنشئ مفهوماً جديداً
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إشعار عائم -->
+    <div class="floating-notification" id="notification"></div>
+
+    <!-- مدخل ملف مخفي -->
+    <input type="file" id="fileInput" class="file-input" accept=".json" onchange="handleFileImport(event)">
+
+    <script>
+        // البيانات الوهمية
+        const sampleConcepts = {
+            "simulators": {
+                "id": "simulators",
+                "title": "المحاكيات المتوازية",
+                "description": "معالجات متوازية متخصصة في أنواع مختلفة من المعلومات",
+                "category": "core-architecture",
+                "safety_level": "moderate",
+                "connections": ["generative-collapse", "noise-factor", "environmental-variables"],
+                "scientific_relations": ["distributed_computing", "neural_networks", "parallel_processing"],
+                "x": 300,
+                "y": 200
+            },
+            "generative-collapse": {
+                "id": "generative-collapse",
+                "title": "الانهيار التوليدي",
+                "description": "آلية تحويل الاحتمالات المتعددة إلى قرار واحد",
+                "category": "decision-engine",
+                "safety_level": "moderate",
+                "connections": ["simulators", "oscillators", "noise-factor"],
+                "scientific_relations": ["quantum_collapse", "optimization_algorithms"],
+                "x": 500,
+                "y": 150
+            },
+            "emotional-encryption": {
+                "id": "emotional-encryption",
+                "title": "التشفير العاطفي",
+                "description": "ربط الذكريات بالسياق العاطفي كمفتاح",
+                "category": "memory-system",
+                "safety_level": "moderate",
+                "connections": ["generative-reconstruction", "middleware", "trust-matrix"],
+                "scientific_relations": ["cryptographic_hashing", "state_dependent_learning"],
+                "x": 700,
+                "y": 300
+            },
+            "oscillators": {
+                "id": "oscillators",
+                "title": "أنماط التذبذب",
+                "description": "أنماط توازن الحالات العاطفية والمعرفية",
+                "category": "core-engine",
+                "safety_level": "low",
+                "connections": ["noise-factor", "environmental-variables", "generative-collapse"],
+                "scientific_relations": ["harmonic_oscillators", "circadian_rhythms"],
+                "x": 400,
+                "y": 350
+            },
+            "noise-factor": {
+                "id": "noise-factor",
+                "title": "معامل التشويش",
+                "description": "عشوائية محكومة للإبداع ومنع الجمود",
+                "category": "enhancement-parameter",
+                "safety_level": "low",
+                "connections": ["simulators", "oscillators", "generative-collapse"],
+                "scientific_relations": ["entropy", "genetic_mutations", "chaos_theory"],
+                "x": 250,
+                "y": 400
+            }
+        };
+
+        // المتغيرات العامة
+        let concepts = {};
+        let selectedConcept = null;
+        let currentTool = 'select';
+        let connectingFrom = null;
+        let simulation = null;
+
+        // إعداد SVG
+        const svg = d3.select("#conceptCanvas");
+        const width = parseInt(svg.style("width"));
+        const height = parseInt(svg.style("height"));
+
+        // مجموعات SVG
+        const linksGroup = svg.append("g").attr("class", "links");
+        const nodesGroup = svg.append("g").attr("class", "nodes");
+
+        // تهيئة التطبيق
+        function initApp() {
+            loadSampleData();
+            setupEventListeners();
+            updateVisualization();
+            showNotification("🚀 مرحباً بك في منشئ المفاهيم المعرفية!");
+        }
+
+        // تحميل البيانات الوهمية
+        function loadSampleData() {
+            concepts = { ...sampleConcepts };
+            updateConceptsList();
+            updateVisualization();
+            updateStats();
+            showNotification("📊 تم تحميل البيانات الوهمية بنجاح");
+        }
+
+        // تحديث قائمة المفاهيم
+        function updateConceptsList() {
+            const conceptsList = document.getElementById('conceptsList');
+            conceptsList.innerHTML = '';
+
+            Object.values(concepts).forEach(concept => {
+                const card = document.createElement('div');
+                card.className = 'concept-card';
+                card.draggable = true;
+                card.dataset.conceptId = concept.id;
+                
+                if (selectedConcept === concept.id) {
+                    card.classList.add('selected');
+                }
+
+                card.innerHTML = `
+                    <div class="concept-title">${concept.title}</div>
+                    <div class="concept-category">🏷️ ${concept.category}</div>
+                    <div class="concept-connections">🔗 ${concept.connections?.length || 0} ارتباط</div>
+                `;
+
+                card.onclick = () => selectConcept(concept.id);
+                card.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', concept.id);
+                };
+
+                conceptsList.appendChild(card);
+            });
+        }
+
+        // اختيار مفهوم
+        function selectConcept(conceptId) {
+            selectedConcept = conceptId;
+            updateConceptsList();
+            loadConceptEditor(conceptId);
+            highlightNode(conceptId);
+            updateStats();
+        }
+
+        // تحميل محرر المفهوم
+        function loadConceptEditor(conceptId) {
+            const concept = concepts[conceptId];
+            const editorContent = document.getElementById('editorContent');
+
+            editorContent.innerHTML = `
+                <div class="form-group">
+                    <label>معرف المفهوم</label>
+                    <input type="text" id="conceptId" value="${concept.id}" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>العنوان</label>
+                    <input type="text" id="conceptTitle" value="${concept.title}">
+                </div>
+                
+                <div class="form-group">
+                    <label>الوصف</label>
+                    <textarea id="conceptDescription">${concept.description}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>الفئة</label>
+                    <select id="conceptCategory">
+                        <option value="core-architecture" ${concept.category === 'core-architecture' ? 'selected' : ''}>البنية الأساسية</option>
+                        <option value="decision-engine" ${concept.category === 'decision-engine' ? 'selected' : ''}>محرك القرارات</option>
+                        <option value="memory-system" ${concept.category === 'memory-system' ? 'selected' : ''}>نظام الذاكرة</option>
+                        <option value="core-engine" ${concept.category === 'core-engine' ? 'selected' : ''}>المحرك الأساسي</option>
+                        <option value="enhancement-parameter" ${concept.category === 'enhancement-parameter' ? 'selected' : ''}>معامل التحسين</option>
+                        <option value="security-layer" ${concept.category === 'security-layer' ? 'selected' : ''}>طبقة الأمان</option>
+                        <option value="social-layer" ${concept.category === 'social-layer' ? 'selected' : ''}>الطبقة الاجتماعية</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>مستوى الأمان</label>
+                    <select id="conceptSafety">
+                        <option value="low" ${concept.safety_level === 'low' ? 'selected' : ''}>منخفض</option>
+                        <option value="moderate" ${concept.safety_level === 'moderate' ? 'selected' : ''}>متوسط</option>
+                        <option value="high" ${concept.safety_level === 'high' ? 'selected' : ''}>عالي</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>الروابط العلمية</label>
+                    <textarea id="conceptScientific" placeholder="أدخل المجالات العلمية مفصولة بفاصلة">${(concept.scientific_relations || []).join(', ')}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>الارتباطات (${(concept.connections || []).length})</label>
+                    <div class="connections-list" id="connectionsList">
+                        ${(concept.connections || []).map(conn => `
+                            <div class="connection-item">
+                                <span>${concepts[conn]?.title || conn}</span>
+                                <button class="connection-remove" onclick="removeConnection('${conceptId}', '${conn}')">×</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn" onclick="saveConcept()">💾 حفظ التغييرات</button>
+                    <button class="btn btn-secondary" onclick="duplicateConcept('${conceptId}')">📄 نسخ</button>
+                    <button class="btn btn-secondary" onclick="deleteConcept('${conceptId}')">🗑️ حذف</button>
+                </div>
+            `;
+        }
+
+        // حفظ المفهوم
+        function saveConcept() {
+            if (!selectedConcept) return;
+
+            const concept = concepts[selectedConcept];
+            concept.title = document.getElementById('conceptTitle').value;
+            concept.description = document.getElementById('conceptDescription').value;
+            concept.category = document.getElementById('conceptCategory').value;
+            concept.safety_level = document.getElementById('conceptSafety').value;
+            concept.scientific_relations = document.getElementById('conceptScientific').value
+                .split(',').map(s => s.trim()).filter(s => s);
+
+            updateConceptsList();
+            updateVisualization();
+            showNotification("✅ تم حفظ التغييرات بنجاح");
+        }
+
+        // حذف مفهوم
+        function deleteConcept(conceptId) {
+            if (confirm('هل أنت متأكد من حذف هذا المفهوم؟')) {
+                // إزالة الارتباطات من المفاهيم الأخرى
+                Object.values(concepts).forEach(concept => {
+                    if (concept.connections) {
+                        concept.connections = concept.connections.filter(conn => conn !== conceptId);
+                    }
+                });
+
+                delete concepts[conceptId];
+                
+                if (selectedConcept === conceptId) {
+                    selectedConcept = null;
+                    document.getElementById('editorContent').innerHTML = `
+                        <div style="text-align: center; padding: 50px; opacity: 0.7;">
+                            🎨 اختر مفهوماً لتحريره<br>
+                            أو أنشئ مفهوماً جديداً
+                        </div>
+                    `;
+                }
+
+                updateConceptsList();
+                updateVisualization();
+                updateStats();
+                showNotification("🗑️ تم حذف المفهوم");
+            }
+        }
+
+        // إنشاء مفهوم جديد
+        function createNewConcept() {
+            const id = `concept_${Date.now()}`;
+            const newConcept = {
+                id: id,
+                title: "مفهوم جديد",
+                description: "وصف المفهوم الجديد",
+                category: "core-architecture",
+                safety_level: "moderate",
+                connections: [],
+                scientific_relations: [],
+                x: Math.random() * (width - 200) + 100,
+                y: Math.random() * (height - 200) + 100
+            };
+
+            concepts[id] = newConcept;
+            selectConcept(id);
+            updateConceptsList();
+            updateVisualization();
+            updateStats();
+            showNotification("✨ تم إنشاء مفهوم جديد");
+        }
+
+        // نسخ مفهوم
+        function duplicateConcept(conceptId) {
+            const original = concepts[conceptId];
+            const id = `${conceptId}_copy_${Date.now()}`;
+            const copy = {
+                ...original,
+                id: id,
+                title: original.title + " (نسخة)",
+                connections: [],
+                x: original.x + 50,
+                y: original.y + 50
+            };
+
+            concepts[id] = copy;
+            selectConcept(id);
+            updateConceptsList();
+            updateVisualization();
+            updateStats();
+            showNotification("📄 تم نسخ المفهوم");
+        }
+
+        // إزالة رابط
+        function removeConnection(fromId, toId) {
+            if (concepts[fromId] && concepts[fromId].connections) {
+                concepts[fromId].connections = concepts[fromId].connections.filter(conn => conn !== toId);
+            }
+            if (concepts[toId] && concepts[toId].connections) {
+                concepts[toId].connections = concepts[toId].connections.filter(conn => conn !== fromId);
+            }
+
+            updateVisualization();
+            loadConceptEditor(fromId);
+            updateStats();
+            showNotification("🔗 تم إزالة الرابط");
+        }
+
+        // تحديث التصور البصري
+        function updateVisualization() {
+            const nodes = Object.values(concepts);
+            const links = [];
+
+            // إنشاء الروابط
+            nodes.forEach(node => {
+                if (node.connections) {
+                    node.connections.forEach(targetId => {
+                        if (concepts[targetId]) {
+                            links.push({
+                                source: node.id,
+                                target: targetId
+                            });
+                        }
+                    });
+                }
+            });
+
+            // رسم الروابط
+            const linkElements = linksGroup.selectAll('.link')
+                .data(links, d => `${d.source}-${d.target}`);
+
+            linkElements.exit().remove();
+
+            const linkEnter = linkElements.enter()
+                .append('line')
+                .attr('class', 'link')
+                .style('opacity', 0);
+
+            linkEnter.transition()
+                .duration(500)
+                .style('opacity', 1);
+
+            const allLinks = linkEnter.merge(linkElements);
+
+            // رسم العقد
+            const nodeElements = nodesGroup.selectAll('.node')
+                .data(nodes, d => d.id);
+
+            nodeElements.exit()
+                .transition()
+                .duration(300)
+                .style('opacity', 0)
+                .remove();
+
+            const nodeEnter = nodeElements.enter()
+                .append('g')
+                .attr('class', 'node')
+                .style('opacity', 0)
+                .call(d3.drag()
+                    .on('start', dragStarted)
+                    .on('drag', dragged)
+                    .on('end', dragEnded)
+                );
+
+            // دائرة العقدة
+            nodeEnter.append('circle')
+                .attr('r', 0)
+                .transition()
+                .duration(500)
+                .attr('r', d => {
+                    switch(d.safety_level) {
+                        case 'low': return 25;
+                        case 'moderate': return 30;
+                        case 'high': return 35;
+                        default: return 30;
+                    }
+                })
+                .attr('fill', d => {
+                    const colors = {
+                        'core-architecture': '#ff6b6b',
+                        'decision-engine': '#4ecdc4',
+                        'memory-system': '#45b7aa',
+                        'core-engine': '#96ceb4',
+                        'enhancement-parameter': '#ffeaa7',
+                        'security-layer': '#fd79a8',
+                        'social-layer': '#fdcb6e'
+                    };
+                    return colors[d.category] || '#74b9ff';
+                })
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 3);
+
+            // نص العقدة
+            nodeEnter.append('text')
+                .attr('class', 'node-label')
+                .attr('dy', '.35em')
+                .style('opacity', 0)
+                .text(d => d.title.length > 15 ? d.title.substring(0, 12) + '...' : d.title)
+                .transition()
+                .delay(300)
+                .duration(300)
+                .style('opacity', 1);
+
+            const allNodes = nodeEnter.merge(nodeElements);
+
+            allNodes.transition()
+                .duration(500)
+                .style('opacity', 1);
+
+            // تحديث المواقع
+            allNodes
+                .attr('transform', d => `translate(${d.x}, ${d.y})`);
+
+            allLinks
+                .attr('x1', d => concepts[d.source].x)
+                .attr('y1', d => concepts[d.source].y)
+                .attr('x2', d => concepts[d.target].x)
+                .attr('y2', d => concepts[d.target].y);
+
+            // أحداث النقر
+            allNodes.on('click', function(event, d) {
+                event.stopPropagation();
+                
+                if (currentTool === 'select') {
+                    selectConcept(d.id);
+                } else if (currentTool === 'connect') {
+                    if (!connectingFrom) {
+                        connectingFrom = d.id;
+                        d3.select(this).select('circle').attr('stroke', '#ffeaa7').attr('stroke-width', 5);
+                        showNotification(`🔗 اختر المفهوم الثاني للربط مع ${d.title}`);
+                    } else if (connectingFrom !== d.id) {
+                        addConnection(connectingFrom, d.id);
+                        resetConnectionMode();
+                    }
+                }
+            });
+
+            // إخفاء تلميح السحب إذا كانت هناك مفاهيم
+            const dragHint = document.getElementById('dragHint');
+            if (nodes.length > 0) {
+                dragHint.style.display = 'none';
+            } else {
+                dragHint.style.display = 'block';
+            }
+        }
+
+        // إضافة رابط
+        function addConnection(fromId, toId) {
+            if (!concepts[fromId].connections) {
+                concepts[fromId].connections = [];
+            }
+            if (!concepts[toId].connections) {
+                concepts[toId].connections = [];
+            }
+
+            if (!concepts[fromId].connections.includes(toId)) {
+                concepts[fromId].connections.push(toId);
+            }
+            if (!concepts[toId].connections.includes(fromId)) {
+                concepts[toId].connections.push(fromId);
+            }
+
+            updateVisualization();
+            updateConceptsList();
+            updateStats();
+            
+            if (selectedConcept === fromId || selectedConcept === toId) {
+                loadConceptEditor(selectedConcept);
+            }
+
+            showNotification(`🔗 تم ربط ${concepts[fromId].title} مع ${concepts[toId].title}`);
+        }
+
+        // إعادة تعيين وضع الربط
+        function resetConnectionMode() {
+            connectingFrom = null;
+            nodesGroup.selectAll('circle')
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 3);
+        }
+
+        // تمييز عقدة
+        function highlightNode(nodeId) {
+            nodesGroup.selectAll('circle')
+                .attr('stroke', d => d.id === nodeId ? '#ffeaa7' : '#fff')
+                .attr('stroke-width', d => d.id === nodeId ? 5 : 3);
+        }
+
+        // أحداث السحب
+        function dragStarted(event, d) {
+            if (currentTool !== 'move' && currentTool !== 'select') return;
+            d3.select(this).raise();
+        }
+
+        function dragged(event, d) {
+            if (currentTool !== 'move' && currentTool !== 'select') return;
+            d.x = event.x;
+            d.y = event.y;
+            
+            d3.select(this).attr('transform', `translate(${d.x}, ${d.y})`);
+            
+            // تحديث الروابط
+            linksGroup.selectAll('.link')
+                .attr('x1', link => concepts[link.source].x)
+                .attr('y1', link => concepts[link.source].y)
+                .attr('x2', link => concepts[link.target].x)
+                .attr('y2', link => concepts[link.target].y);
+        }
+
+        function dragEnded(event, d) {
+            // حفظ الموقع الجديد
+        }
+
+        // تغيير الأداة
+        function setTool(tool) {
+            currentTool = tool;
+            
+            // تحديث أزرار الأدوات
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tool + 'Tool').classList.add('active');
+
+            // تحديث نص الوضع
+            const modeTexts = {
+                'select': 'وضع الاختيار',
+                'connect': 'وضع الربط',
+                'move': 'وضع التحريك'
+            };
+            document.getElementById('modeText').textContent = modeTexts[tool];
+
+            // إعادة تعيين وضع الربط
+            resetConnectionMode();
+        }
+
+        // توسيط العرض
+        function centerView() {
+            const nodes = Object.values(concepts);
+            if (nodes.length === 0) return;
+
+            const bounds = {
+                minX: Math.min(...nodes.map(n => n.x)),
+                maxX: Math.max(...nodes.map(n => n.x)),
+                minY: Math.min(...nodes.map(n => n.y)),
+                maxY: Math.max(...nodes.map(n => n.y))
+            };
+
+            const centerX = (bounds.minX + bounds.maxX) / 2;
+            const centerY = (bounds.minY + bounds.maxY) / 2;
+
+            const offsetX = width / 2 - centerX;
+            const offsetY = height / 2 - centerY;
+
+            Object.values(concepts).forEach(concept => {
+                concept.x += offsetX;
+                concept.y += offsetY;
+            });
+
+            updateVisualization();
+            showNotification("🎯 تم توسيط العرض");
+        }
+
+        // تصدير البيانات
+        function exportData() {
+            const data = {
+                concepts: concepts,
+                metadata: {
+                    created: new Date().toISOString(),
+                    version: "1.0",
+                    total_concepts: Object.keys(concepts).length
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cpf-concepts-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showNotification("💾 تم تصدير البيانات بنجاح");
+        }
+
+        // استيراد البيانات
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.concepts) {
+                        concepts = data.concepts;
+                        selectedConcept = null;
+                        updateConceptsList();
+                        updateVisualization();
+                        updateStats();
+                        document.getElementById('editorContent').innerHTML = `
+                            <div style="text-align: center; padding: 50px; opacity: 0.7;">
+                                🎨 اختر مفهوماً لتحريره<br>
+                                أو أنشئ مفهوماً جديداً
+                            </div>
+                        `;
+                        showNotification("📂 تم استيراد البيانات بنجاح");
+                    } else {
+                        throw new Error("تنسيق ملف غير صحيح");
+                    }
+                } catch (error) {
+                    showNotification("❌ خطأ في استيراد البيانات: " + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            document.getElementById('totalConcepts').textContent = Object.keys(concepts).length;
+            
+            let totalConnections = 0;
+            Object.values(concepts).forEach(concept => {
+                totalConnections += (concept.connections || []).length;
+            });
+            document.getElementById('totalConnections').textContent = Math.floor(totalConnections / 2);
+            
+            document.getElementById('selectedConcept').textContent = selectedConcept ? '1' : '0';
+        }
+
+        // إظهار الإشعار
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // إعداد مستمعي الأحداث
+        function setupEventListeners() {
+            // البحث
+            document.getElementById('searchBox').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.concept-card');
+                
+                cards.forEach(card => {
+                    const title = card.querySelector('.concept-title').textContent.toLowerCase();
+                    const description = concepts[card.dataset.conceptId].description.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // سحب وإفلات على الكانفس
+            svg.node().addEventListener('dragover', function(e) {
+                e.preventDefault();
+            });
+
+            svg.node().addEventListener('drop', function(e) {
+                e.preventDefault();
+                const conceptId = e.dataTransfer.getData('text/plain');
+                const rect = svg.node().getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                if (concepts[conceptId]) {
+                    concepts[conceptId].x = x;
+                    concepts[conceptId].y = y;
+                    updateVisualization();
+                    showNotification(`📍 تم نقل ${concepts[conceptId].title}`);
+                }
+            });
+
+            // النقر على الكانفس فارغ
+            svg.on('click', function(event) {
+                if (event.target === this) {
+                    if (currentTool === 'connect') {
+                        resetConnectionMode();
+                    }
+                }
+            });
+        }
+
+        // تهيئة التطبيق عند التحميل
+        window.addEventListener('load', initApp);
+    </script>
+</body>
+</html>

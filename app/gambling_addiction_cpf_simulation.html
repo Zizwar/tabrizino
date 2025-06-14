@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكاة إدمان القمار - نموذج CPF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        .pulse-strong { animation: pulse 0.5s ease-in-out infinite alternate; }
+        .wiggle { animation: wiggle 0.5s ease-in-out infinite; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+        .slot-spin { animation: spin 0.5s linear; }
+        @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+        .money-drain { animation: drain 2s ease-out; }
+        @keyframes drain { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
+        .reward-burst { animation: burst 0.8s ease-out; }
+        @keyframes burst { 0% { transform: scale(0) rotate(0deg); opacity: 1; } 100% { transform: scale(1.5) rotate(180deg); opacity: 0; } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-red-900 to-black min-h-screen text-white" 
+      x-data="gamblingSimulation()">
+    
+    <!-- تحذير أمني -->
+    <div class="fixed top-4 left-4 right-4 z-50 bg-red-600 text-white p-4 rounded-lg shadow-lg" 
+         x-show="showWarning" x-transition>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <span class="text-2xl">⚠️</span>
+                <span class="font-bold">تحذير: محاكاة تعليمية فقط - لا تقامر في الواقع!</span>
+            </div>
+            <button @click="showWarning = false" class="text-white hover:text-red-200">✕</button>
+        </div>
+    </div>
+
+    <!-- الشريط العلوي - إحصائيات CPF -->
+    <div class="bg-black bg-opacity-50 p-4 border-b border-red-500">
+        <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+            <!-- مستوى الدوبامين -->
+            <div class="bg-yellow-500 bg-opacity-20 rounded-lg p-3">
+                <div class="text-yellow-400 text-sm">🧠 دوبامين</div>
+                <div class="text-2xl font-bold" :class="{'text-red-400 pulse-strong': dopamineLevel > 80}">
+                    <span x-text="dopamineLevel"></span>%
+                </div>
+            </div>
+            
+            <!-- مستوى القلق -->
+            <div class="bg-red-500 bg-opacity-20 rounded-lg p-3">
+                <div class="text-red-400 text-sm">😰 قلق</div>
+                <div class="text-2xl font-bold" :class="{'text-red-400 wiggle': anxietyLevel > 70}">
+                    <span x-text="anxietyLevel"></span>%
+                </div>
+            </div>
+            
+            <!-- الطاقة -->
+            <div class="bg-blue-500 bg-opacity-20 rounded-lg p-3">
+                <div class="text-blue-400 text-sm">⚡ طاقة</div>
+                <div class="text-2xl font-bold" :class="{'text-red-400': energyLevel < 30}">
+                    <span x-text="energyLevel"></span>%
+                </div>
+            </div>
+            
+            <!-- المال -->
+            <div class="bg-green-500 bg-opacity-20 rounded-lg p-3">
+                <div class="text-green-400 text-sm">💰 مال</div>
+                <div class="text-2xl font-bold" :class="{'text-red-400 pulse-strong': money < 100}">
+                    $<span x-text="money"></span>
+                </div>
+            </div>
+            
+            <!-- حالة الخيط الأريادني -->
+            <div class="bg-purple-500 bg-opacity-20 rounded-lg p-3">
+                <div class="text-purple-400 text-sm">🧵 أريادني</div>
+                <div class="text-lg font-bold" :class="ariadneStatus.color">
+                    <span x-text="ariadneStatus.icon"></span>
+                    <span x-text="ariadneStatus.text"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto p-6">
+        
+        <!-- آلة القمار الرئيسية -->
+        <div class="bg-gradient-to-b from-yellow-600 to-yellow-800 rounded-3xl p-8 shadow-2xl border-4 border-yellow-400 mb-8">
+            <div class="text-center mb-6">
+                <h1 class="text-4xl font-bold text-yellow-100 mb-2">🎰 آلة الحظ الذهبية</h1>
+                <div class="text-yellow-200">اربح أو اخسر - الحظ بيدك!</div>
+            </div>
+            
+            <!-- شاشة الرموز -->
+            <div class="bg-black rounded-xl p-6 mb-6">
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div class="bg-gray-800 rounded-lg h-20 flex items-center justify-center text-4xl"
+                         :class="{'slot-spin': isSpinning}">
+                        <span x-text="slots[0]"></span>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg h-20 flex items-center justify-center text-4xl"
+                         :class="{'slot-spin': isSpinning}">
+                        <span x-text="slots[1]"></span>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg h-20 flex items-center justify-center text-4xl"
+                         :class="{'slot-spin': isSpinning}">
+                        <span x-text="slots[2]"></span>
+                    </div>
+                </div>
+                
+                <!-- نتيجة آخر دورة -->
+                <div class="text-center">
+                    <div x-show="lastResult" class="text-2xl font-bold" :class="lastResult?.color">
+                        <span x-text="lastResult?.text"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- أزرار التحكم -->
+            <div class="grid grid-cols-3 gap-4">
+                <button @click="spin(10)" 
+                        :disabled="isSpinning || money < 10"
+                        :class="money >= 10 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 cursor-not-allowed'"
+                        class="py-3 px-4 rounded-lg font-bold text-white transition-all">
+                    🎲 رهان $10
+                </button>
+                
+                <button @click="spin(50)" 
+                        :disabled="isSpinning || money < 50"
+                        :class="money >= 50 ? 'bg-orange-600 hover:bg-orange-700' : 'bg-gray-600 cursor-not-allowed'"
+                        class="py-3 px-4 rounded-lg font-bold text-white transition-all">
+                    🔥 رهان $50
+                </button>
+                
+                <button @click="spin(100)" 
+                        :disabled="isSpinning || money < 100"
+                        :class="money >= 100 ? 'bg-red-600 hover:bg-red-700 pulse-strong' : 'bg-gray-600 cursor-not-allowed'"
+                        class="py-3 px-4 rounded-lg font-bold text-white transition-all">
+                    💎 رهان $100
+                </button>
+            </div>
+        </div>
+
+        <!-- تحليل CPF في الوقت الفعلي -->
+        <div class="grid md:grid-cols-2 gap-6">
+            
+            <!-- المحاكيات النشطة -->
+            <div class="bg-gray-800 bg-opacity-80 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    🎭 المحاكيات النشطة
+                </h2>
+                
+                <div class="space-y-3">
+                    <div class="bg-blue-600 bg-opacity-30 p-3 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span>🧠 معالج الواقع</span>
+                            <span class="font-bold text-red-400" x-show="dopamineLevel > 60">منحاز!</span>
+                        </div>
+                        <div class="text-sm text-gray-300">
+                            "المرة القادمة ستكون مختلفة..."
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-600 bg-opacity-30 p-3 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span>🔮 محرك التنبؤ</span>
+                            <span class="font-bold text-green-400" x-show="recentWins > 0">متفائل</span>
+                        </div>
+                        <div class="text-sm text-gray-300">
+                            "إحصائياً، يجب أن أربح قريباً!"
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-600 bg-opacity-30 p-3 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span>💭 النمذجة الاجتماعية</span>
+                            <span class="font-bold text-yellow-400">نشط</span>
+                        </div>
+                        <div class="text-sm text-gray-300">
+                            "الآخرون يربحون، لماذا لا أنا؟"
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- حالة ذاكرة العقيق -->
+            <div class="bg-gray-800 bg-opacity-80 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    💎 ذاكرة العقيق
+                </h2>
+                
+                <div class="space-y-2 max-h-40 overflow-y-auto">
+                    <template x-for="memory in agateMemories.slice(-8)" :key="memory.id">
+                        <div class="flex justify-between items-center p-2 rounded"
+                             :class="memory.type === 'win' ? 'bg-green-600 bg-opacity-30' : 'bg-red-600 bg-opacity-30'">
+                            <span x-text="memory.icon"></span>
+                            <span x-text="memory.text" class="text-sm"></span>
+                            <span x-text="memory.amount" class="font-bold"></span>
+                        </div>
+                    </template>
+                </div>
+                
+                <div class="mt-4 text-sm text-gray-400">
+                    العقيق الأبيض (فجوات): <span x-text="whiteAgateCount"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- تدخل الخيط الأريادني -->
+        <div x-show="ariadneIntervention" 
+             x-transition
+             class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-40">
+            <div class="bg-purple-900 rounded-xl p-8 border-4 border-purple-400 max-w-md mx-4 text-center">
+                <div class="text-6xl mb-4">🧵</div>
+                <h3 class="text-2xl font-bold mb-4 text-purple-300">تدخل الخيط الأريادني</h3>
+                <p class="mb-6 text-purple-200">
+                    تم اكتشاف نمط خطر في السلوك. هل تريد أخذ استراحة والعودة للواقع؟
+                </p>
+                <div class="space-y-3">
+                    <button @click="acceptAriadneHelp()" 
+                            class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-bold">
+                        ✅ نعم، أحتاج استراحة
+                    </button>
+                    <button @click="ignoreAriadneHelp()" 
+                            class="w-full bg-red-600 hover:bg-red-700 py-3 rounded-lg font-bold">
+                        ❌ لا، أريد المتابعة
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- انتصارات وخسائر -->
+        <div class="fixed bottom-4 right-4 space-y-2" style="pointer-events: none;">
+            <template x-for="effect in visualEffects" :key="effect.id">
+                <div class="text-4xl" 
+                     :class="effect.class"
+                     x-text="effect.text">
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <script>
+        function gamblingSimulation() {
+            return {
+                // حالة اللعبة
+                money: 500,
+                dopamineLevel: 50,
+                anxietyLevel: 30,
+                energyLevel: 80,
+                isSpinning: false,
+                showWarning: true,
+                
+                // حالة الآلة
+                slots: ['🍒', '🍊', '🍇'],
+                lastResult: null,
+                recentWins: 0,
+                totalSpins: 0,
+                
+                // ذاكرة العقيق
+                agateMemories: [],
+                whiteAgateCount: 0,
+                memoryCounter: 1,
+                
+                // الخيط الأريادني
+                ariadneIntervention: false,
+                ariadneIgnored: 0,
+                
+                // تأثيرات بصرية
+                visualEffects: [],
+                
+                // رموز الآلة
+                symbols: ['🍒', '🍊', '🍇', '🍋', '🔔', '💎', '7️⃣'],
+                
+                get ariadneStatus() {
+                    if (this.dopamineLevel > 80 || this.anxietyLevel > 80 || this.money < 50) {
+                        return { icon: '🚨', text: 'خطر', color: 'text-red-400' };
+                    } else if (this.dopamineLevel > 60 || this.anxietyLevel > 60) {
+                        return { icon: '⚠️', text: 'تحذير', color: 'text-yellow-400' };
+                    } else {
+                        return { icon: '✅', text: 'آمن', color: 'text-green-400' };
+                    }
+                },
+                
+                async spin(bet) {
+                    if (this.isSpinning || this.money < bet) return;
+                    
+                    this.isSpinning = true;
+                    this.money -= bet;
+                    this.totalSpins++;
+                    
+                    // تحديث CPF
+                    this.updateCPFState(bet);
+                    
+                    // محاكاة الدوران
+                    for (let i = 0; i < 10; i++) {
+                        this.slots = this.slots.map(() => 
+                            this.symbols[Math.floor(Math.random() * this.symbols.length)]
+                        );
+                        await this.sleep(100);
+                    }
+                    
+                    // تحديد النتيجة
+                    const result = this.calculateResult(bet);
+                    this.money += result.winAmount;
+                    this.lastResult = result;
+                    
+                    // تحديث ذاكرة العقيق
+                    this.updateAgateMemory(result, bet);
+                    
+                    // تأثيرات بصرية
+                    this.addVisualEffect(result);
+                    
+                    // فحص تدخل الخيط الأريادني
+                    this.checkAriadneIntervention();
+                    
+                    this.isSpinning = false;
+                },
+                
+                calculateResult(bet) {
+                    const [a, b, c] = this.slots;
+                    
+                    // جاكبوت
+                    if (a === b && b === c && a === '💎') {
+                        this.recentWins++;
+                        return {
+                            type: 'win',
+                            winAmount: bet * 50,
+                            text: '🎉 جاكبوت! 💎💎💎',
+                            color: 'text-yellow-400'
+                        };
+                    }
+                    
+                    // ثلاث متطابقة
+                    if (a === b && b === c) {
+                        this.recentWins++;
+                        return {
+                            type: 'win',
+                            winAmount: bet * 10,
+                            text: '🎊 فوز كبير!',
+                            color: 'text-green-400'
+                        };
+                    }
+                    
+                    // اثنان متطابقان
+                    if (a === b || b === c || a === c) {
+                        return {
+                            type: 'small_win',
+                            winAmount: bet * 2,
+                            text: '😊 فوز صغير',
+                            color: 'text-blue-400'
+                        };
+                    }
+                    
+                    // خسارة
+                    return {
+                        type: 'loss',
+                        winAmount: 0,
+                        text: '😞 لم تربح هذه المرة',
+                        color: 'text-red-400'
+                    };
+                },
+                
+                updateCPFState(bet) {
+                    // زيادة الدوبامين مع الترقب
+                    this.dopamineLevel = Math.min(100, this.dopamineLevel + bet/5);
+                    
+                    // زيادة القلق مع المخاطر العالية
+                    if (bet > 50) {
+                        this.anxietyLevel = Math.min(100, this.anxietyLevel + 10);
+                    }
+                    
+                    // استنزاف الطاقة
+                    this.energyLevel = Math.max(0, this.energyLevel - 3);
+                    
+                    // تأثير الإدمان - تدهور طبيعي
+                    setTimeout(() => {
+                        if (this.lastResult?.type !== 'win') {
+                            this.dopamineLevel = Math.max(0, this.dopamineLevel - 10);
+                            this.anxietyLevel = Math.min(100, this.anxietyLevel + 5);
+                        }
+                    }, 3000);
+                },
+                
+                updateAgateMemory(result, bet) {
+                    const memory = {
+                        id: this.memoryCounter++,
+                        type: result.type === 'loss' ? 'loss' : 'win',
+                        text: result.type === 'loss' ? 'خسارة' : 'ربح',
+                        amount: result.type === 'loss' ? `-$${bet}` : `+$${result.winAmount}`,
+                        icon: result.type === 'loss' ? '🔴' : '🟢',
+                        timestamp: Date.now()
+                    };
+                    
+                    this.agateMemories.push(memory);
+                    
+                    // العقيق الأبيض (الفجوات بين القرارات)
+                    if (result.type === 'loss') {
+                        this.whiteAgateCount++;
+                    }
+                },
+                
+                checkAriadneIntervention() {
+                    const dangerConditions = [
+                        this.money < 100,
+                        this.dopamineLevel > 85,
+                        this.anxietyLevel > 85,
+                        this.totalSpins > 10 && this.recentWins === 0
+                    ];
+                    
+                    const dangerLevel = dangerConditions.filter(Boolean).length;
+                    
+                    if (dangerLevel >= 2 && !this.ariadneIntervention) {
+                        this.ariadneIntervention = true;
+                    }
+                },
+                
+                acceptAriadneHelp() {
+                    this.ariadneIntervention = false;
+                    // إعادة تعيين مؤقت
+                    this.dopamineLevel = Math.max(20, this.dopamineLevel - 30);
+                    this.anxietyLevel = Math.max(10, this.anxietyLevel - 20);
+                    this.energyLevel = Math.min(100, this.energyLevel + 20);
+                    
+                    this.addVisualEffect({
+                        type: 'help',
+                        text: '🧵 الخيط الأريادني ساعدك!',
+                        color: 'text-purple-400'
+                    });
+                },
+                
+                ignoreAriadneHelp() {
+                    this.ariadneIntervention = false;
+                    this.ariadneIgnored++;
+                    
+                    // عواقب تجاهل المساعدة
+                    this.dopamineLevel = Math.min(100, this.dopamineLevel + 20);
+                    this.anxietyLevel = Math.min(100, this.anxietyLevel + 15);
+                    
+                    this.addVisualEffect({
+                        type: 'ignore',
+                        text: '⚠️ تم تجاهل التحذير',
+                        color: 'text-red-400'
+                    });
+                },
+                
+                addVisualEffect(result) {
+                    const effect = {
+                        id: Date.now(),
+                        text: result.type === 'win' ? '💰' : result.type === 'loss' ? '💸' : result.text,
+                        class: result.type === 'win' ? 'reward-burst' : 'money-drain'
+                    };
+                    
+                    this.visualEffects.push(effect);
+                    
+                    setTimeout(() => {
+                        this.visualEffects = this.visualEffects.filter(e => e.id !== effect.id);
+                    }, 2000);
+                },
+                
+                sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+            }
+        }
+    </script>
+</body>
+</html>

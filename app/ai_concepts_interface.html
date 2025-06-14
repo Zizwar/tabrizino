@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واجهة تجربة المفاهيم مع الذكاء الاصطناعي</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .concept-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .chat-bubble {
+            animation: slideInUp 0.3s ease;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .flow-node {
+            transition: all 0.3s ease;
+        }
+        
+        .flow-node:hover {
+            transform: scale(1.05);
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            min-width: 300px;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800" x-data="aiConceptsApp()">
+    <!-- Notification -->
+    <div x-show="notification.show" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform -translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform -translate-y-2"
+         class="notification">
+        <div :class="notification.type === 'success' ? 'bg-green-500' : notification.type === 'error' ? 'bg-red-500' : 'bg-blue-500'" 
+             class="text-white px-6 py-3 rounded-lg shadow-lg">
+            <span x-text="notification.message"></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white p-6 shadow-lg">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-2">
+                <i class="fas fa-brain mr-3"></i>
+                مختبر المفاهيم الذكية
+            </h1>
+            <p class="text-center text-blue-100">تجربة وإدارة المفاهيم مع الذكاء الاصطناعي</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6">
+            <div class="flex space-x-8 overflow-x-auto">
+                <button @click="activeTab = 'concepts'" 
+                        :class="activeTab === 'concepts' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+                        class="py-4 px-2 whitespace-nowrap font-medium">
+                    <i class="fas fa-lightbulb mr-2"></i>المفاهيم
+                </button>
+                <button @click="activeTab = 'chat'" 
+                        :class="activeTab === 'chat' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+                        class="py-4 px-2 whitespace-nowrap font-medium">
+                    <i class="fas fa-comments mr-2"></i>الدردشة
+                </button>
+                <button @click="activeTab = 'viewer'" 
+                        :class="activeTab === 'viewer' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+                        class="py-4 px-2 whitespace-nowrap font-medium">
+                    <i class="fas fa-eye mr-2"></i>العرض
+                </button>
+                <button @click="activeTab = 'flowchart'" 
+                        :class="activeTab === 'flowchart' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+                        class="py-4 px-2 whitespace-nowrap font-medium">
+                    <i class="fas fa-project-diagram mr-2"></i>خرائط التدفق
+                </button>
+                <button @click="activeTab = 'tts'" 
+                        :class="activeTab === 'tts' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
+                        class="py-4 px-2 whitespace-nowrap font-medium">
+                    <i class="fas fa-volume-up mr-2"></i>تحويل النص لصوت
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <!-- Concepts Management Tab -->
+        <div x-show="activeTab === 'concepts'" class="space-y-6">
+            <!-- Add New Concept -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-plus-circle text-green-500 mr-2"></i>إضافة مفهوم جديد
+                </h2>
+                <form @submit.prevent="addConcept()" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input x-model="newConcept.title" type="text" placeholder="عنوان المفهوم"
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <select x-model="newConcept.category" 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر التصنيف</option>
+                            <option value="تقني">تقني</option>
+                            <option value="علمي">علمي</option>
+                            <option value="أدبي">أدبي</option>
+                            <option value="فلسفي">فلسفي</option>
+                        </select>
+                    </div>
+                    <textarea x-model="newConcept.description" placeholder="وصف المفهوم" rows="3"
+                              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-save mr-2"></i>حفظ المفهوم
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Concepts List -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template x-for="concept in concepts" :key="concept.id">
+                    <div class="concept-card bg-white rounded-lg shadow-md p-6 border-r-4 border-blue-500">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-bold text-gray-800" x-text="concept.title"></h3>
+                            <div class="flex space-x-2">
+                                <button @click="editConcept(concept)" class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button @click="deleteConcept(concept.id)" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mb-2" 
+                              x-text="concept.category"></span>
+                        <p class="text-gray-600 text-sm mb-4" x-text="concept.description"></p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-400" x-text="concept.createdAt"></span>
+                            <button @click="sendConceptToAI(concept)" 
+                                    class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                <i class="fas fa-robot mr-1"></i>إرسال للذكاء
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Chat Tab -->
+        <div x-show="activeTab === 'chat'" class="space-y-6">
+            <!-- AI Models Selection -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold mb-4">اختيار نموذج الذكاء الاصطناعي</h3>
+                <select x-model="selectedModel" class="w-full p-3 border border-gray-300 rounded-lg">
+                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                    <option value="gpt-4">GPT-4</option>
+                    <option value="claude-3">Claude 3</option>
+                </select>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="bg-white rounded-lg shadow-md h-96 flex flex-col">
+                <div class="p-4 border-b bg-gray-50 rounded-t-lg">
+                    <h3 class="text-lg font-bold text-gray-800">
+                        <i class="fas fa-robot text-blue-500 mr-2"></i>
+                        دردشة مع الذكاء الاصطناعي
+                    </h3>
+                </div>
+                
+                <!-- Messages Area -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-4" x-ref="chatContainer">
+                    <template x-for="message in chatMessages" :key="message.id">
+                        <div class="chat-bubble" :class="message.sender === 'user' ? 'flex justify-end' : 'flex justify-start'">
+                            <div :class="message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'" 
+                                 class="max-w-xs md:max-w-md px-4 py-2 rounded-lg">
+                                <p x-text="message.text"></p>
+                                <span class="text-xs opacity-75" x-text="message.timestamp"></span>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Typing Indicator -->
+                    <div x-show="isTyping" class="flex justify-start">
+                        <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+                            <div class="flex space-x-1">
+                                <div class="pulse-dot w-2 h-2 bg-gray-500 rounded-full"></div>
+                                <div class="pulse-dot w-2 h-2 bg-gray-500 rounded-full" style="animation-delay: 0.2s;"></div>
+                                <div class="pulse-dot w-2 h-2 bg-gray-500 rounded-full" style="animation-delay: 0.4s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Message Input -->
+                <div class="p-4 border-t">
+                    <form @submit.prevent="sendMessage()" class="flex space-x-3">
+                        <input x-model="newMessage" type="text" placeholder="اكتب رسالتك..."
+                               class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               :disabled="isTyping">
+                        <button type="submit" :disabled="isTyping || !newMessage.trim()"
+                                class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Viewer Tab -->
+        <div x-show="activeTab === 'viewer'" class="space-y-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold mb-4">عارض النتائج</h3>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <div x-show="!viewerContent">
+                        <i class="fas fa-file-alt text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-500">لا توجد نتائج للعرض حالياً</p>
+                        <p class="text-sm text-gray-400 mt-2">قم بإرسال مفهوم للذكاء الاصطناعي لرؤية النتائج هنا</p>
+                    </div>
+                    <div x-show="viewerContent" class="text-right">
+                        <div class="flex justify-between items-center mb-4">
+                            <button @click="viewerContent = ''" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-times mr-1"></i>مسح
+                            </button>
+                            <h4 class="text-lg font-bold">نتيجة الذكاء الاصطناعي</h4>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-right" x-html="viewerContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flowchart Tab -->
+        <div x-show="activeTab === 'flowchart'" class="space-y-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold mb-4">خريطة تدفق المفاهيم</h3>
+                <div class="overflow-x-auto">
+                    <svg width="800" height="400" class="border rounded-lg bg-gray-50">
+                        <!-- Flowchart nodes -->
+                        <template x-for="(node, index) in flowchartNodes" :key="index">
+                            <g class="flow-node cursor-pointer" @click="selectFlowNode(node)">
+                                <rect :x="node.x" :y="node.y" width="120" height="60" 
+                                      :fill="node.selected ? '#3B82F6' : '#E5E7EB'" 
+                                      stroke="#6B7280" stroke-width="2" rx="8"/>
+                                <text :x="node.x + 60" :y="node.y + 35" 
+                                      text-anchor="middle" :fill="node.selected ? 'white' : 'black'" 
+                                      font-size="12" x-text="node.title"></text>
+                            </g>
+                        </template>
+                        
+                        <!-- Connection lines -->
+                        <template x-for="connection in flowchartConnections" :key="connection.id">
+                            <line :x1="connection.x1" :y1="connection.y1" 
+                                  :x2="connection.x2" :y2="connection.y2" 
+                                  stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        </template>
+                        
+                        <!-- Arrow marker definition -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                                    refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+                
+                <!-- Flowchart Controls -->
+                <div class="mt-4 flex space-x-4">
+                    <button @click="generateFlowchart()" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>إنشاء خريطة جديدة
+                    </button>
+                    <button @click="exportFlowchart()" 
+                            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-download mr-2"></i>تصدير
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text to Speech Tab -->
+        <div x-show="activeTab === 'tts'" class="space-y-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold mb-4">تحويل النص إلى صوت</h3>
+                <textarea x-model="ttsText" placeholder="اكتب النص المراد تحويله إلى صوت..." 
+                          rows="6" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <select x-model="ttsVoice" class="p-3 border border-gray-300 rounded-lg">
+                        <option value="ar-voice-1">صوت عربي 1</option>
+                        <option value="ar-voice-2">صوت عربي 2</option>
+                        <option value="en-voice-1">صوت إنجليزي</option>
+                    </select>
+                    
+                    <select x-model="ttsSpeed" class="p-3 border border-gray-300 rounded-lg">
+                        <option value="0.8">بطيء</option>
+                        <option value="1.0">عادي</option>
+                        <option value="1.2">سريع</option>
+                    </select>
+                    
+                    <button @click="convertToSpeech()" :disabled="!ttsText.trim() || isConverting"
+                            class="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 text-white px-4 py-3 rounded-lg transition-colors">
+                        <span x-show="!isConverting">
+                            <i class="fas fa-play mr-2"></i>تحويل إلى صوت
+                        </span>
+                        <span x-show="isConverting" class="flex items-center justify-center">
+                            <div class="loading-spinner mr-2"></div>
+                            جاري التحويل...
+                        </span>
+                    </button>
+                </div>
+                
+                <!-- Audio Player -->
+                <div x-show="audioUrl" class="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-bold mb-3">الصوت المُنتج:</h4>
+                    <audio controls class="w-full" x-ref="audioPlayer">
+                        <source :src="audioUrl" type="audio/wav">
+                        المتصفح لا يدعم تشغيل الصوت
+                    </audio>
+                    <div class="mt-3 flex space-x-3">
+                        <button @click="downloadAudio()" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-download mr-1"></i>تحميل
+                        </button>
+                        <button @click="shareAudio()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-share mr-1"></i>مشاركة
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function aiConceptsApp() {
+            return {
+                activeTab: 'concepts',
+                selectedModel: 'gpt-4o-mini',
+                
+                // Notification system
+                notification: {
+                    show: false,
+                    message: '',
+                    type: 'info'
+                },
+                
+                // Concepts data
+                concepts: [
+                    {
+                        id: 1,
+                        title: 'الذكاء الاصطناعي',
+                        category: 'تقني',
+                        description: 'تقنية تمكن الآلات من محاكاة الذكاء البشري وأداء المهام المعقدة',
+                        createdAt: '2024-01-15'
+                    },
+                    {
+                        id: 2,
+                        title: 'التعلم العميق',
+                        category: 'علمي',
+                        description: 'فرع من تعلم الآلة يستخدم الشبكات العصبية الاصطناعية متعددة الطبقات',
+                        createdAt: '2024-01-14'
+                    },
+                    {
+                        id: 3,
+                        title: 'فلسفة الوعي',
+                        category: 'فلسفي',
+                        description: 'دراسة طبيعة الوعي والإدراك في الكائنات الحية والآلات',
+                        createdAt: '2024-01-13'
+                    }
+                ],
+                
+                newConcept: {
+                    title: '',
+                    category: '',
+                    description: ''
+                },
+                
+                // Chat data
+                chatMessages: [
+                    {
+                        id: 1,
+                        sender: 'ai',
+                        text: 'مرحباً! أنا هنا لمساعدتك في استكشاف المفاهيم. كيف يمكنني مساعدتك اليوم؟',
+                        timestamp: '10:30'
+                    }
+                ],
+                newMessage: '',
+                isTyping: false,
+                
+                // Viewer data
+                viewerContent: '',
+                
+                // Flowchart data
+                flowchartNodes: [
+                    { x: 50, y: 50, title: 'البداية', selected: false },
+                    { x: 200, y: 50, title: 'تحليل المفهوم', selected: false },
+                    { x: 350, y: 50, title: 'معالجة بالذكاء', selected: false },
+                    { x: 500, y: 50, title: 'النتيجة', selected: false }
+                ],
+                
+                flowchartConnections: [
+                    { id: 1, x1: 170, y1: 80, x2: 200, y2: 80 },
+                    { id: 2, x1: 320, y1: 80, x2: 350, y2: 80 },
+                    { id: 3, x1: 470, y1: 80, x2: 500, y2: 80 }
+                ],
+                
+                // TTS data
+                ttsText: '',
+                ttsVoice: 'ar-voice-1',
+                ttsSpeed: '1.0',
+                isConverting: false,
+                audioUrl: '',
+                
+                // Methods
+                showNotification(message, type = 'info') {
+                    this.notification = { show: true, message, type };
+                    setTimeout(() => {
+                        this.notification.show = false;
+                    }, 3000);
+                },
+                
+                addConcept() {
+                    if (this.newConcept.title && this.newConcept.category && this.newConcept.description) {
+                        const concept = {
+                            id: Date.now(),
+                            ...this.newConcept,
+                            createdAt: new Date().toISOString().split('T')[0]
+                        };
+                        this.concepts.unshift(concept);
+                        this.newConcept = { title: '', category: '', description: '' };
+                        this.showNotification('تم إضافة المفهوم بنجاح!', 'success');
+                    }
+                },
+                
+                editConcept(concept) {
+                    this.newConcept = { ...concept };
+                    this.deleteConcept(concept.id);
+                },
+                
+                deleteConcept(id) {
+                    if (confirm('هل أنت متأكد من حذف هذا المفهوم؟')) {
+                        this.concepts = this.concepts.filter(c => c.id !== id);
+                        this.showNotification('تم حذف المفهوم', 'info');
+                    }
+                },
+                
+                sendConceptToAI(concept) {
+                    // Simulate AI processing
+                    this.activeTab = 'chat';
+                    this.addMessage('user', `أريد تحليل مفهوم: ${concept.title} - ${concept.description}`);
+                    
+                    setTimeout(() => {
+                        this.isTyping = true;
+                        setTimeout(() => {
+                            this.isTyping = false;
+                            const response = this.generateAIResponse(concept);
+                            this.addMessage('ai', response);
+                            this.viewerContent = `<h3 class="text-lg font-bold mb-3">${concept.title}</h3><p class="text-gray-700">${response}</p>`;
+                        }, 2000);
+                    }, 500);
+                },
+                
+                generateAIResponse(concept) {
+                    const responses = [
+                        `مفهوم "${concept.title}" مثير للاهتمام! يمكنني أن أرى أنه يندرج تحت تصنيف ${concept.category}. هذا المفهوم له تطبيقات واسعة في مجالات متعددة.`,
+                        `بناءً على التحليل، مفهوم "${concept.title}" يحتوي على عناصر مهمة تستحق الاستكشاف أكثر. يمكننا تطوير هذا المفهوم ليصبح أكثر تفصيلاً.`,
+                        `مفهوم رائع! "${concept.title}" له علاقات قوية مع مفاهيم أخرى في نفس المجال. هل تريد استكشاف هذه الروابط؟`
+                    ];
+                    return responses[Math.floor(Math.random() * responses.length)];
+                },
+                
+                sendMessage() {
+                    if (this.newMessage.trim()) {
+                        this.addMessage('user', this.newMessage);
+                        const userMessage = this.newMessage;
+                        this.newMessage = '';
+                        
+                        // Simulate AI response
+                        setTimeout(() => {
+                            this.isTyping = true;
+                            setTimeout(() => {
+                                this.isTyping = false;
+                                const response = this.generateChatResponse(userMessage);
+                                this.addMessage('ai', response);
+                            }, 1500);
+                        }, 500);
+                    }
+                },
+                
+                addMessage(sender, text) {
+                    this.chatMessages.push({
+                        id: Date.now(),
+                        sender,
+                        text,
+                        timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
+                    });
+                    
+                    this.$nextTick(() => {
+                        this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
+                    });
+                },
+                
+                generateChatResponse(message) {
+                    const responses = [
+                        'شكراً لك على هذا السؤال المثير للاهتمام. دعني أفكر في أفضل طريقة للإجابة.',
+                        'هذا موضوع رائع! يمكنني مساعدتك في استكشاف هذا المفهوم بتفصيل أكبر.',
+                        'فهمت ما تقصده. هل تريد مني تقديم أمثلة عملية على هذا المفهوم؟',
+                        'سؤال ممتاز! هذا يذكرني بمفاهيم أخرى مترابطة قد تكون مفيدة لك.'
+                    ];
+                    return responses[Math.floor(Math.random() * responses.length)];
+                },
+                
+                selectFlowNode(node) {
+                    this.flowchartNodes.forEach(n => n.selected = false);
+                    node.selected = true;
+                },
+                
+                generateFlowchart() {
+                    // Randomize positions
+                    this.flowchartNodes = this.flowchartNodes.map((node, index) => ({
+                        ...node,
+                        x: 50 + (index * 150) + Math.random() * 50,
+                        y: 50 + Math.random() * 100,
+                        selected: false
+                    }));
+                    this.showNotification('تم إنشاء خريطة تدفق جديدة!', 'success');
+                },
+                
+                exportFlowchart() {
+                    this.showNotification('جاري تصدير خريطة التدفق...', 'info');
+                    // Simulate export
+                    setTimeout(() => {
+                        this.showNotification('تم تصدير خريطة التدفق بنجاح!', 'success');
+                    }, 1000);
+                },
+                
+                convertToSpeech() {
+                    if (!this.ttsText.trim()) return;
+                    
+                    this.isConverting = true;
+                    
+                    // Simulate TTS conversion
+                    setTimeout(() => {
+                        this.isConverting = false;
+                        // Create a dummy audio URL (in real implementation, this would be from TTS service)
+                        this.audioUrl = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+                        this.showNotification('تم تحويل النص إلى صوت بنجاح!', 'success');
+                    }, 2000);
+                },
+                
+                downloadAudio() {
+                    if (this.audioUrl) {
+                        const link = document.createElement('a');
+                        link.href = this.audioUrl;
+                        link.download = 'converted_audio.wav';
+                        link.click();
+                        this.showNotification('تم تحميل الملف الصوتي!', 'success');
+                    }
+                },
+                
+                shareAudio() {
+                    if (navigator.share && this.audioUrl) {
+                        navigator.share({
+                            title: 'ملف صوتي مُحول',
+                            text: 'استمع إلى هذا الملف الصوتي المُحول من النص',
+                            url: this.audioUrl
+                        });
+                    } else {
+                        // Fallback for browsers that don't support Web Share API
+                        navigator.clipboard.writeText(this.audioUrl);
+                        this.showNotification('تم نسخ رابط الملف الصوتي!', 'info');
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+</html>

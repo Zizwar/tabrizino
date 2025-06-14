@@ -349,4 +349,472 @@
                         <template x-for="layer in results?.activatedLayers || []" :key="layer.id">
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <div class="flex items-center">
-                                   
+                                    <span class="text-xl mr-2" x-text="layer.emoji"></span>
+                                    <span class="font-medium" x-text="layer.name"></span>
+                                </div>
+                                <span class="text-sm text-green-600 font-semibold" x-text="layer.usage"></span>
+                            </div>
+                        </template>
+                    </div>
+                    
+                    <!-- المفاهيم المستخدمة -->
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-gray-700">المفاهيم المُفعلة:</h4>
+                        <template x-for="concept in results?.activatedConcepts || []" :key="concept">
+                            <div class="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2"
+                                 x-text="concept"></div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- معلومات إضافية -->
+        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-blue-800 mb-3 flex items-center">
+                <span class="text-xl mr-2">💡</span>
+                حقائق مثيرة عن إدراك الغزالة
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-blue-700">
+                <div class="flex items-start">
+                    <span class="text-xl mr-2">👁️</span>
+                    <div>
+                        <strong>الرؤية البانورامية:</strong> 
+                        عيون على جانبي الرأس توفر رؤية 340 درجة
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <span class="text-xl mr-2">👂</span>
+                    <div>
+                        <strong>السمع الفائق:</strong> 
+                        يمكنها سماع أصوات عالية التردد لكشف الحيوانات المفترسة
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <span class="text-xl mr-2">🏃</span>
+                    <div>
+                        <strong>السرعة القصوى:</strong> 
+                        يمكنها الجري بسرعة 80 كم/ساعة للهروب
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <span class="text-xl mr-2">👥</span>
+                    <div>
+                        <strong>الذكاء الاجتماعي:</strong> 
+                        تتواصل مع القطيع لتنسيق الحركة والإنذار
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function gazelleSimulator() {
+            return {
+                // البيانات الأساسية
+                currentScenario: 'predator_detected',
+                selectedPathway: 'herd_coordination',
+                isRunning: false,
+                isThinking: false,
+                isCalculating: false,
+                currentStep: 0,
+                totalSteps: 6,
+                progress: 0,
+                results: null,
+                overallConfidence: 0.85,
+
+                // السيناريوهات
+                scenarios: {
+                    predator_detected: {
+                        title: "كشف مفترس",
+                        description: "غزالة تكتشف أسداً على بعد 100 متر",
+                        emoji: "🦁",
+                        complexity: 0.6,
+                        familiarity: 0.8,
+                        stakes: 0.9,
+                        urgency: 0.9,
+                        risk: 0.8
+                    },
+                    water_source: {
+                        title: "البحث عن الماء",
+                        description: "العثور على مصدر ماء جديد في موسم الجفاف",
+                        emoji: "💧",
+                        complexity: 0.4,
+                        familiarity: 0.6,
+                        stakes: 0.7,
+                        urgency: 0.5,
+                        risk: 0.3
+                    },
+                    territory_dispute: {
+                        title: "نزاع إقليمي",
+                        description: "مواجهة قطيع منافس على أرض الرعي",
+                        emoji: "⚔️",
+                        complexity: 0.7,
+                        familiarity: 0.5,
+                        stakes: 0.6,
+                        urgency: 0.4,
+                        risk: 0.5
+                    },
+                    mating_season: {
+                        title: "موسم التزاوج",
+                        description: "اختيار شريك مناسب وجذب الانتباه",
+                        emoji: "💕",
+                        complexity: 0.5,
+                        familiarity: 0.7,
+                        stakes: 0.8,
+                        urgency: 0.6,
+                        risk: 0.2
+                    }
+                },
+
+                // المسارات المتاحة
+                pathways: {
+                    immediate_escape: {
+                        name: "الهروب الفوري",
+                        description: "استجابة بقاء سريعة",
+                        emoji: "🏃‍♂️",
+                        duration: "50-200ms",
+                        efficiency: "عالية جداً"
+                    },
+                    herd_coordination: {
+                        name: "تنسيق القطيع",
+                        description: "التواصل مع القطيع للحماية",
+                        emoji: "👥",
+                        duration: "200-800ms", 
+                        efficiency: "عالية"
+                    },
+                    strategic_assessment: {
+                        name: "التقييم الاستراتيجي",
+                        description: "تحليل عميق للموقف",
+                        emoji: "🧠",
+                        duration: "500-2000ms",
+                        efficiency: "متوسطة"
+                    },
+                    social_learning: {
+                        name: "التعلم الاجتماعي",
+                        description: "تعلم من تجارب القطيع",
+                        emoji: "📚",
+                        duration: "1-5s",
+                        efficiency: "متوسطة"
+                    }
+                },
+
+                // الاحتمالات
+                probabilities: {
+                    complexity: 0.6,
+                    familiarity: 0.8,
+                    stakes: 0.9,
+                    urgency: 0.9,
+                    risk: 0.8
+                },
+
+                // تسميات الاحتمالات
+                probabilityLabels: {
+                    complexity: 'التعقيد',
+                    familiarity: 'الألفة',
+                    stakes: 'الأهمية',
+                    urgency: 'الإلحاح',
+                    risk: 'المخاطر'
+                },
+
+                // خطوات العملية المعرفية
+                cognitiveSteps: [
+                    { name: 'الفرز', emoji: '🎯', duration: '5ms' },
+                    { name: 'الاستشعار', emoji: '👁️', duration: '15ms' },
+                    { name: 'المحاكاة', emoji: '🔄', duration: '100ms' },
+                    { name: 'التقييم', emoji: '⚖️', duration: '80ms' },
+                    { name: 'التنسيق', emoji: '📡', duration: '120ms' },
+                    { name: 'القرار', emoji: '✅', duration: '30ms' }
+                ],
+
+                // تهيئة النظام
+                init() {
+                    this.calculateProbabilities();
+                    this.selectOptimalPathway();
+                },
+
+                // اختيار السيناريو
+                selectScenario(scenarioKey) {
+                    this.currentScenario = scenarioKey;
+                    this.calculateProbabilities();
+                    this.selectOptimalPathway();
+                    this.results = null;
+                },
+
+                // حساب الاحتمالات
+                calculateProbabilities() {
+                    this.isCalculating = true;
+                    const scenario = this.scenarios[this.currentScenario];
+                    
+                    setTimeout(() => {
+                        this.probabilities = {
+                            complexity: Math.min(0.8, scenario.complexity + (Math.random() * 0.1 - 0.05)),
+                            familiarity: Math.min(1, scenario.familiarity + (Math.random() * 0.1 - 0.05)),
+                            stakes: Math.min(1, scenario.stakes + (Math.random() * 0.1 - 0.05)),
+                            urgency: Math.min(1, scenario.urgency + (Math.random() * 0.1 - 0.05)),
+                            risk: Math.min(1, scenario.risk + (Math.random() * 0.1 - 0.05))
+                        };
+                        
+                        // حساب الثقة الإجمالية
+                        this.overallConfidence = (
+                            this.probabilities.familiarity * 0.3 +
+                            (1 - this.probabilities.complexity) * 0.2 +
+                            this.probabilities.urgency * 0.3 +
+                            (1 - this.probabilities.risk) * 0.2
+                        );
+                        
+                        this.isCalculating = false;
+                    }, 800);
+                },
+
+                // اختيار المسار الأمثل
+                selectOptimalPathway() {
+                    const probs = this.probabilities;
+                    
+                    if (probs.risk > 0.7 && probs.urgency > 0.8) {
+                        this.selectedPathway = 'immediate_escape';
+                    } else if (probs.complexity > 0.6 && probs.stakes > 0.6) {
+                        this.selectedPathway = 'strategic_assessment';
+                    } else if (probs.familiarity < 0.5) {
+                        this.selectedPathway = 'social_learning';
+                    } else {
+                        this.selectedPathway = 'herd_coordination';
+                    }
+                },
+
+                // اختيار مسار يدوياً
+                selectPathway(pathwayKey) {
+                    this.selectedPathway = pathwayKey;
+                },
+
+                // تشغيل المحاكاة
+                async runSimulation() {
+                    this.isRunning = true;
+                    this.isThinking = true;
+                    this.currentStep = 0;
+                    this.progress = 0;
+                    this.results = null;
+
+                    // تنفيذ الخطوات
+                    for (let i = 0; i < this.totalSteps; i++) {
+                        this.currentStep = i;
+                        this.progress = ((i + 1) / this.totalSteps) * 100;
+                        
+                        // محاكاة وقت المعالجة حسب الخطوة
+                        const stepDuration = this.getStepDuration(i);
+                        await this.sleep(stepDuration);
+                    }
+
+                    // إنهاء المحاكاة وإنتاج النتائج
+                    this.currentStep = this.totalSteps;
+                    this.progress = 100;
+                    
+                    await this.sleep(500);
+                    this.generateResults();
+                    
+                    this.isRunning = false;
+                    this.isThinking = false;
+                },
+
+                // حساب مدة الخطوة
+                getStepDuration(stepIndex) {
+                    const baseDurations = [50, 150, 800, 600, 900, 300]; // مللي ثانية
+                    const pathway = this.pathways[this.selectedPathway];
+                    
+                    // تعديل المدة حسب المسار
+                    let multiplier = 1;
+                    if (this.selectedPathway === 'immediate_escape') {
+                        multiplier = 0.3; // أسرع
+                    } else if (this.selectedPathway === 'strategic_assessment') {
+                        multiplier = 2.0; // أبطأ
+                    } else if (this.selectedPathway === 'social_learning') {
+                        multiplier = 1.8;
+                    }
+                    
+                    return baseDurations[stepIndex] * multiplier;
+                },
+
+                // توليد النتائج
+                generateResults() {
+                    const scenario = this.scenarios[this.currentScenario];
+                    const pathway = this.pathways[this.selectedPathway];
+                    
+                    // حساب الأداء
+                    const totalDuration = this.calculateTotalDuration();
+                    const efficiency = this.calculateEfficiency();
+                    const survivalRate = this.calculateSurvivalRate();
+                    
+                    this.results = {
+                        totalDuration: totalDuration,
+                        totalSteps: this.totalSteps,
+                        efficiency: efficiency,
+                        survivalRate: survivalRate,
+                        finalDecision: this.generateFinalDecision(),
+                        reasoning: this.generateReasoning(),
+                        activatedLayers: this.getActivatedLayers(),
+                        activatedConcepts: this.getActivatedConcepts()
+                    };
+                },
+
+                // حساب المدة الإجمالية
+                calculateTotalDuration() {
+                    let total = 0;
+                    for (let i = 0; i < this.totalSteps; i++) {
+                        total += this.getStepDuration(i);
+                    }
+                    return Math.round(total);
+                },
+
+                // حساب الكفاءة
+                calculateEfficiency() {
+                    const probs = this.probabilities;
+                    let efficiency = 0.7; // أساسية
+                    
+                    if (this.selectedPathway === 'immediate_escape' && probs.risk > 0.7) {
+                        efficiency = 0.95;
+                    } else if (this.selectedPathway === 'herd_coordination' && probs.urgency > 0.5) {
+                        efficiency = 0.85;
+                    } else if (this.selectedPathway === 'strategic_assessment' && probs.complexity > 0.6) {
+                        efficiency = 0.80;
+                    } else if (this.selectedPathway === 'social_learning' && probs.familiarity < 0.5) {
+                        efficiency = 0.75;
+                    }
+                    
+                    return Math.round(efficiency * 100) + '%';
+                },
+
+                // حساب معدل البقاء
+                calculateSurvivalRate() {
+                    const probs = this.probabilities;
+                    let survival = 0.8; // أساسي
+                    
+                    if (probs.risk > 0.7) {
+                        if (this.selectedPathway === 'immediate_escape') {
+                            survival = 0.95;
+                        } else if (this.selectedPathway === 'herd_coordination') {
+                            survival = 0.88;
+                        } else {
+                            survival = 0.65;
+                        }
+                    } else {
+                        survival = 0.9 + (Math.random() * 0.1);
+                    }
+                    
+                    return Math.round(survival * 100) + '%';
+                },
+
+                // توليد القرار النهائي
+                generateFinalDecision() {
+                    const scenario = this.scenarios[this.currentScenario];
+                    const decisions = {
+                        immediate_escape: {
+                            predator_detected: "الهروب بأقصى سرعة نحو الملجأ الآمن",
+                            water_source: "الاقتراب بحذر والشرب بسرعة",
+                            territory_dispute: "التراجع وتجنب المواجهة",
+                            mating_season: "إظهار القوة والسرعة لجذب الشريك"
+                        },
+                        herd_coordination: {
+                            predator_detected: "إصدار إنذار للقطيع والتحرك معاً",
+                            water_source: "تنسيق دوريات الشرب مع القطيع",
+                            territory_dispute: "تجميع القطيع لإظهار القوة",
+                            mating_season: "التنافس المنظم مع ذكور القطيع"
+                        },
+                        strategic_assessment: {
+                            predator_detected: "تقييم سلوك المفترس وإيجاد طريق هروب بديل",
+                            water_source: "دراسة أمان المنطقة وتحديد أوقات الشرب الآمنة",
+                            territory_dispute: "تحليل قوة الخصم ووضع استراتيجية تفاوض",
+                            mating_season: "دراسة منافسين وتطوير استراتيجية جذب"
+                        },
+                        social_learning: {
+                            predator_detected: "تعلم من خبرة القطيع في التعامل مع هذا النوع من المفترسات",
+                            water_source: "تعلم من القطيع عن مصادر المياه الآمنة",
+                            territory_dispute: "تعلم تكتيكات التفاوض من الذكور الأكبر",
+                            mating_season: "تعلم طقوس المغازلة من الذكور الناجحين"
+                        }
+                    };
+                    
+                    return decisions[this.selectedPathway][this.currentScenario] || "متابعة السلوك الحالي";
+                },
+
+                // توليد التبرير
+                generateReasoning() {
+                    const probs = this.probabilities;
+                    const pathway = this.selectedPathway;
+                    
+                    let reasoning = `تم اختيار ${this.pathways[pathway].name} بناءً على: `;
+                    
+                    if (probs.risk > 0.7) {
+                        reasoning += "المخاطر العالية تتطلب استجابة سريعة، ";
+                    }
+                    if (probs.urgency > 0.8) {
+                        reasoning += "الطبيعة العاجلة للموقف، ";
+                    }
+                    if (probs.familiarity > 0.7) {
+                        reasoning += "الألفة مع هذا النوع من المواقف، ";
+                    }
+                    if (probs.complexity > 0.6) {
+                        reasoning += "تعقيد الموقف يتطلب تحليلاً دقيقاً، ";
+                    }
+                    
+                    reasoning += "ومستوى الثقة العالي في النظام المعرفي للغزالة.";
+                    
+                    return reasoning;
+                },
+
+                // الطبقات المُفعلة
+                getActivatedLayers() {
+                    return [
+                        {
+                            id: 0,
+                            name: "النواة التفاعلية",
+                            emoji: "⚡",
+                            usage: "مُفعلة للاستجابات الفورية"
+                        },
+                        {
+                            id: 1,
+                            name: "الوعي السياقي",
+                            emoji: "👁️",
+                            usage: "مُفعلة لتحليل البيئة"
+                        },
+                        {
+                            id: 2,
+                            name: "المعالجة المتوازية",
+                            emoji: "🔄",
+                            usage: "مُفعلة بالكامل - الطبقة الرئيسية"
+                        }
+                    ];
+                },
+
+                // المفاهيم المُفعلة
+                getActivatedConcepts() {
+                    const baseConcepts = [
+                        "environmental_variables",
+                        "simulators", 
+                        "trust_matrix",
+                        "middleware"
+                    ];
+                    
+                    if (this.selectedPathway === 'herd_coordination') {
+                        baseConcepts.push("self_copies", "social_modeling");
+                    }
+                    
+                    if (this.selectedPathway === 'strategic_assessment') {
+                        baseConcepts.push("meta_cognition", "generative_reconstruction");
+                    }
+                    
+                    if (this.probabilities.risk > 0.6) {
+                        baseConcepts.push("ariadne_thread", "safety_validator");
+                    }
+                    
+                    return baseConcepts;
+                },
+
+                // دالة مساعدة للانتظار
+                sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+            }
+        }
+    </script>
+</body>
+</html>

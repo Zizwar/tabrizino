@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شلل الاختيار - CPF Interactive Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .choice-card { transition: all 0.3s ease; transform: scale(1); }
+        .choice-card:hover { transform: scale(1.05); }
+        .overwhelmed { filter: blur(2px); opacity: 0.7; }
+        .simulator-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .collapse-animation { animation: collapse 0.8s ease-in-out; }
+        @keyframes collapse { 0% { opacity: 1; } 50% { opacity: 0.3; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div x-data="choiceParalysisDemo()" class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4">🧠 شلل الاختيار في CPF</h1>
+            <p class="text-lg opacity-90">محاكاة تفاعلية لآليات المعالجة المعرفية عند مواجهة خيارات متعددة</p>
+        </div>
+
+        <!-- Scenario Selection -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">📍 اختر السيناريو</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <button @click="setScenario('career')" 
+                        :class="scenario === 'career' ? 'bg-blue-500' : 'bg-white/20'"
+                        class="p-4 rounded-xl transition-all hover:scale-105">
+                    <i class="fas fa-briefcase text-2xl mb-2"></i>
+                    <div>اختيار المهنة</div>
+                </button>
+                <button @click="setScenario('restaurant')" 
+                        :class="scenario === 'restaurant' ? 'bg-green-500' : 'bg-white/20'"
+                        class="p-4 rounded-xl transition-all hover:scale-105">
+                    <i class="fas fa-utensils text-2xl mb-2"></i>
+                    <div>قائمة الطعام</div>
+                </button>
+                <button @click="setScenario('investment')" 
+                        :class="scenario === 'investment' ? 'bg-purple-500' : 'bg-white/20'"
+                        class="p-4 rounded-xl transition-all hover:scale-105">
+                    <i class="fas fa-chart-line text-2xl mb-2"></i>
+                    <div>قرار استثماري</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- CPF Processing Status -->
+        <div class="grid lg:grid-cols-3 gap-6 mb-8">
+            <!-- Simulators -->
+            <div class="bg-black/20 backdrop-blur rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4">🔄 المحاكيات</h3>
+                <div class="space-y-3">
+                    <div x-show="processing" class="simulator-pulse">
+                        <div class="flex items-center justify-between mb-2">
+                            <span>🧮 Reality Processor</span>
+                            <span x-text="simulators.reality + '%'"></span>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-blue-400 h-2 rounded-full transition-all duration-500" 
+                                 :style="`width: ${simulators.reality}%`"></div>
+                        </div>
+                    </div>
+                    
+                    <div x-show="processing" class="simulator-pulse">
+                        <div class="flex items-center justify-between mb-2">
+                            <span>🔮 Prediction Engine</span>
+                            <span x-text="simulators.prediction + '%'"></span>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-yellow-400 h-2 rounded-full transition-all duration-500" 
+                                 :style="`width: ${simulators.prediction}%`"></div>
+                        </div>
+                    </div>
+                    
+                    <div x-show="processing" class="simulator-pulse">
+                        <div class="flex items-center justify-between mb-2">
+                            <span>🤝 Social Modeler</span>
+                            <span x-text="simulators.social + '%'"></span>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-green-400 h-2 rounded-full transition-all duration-500" 
+                                 :style="`width: ${simulators.social}%`"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oscillators -->
+            <div class="bg-black/20 backdrop-blur rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4">📊 التذبذبات</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span>😰 مستوى القلق</span>
+                            <span x-text="oscillators.anxiety.toFixed(2)"></span>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-3">
+                            <div class="bg-red-400 h-3 rounded-full transition-all duration-300" 
+                                 :style="`width: ${oscillators.anxiety * 100}%`"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span>⚡ الحمل المعرفي</span>
+                            <span x-text="oscillators.cognitiveLoad.toFixed(2)"></span>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-3">
+                            <div class="bg-orange-400 h-3 rounded-full transition-all duration-300" 
+                                 :style="`width: ${oscillators.cognitiveLoad * 100}%`"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 rounded-lg" 
+                     :class="oscillators.anxiety > 0.8 ? 'bg-red-500/30' : oscillators.anxiety > 0.6 ? 'bg-yellow-500/30' : 'bg-green-500/30'">
+                    <span x-text="getEmotionalState()"></span>
+                </div>
+            </div>
+
+            <!-- Attention Manager -->
+            <div class="bg-black/20 backdrop-blur rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4">👁️ إدارة الانتباه</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span>🎯 تركيز الانتباه</span>
+                        <span x-text="attention.focus + '%'"></span>
+                    </div>
+                    <div class="w-full bg-gray-600 rounded-full h-2">
+                        <div class="bg-purple-400 h-2 rounded-full transition-all duration-300" 
+                             :style="`width: ${attention.focus}%`"></div>
+                    </div>
+                    
+                    <div class="text-sm opacity-80" x-text="getAttentionStatus()"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Choices Display -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold">🎲 الخيارات المتاحة</h2>
+                <div class="text-sm">
+                    <span class="opacity-70">عدد الخيارات: </span>
+                    <span x-text="getCurrentChoices().length" class="font-bold"></span>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" 
+                 :class="isOverwhelmed() ? 'overwhelmed' : ''">
+                <template x-for="(choice, index) in getCurrentChoices()" :key="index">
+                    <div class="choice-card bg-white/20 rounded-xl p-4 cursor-pointer hover:bg-white/30 transition-all"
+                         @click="!collapsed && selectChoice(choice)"
+                         :class="{ 'border-2 border-yellow-400': selectedChoice === choice, 'opacity-50': collapsed }">
+                        <div class="text-lg mb-2" x-text="choice.icon"></div>
+                        <h4 class="font-semibold mb-2" x-text="choice.name"></h4>
+                        <div class="text-sm space-y-1">
+                            <div>💰 <span x-text="choice.cost"></span></div>
+                            <div>⭐ <span x-text="choice.rating"></span></div>
+                            <div>⏱️ <span x-text="choice.time"></span></div>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-1">
+                            <template x-for="tag in choice.tags">
+                                <span class="text-xs bg-white/20 px-2 py-1 rounded-full" x-text="tag"></span>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-4 justify-center mb-8">
+            <button @click="startProcessing()" 
+                    :disabled="processing || collapsed"
+                    class="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 px-6 py-3 rounded-xl transition-all">
+                <i class="fas fa-play mr-2"></i>
+                ابدأ المعالجة
+            </button>
+            
+            <button @click="addMoreChoices()" 
+                    :disabled="processing || collapsed"
+                    class="bg-purple-600 hover:bg-purple-700 disabled:opacity-50 px-6 py-3 rounded-xl transition-all">
+                <i class="fas fa-plus mr-2"></i>
+                أضف خيارات
+            </button>
+            
+            <button @click="triggerCollapse()" 
+                    :disabled="!processing || collapsed"
+                    class="bg-red-600 hover:bg-red-700 disabled:opacity-50 px-6 py-3 rounded-xl transition-all">
+                <i class="fas fa-zap mr-2"></i>
+                انهيار توليدي
+            </button>
+            
+            <button @click="reset()" 
+                    class="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-xl transition-all">
+                <i class="fas fa-refresh mr-2"></i>
+                إعادة تعيين
+            </button>
+        </div>
+
+        <!-- Final Decision -->
+        <div x-show="collapsed" class="collapse-animation bg-gradient-to-r from-green-500/20 to-blue-500/20 backdrop-blur-lg rounded-2xl p-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">🎯 القرار النهائي</h2>
+            <div x-show="finalDecision" class="text-6xl mb-4" x-text="finalDecision?.icon"></div>
+            <h3 class="text-2xl font-semibold mb-4" x-text="finalDecision?.name"></h3>
+            <p class="text-lg opacity-90 mb-6">تم اتخاذ القرار بعد معالجة معرفية شاملة!</p>
+            
+            <div class="grid md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+                <div class="bg-white/10 p-4 rounded-xl">
+                    <div class="text-2xl mb-2">⚡</div>
+                    <div class="text-sm">وقت المعالجة</div>
+                    <div class="font-bold" x-text="processingTime + 'ثانية'"></div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-xl">
+                    <div class="text-2xl mb-2">🎲</div>
+                    <div class="text-sm">خيارات تم تقييمها</div>
+                    <div class="font-bold" x-text="getCurrentChoices().length"></div>
+                </div>
+                <div class="bg-white/10 p-4 rounded-xl">
+                    <div class="text-2xl mb-2">📊</div>
+                    <div class="text-sm">ثقة القرار</div>
+                    <div class="font-bold" x-text="Math.round(confidence * 100) + '%'"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CPF Explanation -->
+        <div class="bg-black/30 backdrop-blur rounded-xl p-6 mt-8">
+            <h3 class="text-xl font-semibold mb-4">🧠 ما يحدث في CPF</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold mb-2">🔄 المحاكيات المتوازية</h4>
+                    <p class="text-sm opacity-90">تعمل عدة محاكيات على تقييم كل خيار من زوايا مختلفة: الواقع الحالي، التوقعات المستقبلية، والتأثير الاجتماعي.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">📊 التذبذبات العاطفية</h4>
+                    <p class="text-sm opacity-90">كلما زادت الخيارات، ارتفع القلق والحمل المعرفي، مما يؤثر على جودة المعالجة وسرعة اتخاذ القرار.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">⚡ الانهيار التوليدي</h4>
+                    <p class="text-sm opacity-90">عندما تصل المعالجة لذروتها، يحدث "انهيار" يختزل كل الاحتمالات في قرار واحد نهائي.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">🛡️ الحماية الذاتية</h4>
+                    <p class="text-sm opacity-90">النظام يحمي نفسه من الإرهاق المعرفي عبر تقليل عمق المعالجة أو اللجوء لقرارات "مرضية" بدلاً من مثالية.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function choiceParalysisDemo() {
+            return {
+                scenario: 'career',
+                processing: false,
+                collapsed: false,
+                selectedChoice: null,
+                finalDecision: null,
+                processingTime: 0,
+                confidence: 0,
+                
+                simulators: {
+                    reality: 0,
+                    prediction: 0,
+                    social: 0
+                },
+                
+                oscillators: {
+                    anxiety: 0.3,
+                    cognitiveLoad: 0.2
+                },
+                
+                attention: {
+                    focus: 100
+                },
+                
+                scenarios: {
+                    career: [
+                        { icon: '💼', name: 'مهندس برمجيات', cost: 'راتب عالي', rating: '⭐⭐⭐⭐⭐', time: 'مرن', tags: ['تقنية', 'مستقبلي'] },
+                        { icon: '👨‍⚕️', name: 'طبيب', cost: 'استثمار طويل', rating: '⭐⭐⭐⭐⭐', time: 'مكثف', tags: ['إنساني', 'مرموق'] },
+                        { icon: '🎨', name: 'مصمم جرافيك', cost: 'متوسط', rating: '⭐⭐⭐⭐', time: 'مرن', tags: ['إبداعي', 'حر'] },
+                        { icon: '📚', name: 'أستاذ جامعي', cost: 'متوسط', rating: '⭐⭐⭐⭐', time: 'منتظم', tags: ['أكاديمي', 'مستقر'] },
+                        { icon: '💰', name: 'محاسب', cost: 'جيد', rating: '⭐⭐⭐', time: 'منتظم', tags: ['مستقر', 'دقيق'] },
+                        { icon: '🏗️', name: 'مهندس مدني', cost: 'ممتاز', rating: '⭐⭐⭐⭐', time: 'متنوع', tags: ['عملي', 'تحدي'] }
+                    ],
+                    restaurant: [
+                        { icon: '🍕', name: 'بيتزا مارجريتا', cost: '50 ريال', rating: '⭐⭐⭐⭐', time: '15 دقيقة', tags: ['إيطالي', 'شائع'] },
+                        { icon: '🍣', name: 'سوشي سالمون', cost: '120 ريال', rating: '⭐⭐⭐⭐⭐', time: '10 دقيقة', tags: ['ياباني', 'صحي'] },
+                        { icon: '🥘', name: 'برياني دجاج', cost: '35 ريال', rating: '⭐⭐⭐⭐', time: '20 دقيقة', tags: ['هندي', 'حار'] },
+                        { icon: '🍔', name: 'برجر لحم', cost: '45 ريال', rating: '⭐⭐⭐', time: '12 دقيقة', tags: ['أمريكي', 'سريع'] },
+                        { icon: '🥗', name: 'سلطة قيصر', cost: '30 ريال', rating: '⭐⭐⭐', time: '8 دقيقة', tags: ['صحي', 'خفيف'] }
+                    ],
+                    investment: [
+                        { icon: '📈', name: 'أسهم التقنية', cost: '10,000 ريال', rating: '⭐⭐⭐⭐', time: 'طويل المدى', tags: ['مخاطر عالية', 'عوائد عالية'] },
+                        { icon: '🏠', name: 'استثمار عقاري', cost: '500,000 ريال', rating: '⭐⭐⭐⭐⭐', time: 'طويل جداً', tags: ['مستقر', 'آمن'] },
+                        { icon: '💰', name: 'ودائع بنكية', cost: '50,000 ريال', rating: '⭐⭐⭐', time: 'متوسط', tags: ['آمن', 'عوائد منخفضة'] },
+                        { icon: '💎', name: 'تداول العملات', cost: '5,000 ريال', rating: '⭐⭐', time: 'قصير', tags: ['مخاطر عالية جداً', 'سريع'] },
+                        { icon: '🏭', name: 'صناديق استثمار', cost: '20,000 ريال', rating: '⭐⭐⭐⭐', time: 'متوسط', tags: ['متنوع', 'متوازن'] }
+                    ]
+                },
+                
+                setScenario(newScenario) {
+                    this.scenario = newScenario;
+                    this.reset();
+                },
+                
+                getCurrentChoices() {
+                    return this.scenarios[this.scenario];
+                },
+                
+                addMoreChoices() {
+                    const moreChoices = {
+                        career: [
+                            { icon: '🎭', name: 'ممثل', cost: 'متغير', rating: '⭐⭐⭐', time: 'غير منتظم', tags: ['فني', 'مغامرة'] },
+                            { icon: '✈️', name: 'طيار', cost: 'ممتاز', rating: '⭐⭐⭐⭐⭐', time: 'متنوع', tags: ['سفر', 'مرموق'] }
+                        ],
+                        restaurant: [
+                            { icon: '🌮', name: 'تاكو مكسيكي', cost: '40 ريال', rating: '⭐⭐⭐⭐', time: '10 دقيقة', tags: ['مكسيكي', 'حار'] },
+                            { icon: '🍜', name: 'رامن ياباني', cost: '55 ريال', rating: '⭐⭐⭐⭐⭐', time: '18 دقيقة', tags: ['ياباني', 'دافئ'] }
+                        ],
+                        investment: [
+                            { icon: '🚀', name: 'شركات ناشئة', cost: '25,000 ريال', rating: '⭐⭐', time: 'طويل', tags: ['مخاطر عالية', 'ابتكار'] },
+                            { icon: '🥇', name: 'ذهب وسلع', cost: '30,000 ريال', rating: '⭐⭐⭐⭐', time: 'طويل', tags: ['تحوط', 'تقليدي'] }
+                        ]
+                    };
+                    
+                    this.scenarios[this.scenario].push(...moreChoices[this.scenario]);
+                    this.updateOscillators();
+                },
+                
+                startProcessing() {
+                    this.processing = true;
+                    this.processingTime = 0;
+                    
+                    // Update oscillators based on choice count
+                    this.updateOscillators();
+                    
+                    // Simulate processing
+                    const interval = setInterval(() => {
+                        this.processingTime += 0.1;
+                        
+                        // Update simulators
+                        this.simulators.reality = Math.min(100, this.simulators.reality + Math.random() * 15);
+                        this.simulators.prediction = Math.min(100, this.simulators.prediction + Math.random() * 12);
+                        this.simulators.social = Math.min(100, this.simulators.social + Math.random() * 10);
+                        
+                        // Update oscillators
+                        if (this.processingTime > 2) {
+                            this.oscillators.anxiety = Math.min(0.95, this.oscillators.anxiety + 0.02);
+                            this.oscillators.cognitiveLoad = Math.min(0.9, this.oscillators.cognitiveLoad + 0.015);
+                            this.attention.focus = Math.max(20, this.attention.focus - 1);
+                        }
+                        
+                        // Stop when all simulators are near complete
+                        if (this.simulators.reality > 90 && this.simulators.prediction > 90 && this.simulators.social > 90) {
+                            clearInterval(interval);
+                            this.processing = false;
+                        }
+                    }, 100);
+                },
+                
+                triggerCollapse() {
+                    this.collapsed = true;
+                    this.finalDecision = this.getCurrentChoices()[Math.floor(Math.random() * this.getCurrentChoices().length)];
+                    this.confidence = Math.max(0.4, 1 - (this.oscillators.anxiety * 0.5) - (this.oscillators.cognitiveLoad * 0.3));
+                },
+                
+                updateOscillators() {
+                    const choiceCount = this.getCurrentChoices().length;
+                    const baseAnxiety = Math.min(0.9, 0.2 + (choiceCount - 3) * 0.1);
+                    const baseCognitiveLoad = Math.min(0.8, 0.1 + (choiceCount - 3) * 0.08);
+                    
+                    this.oscillators.anxiety = baseAnxiety;
+                    this.oscillators.cognitiveLoad = baseCognitiveLoad;
+                    this.attention.focus = Math.max(30, 100 - (choiceCount - 3) * 8);
+                },
+                
+                isOverwhelmed() {
+                    return this.oscillators.anxiety > 0.7 || this.oscillators.cognitiveLoad > 0.6;
+                },
+                
+                getEmotionalState() {
+                    if (this.oscillators.anxiety > 0.8) return '😰 قلق شديد - شلل في اتخاذ القرار';
+                    if (this.oscillators.anxiety > 0.6) return '😟 قلق متوسط - صعوبة في التركيز';
+                    if (this.oscillators.anxiety > 0.4) return '😐 قلق طفيف - يمكن إدارته';
+                    return '😌 حالة هادئة - قرارات واضحة';
+                },
+                
+                getAttentionStatus() {
+                    if (this.attention.focus > 80) return 'تركيز عالي - معالجة عميقة';
+                    if (this.attention.focus > 60) return 'تركيز متوسط - معالجة جيدة';
+                    if (this.attention.focus > 40) return 'تركيز منخفض - معالجة سطحية';
+                    return 'تشتت شديد - صعوبة في المعالجة';
+                },
+                
+                selectChoice(choice) {
+                    this.selectedChoice = choice;
+                },
+                
+                reset() {
+                    this.processing = false;
+                    this.collapsed = false;
+                    this.selectedChoice = null;
+                    this.finalDecision = null;
+                    this.processingTime = 0;
+                    this.confidence = 0;
+                    
+                    this.simulators = { reality: 0, prediction: 0, social: 0 };
+                    this.oscillators = { anxiety: 0.3, cognitiveLoad: 0.2 };
+                    this.attention = { focus: 100 };
+                    
+                    // Reset scenarios to original
+                    this.scenarios = {
+                        career: [
+                            { icon: '💼', name: 'مهندس برمجيات', cost: 'راتب عالي', rating: '⭐⭐⭐⭐⭐', time: 'مرن', tags: ['تقنية', 'مستقبلي'] },
+                            { icon: '👨‍⚕️', name: 'طبيب', cost: 'استثمار طويل', rating: '⭐⭐⭐⭐⭐', time: 'مكثف', tags: ['إنساني', 'مرموق'] },
+                            { icon: '🎨', name: 'مصمم جرافيك', cost: 'متوسط', rating: '⭐⭐⭐⭐', time: 'مرن', tags: ['إبداعي', 'حر'] },
+                            { icon: '📚', name: 'أستاذ جامعي', cost: 'متوسط', rating: '⭐⭐⭐⭐', time: 'منتظم', tags: ['أكاديمي', 'مستقر'] },
+                            { icon: '💰', name: 'محاسب', cost: 'جيد', rating: '⭐⭐⭐', time: 'منتظم', tags: ['مستقر', 'دقيق'] }
+                        ],
+                        restaurant: [
+                            { icon: '🍕', name: 'بيتزا مارجريتا', cost: '50 ريال', rating: '⭐⭐⭐⭐', time: '15 دقيقة', tags: ['إيطالي', 'شائع'] },
+                            { icon: '🍣', name: 'سوشي سالمون', cost: '120 ريال', rating: '⭐⭐⭐⭐⭐', time: '10 دقيقة', tags: ['ياباني', 'صحي'] },
+                            { icon: '🥘', name: 'برياني دجاج', cost: '35 ريال', rating: '⭐⭐⭐⭐', time: '20 دقيقة', tags: ['هندي', 'حار'] },
+                            { icon: '🍔', name: 'برجر لحم', cost: '45 ريال', rating: '⭐⭐⭐', time: '12 دقيقة', tags: ['أمريكي', 'سريع'] }
+                        ],
+                        investment: [
+                            { icon: '📈', name: 'أسهم التقنية', cost: '10,000 ريال', rating: '⭐⭐⭐⭐', time: 'طويل المدى', tags: ['مخاطر عالية', 'عوائد عالية'] },
+                            { icon: '🏠', name: 'استثمار عقاري', cost: '500,000 ريال', rating: '⭐⭐⭐⭐⭐', time: 'طويل جداً', tags: ['مستقر', 'آمن'] },
+                            { icon: '💰', name: 'ودائع بنكية', cost: '50,000 ريال', rating: '⭐⭐⭐', time: 'متوسط', tags: ['آمن', 'عوائد منخفضة'] },
+                            { icon: '💎', name: 'تداول العملات', cost: '5,000 ريال', rating: '⭐⭐', time: 'قصير', tags: ['مخاطر عالية جداً', 'سريع'] }
+                        ]
+                    };
+                    this.updateOscillators();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

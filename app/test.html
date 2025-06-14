@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الهزازات: توازن vs اجترار</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: #fff;
+            display: block;
+            margin-bottom: 20px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button#normalStateBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button#ruminationStateBtn {
+            background-color: #f44336;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .description {
+            max-width: 800px;
+            text-align: justify;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        h3 {
+            color: #555;
+            text-align: center;
+        }
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button id="normalStateBtn">الحالة الطبيعية (توازن)</button>
+        <button id="ruminationStateBtn">حالة الاجترار العقلي</button>
+    </div>
+    <canvas id="oscillatorCanvas" width="800" height="400"></canvas>
+    <div class="description">
+        <h2>تصوير الهزازات: التوازن مقابل الاجترار العقلي</h2>
+        <p>
+            تُظهر هذه الرسوم المتحركة مفهوم الهزازات المعرفية من منظور نظري، حيث تمثل كل دائرة 
+            [span_3](start_span)"نمط تذبذب" (Oscillator) يعبر عن حالة عاطفية أو معرفية أساسية[span_3](end_span).
+            تصف نظرية الهزازات في CPF نظامًا من ثلاثة أنماط تذبذب تمثل الحالات العاطفية والمعرفية الأساسية: 
+            النمط الأساسي (Baseline Oscillator) للحفاظ على الاستقرار، 
+            والنمط الديناميكي (Dynamic Oscillator) لمعالجة التجارب الحياتية، 
+            [span_4](start_span)ونمط التكامل (Integration Oscillator) لدمج الإشارات وحساب الحالة الكلية[span_4](end_span).
+            [span_5](start_span)يؤثر التوافق بين هذه الأنماط على درجة "الوعي" أو "النشاط المعرفي" الكلي[span_5](end_span).
+        </p>
+
+        <h3>الحالة الطبيعية (التوازن)</h3>
+        <ul>
+            [span_6](start_span)<li>في هذه الحالة، تعمل الهزازات (الدوائر) بتناغم وانسجام[span_6](end_span).</li>
+            [span_7](start_span)<li>تكون ترددات وسعات حركتها متوازنة، مما يؤدي إلى "تناغم مثالي" في النظام[span_7](end_span).</li>
+            <li>النقطة المركزية (المعبرة عن الحالة المعرفية الكلية) تظل ضمن النطاق الأمثل (0.4-0.7)، 
+                [span_8](start_span)مما يشير إلى "توازن طبيعي ووضوح" في التفكير والمشاعر[span_8](end_span).</li>
+            <li>الألوان هادئة ومتناسقة لتعكس الاستقرار.</li>
+        </ul>
+
+        <h3>حالة الاجترار العقلي</h3>
+        <ul>
+            [span_9](start_span)<li>هنا، يتم محاكاة الاجترار العقلي كـ "حلقات لانهائية من التفكير"[span_9](end_span) [span_10](start_span)أو "تشويش" غير مرغوب فيه[span_10](end_span) 
+                [span_11](start_span)الذي يؤدي إلى "شلل معرفي"[span_11](end_span) [span_12](start_span)واستنزاف للطاقة[span_12](end_span).</li>
+            <li>تزداد سعة وتردد بعض الهزازات (خاصة النمط الديناميكي)، مما يمثل الأفكار السلبية 
+                [span_13](start_span)والمخاوف المتكررة التي تستحوذ على الانتباه[span_13](end_span).</li>
+            <li>تفقد الهزازات تناغمها، وقد تتصادم الدوائر أو تخرج عن السيطرة، 
+                [span_14](start_span)مما يعكس "فقدان التنسيق بين الأنماط"[span_14](end_span).</li>
+            [span_15](start_span)<li>تتحرك النقطة المركزية خارج النطاق الأمثل، نحو "إثارة شديدة أو توتر مفرط"[span_15](end_span) 
+                [span_16](start_span)أو "إنهاك"[span_16](end_span) [span_17](start_span)نتيجة لـ "الإفراط في التحليل"[span_17](end_span).</li>
+            <li>الألوان تصبح أكثر حدة وتباينًا واضطرابًا، مما يعكس الانزعاج والتوتر.</li>
+            [span_18](start_span)<li>في WinoScript، يمكن لـ "عامل التشويش الإبداعي" (Noise Factor)[span_18](end_span) 
+                [span_19](start_span)أن يقطع هذه الحلقات المدمرة[span_19](end_span) [span_20](start_span)ويساعد على إعادة التوازن[span_20](end_span).</li>
+        </ul>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('oscillatorCanvas');
+        const ctx = canvas.getContext('2d');
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        let animationFrameId;
+        let currentState = 'normal'; // 'normal' or 'rumination'
+
+        const baseOscillators = [
+            { radius: 15, speed: 0.05, amplitudeX: 100, amplitudeY: 50, color: 'rgba(76, 175, 80, 0.7)' }, // أخضر
+            { radius: 15, speed: 0.04, amplitudeX: 80, amplitudeY: 60, color: 'rgba(33, 150, 243, 0.7)' }, // أزرق
+            { radius: 15, speed: 0.06, amplitudeX: 90, amplitudeY: 70, color: 'rgba(255, 193, 7, 0.7)' }  // أصفر
+        ];
+
+        let oscillators = [];
+        let globalCognitiveScore = 0.5; // Overall system state
+
+        function initializeOscillators(state) {
+            oscillators = baseOscillators.map(o => ({ ...o })); // Deep copy
+
+            if (state === 'rumination') {
+                // Modify oscillators for rumination state
+                oscillators[0].speed = 0.15; // Faster for dynamic/rumination
+                oscillators[0].amplitudeX = 150;
+                oscillators[0].amplitudeY = 100;
+                oscillators[0].color = 'rgba(244, 67, 54, 0.8)'; // أحمر ساطع
+
+                oscillators[1].speed = 0.12; // Also faster, but maybe less amplitude
+                oscillators[1].amplitudeX = 120;
+                oscillators[1].amplitudeY = 90;
+                oscillators[1].color = 'rgba(255, 87, 34, 0.8)'; // برتقالي ساطع
+
+                // Add "noise" or additional chaotic elements
+                oscillators.push({
+                    radius: 10, speed: 0.2, amplitudeX: 70, amplitudeY: 120, color: 'rgba(156, 39, 176, 0.6)', // بنفسجي
+                    offset: Math.random() * Math.PI * 2, // Random starting point
+                    noiseFactor: 0.5 // For extra erratic movement
+                });
+                oscillators.push({
+                    radius: 12, speed: 0.18, amplitudeX: 110, amplitudeY: 60, color: 'rgba(0, 188, 212, 0.6)', // أزرق سماوي
+                    offset: Math.random() * Math.PI * 2,
+                    noiseFactor: 0.3
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let sumX = 0;
+            let sumY = 0;
+            let totalWeight = 0;
+
+            const time = Date.now() * 0.001; // Current time for animation
+
+            oscillators.forEach((osc, index) => {
+                const x = centerX + Math.sin(time * osc.speed + (osc.offset || 0)) * osc.amplitudeX;
+                const y = centerY + Math.cos(time * osc.speed * (osc.noiseFactor || 1) + (osc.offset || 0)) * osc.amplitudeY;
+
+                ctx.beginPath();
+                ctx.arc(x, y, osc.radius, 0, Math.PI * 2);
+                ctx.fillStyle = osc.color;
+                ctx.fill();
+                ctx.strokeStyle = osc.color.replace('0.7', '1'); // Opaque stroke
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Calculate weighted average for global cognitive score
+                // Weight by amplitude (more intense oscillations have more influence)
+                const weight = (osc.amplitudeX + osc.amplitudeY) / 2;
+                sumX += x * weight;
+                sumY += y * weight;
+                totalWeight += weight;
+            });
+
+            if (totalWeight > 0) {
+                const avgX = sumX / totalWeight;
+                const avgY = sumY / totalWeight;
+
+                // Map avgX and avgY to a single global cognitive score (0-1)
+                // Simplified: use distance from center, normalized
+                const distance = Math.sqrt(Math.pow(avgX - centerX, 2) + Math.pow(avgY - centerY, 2));
+                const maxPossibleDistance = Math.max(...oscillators.map(o => (o.amplitudeX + o.amplitudeY)/2)) * 1.5; // Estimate max possible spread
+                globalCognitiveScore = 1 - (distance / maxPossibleDistance); // Higher score for closer to center (more coherent)
+
+                if (currentState === 'rumination') {
+                    // In rumination, we want the score to be typically higher or lower (more extreme)
+                    // Let's invert and offset for visual extreme
+                    globalCognitiveScore = 0.5 + (0.5 - globalCognitiveScore) * 1.5; // Pushes it further from middle
+                }
+                globalCognitiveScore = Math.max(0, Math.min(1, globalCognitiveScore)); // Clamp 0-1
+
+                // Draw central "Cognitive State" dot
+                ctx.beginPath();
+                ctx.arc(avgX, avgY, 10, 0, Math.PI * 2);
+                ctx.fillStyle = 'black';
+                ctx.fill();
+
+                // Draw text for cognitive score
+                ctx.fillStyle = '#333';
+                ctx.font = '14px Arial';
+                ctx.fillText(`الحالة المعرفية: ${globalCognitiveScore.toFixed(2)}`, avgX + 15, avgY + 5);
+                
+                // Draw optimal range visualization
+                ctx.strokeStyle = 'rgba(0, 150, 136, 0.4)'; // Teal
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 50, 0, Math.PI * 2); // Represents optimal range
+                ctx.stroke();
+                ctx.fillText('نطاق التوازن الأمثل', centerX + 55, centerY + 5);
+            }
+
+            animationFrameId = requestAnimationFrame(draw);
+        }
+
+        function setNormalState() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            currentState = 'normal';
+            initializeOscillators(currentState);
+            animationFrameId = requestAnimationFrame(draw);
+        }
+
+        function setRuminationState() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            currentState = 'rumination';
+            initializeOscillators(currentState);
+            animationFrameId = requestAnimationFrame(draw);
+        }
+
+        document.getElementById('normalStateBtn').addEventListener('click', setNormalState);
+        document.getElementById('ruminationStateBtn').addEventListener('click', setRuminationState);
+
+        // Start with normal state
+        setNormalState();
+    </script>
+</body>
+</html>

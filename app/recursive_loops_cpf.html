@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحلقات التكرارية المدمرة - CPF Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @keyframes spiral-in {
+            0% { transform: rotate(0deg) scale(1) translateY(0); }
+            100% { transform: rotate(720deg) scale(0.1) translateY(-50px); opacity: 0; }
+        }
+        
+        @keyframes mind-overwhelm {
+            0%, 100% { background: linear-gradient(45deg, #1e293b, #334155); }
+            50% { background: linear-gradient(45deg, #991b1b, #7f1d1d); }
+        }
+        
+        @keyframes thought-bubble {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        
+        @keyframes emergency-pulse {
+            0%, 100% { box-shadow: 0 0 10px #ef4444; }
+            50% { box-shadow: 0 0 30px #ef4444, 0 0 40px #ef4444; }
+        }
+        
+        .spiral-in { animation: spiral-in 2s ease-in infinite; }
+        .mind-overwhelm { animation: mind-overwhelm 3s ease-in-out infinite; }
+        .thought-bubble { animation: thought-bubble 1.5s ease-out infinite; }
+        .emergency-pulse { animation: emergency-pulse 1s ease-in-out infinite; }
+        
+        .mirror-effect {
+            background: linear-gradient(45deg, 
+                rgba(59, 130, 246, 0.1) 0%,
+                rgba(147, 51, 234, 0.1) 25%,
+                rgba(59, 130, 246, 0.1) 50%,
+                rgba(147, 51, 234, 0.1) 75%,
+                rgba(59, 130, 246, 0.1) 100%);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen overflow-hidden" x-data="recursiveLoopSimulation()">
+    
+    <!-- Background -->
+    <div class="fixed inset-0 transition-all duration-1000" 
+         :class="loopActive ? 'mind-overwhelm' : 'bg-gradient-to-br from-slate-800 to-slate-900'">
+    </div>
+    
+    <!-- Header -->
+    <div class="relative z-10 p-6 text-center">
+        <h1 class="text-4xl font-bold text-white mb-2">🧠 الحلقات التكرارية المدمرة</h1>
+        <p class="text-slate-300 text-lg">محاكاة لآلية الحماية في إطار CPF</p>
+        <div class="mt-4 text-sm text-slate-400">
+            <span>الطاقة المعرفية: </span>
+            <div class="inline-block w-32 bg-slate-700 rounded-full h-2">
+                <div class="bg-red-500 h-2 rounded-full transition-all duration-300" 
+                     :style="`width: ${cognitiveEnergy}%`"></div>
+            </div>
+            <span x-text="`${cognitiveEnergy}%`"></span>
+        </div>
+    </div>
+
+    <!-- Main Simulation Area -->
+    <div class="relative flex items-center justify-center h-screen">
+        
+        <!-- Recursive Thought Loops -->
+        <div class="relative">
+            <!-- Central Mind -->
+            <div class="w-32 h-32 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 
+                        flex items-center justify-center text-white text-2xl
+                        transition-all duration-500 transform"
+                 :class="loopActive ? 'scale-110 animate-pulse' : 'scale-100'">
+                🧠
+            </div>
+            
+            <!-- Recursive Circles -->
+            <template x-for="(circle, index) in recursiveCircles" :key="index">
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                           rounded-full border-2 border-dashed transition-all duration-300 mirror-effect"
+                     :class="loopActive ? 'border-red-400 spiral-in' : 'border-blue-400'"
+                     :style="`width: ${120 + (index * 60)}px; height: ${120 + (index * 60)}px; 
+                             animation-delay: ${index * 0.3}s`">
+                </div>
+            </template>
+        </div>
+        
+        <!-- Thought Bubbles -->
+        <template x-for="bubble in thoughtBubbles" :key="bubble.id">
+            <div class="absolute bg-white bg-opacity-90 rounded-lg p-3 max-w-xs shadow-lg thought-bubble"
+                 :style="`top: ${bubble.y}%; left: ${bubble.x}%; animation-delay: ${bubble.delay}s`">
+                <div class="text-sm text-gray-800" x-text="bubble.text"></div>
+                <div class="absolute bottom-0 left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 
+                           border-transparent border-t-white border-opacity-90"></div>
+            </div>
+        </template>
+        
+        <!-- Loop Level Indicator -->
+        <div class="absolute top-20 right-20 bg-black bg-opacity-50 rounded-lg p-4 text-white">
+            <div class="text-lg font-bold">مستوى التكرار</div>
+            <div class="text-3xl font-mono" x-text="loopLevel"></div>
+            <div class="text-sm mt-2" :class="loopLevel > 3 ? 'text-red-400' : 'text-green-400'">
+                <span x-show="loopLevel <= 3">😌 آمن</span>
+                <span x-show="loopLevel > 3 && loopLevel <= 6">😰 خطر متوسط</span>
+                <span x-show="loopLevel > 6">🚨 خطر شديد</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-20">
+        <div class="bg-black bg-opacity-70 rounded-xl p-6 text-white backdrop-blur">
+            <div class="flex items-center gap-4">
+                
+                <!-- Start Loop Button -->
+                <button @click="startRecursiveLoop()" 
+                        :disabled="loopActive"
+                        class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 
+                               rounded-lg font-bold hover:from-purple-700 hover:to-blue-700 
+                               disabled:opacity-50 disabled:cursor-not-allowed
+                               transition-all duration-300">
+                    <i class="fas fa-play mr-2"></i>
+                    بدء التفكير التكراري
+                </button>
+                
+                <!-- Noise Factor (Protection) -->
+                <button @click="activateNoiseFactor()" 
+                        :disabled="!loopActive || noiseCooldown"
+                        class="px-4 py-3 bg-yellow-600 rounded-lg hover:bg-yellow-700 
+                               disabled:opacity-50 disabled:cursor-not-allowed
+                               transition-all duration-300"
+                        title="عامل التشويش - يكسر الحلقة">
+                    <i class="fas fa-random mr-2"></i>
+                    🔀 تشويش إبداعي
+                </button>
+                
+                <!-- Ariadne Thread (Emergency) -->
+                <button @click="emergencyExit()" 
+                        :disabled="!loopActive"
+                        :class="loopLevel > 6 ? 'emergency-pulse' : ''"
+                        class="px-4 py-3 bg-red-600 rounded-lg hover:bg-red-700 
+                               disabled:opacity-50 disabled:cursor-not-allowed
+                               transition-all duration-300"
+                        title="الخيط الأريادني - خروج طارئ">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    🆘 خروج طارئ
+                </button>
+            </div>
+            
+            <!-- System Status -->
+            <div class="mt-4 text-sm text-center">
+                <span x-show="!loopActive" class="text-green-400">✅ النظام مستقر</span>
+                <span x-show="loopActive && loopLevel <= 3" class="text-yellow-400">⚠️ تكرار خفيف</span>
+                <span x-show="loopActive && loopLevel > 3 && loopLevel <= 6" class="text-orange-400">🔥 تكرار متوسط</span>
+                <span x-show="loopActive && loopLevel > 6" class="text-red-400 animate-pulse">💀 حلقة مدمرة نشطة</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Educational Info -->
+    <div class="fixed top-6 left-6 max-w-md bg-black bg-opacity-60 rounded-lg p-4 text-white text-sm">
+        <h3 class="font-bold mb-2">🔬 آلية الحماية في CPF:</h3>
+        <ul class="space-y-1 text-xs">
+            <li>🔀 <strong>عامل التشويش:</strong> يكسر الأنماط التكرارية</li>
+            <li>🆘 <strong>الخيط الأريادني:</strong> عودة فورية للواقع</li>
+            <li>⚡ <strong>استنزاف الطاقة:</strong> يمنع استمرار الحلقة</li>
+            <li>🔄 <strong>مستويات التكرار:</strong> مراقبة شدة الحلقة</li>
+        </ul>
+    </div>
+
+    <script>
+        function recursiveLoopSimulation() {
+            return {
+                loopActive: false,
+                loopLevel: 0,
+                cognitiveEnergy: 100,
+                noiseCooldown: false,
+                
+                recursiveCircles: [],
+                thoughtBubbles: [],
+                
+                recursiveThoughts: [
+                    "ماذا يفكر أنني أفكر؟",
+                    "هل يعتقد أنني أعتقد أنه...؟",
+                    "ربما يظن أنني أظن أنه يظن...",
+                    "لكن ماذا لو كان يفكر أنني أفكر...",
+                    "وإذا كان يعلم أنني أعلم أنه يعلم...",
+                    "هذا لا ينتهي... لكن ماذا لو...",
+                    "لا يمكنني التوقف عن التفكير...",
+                    "هذا جنون... لكن ماذا إذا..."
+                ],
+                
+                init() {
+                    this.resetSimulation();
+                },
+                
+                startRecursiveLoop() {
+                    this.loopActive = true;
+                    this.runLoop();
+                },
+                
+                runLoop() {
+                    if (!this.loopActive) return;
+                    
+                    const loopInterval = setInterval(() => {
+                        if (!this.loopActive) {
+                            clearInterval(loopInterval);
+                            return;
+                        }
+                        
+                        this.loopLevel++;
+                        this.cognitiveEnergy = Math.max(5, this.cognitiveEnergy - (this.loopLevel * 2));
+                        
+                        // Add recursive circles
+                        if (this.recursiveCircles.length < 8) {
+                            this.recursiveCircles.push({
+                                id: Date.now() + Math.random(),
+                                radius: 120 + (this.recursiveCircles.length * 60)
+                            });
+                        }
+                        
+                        // Add thought bubbles
+                        this.addThoughtBubble();
+                        
+                        // Emergency stop if too dangerous
+                        if (this.loopLevel > 10 || this.cognitiveEnergy <= 10) {
+                            this.emergencyExit();
+                        }
+                        
+                    }, 1500 - (this.loopLevel * 100)); // Speed increases with level
+                },
+                
+                addThoughtBubble() {
+                    const thought = this.recursiveThoughts[Math.floor(Math.random() * this.recursiveThoughts.length)];
+                    const bubble = {
+                        id: Date.now() + Math.random(),
+                        text: thought,
+                        x: Math.random() * 70 + 10,
+                        y: Math.random() * 60 + 20,
+                        delay: Math.random() * 0.5
+                    };
+                    
+                    this.thoughtBubbles.push(bubble);
+                    
+                    // Remove old bubbles
+                    setTimeout(() => {
+                        this.thoughtBubbles = this.thoughtBubbles.filter(b => b.id !== bubble.id);
+                    }, 3000);
+                },
+                
+                activateNoiseFactor() {
+                    if (this.noiseCooldown) return;
+                    
+                    this.noiseCooldown = true;
+                    
+                    // Add random positive interruption
+                    const positiveThoughts = [
+                        "🎵 أسمع موسيقى جميلة...",
+                        "☕ رائحة القهوة...",
+                        "🌅 منظر الشروق رائع...",
+                        "📱 رسالة من صديق...",
+                        "🐱 قطة تمر بالشارع..."
+                    ];
+                    
+                    const randomThought = positiveThoughts[Math.floor(Math.random() * positiveThoughts.length)];
+                    this.thoughtBubbles.push({
+                        id: 'noise-' + Date.now(),
+                        text: randomThought,
+                        x: 50,
+                        y: 30,
+                        delay: 0
+                    });
+                    
+                    // Reduce loop intensity
+                    this.loopLevel = Math.max(0, this.loopLevel - 2);
+                    this.cognitiveEnergy = Math.min(100, this.cognitiveEnergy + 15);
+                    
+                    // Remove some circles
+                    this.recursiveCircles.splice(0, 2);
+                    
+                    setTimeout(() => {
+                        this.noiseCooldown = false;
+                    }, 3000);
+                },
+                
+                emergencyExit() {
+                    this.loopActive = false;
+                    
+                    // Clear all thought bubbles
+                    this.thoughtBubbles = [{
+                        id: 'emergency',
+                        text: '🆘 تم تفعيل الخيط الأريادني - عودة للواقع الآمن',
+                        x: 50,
+                        y: 50,
+                        delay: 0
+                    }];
+                    
+                    // Reset after emergency
+                    setTimeout(() => {
+                        this.resetSimulation();
+                    }, 3000);
+                },
+                
+                resetSimulation() {
+                    this.loopActive = false;
+                    this.loopLevel = 0;
+                    this.cognitiveEnergy = 100;
+                    this.recursiveCircles = [];
+                    this.thoughtBubbles = [];
+                    this.noiseCooldown = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

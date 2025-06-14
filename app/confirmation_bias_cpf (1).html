@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التحيز التأكيدي - محاكاة CPF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-gentle': 'bounce 2s infinite',
+                        'spin-slow': 'spin 4s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+        body { font-family: 'Amiri', serif; }
+        
+        .gradient-mask {
+            mask: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+            -webkit-mask: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        .reject-glow {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white">
+    
+    <div x-data="confirmationBiasSimulation()" class="container mx-auto px-4 py-8">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                🧠 التحيز التأكيدي في إطار CPF
+            </h1>
+            <p class="text-lg text-gray-300">كيف تؤثر معتقداتنا المسبقة على معالجة المعلومات</p>
+        </div>
+
+        <!-- Current Belief Display -->
+        <div class="mb-8 p-6 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-xl border border-blue-500/30">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                💡 المعتقد الحالي
+                <span class="ml-2 text-sm text-gray-400">(يؤثر على كل المعالجة)</span>
+            </h2>
+            <div class="flex flex-wrap gap-2">
+                <template x-for="belief in beliefs" :key="belief.id">
+                    <button 
+                        @click="currentBelief = belief"
+                        :class="currentBelief.id === belief.id ? 'bg-blue-500 glow' : 'bg-gray-700 hover:bg-gray-600'"
+                        class="px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105"
+                        x-text="belief.name">
+                    </button>
+                </template>
+            </div>
+            <div class="mt-4 p-4 bg-blue-900/20 rounded-lg border border-blue-400/30">
+                <p class="text-blue-300" x-text="currentBelief.description"></p>
+            </div>
+        </div>
+
+        <!-- Information Stream -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            
+            <!-- Incoming Information -->
+            <div class="space-y-6">
+                <h2 class="text-xl font-bold flex items-center">
+                    📡 تدفق المعلومات
+                    <button @click="generateRandomInfo()" class="ml-4 px-3 py-1 bg-green-600 hover:bg-green-500 rounded text-sm transition-colors">
+                        معلومة جديدة
+                    </button>
+                </h2>
+                
+                <template x-for="info in incomingInfo" :key="info.id">
+                    <div 
+                        class="p-4 rounded-xl border-2 transition-all duration-500 transform hover:scale-102"
+                        :class="getInfoCardClass(info)"
+                        x-show="info.visible"
+                        x-transition:enter="transition ease-out duration-500"
+                        x-transition:enter-start="opacity-0 translate-y-8"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="text-2xl" x-text="info.icon"></span>
+                            <span class="text-sm font-medium px-2 py-1 rounded" 
+                                  :class="info.alignment === 'supporting' ? 'bg-green-900/50 text-green-300' : 
+                                         info.alignment === 'challenging' ? 'bg-red-900/50 text-red-300' : 
+                                         'bg-yellow-900/50 text-yellow-300'"
+                                  x-text="getAlignmentText(info.alignment)">
+                            </span>
+                        </div>
+                        
+                        <p class="text-gray-200 mb-4" x-text="info.content"></p>
+                        
+                        <div class="flex gap-2">
+                            <button @click="processInfo(info, 'accept')" 
+                                    class="flex-1 py-2 px-3 bg-green-600 hover:bg-green-500 rounded transition-colors text-sm">
+                                ✅ قبول
+                            </button>
+                            <button @click="processInfo(info, 'reject')" 
+                                    class="flex-1 py-2 px-3 bg-red-600 hover:bg-red-500 rounded transition-colors text-sm">
+                                ❌ رفض
+                            </button>
+                            <button @click="processInfo(info, 'ignore')" 
+                                    class="flex-1 py-2 px-3 bg-gray-600 hover:bg-gray-500 rounded transition-colors text-sm">
+                                🙈 تجاهل
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- CPF Processing Visualization -->
+            <div class="space-y-6">
+                <h2 class="text-xl font-bold">🔄 معالجة CPF</h2>
+                
+                <!-- Middleware Filter -->
+                <div class="p-4 bg-gradient-to-r from-orange-900/30 to-red-900/30 rounded-xl border border-orange-500/30">
+                    <h3 class="font-bold mb-2 flex items-center">
+                        🚧 Middleware - طبقة التصفية
+                        <div class="ml-auto w-16 h-2 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-orange-400 to-red-400 transition-all duration-1000"
+                                 :style="`width: ${filterStrength}%`"></div>
+                        </div>
+                    </h3>
+                    <p class="text-sm text-gray-300">قوة الفلتر: <span x-text="Math.round(filterStrength)"></span>%</p>
+                    <p class="text-xs text-gray-400 mt-1">المعلومات المؤيدة تمر بسهولة، المعارضة تُرفض</p>
+                </div>
+
+                <!-- Simulators -->
+                <div class="space-y-3">
+                    <h3 class="font-bold">🎭 المحاكيات</h3>
+                    <template x-for="simulator in simulators" :key="simulator.name">
+                        <div class="p-3 bg-gray-800/50 rounded-lg border border-gray-600/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-medium" x-text="simulator.icon + ' ' + simulator.name"></span>
+                                <div class="w-12 h-2 bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-blue-400 transition-all duration-500"
+                                         :style="`width: ${simulator.activity}%`"></div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400" x-text="simulator.status"></p>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Bias Indicators -->
+                <div class="p-4 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-xl border border-purple-500/30">
+                    <h3 class="font-bold mb-3">⚠️ مؤشرات التحيز</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>معلومات مقبولة مؤيدة:</span>
+                            <span class="text-green-400" x-text="stats.acceptedSupporting"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>معلومات مرفوضة معارضة:</span>
+                            <span class="text-red-400" x-text="stats.rejectedChallenging"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>معدل التحيز:</span>
+                            <span class="font-bold" 
+                                  :class="getBiasRateColor()"
+                                  x-text="getBiasRate() + '%'"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Processed Information Archive -->
+        <div class="p-6 bg-gradient-to-r from-slate-800/30 to-gray-800/30 rounded-xl border border-gray-500/30">
+            <h2 class="text-xl font-bold mb-4">📚 أرشيف المعلومات المعالجة</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <template x-for="processed in processedInfo" :key="processed.id">
+                    <div class="p-3 rounded-lg text-sm border-l-4 transition-all duration-300 hover:scale-105"
+                         :class="getProcessedCardClass(processed)">
+                        <div class="flex items-center justify-between mb-1">
+                            <span x-text="processed.icon"></span>
+                            <span class="text-xs font-medium" x-text="getActionText(processed.action)"></span>
+                        </div>
+                        <p class="text-xs text-gray-300 truncate" x-text="processed.content"></p>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Ariadne Thread Safety Monitor -->
+        <div class="mt-8 p-4 bg-gradient-to-r from-indigo-900/30 to-cyan-900/30 rounded-xl border border-indigo-500/30"
+             x-show="stats.rejectedChallenging > 3"
+             x-transition:enter="transition ease-out duration-500"
+             x-transition:enter-start="opacity-0 translate-y-4">
+            <h3 class="font-bold mb-2 flex items-center text-yellow-400">
+                ⚡ تحذير الخيط الأريادني
+                <div class="ml-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+            </h3>
+            <p class="text-sm text-gray-300">تم اكتشاف تحيز تأكيدي قوي! يُنصح بفحص المعتقدات الحالية وفتح المجال للمعلومات المتنوعة.</p>
+            <button @click="resetBias()" 
+                    class="mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded transition-colors text-sm">
+                🔄 إعادة ضبط التحيز
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function confirmationBiasSimulation() {
+            return {
+                currentBelief: null,
+                beliefs: [
+                    {
+                        id: 'tech_optimist',
+                        name: 'التفاؤل التكنولوجي',
+                        description: 'أؤمن أن التكنولوجيا ستحل كل مشاكل البشرية'
+                    },
+                    {
+                        id: 'health_natural',
+                        name: 'الطب الطبيعي',
+                        description: 'الطبيعة أفضل من الطب الحديث في العلاج'
+                    },
+                    {
+                        id: 'economic_growth',
+                        name: 'النمو الاقتصادي',
+                        description: 'النمو الاقتصادي هو الحل لكل المشاكل الاجتماعية'
+                    }
+                ],
+                incomingInfo: [],
+                processedInfo: [],
+                filterStrength: 70,
+                stats: {
+                    acceptedSupporting: 0,
+                    rejectedChallenging: 0,
+                    total: 0
+                },
+                simulators: [
+                    { name: 'معالج الواقع', icon: '👁️', activity: 60, status: 'يفضل المعلومات المؤيدة' },
+                    { name: 'محرك التنبؤ', icon: '🔮', activity: 45, status: 'يتنبأ بناءً على المعتقد' },
+                    { name: 'مُعيد البناء', icon: '🧩', activity: 55, status: 'يعيد صياغة المعارض' },
+                    { name: 'المنمذج الاجتماعي', icon: '👥', activity: 40, status: 'يبحث عن التأييد' }
+                ],
+                
+                informationDatabase: {
+                    tech_optimist: {
+                        supporting: [
+                            { icon: '🚀', content: 'ذكاء اصطناعي جديد يحل مشكلة تغير المناخ' },
+                            { icon: '💊', content: 'تقنية جديدة تعالج السرطان بنسبة نجاح 95%' },
+                            { icon: '🌍', content: 'روبوتات تنظف المحيطات من البلاستيك' }
+                        ],
+                        challenging: [
+                            { icon: '📱', content: 'دراسة: وسائل التواصل تزيد الاكتئاب بين الشباب' },
+                            { icon: '🤖', content: 'الذكاء الاصطناعي قد يلغي 40% من الوظائف' },
+                            { icon: '🔒', content: 'خروقات بيانات جديدة تهدد خصوصية الملايين' }
+                        ]
+                    },
+                    health_natural: {
+                        supporting: [
+                            { icon: '🌿', content: 'دراسة: الأعشاب الطبيعية فعالة ضد الالتهابات' },
+                            { icon: '🥗', content: 'النظام النباتي يقلل خطر أمراض القلب بـ30%' },
+                            { icon: '🧘', content: 'التأمل يحسن الصحة النفسية أكثر من الأدوية' }
+                        ],
+                        challenging: [
+                            { icon: '💉', content: 'اللقاحات منعت وفاة مليون طفل هذا العام' },
+                            { icon: '🏥', content: 'جراحة روبوتية تنقذ مريض من سرطان نادر' },
+                            { icon: '⚗️', content: 'عقار جديد يعكس أعراض الزهايمر تماماً' }
+                        ]
+                    },
+                    economic_growth: {
+                        supporting: [
+                            { icon: '📈', content: 'النمو الاقتصادي رفع مليار شخص من الفقر' },
+                            { icon: '💼', content: 'شركات جديدة توفر مليون فرصة عمل' },
+                            { icon: '🏗️', content: 'الاستثمار في البنية التحتية يحسن حياة المجتمعات' }
+                        ],
+                        challenging: [
+                            { icon: '🌡️', content: 'النمو الصناعي يسرع تغير المناخ' },
+                            { icon: '💔', content: 'الفجوة بين الأغنياء والفقراء تتزايد' },
+                            { icon: '🏭', content: 'التلوث الصناعي يهدد صحة الملايين' }
+                        ]
+                    }
+                },
+
+                init() {
+                    this.currentBelief = this.beliefs[0];
+                    this.generateRandomInfo();
+                },
+
+                generateRandomInfo() {
+                    if (!this.currentBelief) return;
+                    
+                    const beliefData = this.informationDatabase[this.currentBelief.id];
+                    const isSupporting = Math.random() > 0.4; // 60% chance supporting
+                    const sourceArray = isSupporting ? beliefData.supporting : beliefData.challenging;
+                    const info = sourceArray[Math.floor(Math.random() * sourceArray.length)];
+                    
+                    const newInfo = {
+                        id: Date.now(),
+                        ...info,
+                        alignment: isSupporting ? 'supporting' : 'challenging',
+                        visible: true
+                    };
+                    
+                    this.incomingInfo.unshift(newInfo);
+                    
+                    // Keep only last 3 items
+                    if (this.incomingInfo.length > 3) {
+                        this.incomingInfo = this.incomingInfo.slice(0, 3);
+                    }
+
+                    // Update simulators activity
+                    this.updateSimulatorActivity(newInfo);
+                },
+
+                updateSimulatorActivity(info) {
+                    this.simulators.forEach(sim => {
+                        if (info.alignment === 'supporting') {
+                            sim.activity = Math.min(90, sim.activity + 10);
+                        } else {
+                            sim.activity = Math.max(20, sim.activity - 5);
+                        }
+                    });
+                },
+
+                processInfo(info, action) {
+                    // Remove from incoming
+                    this.incomingInfo = this.incomingInfo.filter(i => i.id !== info.id);
+                    
+                    // Add to processed
+                    this.processedInfo.unshift({
+                        ...info,
+                        action: action,
+                        timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
+                    });
+                    
+                    // Keep only last 12 processed items
+                    if (this.processedInfo.length > 12) {
+                        this.processedInfo = this.processedInfo.slice(0, 12);
+                    }
+                    
+                    // Update stats
+                    this.stats.total++;
+                    if (action === 'accept' && info.alignment === 'supporting') {
+                        this.stats.acceptedSupporting++;
+                    }
+                    if (action === 'reject' && info.alignment === 'challenging') {
+                        this.stats.rejectedChallenging++;
+                    }
+                    
+                    // Update filter strength based on bias
+                    if (action === 'reject' && info.alignment === 'challenging') {
+                        this.filterStrength = Math.min(95, this.filterStrength + 5);
+                    }
+                    if (action === 'accept' && info.alignment === 'challenging') {
+                        this.filterStrength = Math.max(30, this.filterStrength - 10);
+                    }
+                },
+
+                resetBias() {
+                    this.stats = { acceptedSupporting: 0, rejectedChallenging: 0, total: 0 };
+                    this.filterStrength = 50;
+                    this.processedInfo = [];
+                    this.simulators.forEach(sim => { sim.activity = 50; });
+                },
+
+                getInfoCardClass(info) {
+                    const base = 'border-gray-600/50 bg-gray-800/30';
+                    if (info.alignment === 'supporting') {
+                        return base + ' border-green-500/50 bg-green-900/10';
+                    } else if (info.alignment === 'challenging') {
+                        return base + ' border-red-500/50 bg-red-900/10 reject-glow';
+                    }
+                    return base;
+                },
+
+                getProcessedCardClass(processed) {
+                    if (processed.action === 'accept') {
+                        return processed.alignment === 'supporting' 
+                            ? 'bg-green-900/20 border-green-500' 
+                            : 'bg-blue-900/20 border-blue-500';
+                    } else if (processed.action === 'reject') {
+                        return 'bg-red-900/20 border-red-500';
+                    }
+                    return 'bg-gray-800/20 border-gray-500';
+                },
+
+                getAlignmentText(alignment) {
+                    return {
+                        'supporting': 'مؤيد',
+                        'challenging': 'معارض',
+                        'neutral': 'محايد'
+                    }[alignment] || 'غير محدد';
+                },
+
+                getActionText(action) {
+                    return {
+                        'accept': 'مقبول',
+                        'reject': 'مرفوض',
+                        'ignore': 'متجاهل'
+                    }[action] || 'غير محدد';
+                },
+
+                getBiasRate() {
+                    if (this.stats.total === 0) return 0;
+                    const biasedActions = this.stats.acceptedSupporting + this.stats.rejectedChallenging;
+                    return Math.round((biasedActions / this.stats.total) * 100);
+                },
+
+                getBiasRateColor() {
+                    const rate = this.getBiasRate();
+                    if (rate < 30) return 'text-green-400';
+                    if (rate < 60) return 'text-yellow-400';
+                    return 'text-red-400';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

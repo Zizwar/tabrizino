@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأثير الخيانة العاطفية على نظام CPF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        
+        .corrupted {
+            animation: heartbreak-glitch 2s infinite;
+            filter: hue-rotate(180deg) contrast(1.8) brightness(0.7);
+        }
+        
+        .doubtful {
+            animation: doubt-pulse 1.5s infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes heartbreak-glitch {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-3px) scaleX(0.95); }
+            40% { transform: translateX(3px) scaleY(0.95); }
+            60% { transform: translateX(-2px) scaleX(1.05); }
+            80% { transform: translateX(2px) scaleY(1.05); }
+        }
+        
+        @keyframes doubt-pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.95); }
+        }
+        
+        .heart-broken {
+            animation: broken-heart 3s infinite;
+        }
+        
+        @keyframes broken-heart {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-2deg) scale(0.98); }
+            50% { transform: rotate(2deg) scale(1.02); }
+            75% { transform: rotate(-1deg) scale(0.99); }
+        }
+        
+        .corrupted-memory {
+            background: linear-gradient(45deg, #dc2626, #ef4444, #1f2937, #dc2626);
+            background-size: 400% 400%;
+            animation: betrayal-gradient 2s ease infinite;
+        }
+        
+        @keyframes betrayal-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .love-memory {
+            background: linear-gradient(45deg, #ec4899, #f97316, #84cc16);
+            background-size: 200% 200%;
+            animation: love-gradient 4s ease infinite;
+        }
+        
+        @keyframes love-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .simulator-card {
+            transition: all 0.3s ease;
+        }
+        
+        .simulator-card:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .trust-broken {
+            filter: brightness(0.3) saturate(0.2);
+            border: 2px dashed #ef4444 !important;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .relationship-healthy {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-pink-900 to-slate-900 min-h-screen text-white" x-data="betrayalSimulation">
+    
+    <!-- Header -->
+    <header class="text-center py-6 border-b border-gray-700">
+        <h1 class="text-3xl font-bold mb-2">💔💕 تأثير الخيانة العاطفية على نظام CPF</h1>
+        <p class="text-gray-300">محاكاة: كيف تدمر الخيانة العاطفية إدراكنا وذاكرتنا وثقتنا</p>
+        <div class="mt-4 text-6xl" :class="betrayalActive ? 'heart-broken' : ''" x-text="betrayalActive ? '💔' : '💕'"></div>
+    </header>
+
+    <!-- Control Panel -->
+    <div class="container mx-auto px-4 py-6">
+        <div class="bg-gray-800 rounded-lg p-6 mb-6" :class="betrayalActive ? 'trust-broken' : 'relationship-healthy'">
+            <h3 class="text-xl font-semibold mb-4">🎮 لوحة التحكم</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <button @click="simulateRomance()" 
+                        class="bg-pink-600 hover:bg-pink-700 px-4 py-2 rounded transition-colors">
+                    💕 لحظة رومانسية
+                </button>
+                <button @click="simulateDoubt()" 
+                        class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded transition-colors">
+                    🤔 شك وريبة
+                </button>
+                <button @click="simulateBetrayal()" 
+                        class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition-colors">
+                    💔 اكتشاف الخيانة!
+                </button>
+                <button @click="reset()" 
+                        class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded transition-colors">
+                    🔄 علاقة جديدة
+                </button>
+            </div>
+        </div>
+
+        <!-- Relationship Status -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+            
+            <!-- Trust Matrix -->
+            <div class="bg-gray-800 rounded-lg p-6" :class="{ 'trust-broken': betrayalActive }">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    🔐 مصفوفة الثقة
+                    <span class="mr-2 text-sm" :class="trustLevel >= 0.7 ? 'text-green-400' : trustLevel >= 0.4 ? 'text-yellow-400' : 'text-red-400'">
+                        (<span x-text="Math.round(trustLevel * 100)"></span>%)
+                    </span>
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span>الشريك العاطفي</span>
+                        <div class="w-20 bg-gray-700 rounded-full h-2">
+                            <div class="h-2 rounded-full transition-all duration-1000" 
+                                 :style="`width: ${partnerTrust * 100}%`"
+                                 :class="betrayalActive ? 'corrupted-memory' : 'love-memory'"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>الذكريات المشتركة</span>
+                        <div class="w-20 bg-gray-700 rounded-full h-2">
+                            <div class="h-2 rounded-full transition-all duration-1000" 
+                                 :style="`width: ${memoryTrust * 100}%`"
+                                 :class="{ 'corrupted-memory': betrayalActive && memoryTrust < 0.3, 'love-memory': !betrayalActive }"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>الثقة في المستقبل</span>
+                        <div class="w-20 bg-gray-700 rounded-full h-2">
+                            <div class="h-2 rounded-full transition-all duration-1000" 
+                                 :style="`width: ${futureTrust * 100}%`"
+                                 :class="{ 'corrupted-memory': betrayalActive && futureTrust < 0.3, 'love-memory': !betrayalActive }"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>الثقة في الذات</span>
+                        <div class="w-20 bg-gray-700 rounded-full h-2">
+                            <div class="h-2 rounded-full transition-all duration-1000" 
+                                 :style="`width: ${selfTrust * 100}%`"
+                                 :class="{ 'corrupted-memory': betrayalActive && selfTrust < 0.3, 'love-memory': !betrayalActive }"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middleware Bridge -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">🌉 الجسر الإدراكي</h3>
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center text-2xl transition-all duration-500"
+                         :class="middlewareState === 'filtering' ? 'bg-green-600 animate-pulse' : 
+                                middlewareState === 'blocking' ? 'bg-red-600 corrupted' : 
+                                middlewareState === 'paranoid' ? 'bg-orange-600 doubtful' :
+                                'bg-yellow-600 doubtful'">
+                        <span x-text="middlewareState === 'filtering' ? '💕' : 
+                                     middlewareState === 'blocking' ? '🚫' : 
+                                     middlewareState === 'paranoid' ? '👁️' : '❓'"></span>
+                    </div>
+                    <p class="text-sm" x-text="middlewareState === 'filtering' ? 'يرشح بمحبة' : 
+                                              middlewareState === 'blocking' ? 'يحجب كل شيء!' : 
+                                              middlewareState === 'paranoid' ? 'مراقبة مفرطة' :
+                                              'يشك في كل شيء'"></p>
+                </div>
+            </div>
+
+            <!-- Emotional State -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">💖 الحالة العاطفية</h3>
+                <div class="text-center">
+                    <div class="text-3xl font-bold mb-2" :class="betrayalActive ? 'text-red-400 doubtful' : 'text-pink-400'">
+                        <span x-text="emotionalHealth"></span>%
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-4">
+                        <div class="h-4 rounded-full transition-all duration-1000"
+                             :style="`width: ${emotionalHealth}%`"
+                             :class="betrayalActive ? 'corrupted-memory' : 'love-memory'"></div>
+                    </div>
+                    <p class="text-xs mt-2 text-gray-400" x-text="betrayalActive ? 'قلب محطم' : 'قلب ينبض بالحب'"></p>
+                </div>
+            </div>
+
+            <!-- Self Copies Model -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">🪞 نموذج الذات</h3>
+                <div class="text-center">
+                    <div class="text-xl mb-2" x-text="selfImage"></div>
+                    <div class="text-sm text-gray-400" x-text="selfImageDescription"></div>
+                    <div class="mt-3 text-xs">
+                        <span x-text="betrayalActive ? 'هل أستحق الحب؟' : 'أنا محبوب ومقدر'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulators Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <template x-for="simulator in simulators" :key="simulator.id">
+                <div class="simulator-card bg-gray-800 rounded-lg p-4 border-2 transition-all duration-500"
+                     :class="simulator.corrupted ? 'border-red-500 corrupted-memory' : 
+                             simulator.doubtful ? 'border-yellow-500 doubtful' : 
+                             'border-gray-600'">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-semibold text-sm" x-text="simulator.name"></h4>
+                        <span class="text-lg" x-text="simulator.icon"></span>
+                    </div>
+                    <div class="text-xs text-gray-300 mb-2" x-text="simulator.status"></div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="h-2 rounded-full transition-all duration-1000"
+                             :style="`width: ${simulator.confidence * 100}%`"
+                             :class="simulator.corrupted ? 'bg-red-500 corrupted' : 
+                                    simulator.doubtful ? 'bg-yellow-500 doubtful' : 
+                                    'bg-pink-500'"></div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Agate Memory Timeline -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4">💎 ذاكرة العقيق - الخط الزمني العاطفي</h3>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <template x-for="(agate, index) in agateTimeline" :key="index">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500 cursor-pointer"
+                         :class="agate.corrupted ? 'bg-red-800 text-red-200 corrupted border-2 border-red-400' :
+                                agate.doubtful ? 'bg-yellow-800 text-yellow-200 doubtful border-2 border-yellow-400' :
+                                agate.color === 'white' ? 'bg-gray-300 text-gray-800' :
+                                agate.color === 'pink' ? 'bg-pink-600 text-white' :
+                                agate.color === 'red' ? 'bg-red-600 text-white' :
+                                agate.color === 'purple' ? 'bg-purple-600 text-white' :
+                                agate.color === 'blue' ? 'bg-blue-600 text-white' :
+                                agate.color === 'yellow' ? 'bg-yellow-600 text-white' :
+                                'bg-green-600 text-white'"
+                         @click="showAgateDetails(agate)"
+                         :title="agate.description">
+                        <span x-text="agate.corrupted ? '💀' : agate.doubtful ? '❓' : agate.emoji"></span>
+                    </div>
+                </template>
+            </div>
+            <div class="text-sm text-gray-400">
+                <span>💕 ذكريات الحب</span> • 
+                <span>💔 ذكريات ملوثة</span> • 
+                <span>❓ ذكريات مشكوك فيها</span> • 
+                <span>⚪ لحظات غير محسومة</span>
+            </div>
+        </div>
+
+        <!-- Events Log -->
+        <div class="bg-gray-800 rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">📋 سجل الأحداث العاطفية</h3>
+            <div class="max-h-40 overflow-y-auto space-y-2">
+                <template x-for="(event, index) in events" :key="index">
+                    <div class="text-sm p-2 rounded"
+                         :class="event.type === 'betrayal' ? 'bg-red-900 text-red-200' :
+                                event.type === 'doubt' ? 'bg-yellow-900 text-yellow-200' :
+                                event.type === 'corruption' ? 'bg-purple-900 text-purple-200' :
+                                event.type === 'romance' ? 'bg-pink-900 text-pink-200' :
+                                'bg-green-900 text-green-200'">
+                        <span class="text-xs text-gray-400" x-text="event.time"></span> - 
+                        <span x-text="event.message"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('betrayalSimulation', () => ({
+                // Trust Matrix Values
+                trustLevel: 0.9,
+                partnerTrust: 0.9,
+                memoryTrust: 0.9,
+                futureTrust: 0.8,
+                selfTrust: 0.8,
+                
+                // Emotional States
+                betrayalActive: false,
+                doubtPhase: false,
+                emotionalHealth: 85,
+                selfImage: '😊 واثق ومحبوب',
+                selfImageDescription: 'أرى نفسي جذاباً ومستحقاً للحب',
+                middlewareState: 'filtering', // filtering, blocking, doubtful, paranoid
+                
+                // Simulators
+                simulators: [
+                    { id: 1, name: 'معالج الواقع', icon: '👁️', confidence: 0.9, status: 'يرى الحب في كل مكان', corrupted: false, doubtful: false },
+                    { id: 2, name: 'محرك التنبؤ', icon: '🔮', confidence: 0.8, status: 'يتوقع مستقبل سعيد', corrupted: false, doubtful: false },
+                    { id: 3, name: 'مُعيد بناء الذاكرة', icon: '🧠', confidence: 0.9, status: 'يستدعي ذكريات جميلة', corrupted: false, doubtful: false },
+                    { id: 4, name: 'نموذج اجتماعي', icon: '👥', confidence: 0.7, status: 'يثق في النوايا', corrupted: false, doubtful: false },
+                    { id: 5, name: 'مستكشف الأنماط', icon: '🔍', confidence: 0.8, status: 'يرى إشارات الحب', corrupted: false, doubtful: false },
+                    { id: 6, name: 'مراقب العواطف', icon: '💝', confidence: 0.9, status: 'يراقب مشاعر الحب', corrupted: false, doubtful: false }
+                ],
+                
+                // Agate Memory Timeline
+                agateTimeline: [
+                    { color: 'pink', emoji: '💕', description: 'أول لقاء - سحر من أول نظرة', corrupted: false, doubtful: false },
+                    { color: 'purple', emoji: '💜', description: 'قضاء وقت جميل معاً', corrupted: false, doubtful: false },
+                    { color: 'red', emoji: '❤️', description: 'كلمات حب عميقة', corrupted: false, doubtful: false },
+                    { color: 'pink', emoji: '💕', description: 'خطط للمستقبل', corrupted: false, doubtful: false },
+                    { color: 'yellow', emoji: '🌟', description: 'لحظة سعادة مطلقة', corrupted: false, doubtful: false },
+                    { color: 'white', emoji: '🤍', description: 'لحظة غامضة', corrupted: false, doubtful: false }
+                ],
+                
+                // Events Log
+                events: [
+                    { time: '09:00', message: '💕 بداية يوم جميل مع من نحب', type: 'romance' },
+                    { time: '09:30', message: '🌸 رسالة حب صباحية', type: 'romance' }
+                ],
+                
+                // Methods
+                simulateRomance() {
+                    if (!this.betrayalActive) {
+                        this.addEvent('💕 لحظة رومانسية جميلة - تقوية الروابط', 'romance');
+                        
+                        // تحسن في كل المقاييس
+                        this.partnerTrust = Math.min(1, this.partnerTrust + 0.05);
+                        this.memoryTrust = Math.min(1, this.memoryTrust + 0.03);
+                        this.emotionalHealth = Math.min(100, this.emotionalHealth + 5);
+                        this.updateTrustLevel();
+                        
+                        // تحديث المحاكيات
+                        this.simulators.forEach(sim => {
+                            sim.confidence = Math.min(1, sim.confidence + 0.05);
+                            sim.status = sim.name.includes('معالج') ? 'يرى الحب في كل مكان' :
+                                        sim.name.includes('محرك') ? 'يتوقع مستقبل سعيد' :
+                                        sim.name.includes('ذاكرة') ? 'يستدعي ذكريات جميلة' :
+                                        sim.name.includes('اجتماعي') ? 'يثق في النوايا' :
+                                        sim.name.includes('أنماط') ? 'يرى إشارات الحب' :
+                                        'يراقب مشاعر الحب';
+                        });
+                        
+                        // إضافة عقيق حب جديد
+                        const loveColors = ['pink', 'purple', 'red'];
+                        const loveEmojis = ['💕', '💜', '❤️'];
+                        const colorIndex = Math.floor(Math.random() * loveColors.length);
+                        
+                        this.agateTimeline.push({
+                            color: loveColors[colorIndex],
+                            emoji: loveEmojis[colorIndex],
+                            description: 'لحظة حب جديدة',
+                            corrupted: false,
+                            doubtful: false
+                        });
+                    } else {
+                        // بعد الخيانة - حتى اللحظات الجميلة مشكوك فيها
+                        this.addEvent('💔 حتى اللحظات الجميلة أصبحت مشكوك فيها', 'doubt');
+                        this.agateTimeline.push({
+                            color: 'white',
+                            emoji: '❓',
+                            description: 'لحظة مشكوك في صدقها',
+                            corrupted: false,
+                            doubtful: true
+                        });
+                    }
+                },
+                
+                simulateDoubt() {
+                    this.doubtPhase = true;
+                    this.addEvent('🤔 بداية الشك - شيء ما ليس على ما يرام', 'doubt');
+                    
+                    // انخفاض طفيف في الثقة
+                    this.partnerTrust = Math.max(0.3, this.partnerTrust - 0.2);
+                    this.futureTrust = Math.max(0.4, this.futureTrust - 0.15);
+                    this.updateTrustLevel();
+                    
+                    // تغيير حالة Middleware
+                    this.middlewareState = 'doubtful';
+                    
+                    // بعض المحاكيات تصبح مشكوك فيها
+                    this.simulators.forEach((sim, index) => {
+                        if (index < 3) { // أول 3 محاكيات
+                            sim.doubtful = true;
+                            sim.confidence = Math.max(0.4, sim.confidence - 0.3);
+                            sim.status = 'يبحث عن إشارات الخطر';
+                        }
+                    });
+                    
+                    // إفساد بعض ذكريات العقيق
+                    this.agateTimeline.forEach(agate => {
+                        if (agate.color === 'white' || Math.random() > 0.7) {
+                            agate.doubtful = true;
+                            if (agate.color === 'white') {
+                                agate.description = 'لحظة مشكوك فيها - ماذا حدث حقاً؟';
+                            }
+                        }
+                    });
+                    
+                    setTimeout(() => {
+                        this.middlewareState = 'paranoid';
+                        this.addEvent('👁️ دخول في مرحلة المراقبة المفرطة', 'doubt');
+                    }, 2000);
+                },
+                
+                simulateBetrayal() {
+                    this.betrayalActive = true;
+                    this.doubtPhase = false;
+                    this.addEvent('💔💔💔 اكتشاف الخيانة! تدمير كامل للثقة', 'betrayal');
+                    
+                    // انهيار فوري في كل شيء
+                    this.partnerTrust = 0.05;
+                    this.memoryTrust = 0.1;
+                    this.futureTrust = 0.1;
+                    this.selfTrust = 0.3;
+                    this.emotionalHealth = 15;
+                    this.updateTrustLevel();
+                    
+                    // تغيير صورة الذات
+                    this.selfImage = '😭 محطم وغير مرغوب';
+                    this.selfImageDescription = 'ربما لا أستحق الحب... ماذا بي؟';
+                    
+                    // تغيير حالة Middleware
+                    this.middlewareState = 'blocking';
+                    
+                    setTimeout(() => {
+                        this.addEvent('🧠 تلويث شامل للذكريات والمحاكيات', 'corruption');
+                        
+                        // إفساد كل المحاكيات
+                        this.simulators.forEach(sim => {
+                            sim.corrupted = true;
+                            sim.doubtful = false;
+                            sim.confidence = Math.random() * 0.3 + 0.1;
+                            sim.status = sim.name.includes('معالج') ? 'يرى الخيانة في كل مكان' :
+                                        sim.name.includes('محرك') ? 'يتوقع المزيد من الألم' :
+                                        sim.name.includes('ذاكرة') ? 'يستدعي ذكريات الألم فقط' :
+                                        sim.name.includes('اجتماعي') ? 'لا يثق في أحد' :
+                                        sim.name.includes('أنماط') ? 'يرى إشارات الخطر فقط' :
+                                        'يراقب علامات الخيانة';
+                        });
+                        
+                        // تلويث ذاكرة العقيق
+                        this.agateTimeline.forEach(agate => {
+                            if (agate.color === 'pink' || agate.color === 'purple' || agate.color === 'red') {
+                                if (Math.random() > 0.3) {
+                                    agate.corrupted = true;
+                                    agate.description += ' (هل كان كله كذب؟)';
+                                    agate.emoji = '💀';
+                                }
+                            } else if (agate.color === 'white') {
+                                agate.doubtful = true;
+                                agate.description = 'لحظة مشكوك فيها - ربما كان يخونني حتى هنا';
+                                agate.emoji = '❓';
+                            }
+                        });
+                        
+                        this.addEvent('💭 حتى أجمل الذكريات أصبحت ملوثة بالشك', 'corruption');
+                        
+                    }, 1500);
+                    
+                    setTimeout(() => {
+                        this.middlewareState = 'paranoid';
+                        this.addEvent('👁️ النظام في حالة مراقبة مفرطة دائمة', 'corruption');
+                    }, 3000);
+                },
+                
+                reset() {
+                    this.betrayalActive = false;
+                    this.doubtPhase = false;
+                    this.partnerTrust = 0.9;
+                    this.memoryTrust = 0.9;
+                    this.futureTrust = 0.8;
+                    this.selfTrust = 0.8;
+                    this.emotionalHealth = 85;
+                    this.updateTrustLevel();
+                    
+                    // إعادة تعيين صورة الذات
+                    this.selfImage = '😊 واثق ومحبوب';
+                    this.selfImageDescription = 'أرى نفسي جذاباً ومستحقاً للحب';
+                    this.middlewareState = 'filtering';
+                    
+                    // إعادة تعيين المحاكيات
+                    this.simulators.forEach((sim, index) => {
+                        sim.corrupted = false;
+                        sim.doubtful = false;
+                        sim.confidence = 0.8 + Math.random() * 0.2;
+                        sim.status = sim.name.includes('معالج') ? 'يرى الحب في كل مكان' :
+                                    sim.name.includes('محرك') ? 'يتوقع مستقبل سعيد' :
+                                    sim.name.includes('ذاكرة') ? 'يستدعي ذكريات جميلة' :
+                                    sim.name.includes('اجتماعي') ? 'يثق في النوايا' :
+                                    sim.name.includes('أنماط') ? 'يرى إشارات الحب' :
+                                    'يراقب مشاعر الحب';
+                    });
+                    
+                    // إعادة تعيين ذاكرة العقيق
+                    this.agateTimeline = [
+                        { color: 'pink', emoji: '💕', description: 'أول لقاء - سحر من أول نظرة', corrupted: false, doubtful: false },
+                        { color: 'purple', emoji: '💜', description: 'قضاء وقت جميل معاً', corrupted: false, doubtful: false },
+                        { color: 'red', emoji: '❤️', description: 'كلمات حب عميقة', corrupted: false, doubtful: false },
+                        { color: 'pink', emoji: '💕', description: 'خطط للمستقبل', corrupted: false, doubtful: false },
+                        { color: 'yellow', emoji: '🌟', description: 'لحظة سعادة مطلقة', corrupted: false, doubtful: false },
+                        { color: 'white', emoji: '🤍', description: 'لحظة غامضة', corrupted: false, doubtful: false }
+                    ];
+                    
+                    this.events = [
+                        { time: this.getCurrentTime(), message: '🌅 بداية علاقة جديدة مليئة بالأمل', type: 'romance' }
+                    ];
+                },
+                
+                updateTrustLevel() {
+                    this.trustLevel = (this.partnerTrust + this.memoryTrust + this.futureTrust + this.selfTrust) / 4;
+                },
+                
+                addEvent(message, type) {
+                    this.events.unshift({
+                        time: this.getCurrentTime(),
+                        message: message,
+                        type: type
+                    });
+                    
+                    if (this.events.length > 12) {
+                        this.events.pop();
+                    }
+                },
+                
+                getCurrentTime() {
+                    return new Date().toLocaleTimeString('ar', { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                },
+                
+                showAgateDetails(agate) {
+                    const statusText = agate.corrupted ? 'ذكرى ملوثة بالخيانة - هل كان كله كذب؟' : 
+                                      agate.doubtful ? 'ذكرى مشكوك في صدقها' : 
+                                      'ذكرى سليمة وجميلة';
+                                      
+                    const emotionalImpact = agate.corrupted ? 'تسبب ألم شديد عند التذكر' :
+                                           agate.doubtful ? 'تثير القلق والشك' :
+                                           'تبعث على السعادة والدفء';
+                                           
+                    alert(`💎 تفاصيل العقيق العاطفي:\n\n${agate.emoji} ${agate.description}\n\n📊 الحالة: ${statusText}\n\n💭 التأثير العاطفي: ${emotionalImpact}`);
+                }
+            }))
+        })
+    </script>
+                    

@@ -390,4 +390,133 @@
                     
                     this.lastVotingResult = votes;
                     
-                    // Determine if it sh
+                    // Determine if it should be measured or white
+                    const avgSignificance = votes.reduce((sum, v) => sum + v.significance, 0) / votes.length;
+                    const shouldMeasure = avgSignificance > 0.6;
+                    
+                    const newAgate = {
+                        type: shouldMeasure ? 'measured' : 'white',
+                        content: this.newExperience.content,
+                        color: shouldMeasure ? this.getColorHex(this.newExperience.suggestedColor) : '#ffffff',
+                        significance: shouldMeasure ? avgSignificance : undefined,
+                        position: this.timeline.length,
+                        timestamp: Date.now()
+                    };
+                    
+                    this.timeline.push(newAgate);
+                    this.newExperience.content = '';
+                },
+                
+                reinterpretWhiteAgate() {
+                    this.timeline.forEach(item => {
+                        if (item.type === 'white' && !item.compressed) {
+                            // Add speculation based on context
+                            item.speculation = this.generateSpeculation(item);
+                        }
+                    });
+                    this.showSpeculation = true;
+                },
+                
+                generateSpeculation(item) {
+                    const scenarios = [
+                        { scenario: 'رحلة بالحافلة', confidence: 0.8 },
+                        { scenario: 'رحلة بسيارة أجرة', confidence: 0.6 },
+                        { scenario: 'رحلة بالقطار', confidence: 0.5 },
+                        { scenario: 'المشي واستكشاف', confidence: 0.4 }
+                    ];
+                    
+                    return scenarios.filter(() => Math.random() > 0.3);
+                },
+                
+                compressWhiteSequences() {
+                    let compressed = [];
+                    let i = 0;
+                    
+                    while (i < this.timeline.length) {
+                        const current = this.timeline[i];
+                        
+                        if (current.type === 'white' && !current.compressed) {
+                            let count = 1;
+                            let j = i + 1;
+                            
+                            while (j < this.timeline.length && 
+                                   this.timeline[j].type === 'white' && 
+                                   !this.timeline[j].compressed) {
+                                count++;
+                                j++;
+                            }
+                            
+                            if (count > 2) {
+                                compressed.push({
+                                    ...current,
+                                    compressed: true,
+                                    count: count,
+                                    content: `${count} أحداث غير محسومة`
+                                });
+                                i = j;
+                            } else {
+                                compressed.push(current);
+                                i++;
+                            }
+                        } else {
+                            compressed.push(current);
+                            i++;
+                        }
+                    }
+                    
+                    this.timeline = compressed;
+                },
+                
+                generateRandomExperience() {
+                    const experiences = [
+                        'لقاء مع صديق',
+                        'قراءة كتاب ملهم',
+                        'مشاهدة غروب الشمس',
+                        'محادثة عميقة',
+                        'اكتشاف مكان جديد',
+                        'لحظة تأمل',
+                        'حل مشكلة معقدة',
+                        'تعلم شيء جديد'
+                    ];
+                    
+                    this.newExperience.content = experiences[Math.floor(Math.random() * experiences.length)];
+                    this.newExperience.suggestedColor = this.agateColors[Math.floor(Math.random() * this.agateColors.length)].name;
+                    this.addExperience();
+                },
+                
+                clearTimeline() {
+                    if (confirm('هل أنت متأكد من مسح الخط الزمني؟')) {
+                        this.timeline = [];
+                        this.selectedItem = null;
+                        this.lastVotingResult = null;
+                    }
+                },
+                
+                getColorClass(colorName) {
+                    const colorMap = {
+                        yellow: 'bg-yellow-400',
+                        blue: 'bg-blue-500',
+                        red: 'bg-red-500',
+                        green: 'bg-green-500',
+                        purple: 'bg-purple-500',
+                        pink: 'bg-pink-500'
+                    };
+                    return colorMap[colorName] || 'bg-gray-500';
+                },
+                
+                getColorHex(colorName) {
+                    const colorMap = {
+                        yellow: '#ffd700',
+                        blue: '#4169e1',
+                        red: '#ff6347',
+                        green: '#32cd32',
+                        purple: '#9370db',
+                        pink: '#ff69b4'
+                    };
+                    return colorMap[colorName] || '#ffffff';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -3,389 +3,741 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPF~ - محاكاة إدراك الصرصار</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webppl/0.9.15/webppl.min.js"></script>
+    <title>دليل إدراك الصرصار - CPF v6.0</title>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            color: #e0e6ed;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        
+        body { font-family: 'Cairo', sans-serif; }
+        
+        /* Animation Classes */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.05);
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes slide-right {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes scale-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .pulse-glow { animation: pulse-glow 2s infinite; }
+        .float { animation: float 3s ease-in-out infinite; }
+        .slide-right { animation: slide-right 0.5s ease-out; }
+        .scale-pulse { animation: scale-pulse 1s infinite; }
+        
+        /* Custom gradient backgrounds */
+        .bg-neural { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .bg-danger { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); }
+        .bg-safe { background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%); }
+        .bg-explore { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        
+        /* SVG Animations */
+        .cockroach-body { animation: float 2s ease-in-out infinite; }
+        .antenna { animation: scale-pulse 1.5s ease-in-out infinite; }
+        .neural-pulse { animation: pulse-glow 1s infinite; }
+        
+        /* Progress Bar Animation */
+        .progress-fill {
+            transition: width 0.3s ease-in-out;
+        }
+        
+        /* Glowing orbs */
+        .probability-orb {
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            border: 2px solid rgba(255,255,255,0.3);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .title h1 {
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #64b5f6, #42a5f5, #2196f3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-        
-        .cockroach-world {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .perception-panel, .controls-panel {
-            background: rgba(255,255,255,0.08);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .cockroach-arena {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(45deg, #2d4a3e, #1a2f24);
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #4caf50;
-            margin-bottom: 20px;
-        }
-        
-        .cockroach {
-            width: 30px;
-            height: 20px;
-            background: #8d6e63;
-            border-radius: 50% 50% 20% 20%;
-            position: absolute;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .cockroach::before {
-            content: '';
-            position: absolute;
-            width: 6px;
-            height: 15px;
-            background: #5d4037;
-            border-radius: 50%;
-            top: -8px;
-            left: 12px;
-        }
-        
-        .threat {
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle, #f44336, #d32f2f);
-            border-radius: 50%;
-            position: absolute;
-            cursor: pointer;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-        
-        .perception-data {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-        
-        .probability-bar {
-            margin: 10px 0;
-        }
-        
-        .probability-bar label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .bar-container {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            height: 20px;
-        }
-        
-        .bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4caf50, #66bb6a);
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
-        
-        .controls button {
-            background: linear-gradient(45deg, #2196f3, #42a5f5);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 5px;
-            font-size: 1em;
-            transition: all 0.3s ease;
-        }
-        
-        .controls button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
-        }
-        
-        .webppl-output {
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            font-family: 'Courier New', monospace;
-            border-left: 4px solid #2196f3;
-        }
-        
-        .warning {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            text-align: center;
         }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 min-h-screen">
 
-<div class="container" x-data="cockroachSimulation()">
-    <div class="title">
-        <h1>CPF~ محاكاة إدراك الصرصار</h1>
-        <p>WebPPL + Alpine.js = برمجة احتمالية تفاعلية</p>
+<div x-data="cockroachCognition()" class="container mx-auto px-4 py-8">
+    
+    <!-- Header with animated cockroach -->
+    <div class="text-center mb-12">
+        <div class="relative inline-block">
+            <svg width="120" height="80" viewBox="0 0 120 80" class="cockroach-body">
+                <!-- Cockroach body -->
+                <ellipse cx="60" cy="40" rx="35" ry="15" fill="#654321" stroke="#4a3728" stroke-width="2"/>
+                
+                <!-- Head -->
+                <ellipse cx="25" cy="40" rx="12" ry="10" fill="#8b6f3e" stroke="#4a3728" stroke-width="1.5"/>
+                
+                <!-- Antennae -->
+                <path d="M15 35 Q5 25 8 20" stroke="#4a3728" stroke-width="2" fill="none" class="antenna"/>
+                <path d="M15 45 Q5 55 8 60" stroke="#4a3728" stroke-width="2" fill="none" class="antenna"/>
+                
+                <!-- Legs -->
+                <g stroke="#4a3728" stroke-width="2" fill="none">
+                    <path d="M40 50 L35 65"/>
+                    <path d="M55 52 L50 67"/>
+                    <path d="M70 52 L75 67"/>
+                    <path d="M85 50 L90 65"/>
+                    <path d="M40 30 L35 15"/>
+                    <path d="M85 30 L90 15"/>
+                </g>
+                
+                <!-- Eyes -->
+                <circle cx="20" cy="38" r="2" fill="#ff0000"/>
+                <circle cx="20" cy="42" r="2" fill="#ff0000"/>
+                
+                <!-- Neural activity visualization -->
+                <g class="neural-pulse">
+                    <circle cx="45" cy="35" r="3" fill="rgba(255,215,0,0.6)" opacity="0.7"/>
+                    <circle cx="55" cy="42" r="2" fill="rgba(255,215,0,0.6)" opacity="0.5"/>
+                    <circle cx="70" cy="38" r="2.5" fill="rgba(255,215,0,0.6)" opacity="0.8"/>
+                </g>
+            </svg>
+        </div>
+        
+        <h1 class="text-4xl font-bold text-amber-800 mt-4 mb-2">دليل إدراك الصرصار التفاعلي</h1>
+        <p class="text-lg text-amber-700">استكشف كيف يعمل النظام المعرفي المحسن مع الكائنات البدائية</p>
+        <div class="text-sm text-amber-600 mt-2">الطبقة المعرفية: 1 - الوعي السياقي البسيط</div>
     </div>
 
-    <div class="cockroach-world">
-        <div class="perception-panel">
-            <h3>🧠 البيانات الإدراكية الاحتمالية</h3>
-            
-            <div class="cockroach-arena" @click="addThreat($event)">
-                <div class="cockroach" 
-                     :style="`left: ${cockroach.x}px; top: ${cockroach.y}px; transform: rotate(${cockroach.angle}deg)`"
-                     @click.stop="moveCockroach()">
+    <!-- Scenario Selection -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">اختر سيناريو الاختبار</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <template x-for="(scenario, key) in scenarios" :key="key">
+                <button 
+                    @click="selectScenario(key)"
+                    :class="selectedScenario === key ? 'ring-4 ring-amber-400 bg-amber-100' : 'hover:bg-gray-50'"
+                    class="p-6 rounded-xl border-2 border-gray-200 transition-all duration-300 transform hover:scale-105">
+                    
+                    <div class="text-3xl mb-3" x-text="scenario.icon"></div>
+                    <h3 class="font-bold text-gray-800 mb-2" x-text="scenario.title"></h3>
+                    <p class="text-sm text-gray-600" x-text="scenario.description"></p>
+                    
+                    <!-- Mini probability indicators -->
+                    <div class="flex justify-between mt-4 text-xs">
+                        <div class="text-center">
+                            <div class="w-4 h-4 bg-red-500 rounded-full mx-auto mb-1" 
+                                 :style="`opacity: ${scenario.risk}`"></div>
+                            <span>خطر</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-4 h-4 bg-orange-500 rounded-full mx-auto mb-1" 
+                                 :style="`opacity: ${scenario.urgency}`"></div>
+                            <span>إلحاح</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full mx-auto mb-1" 
+                                 :style="`opacity: ${scenario.complexity}`"></div>
+                            <span>تعقيد</span>
+                        </div>
+                    </div>
+                </button>
+            </template>
+        </div>
+    </div>
+
+    <!-- Probability Visualization -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center justify-center">
+            <svg width="30" height="30" viewBox="0 0 30 30" class="mr-3">
+                <circle cx="15" cy="15" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M15 8 L15 15 L20 20" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            حساب الاحتمالات المعرفية
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <template x-for="(prob, key) in currentProbabilities" :key="key">
+                <div class="text-center">
+                    <!-- Animated probability orb -->
+                    <div class="relative mx-auto mb-4 w-24 h-24 probability-orb rounded-full flex items-center justify-center"
+                         :class="getProbabilityColor(key, prob.value)">
+                        
+                        <!-- Circular progress -->
+                        <svg class="w-20 h-20 transform -rotate-90">
+                            <circle cx="40" cy="40" r="32" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
+                            <circle cx="40" cy="40" r="32" :stroke="getProbabilityStroke(key)" stroke-width="4" 
+                                    fill="none" stroke-linecap="round" 
+                                    :stroke-dasharray="`${201.06} ${201.06}`"
+                                    :stroke-dashoffset="`${201.06 - (prob.value * 201.06)}`"
+                                    class="transition-all duration-1000 ease-out"/>
+                        </svg>
+                        
+                        <!-- Percentage text -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-lg font-bold text-white" x-text="`${Math.round(prob.value * 100)}%`"></span>
+                        </div>
+                        
+                        <!-- Pulsing effect for high values -->
+                        <div x-show="prob.value > 0.7" 
+                             class="absolute inset-0 rounded-full bg-white/20 scale-pulse"></div>
+                    </div>
+                    
+                    <h3 class="font-bold text-gray-800 mb-1" x-text="prob.name"></h3>
+                    <p class="text-xs text-gray-600" x-text="prob.description"></p>
+                    
+                    <!-- Impact indicator -->
+                    <div class="mt-2">
+                        <div class="text-xs" 
+                             :class="prob.value > 0.7 ? 'text-red-600 font-bold' : 
+                                     prob.value > 0.4 ? 'text-yellow-600' : 'text-green-600'"
+                             x-text="prob.value > 0.7 ? 'عالي' : prob.value > 0.4 ? 'متوسط' : 'منخفض'">
+                        </div>
+                    </div>
                 </div>
-                
-                <template x-for="threat in threats">
-                    <div class="threat" 
-                         :style="`left: ${threat.x}px; top: ${threat.y}px`"
-                         @click.stop="removeThreat(threat)">
+            </template>
+        </div>
+    </div>
+
+    <!-- Pathway Selection Visualization -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">اختيار المسار المعرفي</h2>
+        
+        <div class="relative">
+            <!-- Decision Tree Visualization -->
+            <div class="flex justify-center mb-8">
+                <svg width="600" height="300" viewBox="0 0 600 300" class="border-2 border-gray-200 rounded-lg">
+                    <!-- Background -->
+                    <defs>
+                        <radialGradient id="brainGrad" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.1"/>
+                            <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.3"/>
+                        </radialGradient>
+                    </defs>
+                    <rect width="600" height="300" fill="url(#brainGrad)"/>
+                    
+                    <!-- Central decision node -->
+                    <circle cx="300" cy="150" r="40" fill="#f59e0b" stroke="#d97706" stroke-width="3" class="neural-pulse"/>
+                    <text x="300" y="155" text-anchor="middle" fill="white" font-weight="bold" font-size="12">الفرز الإدراكي</text>
+                    
+                    <!-- Pathway nodes -->
+                    <g id="survivalPath">
+                        <line x1="300" y1="150" x2="150" y2="80" stroke="#dc2626" stroke-width="3" 
+                              :class="selectedPathway === 'survival' ? 'pulse-glow' : ''" stroke-dasharray="5,5"/>
+                        <circle cx="150" cy="80" r="30" fill="#dc2626" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="150" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="10">بقاء فوري</text>
+                    </g>
+                    
+                    <g id="instinctPath">
+                        <line x1="300" y1="150" x2="300" y2="80" stroke="#059669" stroke-width="3"
+                              :class="selectedPathway === 'instinct' ? 'pulse-glow' : ''" stroke-dasharray="5,5"/>
+                        <circle cx="300" cy="80" r="30" fill="#059669" stroke="#047857" stroke-width="2"/>
+                        <text x="300" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="10">نمط غريزي</text>
+                    </g>
+                    
+                    <g id="explorePath">
+                        <line x1="300" y1="150" x2="450" y2="80" stroke="#7c3aed" stroke-width="3"
+                              :class="selectedPathway === 'explore' ? 'pulse-glow' : ''" stroke-dasharray="5,5"/>
+                        <circle cx="450" cy="80" r="30" fill="#7c3aed" stroke="#6d28d9" stroke-width="2"/>
+                        <text x="450" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="10">استكشاف</text>
+                    </g>
+                    
+                    <!-- Condition labels -->
+                    <text x="150" y="115" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">
+                        خطر > 60%
+                    </text>
+                    <text x="300" y="115" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">
+                        ألفة > 70%
+                    </text>
+                    <text x="450" y="115" text-anchor="middle" font-size="10" fill="#7c3aed" font-weight="bold">
+                        استكشاف
+                    </text>
+                    
+                    <!-- Selected pathway highlight -->
+                    <g x-show="selectedPathway">
+                        <circle :cx="getPathwayPosition().x" :cy="getPathwayPosition().y" r="35" 
+                                fill="none" stroke="#fbbf24" stroke-width="4" stroke-dasharray="10,5" class="scale-pulse"/>
+                    </g>
+                </svg>
+            </div>
+            
+            <!-- Pathway Details -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <template x-for="(pathway, key) in pathways" :key="key">
+                    <div class="p-6 rounded-xl border-2 transition-all duration-300"
+                         :class="selectedPathway === key ? 
+                                 'border-amber-400 bg-amber-50 transform scale-105' : 
+                                 'border-gray-200 bg-gray-50'">
+                        
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 rounded-full mr-3 flex items-center justify-center text-white font-bold"
+                                 :class="pathway.color">
+                                <span x-text="pathway.icon"></span>
+                            </div>
+                            <h3 class="font-bold text-gray-800" x-text="pathway.name"></h3>
+                        </div>
+                        
+                        <p class="text-sm text-gray-600 mb-4" x-text="pathway.description"></p>
+                        
+                        <!-- Steps visualization -->
+                        <div class="space-y-2">
+                            <div class="text-xs font-semibold text-gray-700 mb-2">الخطوات:</div>
+                            <template x-for="(step, index) in pathway.steps" :key="index">
+                                <div class="flex items-center text-xs">
+                                    <div class="w-4 h-4 rounded-full bg-gray-300 mr-2 flex items-center justify-center text-white font-bold"
+                                         x-text="index + 1"></div>
+                                    <span x-text="step"></span>
+                                </div>
+                            </template>
+                        </div>
+                        
+                        <!-- Timing -->
+                        <div class="mt-4 p-2 bg-white rounded text-center">
+                            <div class="text-xs text-gray-500">الوقت المتوقع</div>
+                            <div class="font-bold" :class="pathway.timeColor" x-text="pathway.duration"></div>
+                        </div>
                     </div>
                 </template>
             </div>
-
-            <div class="perception-data">
-                <div class="probability-bar">
-                    <label>احتمالية الخطر:</label>
-                    <div class="bar-container">
-                        <div class="bar-fill" :style="`width: ${perception.danger * 100}%`"></div>
-                    </div>
-                    <span x-text="`${(perception.danger * 100).toFixed(1)}%`"></span>
-                </div>
-
-                <div class="probability-bar">
-                    <label>مستوى اليقظة:</label>
-                    <div class="bar-container">
-                        <div class="bar-fill" :style="`width: ${perception.alertness * 100}%`"></div>
-                    </div>
-                    <span x-text="`${(perception.alertness * 100).toFixed(1)}%`"></span>
-                </div>
-
-                <div class="probability-bar">
-                    <label>احتمالية الهروب:</label>
-                    <div class="bar-container">
-                        <div class="bar-fill" :style="`width: ${perception.escape_probability * 100}%`"></div>
-                    </div>
-                    <span x-text="`${(perception.escape_probability * 100).toFixed(1)}%`"></span>
-                </div>
-            </div>
         </div>
+    </div>
 
-        <div class="controls-panel">
-            <h3>⚙️ عناصر التحكم</h3>
+    <!-- Simulation Controls -->
+    <div class="text-center mb-8">
+        <button @click="runSimulation()" 
+                :disabled="isRunning"
+                class="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
             
-            <div class="controls">
-                <button @click="runWebPPLSimulation()">🧮 تشغيل WebPPL</button>
-                <button @click="addRandomThreat()">⚠️ إضافة تهديد</button>
-                <button @click="clearThreats()">🧹 مسح التهديدات</button>
-                <button @click="resetSimulation()">🔄 إعادة تعيين</button>
-            </div>
+            <span x-show="!isRunning" class="flex items-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="mr-2">
+                    <polygon points="5,3 19,12 5,21"></polygon>
+                </svg>
+                تشغيل المحاكاة المعرفية
+            </span>
+            
+            <span x-show="isRunning" class="flex items-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" class="mr-2 animate-spin">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+                    <path fill="currentColor" opacity="0.75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                </svg>
+                جاري المعالجة...
+            </span>
+        </button>
+    </div>
 
-            <div class="webppl-output" x-show="webpplResult">
-                <h4>🎯 نتائج WebPPL:</h4>
-                <pre x-text="webpplResult"></pre>
+    <!-- Simulation Results -->
+    <div x-show="simulationResults" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-8 slide-right">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">نتائج المحاكاة</h2>
+        
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="text-center p-4 bg-blue-50 rounded-xl">
+                <div class="text-3xl font-bold text-blue-600" x-text="simulationResults?.totalDuration + 'ms'"></div>
+                <div class="text-sm text-gray-600">الوقت الإجمالي</div>
+            </div>
+            <div class="text-center p-4 bg-green-50 rounded-xl">
+                <div class="text-3xl font-bold text-green-600" x-text="simulationResults?.steps"></div>
+                <div class="text-sm text-gray-600">عدد الخطوات</div>
+            </div>
+            <div class="text-center p-4 bg-purple-50 rounded-xl">
+                <div class="text-lg font-bold text-purple-600" x-text="simulationResults?.efficiency + '%'"></div>
+                <div class="text-sm text-gray-600">الكفاءة</div>
+            </div>
+            <div class="text-center p-4 bg-orange-50 rounded-xl">
+                <div class="text-lg font-bold text-orange-600" x-text="simulationResults?.survivalRate + '%'"></div>
+                <div class="text-sm text-gray-600">معدل البقاء</div>
+            </div>
+        </div>
+        
+        <!-- Visual Timeline -->
+        <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-bold text-gray-800 mb-4 text-center">الخط الزمني للمعالجة</h3>
+            <div class="relative">
+                <div class="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-300 rounded"></div>
+                
+                <template x-for="(step, index) in simulationResults?.timeline || []" :key="index">
+                    <div class="relative flex items-center mb-6"
+                         :class="index % 2 === 0 ? 'justify-start' : 'justify-end'">
+                        
+                        <div class="w-5/12 p-4 rounded-lg shadow"
+                             :class="step.type === 'triage' ? 'bg-yellow-100 border-l-4 border-yellow-500' :
+                                     step.type === 'sense' ? 'bg-blue-100 border-l-4 border-blue-500' :
+                                     step.type === 'decide' ? 'bg-green-100 border-l-4 border-green-500' :
+                                     'bg-gray-100 border-l-4 border-gray-500'">
+                            
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold text-gray-800" x-text="step.name"></h4>
+                                <span class="text-xs bg-white px-2 py-1 rounded" x-text="step.duration + 'ms'"></span>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600" x-text="step.description"></p>
+                            
+                            <div x-show="step.result" class="mt-2 text-xs bg-white p-2 rounded">
+                                <strong>النتيجة:</strong> <span x-text="step.result"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline dot -->
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-4 rounded-full"
+                             :class="step.type === 'triage' ? 'border-yellow-500' :
+                                     step.type === 'sense' ? 'border-blue-500' :
+                                     step.type === 'decide' ? 'border-green-500' :
+                                     'border-gray-500'"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+        
+        <!-- Analysis -->
+        <div class="mt-8 p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border-l-4 border-amber-500">
+            <h3 class="font-bold text-amber-800 mb-3">📊 تحليل الأداء:</h3>
+            <div class="space-y-2 text-amber-700">
+                <p><strong>نوع المعالجة:</strong> <span x-text="simulationResults?.processingType"></span></p>
+                <p><strong>المسار المختار:</strong> <span x-text="simulationResults?.selectedPath"></span></p>
+                <p><strong>مستوى التعقيد:</strong> <span x-text="simulationResults?.complexityLevel"></span></p>
+                <p><strong>استهلاك الطاقة:</strong> <span x-text="simulationResults?.energyConsumption"></span></p>
             </div>
         </div>
     </div>
 
-    <div class="warning">
-        ⚠️ <strong>إطار نظري تجريبي:</strong> هذه محاكاة تعليمية لفهم العمليات الإدراكية وليست تمثيل دقيق للسلوك الحقيقي للحشرات
-    </div>
 </div>
 
 <script>
-function cockroachSimulation() {
+function cockroachCognition() {
     return {
-        cockroach: {
-            x: 150,
-            y: 140,
-            angle: 0
-        },
-        threats: [],
-        perception: {
-            danger: 0.1,
-            alertness: 0.3,
-            escape_probability: 0.2
-        },
-        webpplResult: '',
-
-        init() {
-            this.updatePerception();
-        },
-
-        addThreat(event) {
-            const rect = event.target.getBoundingClientRect();
-            const x = event.clientX - rect.left - 20;
-            const y = event.clientY - rect.top - 20;
-            
-            this.threats.push({
-                id: Date.now(),
-                x: Math.max(0, Math.min(x, 360)),
-                y: Math.max(0, Math.min(y, 260))
-            });
-            
-            this.updatePerception();
-        },
-
-        removeThreat(threat) {
-            this.threats = this.threats.filter(t => t.id !== threat.id);
-            this.updatePerception();
-        },
-
-        addRandomThreat() {
-            this.threats.push({
-                id: Date.now(),
-                x: Math.random() * 360,
-                y: Math.random() * 260
-            });
-            this.updatePerception();
-        },
-
-        clearThreats() {
-            this.threats = [];
-            this.updatePerception();
-        },
-
-        moveCockroach() {
-            // محاكاة حركة احتمالية
-            const moveDistance = 20 + Math.random() * 30;
-            const angle = Math.random() * 2 * Math.PI;
-            
-            this.cockroach.x = Math.max(10, Math.min(this.cockroach.x + Math.cos(angle) * moveDistance, 370));
-            this.cockroach.y = Math.max(10, Math.min(this.cockroach.y + Math.sin(angle) * moveDistance, 270));
-            this.cockroach.angle = (angle * 180 / Math.PI) % 360;
-            
-            this.updatePerception();
-        },
-
-        updatePerception() {
-            // حساب المسافات من التهديدات
-            let minDistance = Infinity;
-            let totalThreat = 0;
-
-            this.threats.forEach(threat => {
-                const dx = threat.x - this.cockroach.x;
-                const dy = threat.y - this.cockroach.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                minDistance = Math.min(minDistance, distance);
-                totalThreat += 1 / Math.max(distance, 10); // تأثير عكسي للمسافة
-            });
-
-            // نموذج احتمالي بسيط
-            this.perception.danger = Math.min(0.9, totalThreat * 0.3 + this.threats.length * 0.1);
-            this.perception.alertness = Math.min(0.95, this.perception.danger * 1.2 + 0.1);
-            this.perception.escape_probability = Math.min(0.9, this.perception.danger * 0.8 + Math.random() * 0.2);
-        },
-
-        runWebPPLSimulation() {
-            // WebPPL code للنمذجة الاحتمالية
-            const webpplCode = `
-            var cockroachPerception = function() {
-                var threats = ${this.threats.length};
-                var minDistance = ${this.threats.length > 0 ? 50 : 200};
-                
-                // نموذج احتمالي للقرار
-                var stress = gaussian(threats * 0.3, 0.1);
-                var fear = beta(2, 3);
-                var confidence = uniform(0, 1);
-                
-                var decision = stress > 0.6 ? 
-                    (fear > 0.7 ? 'panic_flight' : 'cautious_retreat') :
-                    (confidence > 0.5 ? 'explore' : 'stay_alert');
-                
-                var escape_angle = uniform(0, 360);
-                var speed = stress > 0.5 ? gaussian(80, 20) : gaussian(30, 10);
-                
-                return {
-                    decision: decision,
-                    stress_level: stress,
-                    fear_level: fear,
-                    escape_angle: escape_angle,
-                    movement_speed: speed,
-                    survival_priority: stress * fear
-                };
-            };
-            
-            cockroachPerception();
-            `;
-
-            try {
-                // محاكاة نتيجة WebPPL (في التطبيق الحقيقي سنستخدم webppl.run)
-                const simulatedResult = {
-                    decision: this.perception.danger > 0.6 ? 'panic_flight' : 'explore',
-                    stress_level: this.perception.danger,
-                    fear_level: this.perception.alertness,
-                    escape_angle: Math.random() * 360,
-                    movement_speed: 30 + this.perception.danger * 50,
-                    survival_priority: this.perception.danger * this.perception.alertness
-                };
-
-                this.webpplResult = JSON.stringify(simulatedResult, null, 2);
-                
-                // تطبيق نتيجة القرار على الصرصار
-                if (simulatedResult.decision === 'panic_flight') {
-                    this.moveCockroach();
-                }
-                
-            } catch (error) {
-                this.webpplResult = 'خطأ في تشغيل WebPPL: ' + error.message;
+        selectedScenario: 'light_detection',
+        selectedPathway: null,
+        isRunning: false,
+        simulationResults: null,
+        
+        scenarios: {
+            light_detection: {
+                icon: '🔦',
+                title: 'كشف الضوء المفاجئ',
+                description: 'صرصار يكتشف إضاءة مفاجئة في المطبخ',
+                complexity: 0.1,
+                familiarity: 0.9,
+                stakes: 0.8,
+                urgency: 0.9,
+                risk: 0.7
+            },
+            food_search: {
+                icon: '🍞',
+                title: 'البحث عن الطعام',
+                description: 'صرصار يبحث عن فتات الطعام',
+                complexity: 0.2,
+                familiarity: 0.8,
+                stakes: 0.6,
+                urgency: 0.4,
+                risk: 0.3
+            },
+            predator_avoidance: {
+                icon: '🦎',
+                title: 'تجنب المفترس',
+                description: 'صرصار يكتشف وجود عنكبوت قريب',
+                complexity: 0.3,
+                familiarity: 0.7,
+                stakes: 0.9,
+                urgency: 0.9,
+                risk: 0.9
             }
         },
-
-        resetSimulation() {
-            this.cockroach = { x: 150, y: 140, angle: 0 };
-            this.threats = [];
-            this.webpplResult = '';
-            this.updatePerception();
+        
+        pathways: {
+            survival: {
+                name: 'البقاء الفوري',
+                description: 'استجابة فورية للخطر - أقصى سرعة',
+                icon: '⚡',
+                color: 'bg-red-500',
+                timeColor: 'text-red-600',
+                duration: '2-5ms',
+                steps: ['كشف التهديد', 'تفعيل الهروب', 'حركة سريعة']
+            },
+            instinct: {
+                name: 'النمط الغريزي',
+                description: 'تنفيذ سلوك مألوف ومجرب',
+                icon: '🔄',
+                color: 'bg-green-500',
+                timeColor: 'text-green-600',
+                duration: '5-15ms',
+                steps: ['تقييم الوضع', 'اختيار النمط', 'تنفيذ منظم']
+            },
+            explore: {
+                name: 'الاستكشاف الحذر',
+                description: 'استكشاف تدريجي للبيئة الجديدة',
+                icon: '🔍',
+                color: 'bg-purple-500',
+                timeColor: 'text-purple-600',
+                duration: '10-20ms',
+                steps: ['مسح أولي', 'تقييم السلامة', 'حركة حذرة']
+            }
+        },
+        
+        get currentProbabilities() {
+            const scenario = this.scenarios[this.selectedScenario];
+            return {
+                complexity: {
+                    name: 'التعقيد',
+                    description: 'مدى تعقيد المشكلة',
+                    value: scenario.complexity
+                },
+                familiarity: {
+                    name: 'الألفة',
+                    description: 'مدى معرفة الموقف',
+                    value: scenario.familiarity
+                },
+                stakes: {
+                    name: 'الأهمية',
+                    description: 'أهمية القرار',
+                    value: scenario.stakes
+                },
+                urgency: {
+                    name: 'الإلحاح',
+                    description: 'سرعة الاستجابة المطلوبة',
+                    value: scenario.urgency
+                },
+                risk: {
+                    name: 'المخاطر',
+                    description: 'مستوى الخطر',
+                    value: scenario.risk
+                }
+            };
+        },
+        
+        init() {
+            this.calculatePathway();
+        },
+        
+        selectScenario(scenarioKey) {
+            this.selectedScenario = scenarioKey;
+            this.calculatePathway();
+            this.simulationResults = null;
+        },
+        
+        calculatePathway() {
+            const scenario = this.scenarios[this.selectedScenario];
+            
+            // تطبيق منطق الفرز الإدراكي للصرصار
+            if (scenario.risk > 0.6 || scenario.urgency > 0.8) {
+                this.selectedPathway = 'survival';
+            } else if (scenario.familiarity > 0.7 && scenario.complexity < 0.2) {
+                this.selectedPathway = 'instinct';
+            } else {
+                this.selectedPathway = 'explore';
+            }
+        },
+        
+        getProbabilityColor(key, value) {
+            const colors = {
+                complexity: value > 0.7 ? 'bg-gradient-to-br from-blue-500 to-blue-700' : 
+                           value > 0.4 ? 'bg-gradient-to-br from-blue-400 to-blue-600' : 
+                           'bg-gradient-to-br from-blue-300 to-blue-500',
+                familiarity: value > 0.7 ? 'bg-gradient-to-br from-green-500 to-green-700' : 
+                            value > 0.4 ? 'bg-gradient-to-br from-green-400 to-green-600' : 
+                            'bg-gradient-to-br from-green-300 to-green-500',
+                stakes: value > 0.7 ? 'bg-gradient-to-br from-purple-500 to-purple-700' : 
+                       value > 0.4 ? 'bg-gradient-to-br from-purple-400 to-purple-600' : 
+                       'bg-gradient-to-br from-purple-300 to-purple-500',
+                urgency: value > 0.7 ? 'bg-gradient-to-br from-orange-500 to-orange-700' : 
+                        value > 0.4 ? 'bg-gradient-to-br from-orange-400 to-orange-600' : 
+                        'bg-gradient-to-br from-orange-300 to-orange-500',
+                risk: value > 0.7 ? 'bg-gradient-to-br from-red-500 to-red-700' : 
+                     value > 0.4 ? 'bg-gradient-to-br from-red-400 to-red-600' : 
+                     'bg-gradient-to-br from-red-300 to-red-500'
+            };
+            return colors[key] || 'bg-gray-500';
+        },
+        
+        getProbabilityStroke(key) {
+            const colors = {
+                complexity: '#3b82f6',
+                familiarity: '#10b981',
+                stakes: '#8b5cf6',
+                urgency: '#f97316',
+                risk: '#ef4444'
+            };
+            return colors[key] || '#6b7280';
+        },
+        
+        getPathwayPosition() {
+            const positions = {
+                survival: { x: 150, y: 80 },
+                instinct: { x: 300, y: 80 },
+                explore: { x: 450, y: 80 }
+            };
+            return positions[this.selectedPathway] || { x: 300, y: 80 };
+        },
+        
+        async runSimulation() {
+            this.isRunning = true;
+            this.simulationResults = null;
+            
+            const scenario = this.scenarios[this.selectedScenario];
+            const pathway = this.pathways[this.selectedPathway];
+            
+            // محاكاة المعالجة المعرفية
+            const timeline = [];
+            let totalDuration = 0;
+            
+            // الخطوة 1: الفرز الإدراكي
+            await this.simulateDelay(300);
+            const triageDuration = Math.random() * 3 + 2; // 2-5ms
+            totalDuration += triageDuration;
+            timeline.push({
+                name: 'الفرز الإدراكي',
+                description: 'تقييم سريع للموقف واختيار المسار',
+                duration: Math.round(triageDuration),
+                type: 'triage',
+                result: `المسار المختار: ${pathway.name}`
+            });
+            
+            // الخطوة 2: الاستشعار البيئي
+            await this.simulateDelay(200);
+            const senseDuration = Math.random() * 2 + 1; // 1-3ms
+            totalDuration += senseDuration;
+            timeline.push({
+                name: 'الاستشعار البيئي',
+                description: 'جمع المعلومات الحسية من البيئة',
+                duration: Math.round(senseDuration),
+                type: 'sense',
+                result: this.getSenseResult(scenario)
+            });
+            
+            // خطوات إضافية حسب المسار
+            if (this.selectedPathway === 'survival') {
+                // مسار البقاء - سريع جداً
+                await this.simulateDelay(150);
+                const actionDuration = Math.random() * 2 + 1;
+                totalDuration += actionDuration;
+                timeline.push({
+                    name: 'فعل البقاء الفوري',
+                    description: 'تنفيذ فوري لحركة الهروب',
+                    duration: Math.round(actionDuration),
+                    type: 'decide',
+                    result: 'هروب سريع إلى أقرب مخبأ'
+                });
+            } else if (this.selectedPathway === 'instinct') {
+                // مسار غريزي - متوسط
+                await this.simulateDelay(200);
+                const evalDuration = Math.random() * 3 + 2;
+                totalDuration += evalDuration;
+                timeline.push({
+                    name: 'تقييم الوضع',
+                    description: 'تقييم بسيط للمخاطر والفرص',
+                    duration: Math.round(evalDuration),
+                    type: 'process',
+                    result: 'وضع آمن نسبياً'
+                });
+                
+                await this.simulateDelay(150);
+                const executeDuration = Math.random() * 2 + 1;
+                totalDuration += executeDuration;
+                timeline.push({
+                    name: 'تنفيذ النمط',
+                    description: 'تنفيذ السلوك المألوف',
+                    duration: Math.round(executeDuration),
+                    type: 'decide',
+                    result: this.getInstinctResult(scenario)
+                });
+            } else {
+                // مسار الاستكشاف - أطول
+                await this.simulateDelay(250);
+                const scanDuration = Math.random() * 4 + 3;
+                totalDuration += scanDuration;
+                timeline.push({
+                    name: 'المسح الأولي',
+                    description: 'فحص شامل للبيئة المحيطة',
+                    duration: Math.round(scanDuration),
+                    type: 'process',
+                    result: 'اكتشاف عوامل جديدة'
+                });
+                
+                await this.simulateDelay(200);
+                const assessDuration = Math.random() * 3 + 2;
+                totalDuration += assessDuration;
+                timeline.push({
+                    name: 'تقييم السلامة',
+                    description: 'تحليل مستوى الأمان',
+                    duration: Math.round(assessDuration),
+                    type: 'process',
+                    result: 'مستوى أمان مقبول'
+                });
+                
+                await this.simulateDelay(150);
+                const moveDuration = Math.random() * 3 + 2;
+                totalDuration += moveDuration;
+                timeline.push({
+                    name: 'الحركة الحذرة',
+                    description: 'تحرك تدريجي مع مراقبة مستمرة',
+                    duration: Math.round(moveDuration),
+                    type: 'decide',
+                    result: 'استكشاف ناجح مع الحفاظ على السلامة'
+                });
+            }
+            
+            // حساب النتائج النهائية
+            const efficiency = this.calculateEfficiency(scenario, this.selectedPathway);
+            const survivalRate = this.calculateSurvivalRate(scenario, this.selectedPathway);
+            
+            this.simulationResults = {
+                totalDuration: Math.round(totalDuration),
+                steps: timeline.length,
+                efficiency: efficiency,
+                survivalRate: survivalRate,
+                timeline: timeline,
+                processingType: 'معالجة بسيطة وسريعة',
+                selectedPath: pathway.name,
+                complexityLevel: 'طبقة معرفية 1 - وعي سياقي بسيط',
+                energyConsumption: this.getEnergyConsumption(this.selectedPathway)
+            };
+            
+            this.isRunning = false;
+        },
+        
+        simulateDelay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        },
+        
+        getSenseResult(scenario) {
+            if (scenario.title.includes('ضوء')) return 'كشف مصدر ضوء قوي';
+            if (scenario.title.includes('طعام')) return 'اكتشاف رائحة طعام';
+            if (scenario.title.includes('مفترس')) return 'استشعار اهتزازات مشبوهة';
+            return 'بيئة مستقرة';
+        },
+        
+        getInstinctResult(scenario) {
+            if (scenario.title.includes('ضوء')) return 'تفعيل نمط تجنب الضوء';
+            if (scenario.title.includes('طعام')) return 'تفعيل نمط البحث عن الطعام';
+            if (scenario.title.includes('مفترس')) return 'تفعيل نمط الاختباء';
+            return 'متابعة النشاط العادي';
+        },
+        
+        calculateEfficiency(scenario, pathway) {
+            let baseEfficiency = 75;
+            
+            if (pathway === 'survival' && scenario.risk > 0.6) baseEfficiency += 20;
+            if (pathway === 'instinct' && scenario.familiarity > 0.7) baseEfficiency += 15;
+            if (pathway === 'explore' && scenario.complexity > 0.2) baseEfficiency += 10;
+            
+            return Math.min(100, baseEfficiency + Math.random() * 10);
+        },
+        
+        calculateSurvivalRate(scenario, pathway) {
+            let baseSurvival = 80;
+            
+            if (pathway === 'survival') baseSurvival += 15;
+            if (scenario.risk > 0.8 && pathway !== 'survival') baseSurvival -= 20;
+            if (scenario.urgency > 0.8 && pathway === 'explore') baseSurvival -= 10;
+            
+            return Math.min(100, Math.max(60, baseSurvival + Math.random() * 10));
+        },
+        
+        getEnergyConsumption(pathway) {
+            const consumption = {
+                survival: 'عالي - استهلاك سريع للطاقة',
+                instinct: 'منخفض - استخدام فعال للطاقة',
+                explore: 'متوسط - توازن بين الحذر والكفاءة'
+            };
+            return consumption[pathway];
         }
     }
 }

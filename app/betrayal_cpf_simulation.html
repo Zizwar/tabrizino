@@ -370,4 +370,192 @@
                         // بعد الخيانة - حتى اللحظات الجميلة مشكوك فيها
                         this.addEvent('💔 حتى اللحظات الجميلة أصبحت مشكوك فيها', 'doubt');
                         this.agateTimeline.push({
-                            color: '
+                            color: 'white',
+                            emoji: '❓',
+                            description: 'لحظة مشكوك في صدقها',
+                            corrupted: false,
+                            doubtful: true
+                        });
+                    }
+                },
+                
+                simulateDoubt() {
+                    this.doubtPhase = true;
+                    this.addEvent('🤔 بداية الشك - شيء ما ليس على ما يرام', 'doubt');
+                    
+                    // انخفاض طفيف في الثقة
+                    this.partnerTrust = Math.max(0.3, this.partnerTrust - 0.2);
+                    this.futureTrust = Math.max(0.4, this.futureTrust - 0.15);
+                    this.updateTrustLevel();
+                    
+                    // تغيير حالة Middleware
+                    this.middlewareState = 'doubtful';
+                    
+                    // بعض المحاكيات تصبح مشكوك فيها
+                    this.simulators.forEach((sim, index) => {
+                        if (index < 3) { // أول 3 محاكيات
+                            sim.doubtful = true;
+                            sim.confidence = Math.max(0.4, sim.confidence - 0.3);
+                            sim.status = 'يبحث عن إشارات الخطر';
+                        }
+                    });
+                    
+                    // إفساد بعض ذكريات العقيق
+                    this.agateTimeline.forEach(agate => {
+                        if (agate.color === 'white' || Math.random() > 0.7) {
+                            agate.doubtful = true;
+                            if (agate.color === 'white') {
+                                agate.description = 'لحظة مشكوك فيها - ماذا حدث حقاً؟';
+                            }
+                        }
+                    });
+                    
+                    setTimeout(() => {
+                        this.middlewareState = 'paranoid';
+                        this.addEvent('👁️ دخول في مرحلة المراقبة المفرطة', 'doubt');
+                    }, 2000);
+                },
+                
+                simulateBetrayal() {
+                    this.betrayalActive = true;
+                    this.doubtPhase = false;
+                    this.addEvent('💔💔💔 اكتشاف الخيانة! تدمير كامل للثقة', 'betrayal');
+                    
+                    // انهيار فوري في كل شيء
+                    this.partnerTrust = 0.05;
+                    this.memoryTrust = 0.1;
+                    this.futureTrust = 0.1;
+                    this.selfTrust = 0.3;
+                    this.emotionalHealth = 15;
+                    this.updateTrustLevel();
+                    
+                    // تغيير صورة الذات
+                    this.selfImage = '😭 محطم وغير مرغوب';
+                    this.selfImageDescription = 'ربما لا أستحق الحب... ماذا بي؟';
+                    
+                    // تغيير حالة Middleware
+                    this.middlewareState = 'blocking';
+                    
+                    setTimeout(() => {
+                        this.addEvent('🧠 تلويث شامل للذكريات والمحاكيات', 'corruption');
+                        
+                        // إفساد كل المحاكيات
+                        this.simulators.forEach(sim => {
+                            sim.corrupted = true;
+                            sim.doubtful = false;
+                            sim.confidence = Math.random() * 0.3 + 0.1;
+                            sim.status = sim.name.includes('معالج') ? 'يرى الخيانة في كل مكان' :
+                                        sim.name.includes('محرك') ? 'يتوقع المزيد من الألم' :
+                                        sim.name.includes('ذاكرة') ? 'يستدعي ذكريات الألم فقط' :
+                                        sim.name.includes('اجتماعي') ? 'لا يثق في أحد' :
+                                        sim.name.includes('أنماط') ? 'يرى إشارات الخطر فقط' :
+                                        'يراقب علامات الخيانة';
+                        });
+                        
+                        // تلويث ذاكرة العقيق
+                        this.agateTimeline.forEach(agate => {
+                            if (agate.color === 'pink' || agate.color === 'purple' || agate.color === 'red') {
+                                if (Math.random() > 0.3) {
+                                    agate.corrupted = true;
+                                    agate.description += ' (هل كان كله كذب؟)';
+                                    agate.emoji = '💀';
+                                }
+                            } else if (agate.color === 'white') {
+                                agate.doubtful = true;
+                                agate.description = 'لحظة مشكوك فيها - ربما كان يخونني حتى هنا';
+                                agate.emoji = '❓';
+                            }
+                        });
+                        
+                        this.addEvent('💭 حتى أجمل الذكريات أصبحت ملوثة بالشك', 'corruption');
+                        
+                    }, 1500);
+                    
+                    setTimeout(() => {
+                        this.middlewareState = 'paranoid';
+                        this.addEvent('👁️ النظام في حالة مراقبة مفرطة دائمة', 'corruption');
+                    }, 3000);
+                },
+                
+                reset() {
+                    this.betrayalActive = false;
+                    this.doubtPhase = false;
+                    this.partnerTrust = 0.9;
+                    this.memoryTrust = 0.9;
+                    this.futureTrust = 0.8;
+                    this.selfTrust = 0.8;
+                    this.emotionalHealth = 85;
+                    this.updateTrustLevel();
+                    
+                    // إعادة تعيين صورة الذات
+                    this.selfImage = '😊 واثق ومحبوب';
+                    this.selfImageDescription = 'أرى نفسي جذاباً ومستحقاً للحب';
+                    this.middlewareState = 'filtering';
+                    
+                    // إعادة تعيين المحاكيات
+                    this.simulators.forEach((sim, index) => {
+                        sim.corrupted = false;
+                        sim.doubtful = false;
+                        sim.confidence = 0.8 + Math.random() * 0.2;
+                        sim.status = sim.name.includes('معالج') ? 'يرى الحب في كل مكان' :
+                                    sim.name.includes('محرك') ? 'يتوقع مستقبل سعيد' :
+                                    sim.name.includes('ذاكرة') ? 'يستدعي ذكريات جميلة' :
+                                    sim.name.includes('اجتماعي') ? 'يثق في النوايا' :
+                                    sim.name.includes('أنماط') ? 'يرى إشارات الحب' :
+                                    'يراقب مشاعر الحب';
+                    });
+                    
+                    // إعادة تعيين ذاكرة العقيق
+                    this.agateTimeline = [
+                        { color: 'pink', emoji: '💕', description: 'أول لقاء - سحر من أول نظرة', corrupted: false, doubtful: false },
+                        { color: 'purple', emoji: '💜', description: 'قضاء وقت جميل معاً', corrupted: false, doubtful: false },
+                        { color: 'red', emoji: '❤️', description: 'كلمات حب عميقة', corrupted: false, doubtful: false },
+                        { color: 'pink', emoji: '💕', description: 'خطط للمستقبل', corrupted: false, doubtful: false },
+                        { color: 'yellow', emoji: '🌟', description: 'لحظة سعادة مطلقة', corrupted: false, doubtful: false },
+                        { color: 'white', emoji: '🤍', description: 'لحظة غامضة', corrupted: false, doubtful: false }
+                    ];
+                    
+                    this.events = [
+                        { time: this.getCurrentTime(), message: '🌅 بداية علاقة جديدة مليئة بالأمل', type: 'romance' }
+                    ];
+                },
+                
+                updateTrustLevel() {
+                    this.trustLevel = (this.partnerTrust + this.memoryTrust + this.futureTrust + this.selfTrust) / 4;
+                },
+                
+                addEvent(message, type) {
+                    this.events.unshift({
+                        time: this.getCurrentTime(),
+                        message: message,
+                        type: type
+                    });
+                    
+                    if (this.events.length > 12) {
+                        this.events.pop();
+                    }
+                },
+                
+                getCurrentTime() {
+                    return new Date().toLocaleTimeString('ar', { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                },
+                
+                showAgateDetails(agate) {
+                    const statusText = agate.corrupted ? 'ذكرى ملوثة بالخيانة - هل كان كله كذب؟' : 
+                                      agate.doubtful ? 'ذكرى مشكوك في صدقها' : 
+                                      'ذكرى سليمة وجميلة';
+                                      
+                    const emotionalImpact = agate.corrupted ? 'تسبب ألم شديد عند التذكر' :
+                                           agate.doubtful ? 'تثير القلق والشك' :
+                                           'تبعث على السعادة والدفء';
+                                           
+                    alert(`💎 تفاصيل العقيق العاطفي:\n\n${agate.emoji} ${agate.description}\n\n📊 الحالة: ${statusText}\n\n💭 التأثير العاطفي: ${emotionalImpact}`);
+                }
+            }))
+        })
+    </script>
+                    

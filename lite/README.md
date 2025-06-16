@@ -40,7 +40,7 @@ CPF~ Lite now operates on a **Unified Cognitive Space** model:
 
 Instead of separate entities, you can activate multiple **perspectives** simultaneously:
 - Mother's voice: `cpf.activatePerspective('parental_protective')`
-- Future self: `cpf.activatePerspective('growth_oriented')`  
+- Future self: `cpf.activatePerspective('growth_oriented')`
 - Social anxiety: `cpf.activatePerspective('social_uncertainty')`
 
 They all work in the same space but see through different filters.

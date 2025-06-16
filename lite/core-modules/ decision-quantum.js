@@ -623,7 +623,7 @@ class DecisionQuantum {
     calculate_trust_multiplier(trust_evaluations) {
         if (Object.keys(trust_evaluations).length === 0) return 1.0;
         
-        const trust_scores = Object.values(trust_evaluations).map(eval => eval.overall_trust);
+        const trust_scores = Object.values(trust_evaluations).map(_eval => _eval.overall_trust);
         const average_trust = trust_scores.reduce((a, b) => a + b, 0) / trust_scores.length;
         
         return 0.5 + average_trust * 0.5; // Range from 0.5 to 1.0
@@ -737,23 +737,23 @@ class DecisionQuantum {
     }
 
     calculate_trust_confidence(trust_evaluations) {
-        const confidences = Object.values(trust_evaluations).map(eval => eval.trust_confidence);
+        const confidences = Object.values(trust_evaluations).map(_eval => eval.trust_confidence);
         return confidences.length > 0 ? confidences.reduce((a, b) => a + b, 0) / confidences.length : 0.5;
     }
 
     extract_competence_confidence(trust_evaluations) {
-        return Object.values(trust_evaluations).reduce((avg, eval) => 
+        return Object.values(trust_evaluations).reduce((avg, _eval) => 
             avg + eval.components.competence, 0) / Object.keys(trust_evaluations).length || 0.5;
     }
 
     extract_benevolence_assurance(trust_evaluations) {
-        return Object.values(trust_evaluations).reduce((avg, eval) => 
+        return Object.values(trust_evaluations).reduce((avg, _eval) => 
             avg + eval.components.benevolence, 0) / Object.keys(trust_evaluations).length || 0.5;
     }
 
     adjust_risk_for_trust(base_risk, trust_evaluations) {
-        const average_trust = Object.values(trust_evaluations).reduce((avg, eval) => 
-            avg + eval.overall_trust, 0) / Object.keys(trust_evaluations).length || 0.5;
+        const average_trust = Object.values(trust_evaluations).reduce((avg, _eval) => 
+            avg + _eval.overall_trust, 0) / Object.keys(trust_evaluations).length || 0.5;
         
         return base_risk * (1.5 - average_trust); // Higher trust reduces perceived risk
     }

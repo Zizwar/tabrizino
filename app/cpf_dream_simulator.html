@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CPF Dream Simulator - محاكي الأحلام</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
@@ -422,4 +422,4 @@
                 updateOscillator() {
                     // محاكاة تذبذب الحالة العاطفية
                     this.oscillatorLevel += (Math.random() - 0.5) * 0.3;
-                    this.oscillatorLevel = Math.max(0, Math.min(1, this.oscil
+                    this.oscillatorLevel = Math.max(0, Math.min(1, this.oscillatorLevel));

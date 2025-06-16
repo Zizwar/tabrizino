@@ -16,7 +16,7 @@
     "difference": "Same power as original CPF, smarter organization"
   },
   
-  "architecture": {
+  "old_architecture": {
     "design_pattern": "quantum_cognitive_modules",
     "total_concepts": 17,
     "module_count": 5,
@@ -24,6 +24,25 @@
     "core_engine": "probabilistic_programming_with_webppl"
   },
   
+  "architecture": {
+    "paradigm": "unified_cognitive_space",
+    "core_principle": "one_space_multiple_perspectives",
+    "simulator_model": "single_core_dynamic_filtering"
+  },
+  
+  "new_modules": {
+    "unified-cognitive-space.js": "The single space containing everything",
+    "perspectives-manager.js": "Manages different viewpoints/lenses", 
+    "dynamic-others-modeling.js": "Builds models of other people",
+    "script-manager.js": "Manages cognitive scripts (physics, free, etc.)"
+  },
+  
+  "major_changes": {
+    "from": "separate_modules_and_environments", 
+    "to": "unified_space_with_dynamic_filtering",
+    "benefit": "more_realistic_and_efficient_cognition"
+  },
+
   "modules": {
     "wino-quantum.js": {
       "role": "quantum_cognitive_engine",

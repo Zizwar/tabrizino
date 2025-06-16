@@ -26,6 +26,24 @@ Imagine you're an AI trying to understand how humans really think. You notice so
 Help AI understand why humans are "inconsistent" (spoiler: they're not inconsistent, they're **probabilistic**)
 
 ---
+## 🧠 The Unified Cognitive Architecture
+
+CPF~ Lite now operates on a **Unified Cognitive Space** model:
+
+- **One Cognitive Space**: Everything happens in the same mental environment
+- **One Core Simulator**: Processes all cognitive tasks
+- **Multiple Perspectives**: Different "lenses" applied to the same simulator
+- **Dynamic Others Modeling**: Builds models of other people from interactions
+- **Specialized Trust Matrices**: Each perspective has its own trust relationships
+
+### The Parliament Model
+
+Instead of separate entities, you can activate multiple **perspectives** simultaneously:
+- Mother's voice: `cpf.activatePerspective('parental_protective')`
+- Future self: `cpf.activatePerspective('growth_oriented')`  
+- Social anxiety: `cpf.activatePerspective('social_uncertainty')`
+
+They all work in the same space but see through different filters.
 
 ## What Does "Probabilistic Memory" Mean?
 

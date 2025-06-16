@@ -340,6 +340,51 @@ class WaveDynamics {
             };
         });
     }
+    
+    // 🆕 تحديث المذبذبات من الخبرات
+    async update_oscillators_from_experiences(experiences, context) {
+        for (const experience of experiences) {
+            const oscillator_id = `experience_${experience.skill_id}`;
+            
+            this.wave_state.active_oscillators.set(oscillator_id, {
+                type: 'experience_oscillator',
+                frequency: 0.1 + experience.proficiency_level * 0.3,
+                amplitude: experience.relevance_score || 0.5,
+                phase: Math.random() * 2 * Math.PI,
+                skill_context: experience.skill_id,
+                crossover_potential: experience.crossover_potential || 0
+            });
+        }
+    }
+    
+    // 🆕 حساب حالة التداخل الحالية
+    async calculate_current_interference(context) {
+        const patterns = new Map();
+        const oscillators = Array.from(this.wave_state.active_oscillators.values());
+        
+        // البحث عن تداخل الخبرات
+        for (let i = 0; i < oscillators.length; i++) {
+            for (let j = i + 1; j < oscillators.length; j++) {
+                if (oscillators[i].type === 'experience_oscillator' && 
+                    oscillators[j].type === 'experience_oscillator') {
+                    
+                    const crossover_strength = this.calculate_experience_crossover(
+                        oscillators[i], oscillators[j]
+                    );
+                    
+                    if (crossover_strength > 0.3) {
+                        patterns.set(`crossover_${i}_${j}`, {
+                            type: 'constructive_crossover',
+                            strength: crossover_strength,
+                            skills: [oscillators[i].skill_context, oscillators[j].skill_context]
+                        });
+                    }
+                }
+            }
+        }
+        
+        return { interference_patterns: patterns };
+    }
 
     /**
      * Assess noise requirements based on interference patterns

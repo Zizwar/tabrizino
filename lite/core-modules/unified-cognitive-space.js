@@ -46,7 +46,10 @@ class UnifiedCognitiveSpace {
             // الحالة الحالية
             current_script_name: 'default_reality.script', // Default script
             active_perspectives: new Set(),
-            system_state: {} // For overall state tracking
+            system_state: {
+                current_cognitive_modifier: { processing_speed_modifier: 1.0, error_probability_modifier: 1.0, creativity_boost_modifier: 1.0 }
+            }
+
         };
     }
 
@@ -59,14 +62,25 @@ class UnifiedCognitiveSpace {
         this.space.active_perspectives = new Set([perspective_name]);
         const script_parameters = this.space.script_manager.get_script_parameters(this.space.current_script_name);
 
-        // تطبيق "العدسة" على المحاكي
-        // The core_simulator will internally use its sub-modules like decision_quantum, wave_dynamics
-        // or this UnifiedCognitiveSpace orchestrates calls to them based on core_simulator's output.
-        // For now, let's assume core_simulator is a high-level processor.
+        // 1. Reality Engine: معالجة التجسيد، التحقق من الواقع، والحصول على CognitiveModifier
+        const reality_processing_result = await this.space.reality_engine.process_embodiment_and_validate(query, context);
+        this.space.system_state.current_cognitive_modifier = reality_processing_result.cognitive_modifier;
+        const validation_from_reality_engine = reality_processing_result.reality_validation;
+
+        // 2. Agate Memory: الحصول على الخبرات الكمية ذات الصلة
+        // السياق يمكن أن يشمل query.details, context.situation, etc.
+        const query_context_for_experiences = { ...context, query_content: query, perspective: perspective_name };
+        const relevant_experiences = await this.space.agate_memory.getRelevantExperiences(query_context_for_experiences, 0.4 /* example threshold */);
+
+        // 3. Wave Dynamics: تحديث المذبذبات بناءً على الخبرات المفعلة
+        // (يفترض أن WaveDynamics لديها الآن طريقة للقيام بذلك، مثل update_oscillators_from_experiences)
+        await this.space.wave_dynamics.update_oscillators_from_experiences(relevant_experiences, context);
+        // لا نحتاج بالضرورة إلى حالة الموجة هنا مباشرة، بل قبل استدعاء DecisionQuantum
+
+        // 4. CoreSimulator (QuantumSimulators): معالجة الاستعلام، مع إثراءه بالخبرات والمعدل المعرفي
         const simulation_result = await this.space.core_simulator.process({
             query: query,
             context: context,
-            
             // فلاتر المنظور
             trust_matrix: perspective_config.trust_matrix,
             emotional_filter: perspective_config.emotional_filter,
@@ -78,11 +92,20 @@ class UnifiedCognitiveSpace {
             // نماذج الآخرين المفلترة
             others_models_access: this.space.others_models.filter_by_perspective(perspective_config),
             script_parameters: script_parameters
+            // (جديد) تمرير الخبرات والمعدل المعرفي
+            active_experiences: relevant_experiences,
+            cognitive_modifier: this.space.system_state.current_cognitive_modifier
         });
 
-        // Validate with RealityEngine
-        const validation = await this.space.reality_engine.validate(simulation_result, context);
-        return { ...simulation_result, validation };
+        // تجميع وجهة النظر النهائية لهذا المنظور
+        const viewpoint = {
+            ...simulation_result,
+            validation: validation_from_reality_engine, // استخدام نتيجة التحقق التي حصلنا عليها بالفعل
+            source_perspective: perspective_name,
+            influencing_experiences_summary: relevant_experiences.map(e => ({ skill_id: e.skill_id, proficiency: e.proficiency_level })),
+            // قد نرغب في تمرير تفاصيل الخبرات الكاملة إذا احتاجتها DecisionQuantum لاحقًا
+        };
+        return viewpoint;
     }
 
     // البرلمان الداخلي - عدة مناظير في نفس الوقت
@@ -93,27 +116,29 @@ class UnifiedCognitiveSpace {
         );
         const all_viewpoints = await Promise.all(concurrent_processing);
 
-        // 1. وجهات نظر البرلمان هي نفسها "الخيارات" التي ستدخل في حالة تراكب كمي.
-        //    نهيئ سياق القرار لوحدة القرار الكمي.
+        // (جديد) الحصول على حالة التداخل الموجي الحالية بعد معالجة جميع المناظير وتفعيل خبراتها
+        const current_wave_dynamics_state = await this.space.wave_dynamics.calculate_current_interference(context);
+
+        // تهيئة سياق القرار لوحدة القرار الكمي
         const decision_context_for_quantum = {
             options: all_viewpoints, // كل وجهة نظر هي خيار محتمل
             type: 'parliamentary_synthesis', // نعطي العملية نوعاً مميزاً
-            // نمرر السياقات ذات الصلة من الاستعلام الأصلي أو السياق العام
             social_models: context.social_models || query.social_models || [],
             trust_context: context.trust_context || query.trust_context || {},
-            // نمرر أي معلومات سياقية أخرى قد تكون مهمة لوحدة القرار
-            // مثل urgency, stakes, etc., if available in the original context or query
+            // (جديد) تمرير المعدل المعرفي وحالة الموجات
+            cognitive_modifier: this.space.system_state.current_cognitive_modifier,
+            wave_dynamics_state: current_wave_dynamics_state,
+            // يمكن أيضًا تمرير قائمة مجمعة للـ relevant_experiences إذا كانت DecisionQuantum تحتاجها بشكل عام
+            // all_relevant_experiences: all_viewpoints.reduce((acc, vp) => acc.concat(vp.influencing_experiences_details || []), []),
             ...(context.decision_details || {}), // إذا كان السياق يحتوي على تفاصيل قرار محددة
             ...context // نمرر السياق العام
         };
 
-        // 2. نستدعي الوحدة المختصة (DecisionQuantum) للقيام بعملية الدمج الاحتمالي المعقدة.
+        // استدعاء DecisionQuantum
         const final_decision = await this.space.decision_quantum.evaluate(
             decision_context_for_quantum, 
             context // السياق العام يمكن أن يمرر هنا أيضاً للتأثيرات البيئية وغيرها
         );
-
-        // 3. نعيد النتيجة المركبة والذكية من وحدة القرار.
         return final_decision;
     }
 

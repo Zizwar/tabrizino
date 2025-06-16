@@ -580,7 +580,9 @@ function cockroachCognition() {
             
             // الخطوة 1: الفرز الإدراكي
             await this.simulateDelay(300);
-            const triageDuration = Math.random() * 3 + 2; // 2-5ms
+            const TRIAGE_DURATION_RANDOM_FACTOR = 3;
+            const TRIAGE_DURATION_BASE = 2;
+            const triageDuration = Math.random() * TRIAGE_DURATION_RANDOM_FACTOR + TRIAGE_DURATION_BASE; // 2-5ms
             totalDuration += triageDuration;
             timeline.push({
                 name: 'الفرز الإدراكي',

@@ -49,7 +49,15 @@ class CoreSimulator {
         return this.webppl.infer(() => {
             // Example: a simple probabilistic outcome
             const base_outcome = this.webppl.gaussian(0.5, 0.2);
-            const influenced_outcome = base_outcome + (trust_matrix ? 0.1 : 0) + (emotional_filter ? 0.1 : 0);
+            return this.webppl.infer(() => {
+    // Example: a simple probabilistic outcome
+    const base_outcome = this.webppl.gaussian(0.5, 0.2);
+    
+    const TRUST_MATRIX_INFLUENCE = 0.1;
+    const EMOTIONAL_FILTER_INFLUENCE = 0.1;
+    const influenced_outcome = base_outcome + (trust_matrix ? TRUST_MATRIX_INFLUENCE : 0) + (emotional_filter ? EMOTIONAL_FILTER_INFLUENCE : 0);
+});
+
             
             return {
                 simulated_result: Math.max(0, Math.min(1, influenced_outcome)),

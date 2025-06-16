@@ -91,34 +91,30 @@ class UnifiedCognitiveSpace {
         const concurrent_processing = perspective_names.map(name => 
             this.process_with_perspective(query, name, context)
         );
-        
         const all_viewpoints = await Promise.all(concurrent_processing);
-        
-        // التفاعل والتركيب - Placeholder for synthesis logic
-        // This would involve DecisionQuantum and WaveDynamics more directly
-        // For now, let's assume a simple aggregation or selection.
-        const synthesized_decision = this.space.decision_quantum.evaluate(
-            { options: all_viewpoints, type: query.type, ...context }, // DecisionQuantum needs options
-            context // Pass full context
-        );
-        return synthesized_decision; // This needs to be more sophisticated
-    }
 
-    // Placeholder for a more complex synthesis
-    synthesize_parliament_decision(all_viewpoints, perspective_names) {
-        // Simple strategy: pick the one with highest confidence or average them out
-        // In a real scenario, this would be a complex probabilistic combination
-        if (all_viewpoints.length === 0) return { decision: "No consensus", confidence: 0 };
-        
-        // This is a very naive synthesis.
-        // A proper synthesis would involve `DecisionQuantum` to weigh these viewpoints.
-        let best_viewpoint = all_viewpoints[0];
-        for (const viewpoint of all_viewpoints) {
-            if ((viewpoint.confidence || 0) > (best_viewpoint.confidence || 0)) {
-                best_viewpoint = viewpoint;
-            }
-        }
-        return best_viewpoint;
+        // 1. وجهات نظر البرلمان هي نفسها "الخيارات" التي ستدخل في حالة تراكب كمي.
+        //    نهيئ سياق القرار لوحدة القرار الكمي.
+        const decision_context_for_quantum = {
+            options: all_viewpoints, // كل وجهة نظر هي خيار محتمل
+            type: 'parliamentary_synthesis', // نعطي العملية نوعاً مميزاً
+            // نمرر السياقات ذات الصلة من الاستعلام الأصلي أو السياق العام
+            social_models: context.social_models || query.social_models || [],
+            trust_context: context.trust_context || query.trust_context || {},
+            // نمرر أي معلومات سياقية أخرى قد تكون مهمة لوحدة القرار
+            // مثل urgency, stakes, etc., if available in the original context or query
+            ...(context.decision_details || {}), // إذا كان السياق يحتوي على تفاصيل قرار محددة
+            ...context // نمرر السياق العام
+        };
+
+        // 2. نستدعي الوحدة المختصة (DecisionQuantum) للقيام بعملية الدمج الاحتمالي المعقدة.
+        const final_decision = await this.space.decision_quantum.evaluate(
+            decision_context_for_quantum, 
+            context // السياق العام يمكن أن يمرر هنا أيضاً للتأثيرات البيئية وغيرها
+        );
+
+        // 3. نعيد النتيجة المركبة والذكية من وحدة القرار.
+        return final_decision;
     }
 
     set_active_script(script_name) {

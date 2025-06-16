@@ -24,6 +24,9 @@ class AgateMemory {
             voting_history: new Map()
         };
         
+        // 🆕 إضافة نظام الخبرات
+        this.quantum_experiences = new Map(); // skill_id -> QuantumExperience
+        this.crossover_potential_matrix = new Map(); // skill1_skill2 -> potential
         // Emotional Encryption System
         this.emotional_encryption = {
             encryption_keys: new Map(), // Emotional states as keys
@@ -70,6 +73,45 @@ class AgateMemory {
             compression_efficiency: 0.42,
             reconstruction_variation: 0.31
         };
+    }
+
+    
+    // 🆕 تخزين خبرة جديدة
+    store_skill_experience(skill_id, performance_data) {
+        const existing = this.quantum_experiences.get(skill_id) || {
+            skill_id: skill_id,
+            proficiency_level: 0.1,
+            attempts_count: 0,
+            success_history: [],
+            crossover_discoveries: new Map()
+        };
+        
+        existing.attempts_count++;
+        existing.success_history.push(performance_data.success);
+        existing.proficiency_level = this.calculate_proficiency(existing);
+        
+        this.quantum_experiences.set(skill_id, existing);
+        this.update_crossover_potential(skill_id);
+        
+        return existing;
+    }
+    
+    // 🆕 العثور على خبرات ذات صلة
+    getRelevantExperiences(context, threshold = 0.4) {
+        const relevant = [];
+        
+        for (const [skill_id, experience] of this.quantum_experiences) {
+            const relevance = this.calculate_relevance(experience, context);
+            if (relevance > threshold) {
+                relevant.push({
+                    ...experience,
+                    relevance_score: relevance,
+                    crossover_potential: this.get_crossover_potential(skill_id, context.target_skill)
+                });
+            }
+        }
+        
+        return relevant.sort((a, b) => b.relevance_score - a.relevance_score);
     }
 
     /**

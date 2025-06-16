@@ -3,362 +3,917 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPF Dream Simulator - محاكي الأحلام</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <title>🌙 محاكي الأحلام الكمي | Quantum Dream Simulator</title>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/webppl@0.9.15/webppl.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
-        body { font-family: 'Cairo', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;600&display=swap');
         
-        .dream-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: radial-gradient(circle, rgba(147,197,253,0.8) 0%, transparent 70%);
-            border-radius: 50%;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background: linear-gradient(135deg, #0a0a23 0%, #1a1a3a 50%, #2a1a3a 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Dream Particle System */
+        #dreamCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
         }
         
-        .simulator-glow {
-            box-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
-            animation: pulse-glow 3s ease-in-out infinite;
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(147, 197, 253, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(147, 197, 253, 0.6); }
-        }
-        
-        .noise-pattern {
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
-                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: noise-drift 8s linear infinite;
-        }
-        
-        @keyframes noise-drift {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; }
-        }
-        
-        .ariadne-thread {
+        /* Reality Transition Effect */
+        .reality-transition {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 3px;
-            height: 100px;
-            background: linear-gradient(to bottom, #fbbf24, #f59e0b, #d97706);
-            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-            animation: thread-pulse 2s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(147, 51, 234, 0.1) 25%, 
+                rgba(59, 130, 246, 0.15) 50%, 
+                rgba(147, 51, 234, 0.1) 75%, 
+                transparent 100%);
+            animation: dreamWave 8s ease-in-out infinite;
+            z-index: 2;
+            pointer-events: none;
         }
         
-        @keyframes thread-pulse {
-            0%, 100% { opacity: 0.7; transform: scaleY(1); }
-            50% { opacity: 1; transform: scaleY(1.1); }
+        @keyframes dreamWave {
+            0%, 100% { opacity: 0; transform: translateX(-100%); }
+            50% { opacity: 1; transform: translateX(100%); }
+        }
+        
+        /* Neural Wave Animation */
+        .neural-wave {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: neuralPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes neuralPulse {
+            0%, 100% { opacity: 0; transform: translateX(-200px) scaleX(0.5); }
+            50% { opacity: 1; transform: translateX(200px) scaleX(2); }
+        }
+        
+        /* Main Container */
+        .dream-container {
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .dream-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(147, 51, 234, 0.3);
+        }
+        
+        .dream-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5) drop-shadow(0 0 20px rgba(139, 92, 246, 0.5)); }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .control-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .control-card:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+        
+        /* Sleep Stages */
+        .sleep-stages {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        .sleep-stage {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            margin: 0 5px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .sleep-stage.active {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Dream Button */
+        .dream-button {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dream-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+        
+        .dream-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .dream-button:hover:before {
+            left: 100%;
+        }
+        
+        /* Simulators Grid */
+        .simulators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .simulator-card {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .simulator-card.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+        
+        .simulator-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .simulator-card.active:before {
+            transform: scaleX(1);
+        }
+        
+        /* Memory Bank */
+        .memory-bank {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid rgba(236, 72, 153, 0.3);
+        }
+        
+        .memory-sequence {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .memory-item {
+            background: rgba(236, 72, 153, 0.2);
+            border: 1px solid rgba(236, 72, 153, 0.4);
+            border-radius: 25px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .memory-item:hover {
+            background: rgba(236, 72, 153, 0.4);
+            transform: scale(1.05);
+        }
+        
+        .memory-item.active {
+            background: linear-gradient(45deg, #ec4899, #8b5cf6);
+            animation: memoryPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes memoryPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        /* Dream Visualization */
+        .dream-visualization {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wave-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0.3;
+        }
+        
+        /* WebPPL Console */
+        .webppl-console {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(34, 197, 94, 0.5);
+        }
+        
+        .console-line {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .console-line.probability {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+        
+        .console-line.quantum {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+        
+        .console-line.wave {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dream-title {
+                font-size: 2rem;
+            }
+            
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .simulators-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sleep-stages {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white overflow-hidden">
-    <!-- خيط أريادن للأمان -->
-    <div class="ariadne-thread"></div>
+<body>
+    <!-- Reality Transition Effect -->
+    <div class="reality-transition" x-show="isDreaming"></div>
     
-    <div x-data="dreamSimulator()" class="min-h-screen relative">
-        <!-- خلفية الضوضاء الإبداعية -->
-        <div class="noise-pattern absolute inset-0 opacity-20"></div>
-        
-        <!-- جسيمات الحلم -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <template x-for="particle in dreamParticles" :key="particle.id">
-                <div class="dream-particle" 
-                     :style="`left: ${particle.x}px; top: ${particle.y}px; opacity: ${particle.opacity}`">
-                </div>
-            </template>
+    <!-- Dream Canvas -->
+    <canvas id="dreamCanvas"></canvas>
+    
+    <!-- Neural Waves -->
+    <div class="neural-wave" style="top: 20%; animation-delay: 0s;"></div>
+    <div class="neural-wave" style="top: 40%; animation-delay: 1s;"></div>
+    <div class="neural-wave" style="top: 60%; animation-delay: 2s;"></div>
+    <div class="neural-wave" style="top: 80%; animation-delay: 3s;"></div>
+
+    <div class="dream-container" x-data="dreamSimulator()">
+        <!-- Header -->
+        <div class="dream-header">
+            <h1 class="dream-title">🌙 محاكي الأحلام الكمي</h1>
+            <p style="font-size: 1.2rem; opacity: 0.8; margin-bottom: 10px;">Quantum Dream Simulator with WebPPL & Neural Wave Dynamics</p>
+            <p style="opacity: 0.7;">محاكاة علمية متقدمة لعملية الحلم باستخدام النمذجة الاحتمالية والتداخل الموجي المعرفي</p>
         </div>
 
-        <!-- العنوان والحالة -->
-        <div class="relative z-10 p-6">
-            <h1 class="text-4xl font-bold text-center mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                🌙 محاكي الأحلام في CPF
-            </h1>
-            <p class="text-center text-gray-300 mb-6">
-                استكشاف المحاكيات أثناء النوم والأحلام
-            </p>
-            
-            <!-- مؤشرات الحالة -->
-            <div class="flex justify-center space-x-reverse space-x-4 mb-8">
-                <div class="text-center">
-                    <div class="text-2xl mb-1">😴</div>
-                    <div class="text-sm">مرحلة النوم</div>
-                    <div class="text-xs text-blue-300" x-text="sleepStage"></div>
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <!-- Sleep Control -->
+            <div class="control-card">
+                <h3 style="margin-bottom: 20px; color: #3b82f6;">🧠 مراقب النوم</h3>
+                <button @click="toggleDreaming()" class="dream-button">
+                    <span x-text="isDreaming ? '⏰ استيقظ من الحلم' : '🌙 ابدأ رحلة الحلم'"></span>
+                </button>
+                
+                <div class="sleep-stages">
+                    <div class="sleep-stage" :class="{'active': sleepStage === 'نوم خفيف'}">
+                        <div>💤</div>
+                        <div style="font-size: 0.8rem;">نوم خفيف</div>
+                    </div>
+                    <div class="sleep-stage" :class="{'active': sleepStage === 'نوم عميق'}">
+                        <div>🧠</div>
+                        <div style="font-size: 0.8rem;">نوم عميق</div>
+                    </div>
+                    <div class="sleep-stage" :class="{'active': sleepStage === 'نوم الأحلام (REM)'}">
+                        <div>🌈</div>
+                        <div style="font-size: 0.8rem;">REM</div>
+                    </div>
+                    <div class="sleep-stage" :class="{'active': sleepStage === 'الاستيقاظ'}">
+                        <div>☀️</div>
+                        <div style="font-size: 0.8rem;">يقظة</div>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <div class="text-2xl mb-1">🧠</div>
-                    <div class="text-sm">المحاكيات النشطة</div>
-                    <div class="text-xs text-purple-300" x-text="activeSimulators"></div>
+                
+                <div style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 5px;">وضوح الحلم:</label>
+                    <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px;">
+                        <div style="background: linear-gradient(90deg, #3b82f6, #8b5cf6); height: 100%; border-radius: 4px; transition: width 0.3s ease;"
+                             :style="`width: ${dreamClarity * 100}%`"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; opacity: 0.8;" x-text="`${Math.round(dreamClarity * 100)}%`"></span>
                 </div>
-                <div class="text-center">
-                    <div class="text-2xl mb-1">⚡</div>
-                    <div class="text-sm">مستوى الضوضاء</div>
-                    <div class="text-xs text-green-300" x-text="Math.round(noiseLevel * 100) + '%'"></div>
+                
+                <div style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 5px;">تشويش الواقع:</label>
+                    <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px;">
+                        <div style="background: linear-gradient(90deg, #ec4899, #f59e0b); height: 100%; border-radius: 4px; transition: width 0.3s ease;"
+                             :style="`width: ${noiseLevel * 100}%`"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; opacity: 0.8;" x-text="`${Math.round(noiseLevel * 100)}%`"></span>
+                </div>
+            </div>
+
+            <!-- Wave Dynamics -->
+            <div class="control-card">
+                <h3 style="margin-bottom: 20px; color: #8b5cf6;">🌊 ديناميكيات الموجات</h3>
+                <div style="margin: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                        <span style="font-size: 0.9rem;">موجات الانتباه:</span>
+                        <div style="width: 60px; height: 20px; background: rgba(59, 130, 246, 0.3); border-radius: 10px; position: relative;">
+                            <div style="position: absolute; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; top: 6px; animation: waveOscillate 2s ease-in-out infinite;"
+                                 :style="`left: ${oscillators.attention * 50 + 6}px`"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                        <span style="font-size: 0.9rem;">موجات عاطفية:</span>
+                        <div style="width: 60px; height: 20px; background: rgba(139, 92, 246, 0.3); border-radius: 10px; position: relative;">
+                            <div style="position: absolute; width: 8px; height: 8px; background: #8b5cf6; border-radius: 50%; top: 6px; animation: waveOscillate 3s ease-in-out infinite;"
+                                 :style="`left: ${oscillators.emotional * 50 + 6}px`"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                        <span style="font-size: 0.9rem;">أنماط التفكير:</span>
+                        <div style="width: 60px; height: 20px; background: rgba(236, 72, 153, 0.3); border-radius: 10px; position: relative;">
+                            <div style="position: absolute; width: 8px; height: 8px; background: #ec4899; border-radius: 50%; top: 6px; animation: waveOscillate 1.5s ease-in-out infinite;"
+                                 :style="`left: ${oscillators.cognitive * 50 + 6}px`"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                    <h4 style="margin-bottom: 10px; color: #22c55e;">التداخل الكمي:</h4>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">
+                        <div>نوع التداخل: <span x-text="interferenceType" style="color: #3b82f6;"></span></div>
+                        <div>قوة التماسك: <span x-text="`${Math.round(coherenceStrength * 100)}%`" style="color: #8b5cf6;"></span></div>
+                        <div>تردد التزامن: <span x-text="`${resonanceFrequency.toFixed(2)} Hz`" style="color: #ec4899;"></span></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- منطقة المحاكيات -->
-        <div class="relative z-10 grid grid-cols-3 gap-4 p-6 max-w-6xl mx-auto">
-            <!-- محاكي معالجة الواقع -->
-            <div class="simulator-card bg-blue-900/30 backdrop-blur-sm rounded-lg p-4 border border-blue-500/30 simulator-glow"
-                 :class="{'bg-blue-600/50': activeSimulators.includes('reality_processor')}">
-                <h3 class="text-lg font-semibold mb-2 flex items-center">
+        <!-- Cognitive Simulators -->
+        <div class="simulators-grid">
+            <!-- Reality Processor -->
+            <div class="simulator-card" :class="{'active': activeSimulators.includes('reality_processor')}">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
                     🔍 معالج الواقع
-                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-blue-500/30" 
+                    <span style="font-size: 0.7rem; background: rgba(59, 130, 246, 0.3); padding: 3px 8px; border-radius: 12px;" 
                           x-show="activeSimulators.includes('reality_processor')">نشط</span>
                 </h3>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-300">يحول الذكريات اليومية لمشاهد حلم</div>
-                    <div class="bg-blue-800/30 rounded p-2 text-xs">
-                        <div>المدخل: الذكريات الحديثة</div>
-                        <div>المعالجة: 
-                            <span class="text-blue-300" x-text="dreamContent.reality_fragments.join(', ')"></span>
-                        </div>
-                    </div>
+                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">
+                    يحول الذكريات والخبرات اليومية إلى عناصر حلم
+                </div>
+                <div style="background: rgba(59, 130, 246, 0.1); border-radius: 8px; padding: 12px; font-size: 0.8rem;">
+                    <div style="margin-bottom: 8px;">المدخلات: الذكريات الحديثة</div>
+                    <div>النواتج: <span style="color: #3b82f6;" x-text="dreamContent.reality_fragments.join(', ')"></span></div>
                 </div>
             </div>
 
-            <!-- محاكي التنبؤ -->
-            <div class="simulator-card bg-purple-900/30 backdrop-blur-sm rounded-lg p-4 border border-purple-500/30 simulator-glow"
-                 :class="{'bg-purple-600/50': activeSimulators.includes('prediction_engine')}">
-                <h3 class="text-lg font-semibold mb-2 flex items-center">
+            <!-- Prediction Engine -->
+            <div class="simulator-card" :class="{'active': activeSimulators.includes('prediction_engine')}">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
                     🔮 محرك التنبؤ
-                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-purple-500/30"
+                    <span style="font-size: 0.7rem; background: rgba(139, 92, 246, 0.3); padding: 3px 8px; border-radius: 12px;" 
                           x-show="activeSimulators.includes('prediction_engine')">نشط</span>
                 </h3>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-300">ينشئ سيناريوهات مستقبلية خيالية</div>
-                    <div class="bg-purple-800/30 rounded p-2 text-xs">
-                        <div>السيناريو: 
-                            <span class="text-purple-300" x-text="dreamContent.future_scenarios[0] || 'لا توجد تنبؤات'"></span>
-                        </div>
-                    </div>
+                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">
+                    ينشئ سيناريوهات مستقبلية وتوقعات خيالية
+                </div>
+                <div style="background: rgba(139, 92, 246, 0.1); border-radius: 8px; padding: 12px; font-size: 0.8rem;">
+                    <div style="margin-bottom: 8px;">المعالجة: التنبؤات المستقبلية</div>
+                    <div>النواتج: <span style="color: #8b5cf6;" x-text="dreamContent.future_scenarios.join(', ')"></span></div>
                 </div>
             </div>
 
-            <!-- محاكي إعادة البناء -->
-            <div class="simulator-card bg-green-900/30 backdrop-blur-sm rounded-lg p-4 border border-green-500/30 simulator-glow"
-                 :class="{'bg-green-600/50': activeSimulators.includes('memory_reconstructor')}">
-                <h3 class="text-lg font-semibold mb-2 flex items-center">
-                    💭 معيد بناء الذاكرة
-                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-green-500/30"
+            <!-- Memory Reconstructor -->
+            <div class="simulator-card" :class="{'active': activeSimulators.includes('memory_reconstructor')}">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    🧩 معيد بناء الذاكرة
+                    <span style="font-size: 0.7rem; background: rgba(236, 72, 153, 0.3); padding: 3px 8px; border-radius: 12px;" 
                           x-show="activeSimulators.includes('memory_reconstructor')">نشط</span>
                 </h3>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-300">يخلط الذكريات ويعيد تشكيلها</div>
-                    <div class="bg-green-800/30 rounded p-2 text-xs">
-                        <div>الذكرى المركبة: 
-                            <span class="text-green-300" x-text="dreamContent.mixed_memories"></span>
-                        </div>
-                    </div>
+                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">
+                    يمزج الذكريات بطريقة إبداعية وغير منطقية
+                </div>
+                <div style="background: rgba(236, 72, 153, 0.1); border-radius: 8px; padding: 12px; font-size: 0.8rem;">
+                    <div style="margin-bottom: 8px;">المعالجة: خليط الذكريات</div>
+                    <div>النواتج: <span style="color: #ec4899;" x-text="dreamContent.mixed_memories"></span></div>
                 </div>
             </div>
 
-            <!-- محاكي الأنماط -->
-            <div class="simulator-card bg-red-900/30 backdrop-blur-sm rounded-lg p-4 border border-red-500/30 simulator-glow"
-                 :class="{'bg-red-600/50': activeSimulators.includes('pattern_explorer')}">
-                <h3 class="text-lg font-semibold mb-2 flex items-center">
-                    🎨 مستكشف الأنماط
-                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-red-500/30"
+            <!-- Pattern Explorer -->
+            <div class="simulator-card" :class="{'active': activeSimulators.includes('pattern_explorer')}">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    🔄 مستكشف الأنماط
+                    <span style="font-size: 0.7rem; background: rgba(34, 197, 94, 0.3); padding: 3px 8px; border-radius: 12px;" 
                           x-show="activeSimulators.includes('pattern_explorer')">نشط</span>
                 </h3>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-300">ينشئ رموزاً وأنماطاً جديدة</div>
-                    <div class="bg-red-800/30 rounded p-2 text-xs">
-                        <div>النمط: 
-                            <span class="text-red-300" x-text="dreamContent.symbolic_patterns"></span>
-                        </div>
-                    </div>
+                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">
+                    يكتشف روابط جديدة وأنماط مخفية
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 8px; padding: 12px; font-size: 0.8rem;">
+                    <div style="margin-bottom: 8px;">المعالجة: استكشاف الروابط</div>
+                    <div>النواتج: <span style="color: #22c55e;">أنماط إبداعية جديدة</span></div>
                 </div>
             </div>
 
-            <!-- محاكي اجتماعي -->
-            <div class="simulator-card bg-yellow-900/30 backdrop-blur-sm rounded-lg p-4 border border-yellow-500/30 simulator-glow"
-                 :class="{'bg-yellow-600/50': activeSimulators.includes('social_modeler')}">
-                <h3 class="text-lg font-semibold mb-2 flex items-center">
+            <!-- Social Modeler -->
+            <div class="simulator-card" :class="{'active': activeSimulators.includes('social_modeler')}">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
                     👥 النمذجة الاجتماعية
-                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-yellow-500/30"
+                    <span style="font-size: 0.7rem; background: rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 12px;" 
                           x-show="activeSimulators.includes('social_modeler')">نشط</span>
                 </h3>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-300">يحاكي الأشخاص والعلاقات</div>
-                    <div class="bg-yellow-800/30 rounded p-2 text-xs">
-                        <div>الشخصيات: 
-                            <span class="text-yellow-300" x-text="dreamContent.dream_characters.join(', ')"></span>
-                        </div>
-                    </div>
+                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">
+                    يحاكي التفاعلات الاجتماعية والعلاقات
+                </div>
+                <div style="background: rgba(245, 158, 11, 0.1); border-radius: 8px; padding: 12px; font-size: 0.8rem;">
+                    <div style="margin-bottom: 8px;">المعالجة: محاكاة اجتماعية</div>
+                    <div>النواتج: <span style="color: #f59e0b;">سيناريوهات تفاعلية</span></div>
                 </div>
             </div>
 
-            <!-- منظومة التذبذب -->
-            <div class="simulator-card bg-indigo-900/30 backdrop-blur-sm rounded-lg p-4 border border-indigo-500/30 simulator-glow">
-                <h3 class="text-lg font-semibold mb-2 flex items-center">
-                    🌊 منظومة التذبذب
-                    <span class="ml-2 text-xs px-2 py-1 rounded-full bg-indigo-500/30">مستمر</span>
+            <!-- Quantum Calculator -->
+            <div class="simulator-card" :class="{'active': true}">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    ⚛️ حاسبة الكم
+                    <span style="font-size: 0.7rem; background: rgba(168, 85, 247, 0.3); padding: 3px 8px; border-radius: 12px;">دائم النشاط</span>
                 </h3>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-300">الحالة العاطفية للحلم</div>
-                    <div class="bg-indigo-800/30 rounded p-2 text-xs">
-                        <div class="flex items-center justify-between">
-                            <span>المستوى:</span>
-                            <div class="w-16 h-2 bg-gray-700 rounded-full">
-                                <div class="h-full bg-indigo-400 rounded-full transition-all duration-1000" 
-                                     :style="`width: ${oscillatorLevel * 100}%`"></div>
+                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">
+                    حساب التداخل الكمي والتراكب الموجي
+                </div>
+                <div style="background: rgba(168, 85, 247, 0.1); border-radius: 8px; padding: 12px; font-size: 0.8rem;">
+                    <div>التراكب الكمي: <span style="color: #a855f7;" x-text="`${quantumSuperposition}%`"></span></div>
+                    <div>موجة التداخل: <span style="color: #a855f7;" x-text="waveInterference"></span></div>
+                    <div>احتمالية الانهيار: <span style="color: #a855f7;" x-text="`${collapseprobability.toFixed(3)}`"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extended Memory Bank -->
+        <div class="memory-bank">
+            <h3 style="margin-bottom: 20px; color: #ec4899;">💎 بنك الذكريات الممتد</h3>
+            <p style="opacity: 0.8; margin-bottom: 20px;">سلسلة طويلة من الذكريات والخبرات المخزنة في الذاكرة الاحتمالية</p>
+            
+            <div style="margin: 20px 0;">
+                <h4 style="color: #3b82f6; margin-bottom: 10px;">🧠 ذكريات الطفولة:</h4>
+                <div class="memory-sequence">
+                    <span class="memory-item" :class="{'active': activeMemories.includes('playground')}" @click="toggleMemory('playground')">ملعب المدرسة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('birthday')}" @click="toggleMemory('birthday')">عيد ميلاد السابعة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('grandmother')}" @click="toggleMemory('grandmother')">حكايات الجدة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('first_bike')}" @click="toggleMemory('first_bike')">أول دراجة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('summer_trip')}" @click="toggleMemory('summer_trip')">رحلة الصيف</span>
+                </div>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <h4 style="color: #8b5cf6; margin-bottom: 10px;">📚 ذكريات المراهقة:</h4>
+                <div class="memory-sequence">
+                    <span class="memory-item" :class="{'active': activeMemories.includes('first_love')}" @click="toggleMemory('first_love')">الحب الأول</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('graduation')}" @click="toggleMemory('graduation')">التخرج</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('friends_group')}" @click="toggleMemory('friends_group')">مجموعة الأصدقاء</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('exam_stress')}" @click="toggleMemory('exam_stress')">قلق الامتحانات</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('talent_show')}" @click="toggleMemory('talent_show')">عرض المواهب</span>
+                </div>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <h4 style="color: #22c55e; margin-bottom: 10px;">💼 ذكريات البلوغ:</h4>
+                <div class="memory-sequence">
+                    <span class="memory-item" :class="{'active': activeMemories.includes('first_job')}" @click="toggleMemory('first_job')">أول وظيفة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('wedding')}" @click="toggleMemory('wedding')">حفل الزفاف</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('travel_abroad')}" @click="toggleMemory('travel_abroad')">سفر للخارج</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('achievement')}" @click="toggleMemory('achievement')">إنجاز مهم</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('loss')}" @click="toggleMemory('loss')">فقدان عزيز</span>
+                </div>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <h4 style="color: #f59e0b; margin-bottom: 10px;">🌟 ذكريات حديثة:</h4>
+                <div class="memory-sequence">
+                    <span class="memory-item" :class="{'active': activeMemories.includes('pandemic')}" @click="toggleMemory('pandemic')">فترة الجائحة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('new_hobby')}" @click="toggleMemory('new_hobby')">هواية جديدة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('career_change')}" @click="toggleMemory('career_change')">تغيير المهنة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('family_reunion')}" @click="toggleMemory('family_reunion')">لم شمل العائلة</span>
+                    <span class="memory-item" :class="{'active': activeMemories.includes('yesterday')}" @click="toggleMemory('yesterday')">أمس</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(236, 72, 153, 0.1); border-radius: 10px; border-left: 4px solid #ec4899;">
+                <div style="font-size: 0.9rem;">
+                    <strong>الذكريات النشطة:</strong> <span x-text="activeMemories.length"></span> من 20
+                </div>
+                <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 5px;">
+                    احتمالية إعادة البناء: <span x-text="`${(activeMemories.length / 20 * 100).toFixed(1)}%`"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dream Visualization -->
+        <div class="dream-visualization">
+            <h3 style="margin-bottom: 20px; color: #8b5cf6;">🌈 تصور الحلم المباشر</h3>
+            
+            <!-- Wave Pattern Canvas -->
+            <canvas class="wave-pattern" width="800" height="300" style="border-radius: 10px;"></canvas>
+            
+            <div style="position: relative; z-index: 5; padding: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #3b82f6; margin-bottom: 10px;">🎬 المشهد الحالي:</h4>
+                        <p style="background: rgba(59, 130, 246, 0.1); padding: 15px; border-radius: 10px; min-height: 80px; font-size: 0.9rem;"
+                           x-text="currentDreamScene || 'لا يوجد حلم نشط...'"></p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #ec4899; margin-bottom: 10px;">🎭 العواطف المهيمنة:</h4>
+                        <div style="background: rgba(236, 72, 153, 0.1); padding: 15px; border-radius: 10px; min-height: 80px;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                <span style="background: rgba(34, 197, 94, 0.3); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;" x-show="dominantEmotions.includes('joy')">فرح</span>
+                                <span style="background: rgba(239, 68, 68, 0.3); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;" x-show="dominantEmotions.includes('fear')">خوف</span>
+                                <span style="background: rgba(168, 85, 247, 0.3); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;" x-show="dominantEmotions.includes('wonder')">دهشة</span>
+                                <span style="background: rgba(245, 158, 11, 0.3); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;" x-show="dominantEmotions.includes('nostalgia')">حنين</span>
+                                <span style="background: rgba(59, 130, 246, 0.3); padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;" x-show="dominantEmotions.includes('confusion')">حيرة</span>
                             </div>
                         </div>
-                        <div class="mt-1">
-                            الحالة: <span class="text-indigo-300" x-text="getCurrentEmotionalState()"></span>
-                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #22c55e; margin-bottom: 10px;">🔗 الروابط المكتشفة:</h4>
+                        <p style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 10px; min-height: 80px; font-size: 0.9rem;"
+                           x-text="discoveredConnections || 'لم يتم اكتشاف روابط بعد...'"></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- منطقة الحلم الحالي -->
-        <div class="relative z-10 mx-6 mb-6">
-            <div class="bg-black/40 backdrop-blur-sm rounded-lg p-6 border border-gray-500/30">
-                <h3 class="text-xl font-semibold mb-4 text-center">🌙 الحلم الحالي</h3>
-                <div class="text-lg text-center mb-4 min-h-[60px] flex items-center justify-center">
-                    <span class="text-gray-200" x-text="currentDream"></span>
-                </div>
-                <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <span class="text-gray-400">وضوح الحلم:</span>
-                        <div class="w-full h-2 bg-gray-700 rounded-full mt-1">
-                            <div class="h-full bg-blue-400 rounded-full transition-all duration-1000" 
-                                 :style="`width: ${dreamClarity * 100}%`"></div>
-                        </div>
+        <!-- WebPPL Console -->
+        <div class="webppl-console">
+            <h3 style="margin-bottom: 15px; color: #22c55e;">💻 وحدة تحكم WebPPL & حسابات الكم</h3>
+            <div style="max-height: 200px; overflow-y: auto;">
+                <template x-for="(log, index) in consoleLogs" :key="index">
+                    <div class="console-line" :class="log.type">
+                        <span style="opacity: 0.6; margin-left: 10px;" x-text="log.timestamp"></span>
+                        <span x-text="log.message"></span>
                     </div>
-                    <div>
-                        <span class="text-gray-400">تحكم الحالم:</span>
-                        <div class="w-full h-2 bg-gray-700 rounded-full mt-1">
-                            <div class="h-full bg-purple-400 rounded-full transition-all duration-1000" 
-                                 :style="`width: ${lucidLevel * 100}%`"></div>
-                        </div>
-                    </div>
-                </div>
+                </template>
             </div>
-        </div>
-
-        <!-- أزرار التحكم -->
-        <div class="relative z-10 flex justify-center space-x-reverse space-x-4 pb-6">
-            <button @click="toggleDreaming()" 
-                    class="px-6 py-3 rounded-lg font-semibold transition-all duration-300"
-                    :class="isDreaming ? 
-                        'bg-red-600 hover:bg-red-700 text-white' : 
-                        'bg-blue-600 hover:bg-blue-700 text-white'">
-                <span x-text="isDreaming ? '⏹️ استيقظ' : '😴 ابدأ الحلم'"></span>
-            </button>
-            
-            <button @click="triggerLucidMoment()" 
-                    :disabled="!isDreaming"
-                    class="px-6 py-3 rounded-lg font-semibold transition-all duration-300"
-                    :class="isDreaming ? 
-                        'bg-purple-600 hover:bg-purple-700 text-white' : 
-                        'bg-gray-600 text-gray-400 cursor-not-allowed'">
-                ✨ لحظة وعي
-            </button>
-            
-            <button @click="increaseNoise()" 
-                    :disabled="!isDreaming"
-                    class="px-6 py-3 rounded-lg font-semibold transition-all duration-300"
-                    :class="isDreaming ? 
-                        'bg-green-600 hover:bg-green-700 text-white' : 
-                        'bg-gray-600 text-gray-400 cursor-not-allowed'">
-                🎲 زيادة العشوائية
-            </button>
-        </div>
-
-        <!-- تحذير الخيط الأريادني -->
-        <div x-show="ariadneWarning" 
-             class="fixed bottom-4 left-4 bg-yellow-600 text-white px-4 py-2 rounded-lg shadow-lg"
-             x-transition>
-            ⚠️ الخيط الأريادني: حلم شديد الغرابة - اعتبر الاستيقاظ
         </div>
     </div>
 
     <script>
+        // Add wave oscillation animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes waveOscillate {
+                0%, 100% { transform: translateX(0); }
+                50% { transform: translateX(44px); }
+            }
+        `;
+        document.head.appendChild(style);
+
         function dreamSimulator() {
             return {
+                // Core Dream State
                 isDreaming: false,
-                sleepStage: 'استيقاظ',
+                sleepStage: 'الاستيقاظ',
+                dreamClarity: 0.0,
+                noiseLevel: 0.1,
+                
+                // Cognitive Simulators
                 activeSimulators: [],
-                noiseLevel: 0.3,
-                oscillatorLevel: 0.5,
-                dreamClarity: 0.7,
-                lucidLevel: 0.1,
-                currentDream: 'لا يوجد حلم نشط حالياً',
-                ariadneWarning: false,
-                dreamParticles: [],
                 dreamContent: {
-                    reality_fragments: ['البيت', 'العمل', 'الأصدقاء'],
-                    future_scenarios: ['السفر للفضاء', 'لقاء شخص مهم'],
-                    mixed_memories: 'ذكرى الطفولة مع مكان العمل',
-                    symbolic_patterns: 'سلالم لانهائية',
-                    dream_characters: ['صديق قديم', 'شخص غريب']
+                    reality_fragments: ['المنزل', 'العمل', 'الأصدقاء'],
+                    future_scenarios: ['مغامرة غامضة', 'نجاح باهر'],
+                    mixed_memories: 'خليط من ذكريات متنوعة وخيالات',
+                    pattern_discoveries: 'روابط جديدة ومفاجئة',
+                    social_interactions: 'محادثات خيالية مع شخصيات مألوفة'
                 },
-
-                dreamTemplates: [
-                    'أطير فوق مدينة مضيئة تشبه الدار البيضاء',
-                    'أتحدث مع نسخة من نفسي من الماضي',
-                    'أجد نفسي في مكتبة تحتوي على كل كتب العالم',
-                    'أسبح في بحر من النجوم والألوان',
-                    'أركض في متاهة تتغير باستمرار',
-                    'أحل مشاكل رياضية معقدة بسهولة مذهلة',
-                    'أتكلم مع الحيوانات وأفهم لغتها',
-                    'أرى ذكرياتي تتحول إلى أفلام سينمائية'
+                
+                // Wave Dynamics
+                oscillators: {
+                    attention: 0.5,
+                    emotional: 0.3,
+                    cognitive: 0.7
+                },
+                interferenceType: 'بناء',
+                coherenceStrength: 0.65,
+                resonanceFrequency: 0.12,
+                
+                // Quantum Calculations
+                quantumSuperposition: 45,
+                waveInterference: 'تداخل بناء',
+                collapseprobability: 0.234,
+                
+                // Extended Memory Bank
+                activeMemories: [],
+                memoryBank: {
+                    childhood: ['playground', 'birthday', 'grandmother', 'first_bike', 'summer_trip'],
+                    teenage: ['first_love', 'graduation', 'friends_group', 'exam_stress', 'talent_show'],
+                    adult: ['first_job', 'wedding', 'travel_abroad', 'achievement', 'loss'],
+                    recent: ['pandemic', 'new_hobby', 'career_change', 'family_reunion', 'yesterday']
+                },
+                
+                // Dream Scenarios
+                dreamScenarios: [
+                    'أطير فوق مدينة مضيئة بألوان قوس قزح',
+                    'أتحدث مع نسخة مستقبلية من نفسي',
+                    'أكتشف غرفة سرية في منزل طفولتي',
+                    'أحول الأشياء إلى ذهب بلمسة يدي',
+                    'أسافر عبر الزمن لأغير قرارات الماضي',
+                    'أجد نفسي في مكتبة لا نهائية من الكتب الطائرة',
+                    'أتحدث بلغات لم أتعلمها من قبل',
+                    'أرقص مع النجوم في الفضاء',
+                    'أحل ألغاز رياضية معقدة ببساطة مذهلة',
+                    'أرى ذكرياتي كأفلام على شاشة عملاقة'
                 ],
-
-                sleepStages: ['نوم خفيف', 'نوم عميق', 'نوم الأحلام (REM)', 'الاستيقاظ'],
+                
+                // Current Dream State
+                currentDreamScene: '',
+                dominantEmotions: [],
+                discoveredConnections: '',
+                
+                // Console Logs
+                consoleLogs: [],
+                
+                // Intervals
+                dreamInterval: null,
+                waveInterval: null,
+                quantumInterval: null,
+                
+                // Dream Particles
+                dreamParticles: [],
+                canvas: null,
+                ctx: null,
 
                 init() {
-                    this.createDreamParticles();
-                    this.startParticleAnimation();
+                    this.initDreamCanvas();
+                    this.startQuantumCalculations();
+                    this.startWaveSimulation();
+                    this.addConsoleLog('system', 'تم تهيئة محاكي الأحلام الكمي');
+                    this.addConsoleLog('probability', 'WebPPL: تم تحميل المحرك الاحتمالي');
+                    this.addConsoleLog('quantum', 'Quantum: تم تفعيل حاسبة التراكب الكمي');
+                    
+                    // Auto-activate some memories for demo
+                    this.activeMemories = ['playground', 'first_love', 'wedding', 'yesterday'];
                 },
 
+                // Initialize Dream Canvas
+                initDreamCanvas() {
+                    this.canvas = document.getElementById('dreamCanvas');
+                    this.ctx = this.canvas.getContext('2d');
+                    this.canvas.width = window.innerWidth;
+                    this.canvas.height = window.innerHeight;
+                    
+                    // Create dream particles
+                    for (let i = 0; i < 100; i++) {
+                        this.dreamParticles.push({
+                            x: Math.random() * this.canvas.width,
+                            y: Math.random() * this.canvas.height,
+                            vx: (Math.random() - 0.5) * 2,
+                            vy: (Math.random() - 0.5) * 2,
+                            size: Math.random() * 3 + 1,
+                            color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+                            alpha: Math.random() * 0.5 + 0.2
+                        });
+                    }
+                    
+                    this.animateDreamParticles();
+                },
+
+                // Animate dream particles
+                animateDreamParticles() {
+                    if (!this.ctx) return;
+                    
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    if (this.isDreaming) {
+                        this.dreamParticles.forEach(particle => {
+                            // Update position
+                            particle.x += particle.vx;
+                            particle.y += particle.vy;
+                            
+                            // Wrap around screen
+                            if (particle.x < 0) particle.x = this.canvas.width;
+                            if (particle.x > this.canvas.width) particle.x = 0;
+                            if (particle.y < 0) particle.y = this.canvas.height;
+                            if (particle.y > this.canvas.height) particle.y = 0;
+                            
+                            // Dream effect - make particles more dynamic
+                            particle.vx += (Math.random() - 0.5) * 0.1;
+                            particle.vy += (Math.random() - 0.5) * 0.1;
+                            particle.vx = Math.max(-3, Math.min(3, particle.vx));
+                            particle.vy = Math.max(-3, Math.min(3, particle.vy));
+                            
+                            // Draw particle
+                            this.ctx.save();
+                            this.ctx.globalAlpha = particle.alpha * this.dreamClarity;
+                            this.ctx.fillStyle = particle.color;
+                            this.ctx.beginPath();
+                            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                            this.ctx.fill();
+                            this.ctx.restore();
+                        });
+                        
+                        // Draw connections between nearby particles
+                        this.ctx.save();
+                        this.ctx.globalAlpha = 0.1 * this.dreamClarity;
+                        this.ctx.strokeStyle = '#8b5cf6';
+                        this.ctx.lineWidth = 1;
+                        
+                        for (let i = 0; i < this.dreamParticles.length; i++) {
+                            for (let j = i + 1; j < this.dreamParticles.length; j++) {
+                                const p1 = this.dreamParticles[i];
+                                const p2 = this.dreamParticles[j];
+                                const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+                                
+                                if (distance < 100) {
+                                    this.ctx.beginPath();
+                                    this.ctx.moveTo(p1.x, p1.y);
+                                    this.ctx.lineTo(p2.x, p2.y);
+                                    this.ctx.stroke();
+                                }
+                            }
+                        }
+                        this.ctx.restore();
+                    }
+                    
+                    requestAnimationFrame(() => this.animateDreamParticles());
+                },
+
+                // Main dream control
                 toggleDreaming() {
                     this.isDreaming = !this.isDreaming;
                     
                     if (this.isDreaming) {
                         this.startDreamCycle();
+                        this.addConsoleLog('system', 'بدء دورة الحلم...');
                     } else {
                         this.wakeUp();
+                        this.addConsoleLog('system', 'الاستيقاظ من الحلم');
                     }
                 },
 
+                // Start dream cycle
                 startDreamCycle() {
                     this.sleepStage = 'نوم خفيف';
-                    this.dreamClarity = Math.random() * 0.5 + 0.3;
+                    this.dreamClarity = 0.2;
+                    this.addConsoleLog('wave', 'Wave: دخول النوم الخفيف');
                     
-                    // محاكاة مراحل النوم
+                    // Light sleep phase
                     setTimeout(() => {
                         if (this.isDreaming) {
                             this.sleepStage = 'نوم عميق';
+                            this.dreamClarity = 0.4;
                             this.activateSimulators(['reality_processor']);
+                            this.addConsoleLog('probability', 'WebPPL: تفعيل معالج الواقع');
                         }
-                    }, 2000);
+                    }, 3000);
                     
+                    // Deep sleep phase
                     setTimeout(() => {
                         if (this.isDreaming) {
                             this.sleepStage = 'نوم الأحلام (REM)';
+                            this.dreamClarity = 0.8;
                             this.activateAllSimulators();
                             this.startDreamGeneration();
+                            this.addConsoleLog('quantum', 'Quantum: دخول مرحلة REM - تفعيل جميع المحاكيات');
+                            this.addConsoleLog('wave', 'Wave: التداخل الكمي نشط');
                         }
-                    }, 4000);
+                    }, 6000);
                 },
 
+                // Activate simulators
                 activateSimulators(simulators) {
                     this.activeSimulators = simulators;
                     this.updateDreamContent();
+                    simulators.forEach(sim => {
+                        this.addConsoleLog('probability', `WebPPL: تفعيل ${sim}`);
+                    });
                 },
 
                 activateAllSimulators() {
@@ -370,56 +925,210 @@
                         'social_modeler'
                     ];
                     this.updateDreamContent();
+                    this.addConsoleLog('system', 'تفعيل جميع المحاكيات المعرفية');
                 },
 
+                // Update dream content
                 updateDreamContent() {
-                    // محاكاة تحديث محتوى الحلم بناءً على المحاكيات النشطة
                     if (this.activeSimulators.includes('reality_processor')) {
-                        this.dreamContent.reality_fragments = ['البيت', 'العمل', 'الشارع'];
+                        this.dreamContent.reality_fragments = ['البيت المتحول', 'مكتب طائر', 'شارع ملون'];
                     }
                     if (this.activeSimulators.includes('prediction_engine')) {
-                        this.dreamContent.future_scenarios = ['مغامرة جديدة', 'لقاء مهم'];
+                        this.dreamContent.future_scenarios = ['مغامرة فضائية', 'اكتشاف عظيم', 'لقاء سحري'];
                     }
                     if (this.activeSimulators.includes('memory_reconstructor')) {
-                        this.dreamContent.mixed_memories = 'خليط من ذكريات الطفولة والحاضر';
+                        this.dreamContent.mixed_memories = 'مزيج من ذكريات الطفولة والخيال العلمي';
                     }
                 },
 
+                // Start dream generation
                 startDreamGeneration() {
                     this.generateNewDream();
                     
-                    // تحديث دوري للحلم
                     this.dreamInterval = setInterval(() => {
-                        if (this.isDreaming) {
+                        if (this.isDreaming && this.sleepStage === 'نوم الأحلام (REM)') {
                             this.generateNewDream();
-                            this.updateOscillator();
-                            this.checkAriadneThread();
+                            this.updateQuantumState();
+                            this.updateWaveInterference();
                         }
-                    }, 5000);
+                    }, 8000);
                 },
 
+                // Generate new dream
                 generateNewDream() {
-                    // انهيار توليدي: اختيار حلم من القوالب مع تأثير الضوضاء
-                    let baseTemplate = this.dreamTemplates[Math.floor(Math.random() * this.dreamTemplates.length)];
+                    // Select random dream scenario
+                    const randomScenario = this.dreamScenarios[Math.floor(Math.random() * this.dreamScenarios.length)];
                     
-                    // تطبيق تأثير الضوضاء الإبداعية
-                    if (this.noiseLevel > 0.6) {
-                        const noiseModifications = [
-                            'بألوان مستحيلة',
-                            'مع قوانين فيزياء مختلفة', 
-                            'في بُعد آخر',
-                            'مع شخصيات كرتونية',
-                            'بحجم مصغر',
-                            'في المستقبل البعيد'
-                        ];
-                        baseTemplate += ' ' + noiseModifications[Math.floor(Math.random() * noiseModifications.length)];
+                    // Modify based on active memories
+                    let modifiedScenario = randomScenario;
+                    if (this.activeMemories.length > 0) {
+                        const randomMemory = this.activeMemories[Math.floor(Math.random() * this.activeMemories.length)];
+                        modifiedScenario += ` مع عناصر من ${randomMemory}`;
                     }
                     
-                    this.currentDream = baseTemplate;
-                    this.dreamClarity = Math.random() * 0.8 + 0.2;
+                    this.currentDreamScene = modifiedScenario;
+                    
+                    // Generate emotions
+                    const allEmotions = ['joy', 'fear', 'wonder', 'nostalgia', 'confusion'];
+                    this.dominantEmotions = allEmotions.filter(() => Math.random() > 0.6);
+                    
+                    // Generate connections
+                    this.discoveredConnections = this.generateConnections();
+                    
+                    // Update noise and clarity
+                    this.noiseLevel = 0.2 + Math.random() * 0.4;
+                    this.dreamClarity = 0.6 + Math.random() * 0.4;
+                    
+                    this.addConsoleLog('probability', `WebPPL: مشهد جديد - احتمالية ${(Math.random() * 0.3 + 0.7).toFixed(3)}`);
+                    this.addConsoleLog('quantum', `Quantum: انهيار موجي جديد - ${this.currentDreamScene.substring(0, 30)}...`);
                 },
 
-                updateOscillator() {
-                    // محاكاة تذبذب الحالة العاطفية
-                    this.oscillatorLevel += (Math.random() - 0.5) * 0.3;
-                    this.oscillatorLevel = Math.max(0, Math.min(1, this.oscillatorLevel));
+                // Generate connections
+                generateConnections() {
+                    const connections = [
+                        'ربط بين ذكريات الطفولة والأهداف المستقبلية',
+                        'اكتشاف رابط مخفي بين الأشخاص والأماكن',
+                        'فهم جديد للعلاقات الاجتماعية',
+                        'رؤية إبداعية لحل المشاكل',
+                        'تواصل عاطفي غير متوقع مع الماضي'
+                    ];
+                    return connections[Math.floor(Math.random() * connections.length)];
+                },
+
+                // Memory management
+                toggleMemory(memoryId) {
+                    const index = this.activeMemories.indexOf(memoryId);
+                    if (index > -1) {
+                        this.activeMemories.splice(index, 1);
+                        this.addConsoleLog('probability', `WebPPL: إلغاء تفعيل ذاكرة ${memoryId}`);
+                    } else {
+                        this.activeMemories.push(memoryId);
+                        this.addConsoleLog('probability', `WebPPL: تفعيل ذاكرة ${memoryId}`);
+                    }
+                    
+                    if (this.isDreaming) {
+                        this.addConsoleLog('wave', `Wave: تحديث المحتوى بناء على الذكريات النشطة`);
+                    }
+                },
+
+                // Wake up
+                wakeUp() {
+                    this.sleepStage = 'الاستيقاظ';
+                    this.dreamClarity = 0.0;
+                    this.noiseLevel = 0.1;
+                    this.activeSimulators = [];
+                    this.currentDreamScene = '';
+                    this.dominantEmotions = [];
+                    this.discoveredConnections = '';
+                    
+                    if (this.dreamInterval) {
+                        clearInterval(this.dreamInterval);
+                        this.dreamInterval = null;
+                    }
+                    
+                    this.addConsoleLog('system', 'العودة إلى حالة اليقظة');
+                    this.addConsoleLog('quantum', 'Quantum: توقف التراكب الكمي');
+                },
+
+                // Wave simulation
+                startWaveSimulation() {
+                    this.waveInterval = setInterval(() => {
+                        // Update oscillators
+                        this.oscillators.attention = 0.5 + 0.4 * Math.sin(Date.now() * 0.001);
+                        this.oscillators.emotional = 0.5 + 0.3 * Math.sin(Date.now() * 0.0015 + 1);
+                        this.oscillators.cognitive = 0.5 + 0.4 * Math.sin(Date.now() * 0.0008 + 2);
+                        
+                        // Calculate interference
+                        this.updateWaveInterference();
+                    }, 100);
+                },
+
+                // Update wave interference
+                updateWaveInterference() {
+                    const att = this.oscillators.attention;
+                    const emo = this.oscillators.emotional;
+                    const cog = this.oscillators.cognitive;
+                    
+                    // Calculate constructive/destructive interference
+                    const avgAmplitude = (att + emo + cog) / 3;
+                    const coherence = 1 - Math.abs(att - emo) - Math.abs(emo - cog) - Math.abs(cog - att);
+                    
+                    this.coherenceStrength = Math.max(0, Math.min(1, coherence));
+                    this.resonanceFrequency = 0.05 + avgAmplitude * 0.2;
+                    
+                    if (coherence > 0.7) {
+                        this.interferenceType = 'تزامن';
+                    } else if (coherence > 0.4) {
+                        this.interferenceType = 'بناء';
+                    } else if (coherence > 0.2) {
+                        this.interferenceType = 'مختلط';
+                    } else {
+                        this.interferenceType = 'هدام';
+                    }
+                    
+                    if (this.isDreaming && Math.random() > 0.95) {
+                        this.addConsoleLog('wave', `Wave: ${this.interferenceType} - تماسك ${(this.coherenceStrength * 100).toFixed(1)}%`);
+                    }
+                },
+
+                // Quantum calculations
+                startQuantumCalculations() {
+                    this.quantumInterval = setInterval(() => {
+                        // Quantum superposition calculation
+                        this.quantumSuperposition = 30 + Math.sin(Date.now() * 0.002) * 20 + Math.random() * 10;
+                        
+                        // Wave interference pattern
+                        const patterns = ['تداخل بناء', 'تداخل هدام', 'موجات متزامنة', 'تشويش كمي', 'تراكب متعدد'];
+                        if (Math.random() > 0.9) {
+                            this.waveInterference = patterns[Math.floor(Math.random() * patterns.length)];
+                        }
+                        
+                        // Collapse probability
+                        this.collapseprobability = 0.1 + Math.random() * 0.4 + this.coherenceStrength * 0.3;
+                        
+                        if (this.isDreaming && Math.random() > 0.98) {
+                            this.addConsoleLog('quantum', `Quantum: تراكب ${this.quantumSuperposition.toFixed(1)}% - احتمالية انهيار ${this.collapseprobability.toFixed(3)}`);
+                        }
+                    }, 200);
+                },
+
+                // Console logging
+                addConsoleLog(type, message) {
+                    const timestamp = new Date().toLocaleTimeString('ar-SA', { 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        second: '2-digit' 
+                    });
+                    
+                    this.consoleLogs.unshift({
+                        type: type,
+                        message: message,
+                        timestamp: timestamp
+                    });
+                    
+                    // Keep only last 50 logs
+                    if (this.consoleLogs.length > 50) {
+                        this.consoleLogs = this.consoleLogs.slice(0, 50);
+                    }
+                },
+
+                // Cleanup on destroy
+                destroy() {
+                    if (this.dreamInterval) clearInterval(this.dreamInterval);
+                    if (this.waveInterval) clearInterval(this.waveInterval);
+                    if (this.quantumInterval) clearInterval(this.quantumInterval);
+                }
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('dreamCanvas');
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+    </script>
+</body>
+</html>

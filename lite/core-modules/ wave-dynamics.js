@@ -15,7 +15,8 @@ const ProbabilityCore = require('../probability-core');
 class WaveDynamics {
     constructor(config = {}) {
         this.webppl = new ProbabilityCore();
-        
+        this.brain_capacity = config.brain_capacity || 1000;
+        this.precision_level = this.calculate_precision_level();
         // Oscillator types and their characteristics
         this.oscillator_types = {
             attention_cycles: {
@@ -105,7 +106,16 @@ class WaveDynamics {
             pattern_breaking_success: 0.71
         };
     }
-
+    
+classify_noise_or_pattern(signal) {
+        if (this.brain_capacity < 500) {
+            // دماغ صغير: تصنيف بسيط
+            return signal > 0.1 ? 'noise' : 'pattern';
+        } else {
+            // دماغ كبير: تحليل معقد
+            return this.deep_pattern_analysis(signal);
+        }
+    }
     /**
      * Main wave dynamics calculation function
      * Analyzes interference between different cognitive processes

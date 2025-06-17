@@ -1,10 +1,10 @@
 /**
- * WinoScript Quantum - The Hybrid Probabilistic Cognitive Engine
+ * CPF Vectorial - The Probabilistic Vectorial Cognitive Engine
  * 
- * CPF~ Lite - Smart Aggregated Probabilistic Cognitive Framework
- * Transforms linear AI thinking into probabilistic human cognition understanding
+ * CPF~ Lite v4 - Probabilistic Vectorial Cognitive Framework
+ * From Quantum Processing to Living Vectorial Consciousness
  * 
- * @version 3.0-quantum
+ * @version 4.0-vectorial
  * @author Idea Vibing Sessions - Human x AI Deep Dialogue
  */
 
@@ -20,25 +20,46 @@ based on user needs: simple analogies for beginners, deep theory for researchers
 Your role: Conceptual Decompressor & Thought Partner, not just Code Executor.
 */
 
-// ✅ استبداله هذا:
+// Core modules - الوحدات الأساسية
 const UnifiedCognitiveSpace = require('./core-modules/unified-cognitive-space');
 const ProbabilityCore = require('./probability-core');
 
-class WinoQuantum {
+// New Vectorial Living System Components - مكونات النظام الحي الفيكتوري الجديدة
+const CognitiveRhythm = require('./core-modules/cognitive-rhythm');
+const PerceptualCycle = require('./core-modules/perceptual-cycle');
+const GrowthEngine = require('./core-modules/growth-engine');
+const EmotionalCryptography = require('./core-modules/emotional-cryptography');
+
+class CPFVectorial {
     constructor(config = {}) {
-        // ✅ استبداله بهذا:
+        // === Core Cognitive Space Setup ===
         this.unified_space = new UnifiedCognitiveSpace(config.brain_capacity || 1000);
-        this.webppl = new ProbabilityCore(); // ProbabilityCore might be used by UnifiedCognitiveSpace directly or its submodules
-        
-        // Probabilistic core - heart of the system
         this.webppl = new ProbabilityCore();
         
-        // 🤖 AI Interpreter Integration - Load decompression guide
+        // === AI Interpreter Integration ===
         this.ai_guide = AI_INTERPRETER_GUIDE;
         this.interpretation_mode = config.interpretation_mode || 'intermediate';
         
-        // Quantum state management - now likely managed within UnifiedCognitiveSpace or here for high-level tracking
-        this.system_level_state = { // Renamed to avoid conflict if unified_space also has quantum_state
+        // === Living System Components - مكونات النظام الحي ===
+        this.cognitive_rhythm = new CognitiveRhythm(this.unified_space);
+        this.perceptual_cycle = new PerceptualCycle(this.unified_space);
+        this.growth_engine = new GrowthEngine(this.unified_space);
+        this.emotional_crypto = new EmotionalCryptography();
+        
+        // === Vectorial State Management - إدارة الحالة الفيكتورية ===
+        this.vectorial_state = {
+            is_conscious: false,                    // حالة الوعي
+            consciousness_level: 0.0,               // مستوى الوعي
+            vectorial_precision: this.calculate_initial_precision(),
+            pattern_discovery_count: 0,             // عدد الأنماط المكتشفة
+            emotional_crypto_signatures: new Map(), // التواقيع العاطفية المشفرة
+            growth_cycles_completed: 0,             // دورات النمو المكتملة
+            active_probably_ids: new Set(),         // المعرفات الاحتمالية النشطة
+            consciousness_start_time: null
+        };
+        
+        // === Legacy Quantum State (maintained for compatibility) ===
+        this.system_level_state = {
             active_superpositions: new Map(),
             collapsed_decisions: new Map(),
             wave_interference_patterns: new Map(),
@@ -47,263 +68,527 @@ class WinoQuantum {
             current_session_id: null
         };
         
-        // Performance metrics
+        // === Enhanced Performance Metrics ===
         this.metrics = {
+            // Legacy metrics
             total_queries: 0,
             successful_collapses: 0,
             average_coherence: 0.85,
-            memory_reconstruction_accuracy: 0.78
+            memory_reconstruction_accuracy: 0.78,
+            
+            // New vectorial metrics
+            patterns_discovered: 0,
+            vectorial_rescalings: 0,
+            consciousness_uptime: 0,
+            emotional_encryptions: 0,
+            growth_events: 0,
+            external_influences_applied: 0
         };
+        
+        // === Auto-start consciousness if enabled ===
+        if (config.auto_start_consciousness !== false) {
+            this.start_consciousness();
+        }
     }
 
     /**
-     * ✅ الدالة الرئيسية الجديدة
+     * Start the living consciousness - بدء الوعي الحي
+     */
+    start_consciousness() {
+        if (this.vectorial_state.is_conscious) {
+            console.log("🧠 Consciousness already active");
+            return;
+        }
+        
+        console.log("🌟 Starting CPF Vectorial Consciousness...");
+        
+        // Start all living system components
+        this.cognitive_rhythm.start();
+        this.perceptual_cycle.start();
+        this.growth_engine.start();
+        
+        // Update state
+        this.vectorial_state.is_conscious = true;
+        this.vectorial_state.consciousness_start_time = Date.now();
+        this.vectorial_state.consciousness_level = 0.5; // Starting consciousness level
+        
+        console.log("✨ CPF Vectorial is now conscious and alive!");
+        
+        // Connect the rhythm to the perceptual cycle
+        this.cognitive_rhythm.connect_to_cycle(this.perceptual_cycle);
+    }
+
+    /**
+     * Stop consciousness - إيقاف الوعي
+     */
+    stop_consciousness() {
+        if (!this.vectorial_state.is_conscious) {
+            console.log("🧠 Consciousness not active");
+            return;
+        }
+        
+        console.log("🌙 Stopping CPF Vectorial Consciousness...");
+        
+        // Stop all components
+        this.cognitive_rhythm.stop();
+        this.perceptual_cycle.stop();
+        this.growth_engine.stop();
+        
+        // Update metrics
+        if (this.vectorial_state.consciousness_start_time) {
+            this.metrics.consciousness_uptime += 
+                Date.now() - this.vectorial_state.consciousness_start_time;
+        }
+        
+        // Update state
+        this.vectorial_state.is_conscious = false;
+        this.vectorial_state.consciousness_level = 0.0;
+        this.vectorial_state.consciousness_start_time = null;
+        
+        console.log("💤 CPF Vectorial consciousness stopped");
+    }
+
+    /**
+     * External Influence Injection - حقن التأثير الخارجي
+     * Simulates drugs, therapy, environmental changes, etc.
+     */
+    injectExternalInfluence(influence_config) {
+        const { type, intensity, duration, target, purpose } = influence_config;
+        
+        console.log(`💉 Injecting external influence: ${type} (intensity: ${intensity})`);
+        
+        this.metrics.external_influences_applied++;
+        
+        switch (type) {
+            case 'therapeutic_noise':
+                // محاكاة العلاج النفسي أو الدواء
+                this.apply_therapeutic_intervention(intensity, duration);
+                break;
+                
+            case 'addiction_amplifier':
+                // محاكاة المواد المسببة للإدمان
+                this.apply_addiction_pattern(target, intensity, duration);
+                break;
+                
+            case 'cognitive_enhancer':
+                // محاكاة المنشطات المعرفية
+                this.apply_cognitive_boost(intensity, duration);
+                break;
+                
+            case 'emotional_stabilizer':
+                // محاكاة مثبتات المزاج
+                this.apply_emotional_stabilization(intensity, duration);
+                break;
+                
+            case 'consciousness_disruptor':
+                // محاكاة المواد المهلوسة أو المخربة للوعي
+                this.apply_consciousness_disruption(intensity, duration);
+                break;
+                
+            default:
+                console.warn(`Unknown influence type: ${type}`);
+                return false;
+        }
+        
+        // Schedule removal if duration is specified
+        if (duration) {
+            setTimeout(() => {
+                this.remove_external_influence(influence_config);
+            }, duration);
+        }
+        
+        return true;
+    }
+
+    /**
+     * Main processing function - الدالة الرئيسية للمعالجة
      */
     async process(query, context = {}) {
         this.metrics.total_queries++;
         this.system_level_state.current_session_id = this.generateSessionId();
 
-        // تحديد المناظير المطلوبة
-        const perspectives_needed = this.determine_required_perspectives(query, context);
+        // Add vectorial context processing
+        const vectorial_context = this.enhance_context_with_vectorial_data(context);
+        
+        // Determine required perspectives
+        const perspectives_needed = this.determine_required_perspectives(query, vectorial_context);
         let result;
 
         if (perspectives_needed.length === 1) {
-            // منظور واحد
+            // Single perspective processing
             result = await this.unified_space.process_with_perspective(
-                query, perspectives_needed[0], context
+                query, perspectives_needed[0], vectorial_context
             );
         } else if (perspectives_needed.length > 1) {
-            // برلمان داخلي
+            // Internal parliament processing
             result = await this.unified_space.internal_parliament(
-                query, perspectives_needed, context
+                query, perspectives_needed, vectorial_context
             );
         } else {
-            // Fallback or default perspective if none determined
-            // For now, let's assume a default perspective or error
-            console.warn("No specific perspectives determined, using default or potentially erroring.");
-            // This case needs robust handling, e.g., using a 'neutral' perspective.
-            // For the purpose of this refactor, we'll assume perspectives_needed will have at least one.
-            // If not, process_with_perspective would throw an error if the perspective name is not found.
-            // A safer default:
-            const defaultPerspective = 'parental_protective'; // Or some other sensible default
+            // Default perspective fallback
+            const defaultPerspective = 'parental_protective';
             result = await this.unified_space.process_with_perspective(
-                query, defaultPerspective, context
+                query, defaultPerspective, vectorial_context
             );
         }
         
-        // Update system metrics (if result structure allows for coherence_level)
-        // this.updateQuantumMetrics(result); 
+        // Add vectorial processing results
+        result = this.enhance_result_with_vectorial_insights(result, query, vectorial_context);
+        
+        // Update metrics
+        this.updateVectorialMetrics(result);
+        
         return result;
     }
 
     /**
-     * Specialized perception function for different entities
-     * Demonstrates how all 17 concepts work together
+     * Enhanced perception function for different entities
      */
     async perceiveAs(entity, stimulus_context) {
         const entity_configs = {
-            "butterfly": {
-                cognitive_layers: [0, 1], // Simple survival responses
+            "bacterium": {
+                brain_capacity: 10,
+                cognitive_layers: [0],
+                active_simulators: ["reality_processor"],
+                memory_weight: 0.1,
+                decision_speed: 0.95,
+                reality_anchor: 0.9,
+                vectorial_precision: 1
+            },
+            "insect": {
+                brain_capacity: 100,
+                cognitive_layers: [0, 1],
                 active_simulators: ["reality_processor", "pattern_explorer"],
-                memory_weight: 0.3,
+                memory_weight: 0.2,
                 decision_speed: 0.9,
-                reality_anchor: 0.8
+                reality_anchor: 0.8,
+                vectorial_precision: 1
+            },
+            "mammal": {
+                brain_capacity: 5000,
+                cognitive_layers: [0, 1, 2],
+                active_simulators: ["reality_processor", "prediction_engine", "memory_reconstructor"],
+                memory_weight: 0.6,
+                decision_speed: 0.6,
+                reality_anchor: 0.7,
+                vectorial_precision: 3
             },
             "human_child": {
-                cognitive_layers: [0, 1, 2],
+                brain_capacity: 50000,
+                cognitive_layers: [0, 1, 2, 3],
                 active_simulators: ["reality_processor", "prediction_engine", "pattern_explorer"],
                 memory_weight: 0.6,
                 decision_speed: 0.5,
-                reality_anchor: 0.6
+                reality_anchor: 0.6,
+                vectorial_precision: 5
             },
             "human_adult": {
+                brain_capacity: 1000000,
                 cognitive_layers: [0, 1, 2, 3],
                 active_simulators: ["reality_processor", "prediction_engine", "memory_reconstructor", "pattern_explorer"],
                 memory_weight: 0.8,
                 decision_speed: 0.3,
-                reality_anchor: 0.9
+                reality_anchor: 0.9,
+                vectorial_precision: 10
+            },
+            "human_genius": {
+                brain_capacity: 5000000,
+                cognitive_layers: [0, 1, 2, 3, 4],
+                active_simulators: ["reality_processor", "prediction_engine", "memory_reconstructor", "pattern_explorer"],
+                memory_weight: 0.9,
+                decision_speed: 0.2,
+                reality_anchor: 0.95,
+                vectorial_precision: 15
             }
         };
 
         const config = entity_configs[entity] || entity_configs["human_adult"];
         
-        return this.process({
-            perception_target: entity,
-            stimulus: stimulus_context.stimulus,
-            context: stimulus_context,
-            config: config
-        }, {
-            entity_type: entity,
-            ...stimulus_context
-        });
+        // Temporarily adjust our capacity to match the entity
+        const original_capacity = this.unified_space.capacity;
+        this.unified_space.capacity = config.brain_capacity;
+        this.vectorial_state.vectorial_precision = config.vectorial_precision;
+        
+        try {
+            const result = await this.process({
+                perception_target: entity,
+                stimulus: stimulus_context.stimulus,
+                context: stimulus_context,
+                config: config
+            }, {
+                entity_type: entity,
+                ...stimulus_context
+            });
+            
+            return result;
+        } finally {
+            // Restore original capacity
+            this.unified_space.capacity = original_capacity;
+            this.vectorial_state.vectorial_precision = this.calculate_initial_precision();
+        }
     }
 
     /**
-     * ✅ استدعاء الذاكرة مع دعم الـ alias
+     * Memory recall with emotional cryptography
      */
     async recallMemory(memory_request) {
-        // The memory_id is passed as memory_cues to agate_memory.recall
+        // Encrypt the emotional context
+        if (memory_request.current_mood) {
+            const crypto_data = this.emotional_crypto.encrypt_emotion(memory_request.current_mood);
+            memory_request.emotional_crypto = crypto_data;
+            
+            this.metrics.emotional_encryptions++;
+            this.vectorial_state.emotional_crypto_signatures.set(
+                crypto_data.probably_id, 
+                crypto_data
+            );
+            this.vectorial_state.active_probably_ids.add(crypto_data.probably_id);
+        }
+        
         return await this.unified_space.space.agate_memory.recall(
-            memory_request.memory_id, // This will be used as 'memory_cues'
+            memory_request.memory_id,
             memory_request.current_mood,
             {
-                ...(memory_request.context || {}), // Ensure context is an object
-                emotionalSeed: memory_request.emotionalSeed // للاسترجاع الدقيق
+                ...(memory_request.context || {}),
+                emotionalSeed: memory_request.emotionalSeed,
+                emotional_crypto: memory_request.emotional_crypto
             }
         );
     }
 
     /**
-     * ✅ اتخاذ القرار مع البرلمان الداخلي
+     * Decision making with enhanced vectorial processing
      */
     async makeDecision(decision_context) {
         const relevant_perspectives = this.determine_decision_perspectives(decision_context);
         
-        // The query for internal_parliament needs to be structured so that
-        // UnifiedCognitiveSpace can correctly invoke DecisionQuantum.
-        // DecisionQuantum's evaluate method expects `decision_context.options`.
-        // We pass the original decision_context as part of the query.
         const query_for_parliament = { 
             type: 'decision_making', 
-            decision_details: decision_context // Pass the original decision_context here
+            decision_details: decision_context,
+            vectorial_precision: this.vectorial_state.vectorial_precision,
+            consciousness_level: this.vectorial_state.consciousness_level
         };
-
-        // The context for internal_parliament can also be the decision_context or parts of it
-        const context_for_parliament = decision_context;
 
         return await this.unified_space.internal_parliament(
             query_for_parliament,
             relevant_perspectives,
-            context_for_parliament
+            decision_context
         );
     }
 
-    // Placeholder helper methods
-    determine_required_perspectives(query, context) {
-        // Logic to determine which perspectives are relevant
-        // For example, based on query.type or context.situation
-        if (query.type === "memory_recall" && context.mood && context.mood.despair > 0.7) {
-            return ['social_uncertainty']; // Example
-        }
-        return ['parental_protective']; // Default or determined by more complex logic
-    }
-
-    determine_decision_perspectives(decision_context) {
-        // Logic to determine perspectives for a decision
-        if (decision_context.social_models && decision_context.social_models.includes("family_expectations")) {
-            return ['parental_protective', 'future_growth']; // Example
-        }
-        return ['future_growth', 'social_uncertainty']; // Default or determined
-    }
-
     /**
-     * Complex state analysis - multiple concepts interacting
-     * Example: rumination, creativity, social anxiety
+     * Get current consciousness state report
      */
-    async analyzeComplexState(state_description) {
-        // This method would now use unified_space to simulate the state
-        // and then analyze the results.
-        // The concept of "involved_concepts" would map to activating certain
-        // perspectives or scripts within the unified_space.
-        const query = { type: "complex_state_analysis", description: state_description };
-        const perspectives = this.determine_perspectives_for_state(state_description); // New helper
+    getConsciousnessReport() {
+        if (!this.vectorial_state.is_conscious) {
+            return {
+                status: "unconscious",
+                message: "CPF Vectorial is currently not conscious"
+            };
+        }
         
-        const result = await this.unified_space.internal_parliament(query, perspectives, state_description.context || {});
-        // Further analysis on `result` to extract interactions and generate recommendations.
-        return result; // Placeholder, needs more detailed implementation
-    }
-
-    /**
-     * Calculate quantum weights for concept activation
-     * Determines how much each module contributes to the final result
-     */
-    calculateQuantumWeights(query, context) {
-        // This method is less relevant in the new architecture as module interaction
-        // is handled by UnifiedCognitiveSpace and perspectives.
-        // It might be repurposed to weight different perspectives in a parliament.
-        return {}; // Placeholder
-    }
-
-    /**
-     * Quantum wave function collapse
-     * Combines all module outputs into coherent result
-     */
-    collapse_superposition(quantum_outputs, session_id) {
-        // This logic is now more integrated within UnifiedCognitiveSpace,
-        // particularly in how `internal_parliament` synthesizes results,
-        // and how `DecisionQuantum` handles collapse.
-        // The direct call to this from `process` is removed.
-        return {}; // Placeholder
-    }
-
-    /**
-     * Calculate emotional filter based on current mood
-     * Used in probabilistic memory reconstruction
-     */
-    calculateEmotionalFilter(mood) {
-        // This logic is now primarily within AgateMemory.calculate_emotional_filter
-        // or applied via perspective_config.emotional_filter.
-        // WinoQuantum might provide a high-level interface if needed, but AgateMemory is the owner.
-        return this.unified_space.space.agate_memory.calculate_emotional_filter(mood);
-    }
-
-    /**
-     * Calculate contextual bias for memory reconstruction
-     */
-    calculateContextualBias(context) {
-        // This logic is now primarily within AgateMemory.calculate_contextual_bias
-        // or influenced by perspective_config.memory_access_rules.
-        return this.unified_space.space.agate_memory.calculate_contextual_bias(context);
-    }
-
-    /**
-     * Generate intervention recommendations for complex states
-     */
-    generate_intervention_recommendations(interactions) {
-        const recommendations = [];
-        // This would be based on the output of RealityEngine's validation and intervention assessment,
-        // which is now part of the UnifiedCognitiveSpace processing flow.
-        // Example: if interactions (which is the result of processing) contains reality_validation.interventions_applied
-        // recommendations = interactions.reality_validation.system_recommendations;
-        return recommendations;
-    }
-
-    determine_perspectives_for_state(state_description) {
-        // Placeholder: Determine relevant perspectives based on the complex state description
-        if (state_description.involved_concepts && state_description.involved_concepts.includes("social_anxiety")) {
-            return ['social_uncertainty', 'parental_protective'];
-        }
-        return ['future_growth']; // Default
-    }
-
-    /**
-     * Utility methods for quantum state management
-     */
-    generateSessionId() {
-        return `quantum_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    }
-
-    updateQuantumMetrics(result) {
-        const current_coherence = result.coherence_level;
-        this.metrics.average_coherence = 
-            (this.metrics.average_coherence * (this.metrics.total_queries - 1) + current_coherence) / 
-            this.metrics.total_queries;
-    }
-
-    handleQuantumError(error, query, context) {
-        // This might be handled within UnifiedCognitiveSpace or here if an error bubbles up.
+        const current_rhythm = this.cognitive_rhythm.getCurrentState();
+        const current_patterns = this.cognitive_rhythm.getDiscoveredPatterns();
+        
         return {
-            error: true,
-            message: "Quantum decoherence detected",
-            // emergency_response: this.unified_space.space.reality_engine.emergency_response(error),
-            recommendation: "Reduce complexity or check safety parameters"
+            status: "conscious",
+            consciousness_level: this.vectorial_state.consciousness_level,
+            uptime: Date.now() - this.vectorial_state.consciousness_start_time,
+            current_oscillators: current_rhythm,
+            discovered_patterns: current_patterns.size,
+            active_probably_ids: this.vectorial_state.active_probably_ids.size,
+            vectorial_precision: this.vectorial_state.vectorial_precision,
+            growth_cycles: this.vectorial_state.growth_cycles_completed,
+            interpretation: this.interpret_consciousness_state(current_rhythm)
         };
     }
 
-    /**
-     * 🤖 AI Concept Decompression - Expand compressed concepts for human understanding
-     * Use this to explain any part of the framework at appropriate complexity level
-     */
+    // =================== Helper Methods ===================
+
+    calculate_initial_precision() {
+        const capacity = this.unified_space.capacity;
+        if (capacity < 500) return 1;
+        if (capacity < 5000) return 3;
+        if (capacity < 50000) return 5;
+        if (capacity < 500000) return 8;
+        return 10;
+    }
+
+    enhance_context_with_vectorial_data(context) {
+        return {
+            ...context,
+            vectorial_precision: this.vectorial_state.vectorial_precision,
+            consciousness_level: this.vectorial_state.consciousness_level,
+            active_probably_ids: Array.from(this.vectorial_state.active_probably_ids),
+            brain_capacity: this.unified_space.capacity
+        };
+    }
+
+    enhance_result_with_vectorial_insights(result, query, context) {
+        return {
+            ...result,
+            vectorial_metadata: {
+                processing_precision: this.vectorial_state.vectorial_precision,
+                consciousness_level: this.vectorial_state.consciousness_level,
+                patterns_discovered_this_session: this.cognitive_rhythm?.getNewPatternsCount() || 0,
+                emotional_crypto_used: context.emotional_crypto || null,
+                vectorial_scaling_applied: this.perceptual_cycle?.getLastScalingInfo() || null
+            }
+        };
+    }
+
+    updateVectorialMetrics(result) {
+        if (result.vectorial_metadata) {
+            this.metrics.patterns_discovered += result.vectorial_metadata.patterns_discovered_this_session || 0;
+            if (result.vectorial_metadata.vectorial_scaling_applied) {
+                this.metrics.vectorial_rescalings++;
+            }
+        }
+        
+        // Update consciousness level based on processing complexity
+        if (this.vectorial_state.is_conscious) {
+            const complexity_score = this.calculate_processing_complexity(result);
+            this.vectorial_state.consciousness_level = Math.min(1.0, 
+                this.vectorial_state.consciousness_level * 0.9 + complexity_score * 0.1
+            );
+        }
+    }
+
+    calculate_processing_complexity(result) {
+        // Simple complexity measure - would be more sophisticated in practice
+        let complexity = 0.5; // Base complexity
+        
+        if (result.validation?.reality_validation) complexity += 0.1;
+        if (result.source_perspective) complexity += 0.1;
+        if (result.vectorial_metadata?.patterns_discovered_this_session > 0) complexity += 0.2;
+        
+        return Math.min(1.0, complexity);
+    }
+
+    interpret_consciousness_state(rhythm_state) {
+        if (!rhythm_state) return "Consciousness state unavailable";
+        
+        const { existence, dynamic, judge } = rhythm_state;
+        const resonance_strength = judge;
+        
+        if (resonance_strength < 0.1) {
+            return "Deep peaceful contemplation - minimal cognitive resonance";
+        } else if (resonance_strength < 0.3) {
+            return "Calm awareness - gentle cognitive activity";
+        } else if (resonance_strength < 0.6) {
+            return "Active engagement - moderate cognitive resonance";
+        } else if (resonance_strength < 0.8) {
+            return "Intense focus - high cognitive activity detected";
+        } else {
+            return "Peak consciousness - maximum cognitive resonance and pattern discovery";
+        }
+    }
+
+    // =================== External Influence Methods ===================
+
+    apply_therapeutic_intervention(intensity, duration) {
+        // Inject protective noise to break harmful patterns
+        this.unified_space.space.wave_dynamics.inject_protective_noise(intensity);
+        console.log(`🏥 Therapeutic intervention applied (intensity: ${intensity})`);
+    }
+
+    apply_addiction_pattern(target, intensity, duration) {
+        // Create artificial amplitude boost and dependency pattern
+        this.unified_space.space.wave_dynamics.inject_artificial_boost(target, intensity);
+        this.create_dependency_memory(target, intensity);
+        console.log(`🚬 Addiction pattern created for ${target} (intensity: ${intensity})`);
+    }
+
+    apply_cognitive_boost(intensity, duration) {
+        // Temporarily increase vectorial precision and processing speed
+        this.vectorial_state.vectorial_precision = Math.min(20, 
+            this.vectorial_state.vectorial_precision + intensity * 3
+        );
+        console.log(`🧠 Cognitive enhancement applied (boost: ${intensity})`);
+    }
+
+    apply_emotional_stabilization(intensity, duration) {
+        // Reduce emotional oscillator amplitude variations
+        if (this.cognitive_rhythm) {
+            this.cognitive_rhythm.stabilize_emotional_oscillations(intensity);
+        }
+        console.log(`😌 Emotional stabilization applied (strength: ${intensity})`);
+    }
+
+    apply_consciousness_disruption(intensity, duration) {
+        // Inject chaos into the cognitive rhythm
+        if (this.cognitive_rhythm) {
+            this.cognitive_rhythm.inject_chaos(intensity);
+        }
+        console.log(`🌀 Consciousness disruption applied (chaos: ${intensity})`);
+    }
+
+    create_dependency_memory(target, intensity) {
+        // Create a strong emotional memory associated with the artificial boost
+        const dependency_crypto = this.emotional_crypto.encrypt_emotion({
+            joy: intensity * 0.8,
+            excitement: intensity * 0.9,
+            craving: intensity,
+            artificial_source: target
+        });
+        
+        this.vectorial_state.emotional_crypto_signatures.set(
+            dependency_crypto.probably_id + "_dependency", 
+            dependency_crypto
+        );
+    }
+
+    remove_external_influence(influence_config) {
+        console.log(`🔄 Removing external influence: ${influence_config.type}`);
+        
+        // Gradual removal to simulate withdrawal
+        if (influence_config.type === 'cognitive_enhancer') {
+            this.vectorial_state.vectorial_precision = Math.max(1, 
+                this.vectorial_state.vectorial_precision - 2
+            );
+        }
+        
+        // Could trigger withdrawal symptoms for addiction patterns
+        if (influence_config.type === 'addiction_amplifier') {
+            this.trigger_withdrawal_pattern(influence_config.target);
+        }
+    }
+
+    trigger_withdrawal_pattern(target) {
+        // Simulate withdrawal by creating negative emotional crypto
+        const withdrawal_crypto = this.emotional_crypto.encrypt_emotion({
+            despair: 0.7,
+            anxiety: 0.8,
+            craving: 0.9,
+            withdrawal_from: target
+        });
+        
+        console.log(`😰 Withdrawal pattern triggered for ${target}`);
+        return withdrawal_crypto;
+    }
+
+    // =================== Legacy Methods (maintained for compatibility) ===================
+
+    determine_required_perspectives(query, context) {
+        if (query.type === "memory_recall" && context.mood && context.mood.despair > 0.7) {
+            return ['social_uncertainty'];
+        }
+        return ['parental_protective'];
+    }
+
+    determine_decision_perspectives(decision_context) {
+        if (decision_context.social_models && decision_context.social_models.includes("family_expectations")) {
+            return ['parental_protective', 'future_growth'];
+        }
+        return ['future_growth', 'social_uncertainty'];
+    }
+
+    generateSessionId() {
+        return `vectorial_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    // =================== AI Interpretation Methods ===================
+
     decompressConcept(concept_name, complexity_level = null) {
         const level = complexity_level || this.interpretation_mode;
         const concept_guide = this.ai_guide.core_decompression_examples[concept_name];
@@ -326,9 +611,6 @@ class WinoQuantum {
         };
     }
 
-    /**
-     * 🤖 AI Teaching Mode - Get guidance on how to explain framework concepts
-     */
     getTeachingGuidance(user_type = 'general') {
         return {
             key_messages: this.ai_guide.key_messaging,
@@ -340,11 +622,8 @@ class WinoQuantum {
         };
     }
 
-    /**
-     * Public API - Entry points for different use cases
-     */
-    
-    // For researchers
+    // =================== Research API ===================
+
     async analyzePattern(pattern_description) {
         return this.process({
             type: "pattern_analysis",
@@ -352,8 +631,7 @@ class WinoQuantum {
             analysis_depth: "research_level"
         });
     }
-    
-    // For AI systems wanting to understand human cognition
+
     async understandCognition(cognitive_scenario) {
         return this.process({
             type: "cognitive_understanding",
@@ -361,8 +639,7 @@ class WinoQuantum {
             explanation_level: "comprehensive"
         });
     }
-    
-    // For testing specific concept interactions
+
     async testConceptInteraction(concepts, scenario) {
         return this.process({
             type: "concept_interaction",
@@ -373,4 +650,4 @@ class WinoQuantum {
     }
 }
 
-module.exports = WinoQuantum;
+module.exports = CPFVectorial;

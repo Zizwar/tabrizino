@@ -76,6 +76,19 @@ class AgateMemory {
     }
 
     
+    // إضافة الدعم الفيكتوري:
+    store_vectorial_experience(experience, crypto_data) {
+        const vectorial_exp = {
+            core_pattern: this.extract_core_pattern(experience),
+            crypto_signature: crypto_data,
+            current_capacity: this.brain_capacity,
+            scaling_potential: this.calculate_scaling_potential(experience)
+        };
+        
+        // يستخدم النظام الحالي مع إضافات
+        return this.store_experience(vectorial_exp);
+    }
+    
     // 🆕 تخزين خبرة جديدة
     store_skill_experience(skill_id, performance_data) {
         const existing = this.quantum_experiences.get(skill_id) || {

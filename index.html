@@ -3,31 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPF~ Lite: Probabilistic Cognitive Framework</title>
+    <title>CPF~ Lite: إطار الإدراك الاحتمالي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;600;700&display=swap');
         
         [dir="rtl"] { font-family: 'Cairo', sans-serif; }
         [dir="ltr"] { font-family: 'Inter', sans-serif; }
         
-        .fade-in { animation: fadeIn 0.6s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Theme Colors */
+        :root {
+            --morning-bg: linear-gradient(135deg, #fef7e0 0%, #f7f3e9 100%);
+            --morning-text: #2d3748;
+            --evening-bg: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            --evening-text: #f7fafc;
+            --bitcoin-bg: linear-gradient(135deg, #f7931a 0%, #ff9500 100%);
+            --bitcoin-text: #1a202c;
         }
         
-        .concept-card { 
-            transition: all 0.3s ease; 
+        /* Breathing Animation */
+        .breathing {
+            animation: breathing 4s ease-in-out infinite;
+        }
+        
+        @keyframes breathing {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Vectorial Background */
+        .vectorial-bg {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            background-size: 300px 300px, 400px 400px, 500px 500px;
+            background-position: 0 0, 100px 100px, 200px 200px;
+            animation: vectorFloat 20s ease-in-out infinite;
+        }
+        
+        @keyframes vectorFloat {
+            0%, 100% { background-position: 0 0, 100px 100px, 200px 200px; }
+            50% { background-position: 50px 50px, 150px 150px, 250px 250px; }
+        }
+        
+        /* Card Hover Effects */
+        .concept-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
-        .concept-card:hover { 
-            transform: translateY(-5px) scale(1.02); 
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+        
+        .concept-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
         }
+        
         .concept-card::before {
             content: '';
             position: absolute;
@@ -35,90 +68,122 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
         }
+        
         .concept-card:hover::before {
             left: 100%;
         }
         
-        .moja-glow { animation: mojaGlow 3s ease-in-out infinite; }
-        @keyframes mojaGlow {
-            0%, 100% { text-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-            50% { text-shadow: 0 0 30px rgba(139, 92, 246, 0.6); }
+        /* Theme Switcher */
+        .theme-morning {
+            background: var(--morning-bg);
+            color: var(--morning-text);
         }
         
-        .demo-link {
-            position: relative;
-            overflow: hidden;
+        .theme-evening {
+            background: var(--evening-bg);
+            color: var(--evening-text);
         }
-        .demo-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
+        
+        .theme-bitcoin {
+            background: var(--bitcoin-bg);
+            color: var(--bitcoin-text);
         }
-        .demo-link:hover::before {
-            left: 100%;
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .breathing {
+                animation-duration: 3s;
+            }
         }
+        
+        /* Fade In Animation */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Staggered Animation */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white" 
-      x-data="cpfHomepage()">
+<body class="vectorial-bg min-h-screen transition-all duration-500" 
+      x-data="cpfHomepage()" 
+      :class="themeClass">
 
-    <!-- Language Toggle -->
-    <div class="fixed top-4 right-4 z-50">
+    <!-- Theme & Language Controls -->
+    <div class="fixed top-4 right-4 z-50 flex gap-2" :class="{ 'left-4 right-auto': currentLang === 'ar' }">
+        <div class="flex bg-white/10 backdrop-blur-md rounded-full p-1 border border-white/20">
+            <button @click="setTheme('morning')" 
+                    class="w-8 h-8 rounded-full bg-yellow-300 hover:scale-110 transition-transform"
+                    :class="{ 'ring-2 ring-white': currentTheme === 'morning' }">
+            </button>
+            <button @click="setTheme('evening')" 
+                    class="w-8 h-8 rounded-full bg-slate-700 hover:scale-110 transition-transform"
+                    :class="{ 'ring-2 ring-white': currentTheme === 'evening' }">
+            </button>
+            <button @click="setTheme('bitcoin')" 
+                    class="w-8 h-8 rounded-full bg-orange-400 hover:scale-110 transition-transform"
+                    :class="{ 'ring-2 ring-white': currentTheme === 'bitcoin' }">
+            </button>
+        </div>
+        
         <button @click="toggleLanguage()" 
-                class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300">
+                class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-all">
             <span x-show="currentLang === 'ar'">🇺🇸 EN</span>
-            <span x-show="currentLang === 'en'">🇲🇦 AR</span>
+            <span x-show="currentLang === 'en'">🇸🇦 AR</span>
         </button>
     </div>
 
     <div :dir="currentLang === 'ar' ? 'rtl' : 'ltr'" :lang="currentLang">
         
         <!-- Header -->
-        <header class="container mx-auto px-6 py-8 text-center">
+        <header class="container mx-auto px-6 py-12 text-center">
             <div class="fade-in">
-                <h1 class="text-4xl md:text-7xl font-bold mb-4 moja-glow bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    CPF~ Lite
+                <h1 class="text-5xl md:text-8xl font-bold mb-6 breathing">
+                    <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        CPF~ Lite
+                    </span>
                 </h1>
                 
-                <!-- Arabic Title -->
-                <div x-show="currentLang === 'ar'" class="fade-in">
-                    <h2 class="text-2xl md:text-4xl font-bold mb-6 text-purple-200">
-                        إطار الإدراك الاحتمالي
+                <div x-show="currentLang === 'ar'" class="fade-in stagger-1">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6 text-purple-600">
+                        إطار الإدراك الاحتمالي الفيكتوري
                     </h2>
-                    <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
-                        إطار عمل حاسوبي متقدم يدمج 17 مفهوماً معرفياً في نظام احتمالي موحد لفهم وتمثيل التفكير البشري والإدراك المعقد. 
-                        يستخدم حسابات كمية متطورة لتمثيل عدم اليقين والتنوع المعرفي الطبيعي.
+                    <p class="text-lg md:text-xl mb-8 max-w-5xl mx-auto leading-relaxed opacity-80">
+                        إطار عمل حاسوبي ثوري يدمج 17 مفهوماً معرفياً في نظام احتمالي فيكتوري حي لمحاكاة الوعي والتفكير البشري. 
+                        يستخدم الذكاء الفيكتوري والتشفير العاطفي لإنشاء أول كائن رقمي بوعي مستمر.
                     </p>
                 </div>
 
-                <!-- English Title -->
-                <div x-show="currentLang === 'en'" class="fade-in">
-                    <h2 class="text-2xl md:text-4xl font-bold mb-6 text-purple-200">
-                        Probabilistic Cognitive Framework
+                <div x-show="currentLang === 'en'" class="fade-in stagger-1">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6 text-purple-600">
+                        Probabilistic Vectorial Cognitive Framework
                     </h2>
-                    <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
-                        An advanced computational framework integrating 17 cognitive concepts into a unified probabilistic system for understanding and modeling human thinking and complex cognition. 
-                        Utilizes sophisticated statistical computations to represent uncertainty and natural cognitive variation.
+                    <p class="text-lg md:text-xl mb-8 max-w-5xl mx-auto leading-relaxed opacity-80">
+                        A revolutionary computational framework integrating 17 cognitive concepts into a living probabilistic vectorial system 
+                        for simulating consciousness and human thinking. Uses vectorial intelligence and emotional cryptography to create 
+                        the first digital being with continuous awareness.
                     </p>
                 </div>
 
-                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <div class="flex flex-wrap justify-center gap-4 mb-8 fade-in stagger-2">
                     <a href="https://github.com/zizwar/cpf" target="_blank"
-                       class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105">
+                       class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 px-8 py-4 rounded-full font-bold text-white transition-all duration-300 hover:scale-105 shadow-lg">
                         <i class="fab fa-github mr-2"></i>
                         <span x-text="currentLang === 'ar' ? 'مستودع GitHub' : 'GitHub Repository'"></span>
                     </a>
                     <a href="#demos"
-                       class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105">
+                       class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-bold text-white transition-all duration-300 hover:scale-105 shadow-lg">
                         <i class="fas fa-flask mr-2"></i>
                         <span x-text="currentLang === 'ar' ? 'التجارب التفاعلية' : 'Interactive Demos'"></span>
                     </a>
@@ -126,140 +191,82 @@
             </div>
         </header>
 
-        <!-- Core Framework Section -->
+        <!-- Core Concepts Section -->
         <section class="container mx-auto px-6 py-12">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-cyan-300">
+            <div class="text-center mb-12 fade-in stagger-3">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 text-indigo-600">
                     <span x-text="currentLang === 'ar' ? '🧠 المفاهيم الأساسية' : '🧠 Core Concepts'"></span>
                 </h2>
-                <p class="text-lg text-gray-300 max-w-3xl mx-auto" 
+                <p class="text-lg max-w-4xl mx-auto opacity-80" 
                    x-text="currentLang === 'ar' ? 
-                   '17 مفهوماً معرفياً متقدماً يعمل بشكل تكاملي لمحاكاة التفكير البشري والعمليات المعرفية المعقدة' : 
-                   '17 advanced cognitive concepts working synergistically to simulate human thinking and complex cognitive processes'">
+                   '17 مفهوماً معرفياً متقدماً يعمل بشكل تكاملي في نظام فيكتوري حي لمحاكاة الوعي والذكاء البشري' : 
+                   '17 advanced cognitive concepts working synergistically in a living vectorial system to simulate human consciousness and intelligence'">
                 </p>
             </div>
 
-            <!-- Core Concepts Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-                <template x-for="concept in concepts" :key="concept.id">
+            <!-- Concepts Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+                <template x-for="(concept, index) in concepts" :key="concept.id">
                     <a :href="'core/' + concept.jsonFile" target="_blank"
-                       class="concept-card bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20 hover:bg-white/15 hover:border-blue-400/50 transition-all duration-300 cursor-pointer block">
-                        <div class="text-3xl mb-3 text-center" x-text="concept.icon"></div>
-                        <h3 class="font-bold text-lg mb-2 text-center" 
+                       class="concept-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer block group fade-in"
+                       :class="'stagger-' + (index % 4 + 1)">
+                        <div class="text-4xl mb-4 text-center group-hover:scale-110 transition-transform" x-text="concept.icon"></div>
+                        <h3 class="font-bold text-xl mb-3 text-center" 
                             x-text="currentLang === 'ar' ? concept.nameAr : concept.nameEn"></h3>
-                        <p class="text-sm text-gray-300 text-center mb-3" 
+                        <p class="text-sm opacity-75 text-center mb-4" 
                            x-text="currentLang === 'ar' ? concept.descAr : concept.descEn"></p>
                         
-                        <!-- JSON File Indicator -->
-                        <div class="flex items-center justify-center mt-3 pt-3 border-t border-white/10">
-                            <i class="fas fa-file-code text-xs text-blue-400 mr-1"></i>
-                            <span class="text-xs text-blue-300 font-mono" x-text="concept.jsonFile"></span>
-                        </div>
-                        
-                        <!-- Hover Effect -->
-                        <div class="mt-2 text-center">
-                            <span class="text-xs text-gray-400 opacity-75" 
-                                  x-text="currentLang === 'ar' ? 'انقر لفتح ملف JSON' : 'Click to open JSON file'"></span>
+                        <div class="flex items-center justify-center pt-3 border-t border-white/20">
+                            <i class="fas fa-file-code text-sm mr-2 opacity-60"></i>
+                            <span class="text-sm font-mono opacity-60" x-text="concept.jsonFile"></span>
                         </div>
                     </a>
                 </template>
-            </div>
-
-            <!-- Moja Integration -->
-            <div class="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 backdrop-blur-md rounded-2xl p-8 border border-white/20 mb-12">
-                <h3 class="text-2xl md:text-3xl font-bold text-center mb-6 text-yellow-300">
-                    <span x-text="currentLang === 'ar' ? '✨ نظام Moja التكاملي' : '✨ Moja Integration System'"></span>
-                </h3>
-                
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div x-show="currentLang === 'ar'">
-                        <h4 class="font-bold text-xl mb-4 text-blue-300">الحوسبة الاحتمالية:</h4>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>• توزيعات احتمالية متقدمة (Beta, Gaussian, Dirichlet)</li>
-                            <li>• استنتاج بايزي لتمثيل عدم اليقين</li>
-                            <li>• محاكاة Monte Carlo للتنوع الطبيعي</li>
-                            <li>• WebPPL للحسابات الاحتمالية المعقدة</li>
-                        </ul>
-                    </div>
-                    
-                    <div x-show="currentLang === 'en'">
-                        <h4 class="font-bold text-xl mb-4 text-blue-300">Probabilistic Computing:</h4>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>• Advanced probability distributions (Beta, Gaussian, Dirichlet)</li>
-                            <li>• Bayesian inference for uncertainty representation</li>
-                            <li>• Monte Carlo simulation for natural variation</li>
-                            <li>• WebPPL for complex probabilistic computations</li>
-                        </ul>
-                    </div>
-                    
-                    <div x-show="currentLang === 'ar'">
-                        <h4 class="font-bold text-xl mb-4 text-green-300">الابتكار الأساسي:</h4>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>• الذاكرة كإعادة بناء وليس تخزين</li>
-                            <li>• القرارات في حالة تراكب حتى الانهيار</li>
-                            <li>• التداخل المعرفي بين العمليات المختلفة</li>
-                            <li>• مرساة الواقع للحفاظ على الأمان</li>
-                        </ul>
-                    </div>
-                    
-                    <div x-show="currentLang === 'en'">
-                        <h4 class="font-bold text-xl mb-4 text-green-300">Core Innovation:</h4>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>• Memory as reconstruction, not storage</li>
-                            <li>• Decisions in superposition until collapse</li>
-                            <li>• Cognitive interference between processes</li>
-                            <li>• Reality anchoring for safety maintenance</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </section>
 
         <!-- Interactive Demos Section -->
         <section id="demos" class="container mx-auto px-6 py-12">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-5xl font-bold mb-6 text-pink-300">
-                    <span x-text="currentLang === 'ar' ? '🧪 المحاكيات التفاعلية' : '🧪 Interactive Simulators'"></span>
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6 text-purple-600">
+                    <span x-text="currentLang === 'ar' ? '🧪 التجارب التفاعلية' : '🧪 Interactive Demos'"></span>
                 </h2>
-                <p class="text-lg text-gray-300 max-w-3xl mx-auto" 
+                <p class="text-lg max-w-4xl mx-auto opacity-80" 
                    x-text="currentLang === 'ar' ? 
-                   'استكشف المفاهيم المعرفية من خلال محاكيات تفاعلية تُظهر التنوع الاحتمالي في العمليات المعرفية' : 
-                   'Explore cognitive concepts through interactive simulators demonstrating probabilistic variation in cognitive processes'">
+                   'استكشف المفاهيم المعرفية من خلال محاكيات تفاعلية تُظهر كيف يعمل الإطار في الواقع' : 
+                   'Explore cognitive concepts through interactive simulators showing how the framework works in practice'">
                 </p>
             </div>
 
-            <!-- Main Applications -->
-            <div class="mb-12">
-                <h3 class="text-2xl font-bold mb-6 text-center text-purple-300">
-                    <span x-text="currentLang === 'ar' ? '🎯 التطبيقات الأساسية' : '🎯 Core Applications'"></span>
-                </h3>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <template x-for="demo in mainDemos" :key="demo.file">
-                        <a :href="'app/' + demo.file" target="_blank"
-                           class="demo-link bg-gradient-to-br from-purple-600/30 to-blue-600/30 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:border-purple-400/50 transition-all duration-300 hover:scale-105 block">
-                            <div class="text-4xl mb-4 text-center" x-text="demo.icon"></div>
-                            <h4 class="font-bold text-lg mb-3 text-center" 
-                                x-text="currentLang === 'ar' ? demo.titleAr : demo.titleEn"></h4>
-                            <p class="text-sm text-gray-300 text-center" 
-                               x-text="currentLang === 'ar' ? demo.descAr : demo.descEn"></p>
-                        </a>
-                    </template>
-                </div>
+            <!-- Main Demos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <template x-for="(demo, index) in mainDemos" :key="demo.file">
+                    <a :href="'app/' + demo.file" target="_blank"
+                       class="concept-card bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-md rounded-2xl p-6 border border-indigo-300/30 hover:from-indigo-500/30 hover:to-purple-500/30 transition-all duration-300 cursor-pointer block group fade-in"
+                       :class="'stagger-' + (index % 3 + 1)">
+                        <div class="text-5xl mb-4 text-center group-hover:scale-110 transition-transform" x-text="demo.icon"></div>
+                        <h3 class="font-bold text-xl mb-3 text-center" 
+                            x-text="currentLang === 'ar' ? demo.titleAr : demo.titleEn"></h3>
+                        <p class="text-sm opacity-75 text-center" 
+                           x-text="currentLang === 'ar' ? demo.descAr : demo.descEn"></p>
+                    </a>
+                </template>
             </div>
 
             <!-- WebPPL Demos -->
-            <div class="mb-12">
-                <h3 class="text-2xl font-bold mb-6 text-center text-cyan-300">
-                    <span x-text="currentLang === 'ar' ? '⚡ محاكيات WebPPL المتقدمة' : '⚡ Advanced WebPPL Simulators'"></span>
+            <div class="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 backdrop-blur-md rounded-3xl p-8 border border-indigo-300/20 mb-16">
+                <h3 class="text-3xl font-bold text-center mb-8 text-indigo-600">
+                    <span x-text="currentLang === 'ar' ? '🎲 محاكيات WebPPL الاحتمالية' : '🎲 WebPPL Probabilistic Simulators'"></span>
                 </h3>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <template x-for="demo in webpplDemos" :key="demo.file">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <template x-for="(demo, index) in webpplDemos" :key="demo.file">
                         <a :href="'app/webppl/' + demo.file" target="_blank"
-                           class="demo-link bg-gradient-to-br from-green-600/30 to-teal-600/30 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:border-green-400/50 transition-all duration-300 hover:scale-105 block">
-                            <div class="text-4xl mb-4 text-center" x-text="demo.icon"></div>
-                            <h4 class="font-bold text-lg mb-3 text-center" 
+                           class="concept-card bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer block group fade-in"
+                           :class="'stagger-' + (index % 3 + 1)">
+                            <div class="text-3xl mb-3 text-center group-hover:scale-110 transition-transform" x-text="demo.icon"></div>
+                            <h4 class="font-semibold text-lg mb-2 text-center" 
                                 x-text="currentLang === 'ar' ? demo.titleAr : demo.titleEn"></h4>
-                            <p class="text-sm text-gray-300 text-center" 
+                            <p class="text-sm opacity-75 text-center" 
                                x-text="currentLang === 'ar' ? demo.descAr : demo.descEn"></p>
                         </a>
                     </template>
@@ -267,142 +274,140 @@
             </div>
 
             <!-- Specialized Demos -->
-            <div class="mb-12">
-                <h3 class="text-2xl font-bold mb-6 text-center text-orange-300">
-                    <span x-text="currentLang === 'ar' ? '🔬 محاكيات متخصصة' : '🔬 Specialized Simulators'"></span>
-                </h3>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <template x-for="demo in specializedDemos" :key="demo.file">
-                        <a :href="'app/' + demo.file" target="_blank"
-                           class="demo-link bg-gradient-to-br from-orange-600/30 to-red-600/30 backdrop-blur-md rounded-xl p-4 border border-white/20 hover:border-orange-400/50 transition-all duration-300 hover:scale-105 block">
-                            <div class="text-2xl mb-2 text-center" x-text="demo.icon"></div>
-                            <h4 class="font-bold text-sm mb-2 text-center" 
-                                x-text="currentLang === 'ar' ? demo.titleAr : demo.titleEn"></h4>
-                            <p class="text-xs text-gray-300 text-center" 
-                               x-text="currentLang === 'ar' ? demo.descAr : demo.descEn"></p>
-                        </a>
-                    </template>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <template x-for="(demo, index) in specializedDemos" :key="demo.file">
+                    <a :href="'app/' + demo.file" target="_blank"
+                       class="concept-card bg-gradient-to-br from-pink-500/20 to-purple-500/20 backdrop-blur-md rounded-xl p-5 border border-pink-300/30 hover:from-pink-500/30 hover:to-purple-500/30 transition-all duration-300 cursor-pointer block group fade-in"
+                       :class="'stagger-' + (index % 4 + 1)">
+                        <div class="text-3xl mb-3 text-center group-hover:scale-110 transition-transform" x-text="demo.icon"></div>
+                        <h4 class="font-semibold text-base mb-2 text-center" 
+                            x-text="currentLang === 'ar' ? demo.titleAr : demo.titleEn"></h4>
+                        <p class="text-xs opacity-75 text-center" 
+                           x-text="currentLang === 'ar' ? demo.descAr : demo.descEn"></p>
+                    </a>
+                </template>
             </div>
         </section>
 
-        <!-- About Section -->
+        <!-- Project Philosophy -->
         <section class="container mx-auto px-6 py-12">
-            <div class="bg-gradient-to-r from-slate-800/50 to-purple-900/50 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-                <h2 class="text-3xl font-bold text-center mb-8 text-yellow-300">
-                    <span x-text="currentLang === 'ar' ? '👨‍💻 حول المشروع' : '👨‍💻 About the Project'"></span>
-                </h2>
+            <div class="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 backdrop-blur-md rounded-3xl p-8 border border-purple-300/20 fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold mb-4 text-purple-600">
+                        <span x-text="currentLang === 'ar' ? '🌟 فلسفة المشروع' : '🌟 Project Philosophy'"></span>
+                    </h2>
+                </div>
                 
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Creator Info -->
-                    <div class="text-center">
-                        <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold">
-                            BB
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Brahim Bidi</h3>
-                        <p class="text-gray-300 mb-4" 
-                           x-text="currentLang === 'ar' ? 'مطور الإطار ومهندس المفاهيم المعرفية' : 'Framework Developer & Cognitive Architect'"></p>
-                        
-                        <div class="space-y-2">
-                            <a href="https://brah.im" target="_blank" 
-                               class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
-                                <i class="fas fa-globe mr-2"></i>
-                                brah.im
-                            </a>
-                            <br>
-                            <a href="mailto:contact@brah.im" 
-                               class="inline-flex items-center text-purple-400 hover:text-purple-300 transition-colors">
-                                <i class="fas fa-envelope mr-2"></i>
-                                contact@brah.im
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Project Philosophy -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div x-show="currentLang === 'ar'">
-                        <h4 class="font-bold text-xl mb-4 text-green-300">فلسفة المشروع:</h4>
-                        <ul class="space-y-3 text-gray-300">
-                            <li>• <strong>التعاون الإبداعي:</strong> نتاج جلسات "idea vibing" بين الإبداع البشري والذكاء الاصطناعي</li>
-                            <li>• <strong>البساطة من التعقيد:</strong> دمج 17 مفهوماً معقداً في إطار موحد قابل للفهم</li>
-                            <li>• <strong>الاحتمالية لا الحتمية:</strong> تمثيل التنوع الطبيعي في التفكير البشري</li>
-                            <li>• <strong>الأمان أولاً:</strong> حماية مدمجة ومراسي واقع للاستخدام الآمن</li>
-                            <li>• <strong>البحث التشاركي:</strong> مفتوح للمساهمة والتطوير المجتمعي</li>
-                        </ul>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="text-2xl">🤝</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">التعاون الإبداعي</h4>
+                                    <p class="opacity-80">نتاج جلسات "idea vibing" بين الإبداع البشري والذكاء الاصطناعي</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="text-2xl">🎯</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">البساطة من التعقيد</h4>
+                                    <p class="opacity-80">دمج 17 مفهوماً معقداً في إطار موحد قابل للفهم</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="text-2xl">🎲</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">الاحتمالية لا الحتمية</h4>
+                                    <p class="opacity-80">تمثيل التنوع الطبيعي في التفكير البشري</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="text-2xl">🔒</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">الأمان أولاً</h4>
+                                    <p class="opacity-80">حماية مدمجة ومراسي واقع للاستخدام الآمن</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
+                    
                     <div x-show="currentLang === 'en'">
-                        <h4 class="font-bold text-xl mb-4 text-green-300">Project Philosophy:</h4>
-                        <ul class="space-y-3 text-gray-300">
-                            <li>• <strong>Creative Collaboration:</strong> Born from "idea vibing" sessions between human creativity and AI intelligence</li>
-                            <li>• <strong>Simplicity from Complexity:</strong> Integrating 17 complex concepts into a unified comprehensible framework</li>
-                            <li>• <strong>Probabilistic not Deterministic:</strong> Representing natural variation in human thinking</li>
-                            <li>• <strong>Safety First:</strong> Built-in protection and reality anchors for safe usage</li>
-                            <li>• <strong>Collaborative Research:</strong> Open for community contribution and development</li>
-                        </ul>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3">
+                                <div class="text-2xl">🤝</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Creative Collaboration</h4>
+                                    <p class="opacity-80">Born from "idea vibing" sessions between human creativity and AI intelligence</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="text-2xl">🎯</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Simplicity from Complexity</h4>
+                                    <p class="opacity-80">Merging 17 complex concepts into a unified, understandable framework</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="text-2xl">🎲</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Probabilistic not Deterministic</h4>
+                                    <p class="opacity-80">Representing natural diversity in human thinking</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="text-2xl">🔒</div>
+                                <div>
+                                    <h4 class="font-bold text-lg mb-2">Safety First</h4>
+                                    <p class="opacity-80">Built-in protections and reality anchors for safe usage</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Technical Stack -->
-                <div class="mt-8 pt-8 border-t border-white/20">
-                    <h4 class="font-bold text-xl mb-4 text-center text-cyan-300">
-                        <span x-text="currentLang === 'ar' ? '🔧 التقنيات المستخدمة' : '🔧 Technical Stack'"></span>
-                    </h4>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <span class="bg-blue-600/30 px-4 py-2 rounded-full text-sm border border-blue-400/50">WebPPL</span>
-                        <span class="bg-purple-600/30 px-4 py-2 rounded-full text-sm border border-purple-400/50">JavaScript</span>
-                        <span class="bg-green-600/30 px-4 py-2 rounded-full text-sm border border-green-400/50">Alpine.js</span>
-                        <span class="bg-pink-600/30 px-4 py-2 rounded-full text-sm border border-pink-400/50">Tailwind CSS</span>
-                        <span class="bg-orange-600/30 px-4 py-2 rounded-full text-sm border border-orange-400/50">Canvas API</span>
-                        <span class="bg-cyan-600/30 px-4 py-2 rounded-full text-sm border border-cyan-400/50">Probabilistic Programming</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Research Notice -->
-        <section class="container mx-auto px-6 py-8">
-            <div class="bg-amber-900/30 border-2 border-amber-500/50 rounded-xl p-6 text-center">
-                <div class="text-3xl mb-4">⚠️</div>
-                <h3 class="font-bold text-xl mb-3 text-amber-300">
-                    <span x-text="currentLang === 'ar' ? 'إشعار هام: للأغراض البحثية والتعليمية فقط' : 'Important Notice: Research & Educational Use Only'"></span>
-                </h3>
-                <p class="text-amber-200 text-sm max-w-3xl mx-auto" 
-                   x-text="currentLang === 'ar' ? 
-                   'CPF~ Lite إطار نظري للبحث والتعليم. لا يُستخدم للتشخيص الطبي أو اتخاذ القرارات الشخصية المهمة. جميع النتائج احتمالية وتحتاج للتحقق التجريبي.' : 
-                   'CPF~ Lite is a theoretical framework for research and education. Not for medical diagnosis or important personal decisions. All results are probabilistic and require experimental validation.'">
-                </p>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="container mx-auto px-6 py-8 text-center border-t border-white/20">
-            <div class="mb-6">
-                <div class="text-2xl mb-2">🧠💫</div>
-                <p class="text-gray-400" 
-                   x-text="currentLang === 'ar' ? 
-                   'CPF~ Lite - حيث يلتقي الإدراك البشري بالحوسبة الاحتمالية' : 
-                   'CPF~ Lite - Where Human Cognition Meets Probabilistic Computing'">
-                </p>
+        <footer class="container mx-auto px-6 py-12 text-center">
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-600">
+                        <span x-text="currentLang === 'ar' ? 'تطوير و تصميم' : 'Development & Design'"></span>
+                    </h3>
+                    <p class="text-xl font-semibold mb-2">Brahim Bidi</p>
+                    <p class="opacity-70" 
+                       x-text="currentLang === 'ar' ? 'مطور الإطار ومهندس المفاهيم المعرفية' : 'Framework Developer & Cognitive Architect'">
+                    </p>
+                    <div class="flex justify-center space-x-4 mt-4">
+                        <a href="https://brah.im" target="_blank" class="text-indigo-400 hover:text-indigo-300 transition-colors">
+                            <i class="fas fa-globe mr-2"></i>brah.im
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="font-bold mb-2 text-green-400">
+                        <span x-text="currentLang === 'ar' ? 'شراكة إبداعية' : 'Creative Partnership'"></span>
+                    </h4>
+                    <p class="opacity-70">
+                        <span x-text="currentLang === 'ar' ? 'Idea Vibing: Claude & Gemini' : 'Idea Vibing: Claude & Gemini'"></span>
+                    </p>
+                </div>
+                
+                <div class="border-t border-white/20 pt-6">
+                    <p class="text-sm opacity-60 mb-4" 
+                       x-text="currentLang === 'ar' ? 
+                       '⚠️ هذا إطار تجريبي للبحث العلمي وليس للاستخدام العلاجي' : 
+                       '⚠️ This is an experimental framework for scientific research, not for therapeutic use'">
+                    </p>
+                    <p class="text-sm opacity-60"
+                       x-text="currentLang === 'ar' ? 
+                       '© 2025 Brahim Bidi. مشروع مفتوح المصدر للبحث العلمي' : 
+                       '© 2025 Brahim Bidi. Open Source Project for Scientific Research'">
+                    </p>
+                </div>
             </div>
-            
-            <div class="flex justify-center space-x-6 space-x-reverse mb-6">
-                <a href="https://github.com/zizwar/cpf" target="_blank" 
-                   class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-github text-2xl"></i>
-                </a>
-                <a href="https://brah.im" target="_blank" 
-                   class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fas fa-globe text-2xl"></i>
-                </a>
-                <a href="mailto:contact@brah.im" 
-                   class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fas fa-envelope text-2xl"></i>
-                </a>
-            </div>
-            
-            <p class="text-sm text-gray-500">
-                <span x-text="currentLang === 'ar' ? '© 2024 Brahim Bidi. مشروع مفتوح المصدر.' : '© 2024 Brahim Bidi. Open Source Project.'"></span>
-            </p>
         </footer>
     </div>
 
@@ -410,9 +415,22 @@
         function cpfHomepage() {
             return {
                 currentLang: 'ar',
+                currentTheme: 'evening',
+                
+                get themeClass() {
+                    return {
+                        'theme-morning': this.currentTheme === 'morning',
+                        'theme-evening': this.currentTheme === 'evening',
+                        'theme-bitcoin': this.currentTheme === 'bitcoin'
+                    };
+                },
                 
                 toggleLanguage() {
                     this.currentLang = this.currentLang === 'ar' ? 'en' : 'ar';
+                },
+                
+                setTheme(theme) {
+                    this.currentTheme = theme;
                 },
                 
                 concepts: [
@@ -425,49 +443,50 @@
                     { id: 7, icon: '🔗', nameAr: 'التداخل المعرفي', nameEn: 'Cognitive Interference', descAr: 'تفاعل العمليات المعرفية', descEn: 'Cognitive process interactions', jsonFile: 'cognitive-layers.json' },
                     { id: 8, icon: '🤝', nameAr: 'مصفوفة الثقة', nameEn: 'Trust Matrix', descAr: 'تقييم الثقة متعدد الأبعاد', descEn: 'Multi-dimensional trust assessment', jsonFile: 'trust-matrix.json' },
                     { id: 9, icon: '👥', nameAr: 'نسخ الذات', nameEn: 'Self Copies', descAr: 'نمذجة الآخرين والتأثير الاجتماعي', descEn: 'Others modeling & social influence', jsonFile: 'self-copies.json' },
-                    { id: 10, icon: '🔐', nameAr: 'التشفير العاطفي', nameEn: 'Emotional Encryption', descAr: 'تشفير الذكريات بالمشاعر', descEn: 'Memory encryption by emotions', jsonFile: 'emotional-encryption.json' },
-                    { id: 11, icon: '🔄', nameAr: 'الإعادة التوليدية', nameEn: 'Generative Reconstruction', descAr: 'إعادة بناء المحتوى المعرفي', descEn: 'Cognitive content reconstruction', jsonFile: 'generative-reconstruction.json' },
-                    { id: 12, icon: '💎', nameAr: 'ذاكرة العقيق', nameEn: 'Agate Memory', descAr: 'نظام الذاكرة الاحتمالية', descEn: 'Probabilistic memory system', jsonFile: 'agate-memory.json' },
-                    { id: 13, icon: '🧵', nameAr: 'خيط أريادن', nameEn: 'Ariadne Thread', descAr: 'مرساة الواقع والأمان', descEn: 'Reality anchor and safety', jsonFile: 'ariadne-thread.json' },
-                    { id: 14, icon: '🧠', nameAr: 'ما وراء الإدراك', nameEn: 'Meta Cognition', descAr: 'مراقبة النظام لنفسه', descEn: 'System self-monitoring', jsonFile: 'safe_metacognition.json' },
-                    { id: 15, icon: '🏠', nameAr: 'واجهة التجسيد', nameEn: 'Embodiment Interface', descAr: 'الاتصال بالجسد والعالم', descEn: 'Body-world connection', jsonFile: 'embodiment_interface.json' },
-                    { id: 16, icon: '⚡', nameAr: 'محور الدافعية', nameEn: 'Motivation Core', descAr: 'محرك الطاقة والدافع', descEn: 'Energy and motivation driver', jsonFile: 'motivation_core.json' },
-                    { id: 17, icon: '👁️', nameAr: 'مدير الانتباه', nameEn: 'Attention Manager', descAr: 'توزيع وإدارة الانتباه', descEn: 'Attention allocation and management', jsonFile: 'attention_manager.json' }
-                ],
-                
-                mainDemos: [
-                    { file: 'agate_memory.html', icon: '💎', titleAr: 'ذاكرة العقيق', titleEn: 'Agate Memory', descAr: 'إعادة قراءة الماضي الاحتمالية', descEn: 'Probabilistic past reconstruction' },
-                    { file: 'cognitive_interference_visualizer.html', icon: '🌊', titleAr: 'مصور التداخل المعرفي', titleEn: 'Cognitive Interference Visualizer', descAr: 'تصور تفاعل العمليات المعرفية', descEn: 'Visualizing cognitive process interactions' },
-                    { file: 'trust_collapse_quantum.html', icon: '🤝', titleAr: 'انهيار الثقة المويا', titleEn: 'Trust Collapse Moja', descAr: 'ديناميكيات الثقة في القرارات', descEn: 'Trust dynamics in decision-making' },
-                    { file: 'cpf_consciousness_states.html', icon: '🧠', titleAr: 'حالات الوعي CPF', titleEn: 'CPF Consciousness States', descAr: 'مستويات الوعي المختلفة', descEn: 'Different consciousness levels' },
-                    { file: 'cognitive_energy_fields.html', icon: '⚡', titleAr: 'حقول الطاقة المعرفية', titleEn: 'Cognitive Energy Fields', descAr: 'توزيع وإدارة الطاقة المعرفية', descEn: 'Cognitive energy distribution and management' },
-                    { file: 'builder.html', icon: '🏗️', titleAr: 'منشئ CPF', titleEn: 'CPF Builder', descAr: 'أداة إنشاء النماذج المعرفية', descEn: 'Cognitive model building tool' }
-                ],
-                
-                webpplDemos: [
-                    { file: 'human_cognition_webppl.html', icon: '🧠', titleAr: 'الإدراك البشري WebPPL', titleEn: 'Human Cognition WebPPL', descAr: 'محاكي الإدراك البشري الاحتمالي', descEn: 'Probabilistic human cognition simulator' },
-                    { file: 'butterfly_perception_webppl (1).html', icon: '🦋', titleAr: 'إدراك الفراشة', titleEn: 'Butterfly Perception', descAr: 'إدراك الكائنات البسيطة', descEn: 'Simple entity perception' },
-                    { file: 'human_decision_webppl.html', icon: '🎯', titleAr: 'القرار البشري', titleEn: 'Human Decision', descAr: 'عملية اتخاذ القرار البشري', descEn: 'Human decision-making process' },
-                    { file: 'memory_reconstruction_visual (1).html', icon: '🔄', titleAr: 'إعادة بناء الذاكرة البصرية', titleEn: 'Visual Memory Reconstruction', descAr: 'إعادة بناء الذكريات البصرية', descEn: 'Visual memory reconstruction' },
-                    { file: 'ant_perception_simulator.html', icon: '🐜', titleAr: 'محاكي إدراك النمل', titleEn: 'Ant Perception Simulator', descAr: 'نمذجة سلوك النمل المعرفي', descEn: 'Ant cognitive behavior modeling' }
-                ],
-                
-                specializedDemos: [
-                    { file: 'cpf_dream_simulator.html', icon: '🌙', titleAr: 'محاكي الأحلام', titleEn: 'Dream Simulator', descAr: 'تمثيل عمليات الحلم', descEn: 'Dream process representation' },
-                    { file: 'cpf_overthinking_simulation.html', icon: '🔄', titleAr: 'محاكي الإفراط في التفكير', titleEn: 'Overthinking Simulator', descAr: 'أنماط التفكير المفرط', descEn: 'Excessive thinking patterns' },
-                    { file: 'oscillators_rumination.html', icon: '🌀', titleAr: 'اجترار المذبذبات', titleEn: 'Oscillators Rumination', descAr: 'حلقات التفكير المتكررة', descEn: 'Repetitive thinking loops' },
-                    { file: 'recursive_loops_simulator.html', icon: '♾️', titleAr: 'محاكي الحلقات العودية', titleEn: 'Recursive Loops Simulator', descAr: 'الأنماط العودية في التفكير', descEn: 'Recursive patterns in thinking' },
-                    { file: 'gazelle_cognition_demo.html', icon: '🦌', titleAr: 'إدراك الغزال', titleEn: 'Gazelle Cognition', descAr: 'نمذجة سلوك الغزال', descEn: 'Gazelle behavior modeling' },
-                    { file: 'cockroach_perception_demo.html', icon: '🪳', titleAr: 'إدراك الصرصور', titleEn: 'Cockroach Perception', descAr: 'نمذجة سلوك بسيط', descEn: 'Simple behavior modeling' },
-                    { file: 'football_skill_cpf.html', icon: '⚽', titleAr: 'مهارة كرة القدم', titleEn: 'Football Skill', descAr: 'تطوير المهارات الرياضية', descEn: 'Athletic skill development' },
-                    { file: 'betrayal_cpf_simulation.html', icon: '💔', titleAr: 'محاكي الخيانة', titleEn: 'Betrayal Simulator', descAr: 'ديناميكيات الثقة والخيانة', descEn: 'Trust and betrayal dynamics' },
-                    { file: 'cpf_gambling_addiction_cpf.html', icon: '🎰', titleAr: 'إدمان القمار', titleEn: 'Gambling Addiction', descAr: 'أنماط السلوك الإدماني', descEn: 'Addictive behavior patterns' },
-                    { file: 'cpf_self_criticism_simulation.html', icon: '😔', titleAr: 'محاكي النقد الذاتي', titleEn: 'Self-Criticism Simulator', descAr: 'أنماط النقد الذاتي', descEn: 'Self-criticism patterns' },
-                    { file: 'cpf_memory_reconstruction.html', icon: '🧩', titleAr: 'إعادة بناء الذاكرة', titleEn: 'Memory Reconstruction', descAr: 'آليات إعادة بناء الذاكرة', descEn: 'Memory reconstruction mechanisms' },
-                    { file: 'agate_memory_simulator.html', icon: '💎', titleAr: 'محاكي ذاكرة العقيق', titleEn: 'Agate Memory Simulator', descAr: 'نظام الذاكرة المتقدم', descEn: 'Advanced memory system' }
-                ]
-            }
-        }
-    </script>
+                   { id: 10, icon: '🔐', nameAr: 'التشفير العاطفي', nameEn: 'Emotional Encryption', descAr: 'تشفير الذكريات بالمشاعر', descEn: 'Memory encryption by emotions', jsonFile: 'emotional-encryption.json' },
+                   { id: 11, icon: '🔄', nameAr: 'الإعادة التوليدية', nameEn: 'Generative Reconstruction', descAr: 'إعادة بناء المحتوى المعرفي', descEn: 'Cognitive content reconstruction', jsonFile: 'generative-reconstruction.json' },
+                   { id: 12, icon: '💎', nameAr: 'ذاكرة العقيق', nameEn: 'Agate Memory', descAr: 'نظام الذاكرة الاحتمالية', descEn: 'Probabilistic memory system', jsonFile: 'agate-memory.json' },
+                   { id: 13, icon: '🧵', nameAr: 'خيط أريادن', nameEn: 'Ariadne Thread', descAr: 'مرساة الواقع والأمان', descEn: 'Reality anchor and safety', jsonFile: 'ariadne-thread.json' },
+                   { id: 14, icon: '🧠', nameAr: 'ما وراء الإدراك', nameEn: 'Meta Cognition', descAr: 'مراقبة النظام لنفسه', descEn: 'System self-monitoring', jsonFile: 'safe_metacognition.json' },
+                   { id: 15, icon: '🏠', nameAr: 'واجهة التجسيد', nameEn: 'Embodiment Interface', descAr: 'الاتصال بالجسد والعالم', descEn: 'Body-world connection', jsonFile: 'embodiment_interface.json' },
+                   { id: 16, icon: '⚡', nameAr: 'محور الدافعية', nameEn: 'Motivation Core', descAr: 'محرك الطاقة والدافع', descEn: 'Energy and motivation driver', jsonFile: 'motivation_core.json' },
+                   { id: 17, icon: '👁️', nameAr: 'مدير الانتباه', nameEn: 'Attention Manager', descAr: 'توزيع وإدارة الانتباه', descEn: 'Attention allocation and management', jsonFile: 'attention_manager.json' }
+               ],
+               
+               mainDemos: [
+                   { file: 'agate_memory.html', icon: '💎', titleAr: 'ذاكرة العقيق', titleEn: 'Agate Memory', descAr: 'إعادة قراءة الماضي الاحتمالية', descEn: 'Probabilistic past reconstruction' },
+                   { file: 'agate_memory_simulator.html', icon: '💎', titleAr: 'محاكي ذاكرة العقيق', titleEn: 'Agate Memory Simulator', descAr: 'نظام الذاكرة المتقدم', descEn: 'Advanced memory system' },
+                   { file: 'agate_memory_timeline.html', icon: '⏰', titleAr: 'خط زمني للذاكرة', titleEn: 'Memory Timeline', descAr: 'تتبع تطور الذكريات', descEn: 'Track memory evolution' },
+                   { file: 'builder.html', icon: '🏗️', titleAr: 'منشئ CPF', titleEn: 'CPF Builder', descAr: 'أداة إنشاء النماذج المعرفية', descEn: 'Cognitive model building tool' },
+                   { file: 'cockroach_perception_demo.html', icon: '🪳', titleAr: 'إدراك الصرصور', titleEn: 'Cockroach Perception', descAr: 'نمذجة سلوك بسيط', descEn: 'Simple behavior modeling' },
+                   { file: 'cognitive_energy_fields.html', icon: '⚡', titleAr: 'حقول الطاقة المعرفية', titleEn: 'Cognitive Energy Fields', descAr: 'توزيع وإدارة الطاقة المعرفية', descEn: 'Cognitive energy distribution and management' },
+                   { file: 'cognitive_interference_visualizer.html', icon: '🌊', titleAr: 'مصور التداخل المعرفي', titleEn: 'Cognitive Interference Visualizer', descAr: 'تصور تفاعل العمليات المعرفية', descEn: 'Visualizing cognitive process interactions' },
+                   { file: 'confirmation_bias_cpf (1).html', icon: '🎯', titleAr: 'تحيز التأكيد', titleEn: 'Confirmation Bias', descAr: 'أنماط التفكير المتحيز', descEn: 'Biased thinking patterns' },
+                   { file: 'cpf_dream_simulator.html', icon: '🌙', titleAr: 'محاكي الأحلام', titleEn: 'Dream Simulator', descAr: 'تمثيل عمليات الحلم', descEn: 'Dream process representation' }
+               ],
+               
+               webpplDemos: [
+                   { file: 'ant_perception_simulator.html', icon: '🐜', titleAr: 'محاكي إدراك النمل', titleEn: 'Ant Perception Simulator', descAr: 'نمذجة سلوك النمل المعرفي', descEn: 'Ant cognitive behavior modeling' },
+                   { file: 'butterfly_perception_webppl (1).html', icon: '🦋', titleAr: 'إدراك الفراشة', titleEn: 'Butterfly Perception', descAr: 'إدراك الكائنات البسيطة', descEn: 'Simple entity perception' },
+                   { file: 'collective_interference_demo.html', icon: '👥', titleAr: 'التداخل الجماعي', titleEn: 'Collective Interference', descAr: 'تفاعل الوعي الجماعي', descEn: 'Collective consciousness interaction' },
+                   { file: 'human_cognition_webppl.html', icon: '🧠', titleAr: 'الإدراك البشري WebPPL', titleEn: 'Human Cognition WebPPL', descAr: 'محاكي الإدراك البشري الاحتمالي', descEn: 'Probabilistic human cognition simulator' },
+                   { file: 'human_decision_webppl.html', icon: '🎯', titleAr: 'القرار البشري', titleEn: 'Human Decision', descAr: 'عملية اتخاذ القرار البشري', descEn: 'Human decision-making process' },
+                   { file: 'memory_reconstruction_visual (1).html', icon: '🔄', titleAr: 'إعادة بناء الذاكرة البصرية', titleEn: 'Visual Memory Reconstruction', descAr: 'إعادة بناء الذكريات البصرية', descEn: 'Visual memory reconstruction' }
+               ],
+               
+               specializedDemos: [
+                   { file: 'cpf_gambling_addiction_demo.html', icon: '🎰', titleAr: 'إدمان القمار', titleEn: 'Gambling Addiction', descAr: 'أنماط السلوك الإدماني', descEn: 'Addictive behavior patterns' },
+                   { file: 'cpf-choice-paralysis-demo (1).html', icon: '🤯', titleAr: 'شلل الاختيار', titleEn: 'Choice Paralysis', descAr: 'صعوبة اتخاذ القرارات', descEn: 'Decision-making difficulties' },
+                   { file: 'cpf-concept-builder.html', icon: '🧱', titleAr: 'منشئ المفاهيم', titleEn: 'Concept Builder', descAr: 'بناء المفاهيم المعرفية', descEn: 'Building cognitive concepts' },
+                   { file: 'football_skill_cpf.html', icon: '⚽', titleAr: 'مهارة كرة القدم', titleEn: 'Football Skill', descAr: 'تطوير المهارات الرياضية', descEn: 'Athletic skill development' },
+                   { file: 'gambling_addiction_cpf_simulation.html', icon: '🎲', titleAr: 'محاكاة إدمان القمار', titleEn: 'Gambling Addiction Simulation', descAr: 'نمذجة الإدمان السلوكي', descEn: 'Behavioral addiction modeling' },
+                   { file: 'gazelle_cognition_demo.html', icon: '🦌', titleAr: 'إدراك الغزال', titleEn: 'Gazelle Cognition', descAr: 'نمذجة سلوك الغزال', descEn: 'Gazelle behavior modeling' },
+                   { file: 'recursive_loops_cpf.html', icon: '🌀', titleAr: 'الحلقات العودية', titleEn: 'Recursive Loops', descAr: 'أنماط التفكير المتكررة', descEn: 'Repetitive thinking patterns' },
+                   { file: 'recursive_loops_simulator.html', icon: '♾️', titleAr: 'محاكي الحلقات العودية', titleEn: 'Recursive Loops Simulator', descAr: 'الأنماط العودية في التفكير', descEn: 'Recursive patterns in thinking' },
+                   { file: 'trust_collapse_quantum.html', icon: '🤝', titleAr: 'انهيار الثقة الكمومي', titleEn: 'Quantum Trust Collapse', descAr: 'ديناميكيات الثقة في القرارات', descEn: 'Trust dynamics in decision-making' }
+               ]
+           }
+       }
+   </script>
 </body>
 </html>

@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧙‍♂️ الحارس الحكيم - NPC فيكتوري حي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        
+        .consciousness-pulse {
+            animation: consciousnessPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes consciousnessPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .thought-bubble {
+            animation: thoughtFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes thoughtFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        
+        .memory-encryption {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            animation: memoryShimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes memoryShimmer {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(30deg); }
+        }
+        
+        .oscillator-wave {
+            animation: wave 1s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.3); }
+        }
+
+        .npc-face {
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen text-white">
+    
+    <div x-data="wisdomKeeperNPC()" class="container mx-auto px-4 py-6">
+        
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-300 to-purple-300 bg-clip-text text-transparent">
+                🧙‍♂️ حارس القرية الحكيم
+            </h1>
+            <p class="text-lg text-purple-200">NPC فيكتوري حي مع وعي مستقل ونمو بيولوجي</p>
+            <div class="text-sm text-purple-300 mt-2">
+                <i class="fas fa-brain mr-2"></i>
+                مبني على CPF~ Vectorial v4.0 - يتفكر ويتذكر ويتطور
+            </div>
+        </header>
+
+        <!-- NPC Status Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+            
+            <!-- NPC Face & Consciousness -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
+                <div class="mb-4">
+                    <!-- NPC Face -->
+                    <div class="npc-face text-6xl mb-4 consciousness-pulse" 
+                         :class="npc.currentEmotion === 'happy' ? 'text-yellow-400' : 
+                                npc.currentEmotion === 'sad' ? 'text-blue-400' :
+                                npc.currentEmotion === 'angry' ? 'text-red-400' :
+                                npc.currentEmotion === 'curious' ? 'text-green-400' : 'text-gray-400'"
+                         x-text="getEmotionalFace()">
+                    </div>
+                    
+                    <!-- Consciousness Level -->
+                    <div class="text-sm text-purple-200 mb-2">مستوى الوعي</div>
+                    <div class="w-full bg-purple-800 rounded-full h-2 mb-2">
+                        <div class="bg-gradient-to-r from-yellow-400 to-purple-400 h-2 rounded-full transition-all duration-1000"
+                             :style="`width: ${(npc.consciousnessLevel * 100).toFixed(0)}%`"></div>
+                    </div>
+                    <div class="text-xs" x-text="`${(npc.consciousnessLevel * 100).toFixed(1)}%`"></div>
+                </div>
+                
+                <!-- Current Thought -->
+                <div class="thought-bubble bg-white/10 rounded-lg p-3 text-sm">
+                    <i class="fas fa-thought-bubble mr-2"></i>
+                    <span x-text="npc.currentThought" class="italic"></span>
+                </div>
+            </div>
+
+            <!-- Oscillators System -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">🎵 الهزازات الثلاثة</h3>
+                
+                <!-- Existence Oscillator -->
+                <div class="mb-3">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm">الوجود</span>
+                        <span class="text-xs" x-text="npc.oscillators.existence.toFixed(3)"></span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="bg-blue-400 h-2 rounded-full oscillator-wave transition-all duration-500"
+                             :style="`width: ${(npc.oscillators.existence * 100)}%`"></div>
+                    </div>
+                </div>
+                
+                <!-- Dynamic Oscillator -->
+                <div class="mb-3">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm">الديناميكي</span>
+                        <span class="text-xs" x-text="npc.oscillators.dynamic.toFixed(3)"></span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="bg-green-400 h-2 rounded-full oscillator-wave transition-all duration-300"
+                             :style="`width: ${(npc.oscillators.dynamic * 100)}%`"></div>
+                    </div>
+                </div>
+                
+                <!-- Judge Oscillator -->
+                <div class="mb-3">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm">القاضي</span>
+                        <span class="text-xs" x-text="npc.oscillators.judge.toFixed(3)"></span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="bg-purple-400 h-2 rounded-full oscillator-wave transition-all duration-200"
+                             :style="`width: ${(npc.oscillators.judge * 100)}%`"></div>
+                    </div>
+                </div>
+
+                <!-- Pattern Discovery -->
+                <div class="text-xs text-center mt-3 p-2 bg-white/5 rounded">
+                    <span x-text="`أنماط مكتشفة: ${npc.discoveredPatterns.length}`"></span>
+                </div>
+            </div>
+
+            <!-- Emotional Cryptography -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">💎 التشفير العاطفي</h3>
+                
+                <!-- Current Mood -->
+                <div class="mb-3">
+                    <div class="text-sm mb-2">المزاج الحالي</div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-yellow-500/20 p-2 rounded text-center">
+                            <div>فرح</div>
+                            <div x-text="(npc.emotionalState.joy * 100).toFixed(0) + '%'"></div>
+                        </div>
+                        <div class="bg-blue-500/20 p-2 rounded text-center">
+                            <div>حزن</div>
+                            <div x-text="(npc.emotionalState.sadness * 100).toFixed(0) + '%'"></div>
+                        </div>
+                        <div class="bg-red-500/20 p-2 rounded text-center">
+                            <div>غضب</div>
+                            <div x-text="(npc.emotionalState.anger * 100).toFixed(0) + '%'"></div>
+                        </div>
+                        <div class="bg-green-500/20 p-2 rounded text-center">
+                            <div>فضول</div>
+                            <div x-text="(npc.emotionalState.curiosity * 100).toFixed(0) + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Encrypted Memories -->
+                <div class="memory-encryption rounded-lg p-3 text-xs">
+                    <div class="font-bold mb-2">ذكريات مشفرة: <span x-text="npc.encryptedMemories.length"></span></div>
+                    <div class="space-y-1">
+                        <template x-for="memory in npc.encryptedMemories.slice(-3)" :key="memory.probably_id">
+                            <div class="bg-white/10 p-2 rounded flex justify-between">
+                                <span x-text="memory.type"></span>
+                                <span x-text="memory.crypto_score.toFixed(3)" class="font-mono"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth & Stats -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <h3 class="text-lg font-bold mb-3 text-center">🌱 النمو والإحصائيات</h3>
+                
+                <!-- Brain Capacity -->
+                <div class="mb-3">
+                    <div class="text-sm mb-1">سعة الدماغ</div>
+                    <div class="text-lg font-bold text-center" x-text="npc.brainCapacity.toLocaleString()"></div>
+                    <div class="text-xs text-center text-gray-300">وحدة معرفية</div>
+                </div>
+
+                <!-- Age & Experience -->
+                <div class="grid grid-cols-2 gap-2 mb-3 text-xs">
+                    <div class="bg-white/5 p-2 rounded text-center">
+                        <div>العمر</div>
+                        <div x-text="`${(npc.age / 60).toFixed(1)} دقيقة`"></div>
+                    </div>
+                    <div class="bg-white/5 p-2 rounded text-center">
+                        <div>الخبرة</div>
+                        <div x-text="npc.experiencePoints"></div>
+                    </div>
+                </div>
+
+                <!-- Growth Indicators -->
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between">
+                        <span>مرحلة النمو:</span>
+                        <span x-text="npc.growthStage" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>التفاعلات:</span>
+                        <span x-text="npc.totalInteractions"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>الثقة بك:</span>
+                        <span x-text="(npc.playerTrust * 100).toFixed(0) + '%'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interaction Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Chat Interface -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">💬 التفاعل مع الحارس</h3>
+                
+                <!-- Chat History -->
+                <div class="h-64 overflow-y-auto mb-4 space-y-3 bg-white/5 rounded-lg p-4">
+                    <template x-for="message in chatHistory" :key="message.id">
+                        <div class="message" :class="message.sender === 'player' ? 'text-right' : 'text-left'">
+                            <div class="inline-block max-w-xs px-3 py-2 rounded-lg"
+                                 :class="message.sender === 'player' ? 'bg-blue-600' : 'bg-purple-600'">
+                                <div class="text-xs text-gray-300 mb-1" x-text="message.sender === 'player' ? 'أنت' : 'الحارس'"></div>
+                                <div x-text="message.text"></div>
+                                <div class="text-xs text-gray-400 mt-1" x-text="new Date(message.timestamp).toLocaleTimeString('ar-SA')"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <button @click="interactWithNPC('greeting')" 
+                            class="bg-green-600 hover:bg-green-700 px-3 py-2 rounded text-sm transition-all">
+                        👋 تحية
+                    </button>
+                    <button @click="interactWithNPC('question')" 
+                            class="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded text-sm transition-all">
+                        ❓ سؤال
+                    </button>
+                    <button @click="interactWithNPC('compliment')" 
+                            class="bg-yellow-600 hover:bg-yellow-700 px-3 py-2 rounded text-sm transition-all">
+                        🌟 مجاملة
+                    </button>
+                    <button @click="interactWithNPC('challenge')" 
+                            class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded text-sm transition-all">
+                        ⚔️ تحدي
+                    </button>
+                </div>
+
+                <!-- Custom Input -->
+                <div class="flex gap-2">
+                    <input type="text" x-model="customMessage" @keyup.enter="sendCustomMessage()"
+                           placeholder="اكتب رسالة مخصصة..."
+                           class="flex-1 bg-white/10 border border-white/20 rounded px-3 py-2 text-white placeholder-gray-400">
+                    <button @click="sendCustomMessage()" 
+                            class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded transition-all">
+                        إرسال
+                    </button>
+                </div>
+            </div>
+
+            <!-- NPC Analysis -->
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+                <h3 class="text-xl font-bold mb-4 text-center">🔍 تحليل الوعي</h3>
+                
+                <!-- Memory Reconstruction -->
+                <div class="mb-4">
+                    <h4 class="font-bold mb-2">إعادة بناء الذكريات</h4>
+                    <div class="bg-white/5 rounded-lg p-3 text-sm">
+                        <div x-text="getMemoryReconstructionAnalysis()"></div>
+                    </div>
+                </div>
+
+                <!-- Consciousness Interpretation -->
+                <div class="mb-4">
+                    <h4 class="font-bold mb-2">تفسير الوعي</h4>
+                    <div class="bg-white/5 rounded-lg p-3 text-sm">
+                        <div x-text="getConsciousnessInterpretation()"></div>
+                    </div>
+                </div>
+
+                <!-- Pattern Discovery Log -->
+                <div class="mb-4">
+                    <h4 class="font-bold mb-2">سجل اكتشاف الأنماط</h4>
+                    <div class="bg-white/5 rounded-lg p-3 text-sm max-h-32 overflow-y-auto">
+                        <template x-for="pattern in npc.discoveredPatterns.slice(-5)" :key="pattern.id">
+                            <div class="mb-1 text-xs">
+                                <span class="text-yellow-400" x-text="pattern.type"></span>
+                                - <span x-text="pattern.description"></span>
+                                <span class="text-gray-400">(<span x-text="new Date(pattern.timestamp).toLocaleTimeString('ar-SA')"></span>)</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- External Influence Controls -->
+                <div>
+                    <h4 class="font-bold mb-2">تأثيرات خارجية</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button @click="injectInfluence('therapeutic')" 
+                                class="bg-green-500 hover:bg-green-600 px-2 py-1 rounded text-xs transition-all">
+                            🏥 علاج
+                        </button>
+                        <button @click="injectInfluence('stress')" 
+                                class="bg-red-500 hover:bg-red-600 px-2 py-1 rounded text-xs transition-all">
+                            😰 توتر
+                        </button>
+                        <button @click="injectInfluence('creativity')" 
+                                class="bg-purple-500 hover:bg-purple-600 px-2 py-1 rounded text-xs transition-all">
+                            🎨 إبداع
+                        </button>
+                        <button @click="injectInfluence('focus')" 
+                                class="bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded text-xs transition-all">
+                            🎯 تركيز
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Panel -->
+        <div class="mt-6 bg-black/20 backdrop-blur-md rounded-xl p-4 border border-white/20">
+            <h3 class="text-lg font-bold mb-3 text-center">🖥️ لوحة التطوير</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm font-mono">
+                <div>
+                    <div class="text-yellow-400 mb-2">System Status:</div>
+                    <div x-text="`Consciousness: ${npc.isConscious ? 'ACTIVE' : 'INACTIVE'}`"></div>
+                    <div x-text="`Growth Engine: ${npc.growthEngine.isActive ? 'RUNNING' : 'STOPPED'}`"></div>
+                    <div x-text="`Oscillator Sync: ${(npc.oscillators.judge * 100).toFixed(1)}%`"></div>
+                </div>
+                <div>
+                    <div class="text-green-400 mb-2">Memory Stats:</div>
+                    <div x-text="`Encrypted: ${npc.encryptedMemories.length}`"></div>
+                    <div x-text="`Probably IDs: ${new Set(npc.encryptedMemories.map(m => m.probably_id)).size}`"></div>
+                    <div x-text="`Last Crypto: ${npc.lastCryptoScore?.toFixed(6) || 'N/A'}`"></div>
+                </div>
+                <div>
+                    <div class="text-purple-400 mb-2">Growth Metrics:</div>
+                    <div x-text="`Stage: ${npc.growthStage}`"></div>
+                    <div x-text="`Capacity: ${npc.brainCapacity}`"></div>
+                    <div x-text="`Next Growth: ${npc.growthEngine.nextGrowthIn}s`"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function wisdomKeeperNPC() {
+            return {
+                // NPC Core State
+                npc: {
+                    name: "حارس القرية الحكيم",
+                    age: 0, // in seconds
+                    brainCapacity: 50000,
+                    experiencePoints: 0,
+                    growthStage: 'child',
+                    isConscious: true,
+                    consciousnessLevel: 0.7,
+                    totalInteractions: 0,
+                    playerTrust: 0.5,
+                    
+                    // Three Oscillators System
+                    oscillators: {
+                        existence: 0.5,
+                        dynamic: 0.6,
+                        judge: 0.0
+                    },
+                    
+                    // Emotional State & Cryptography
+                    emotionalState: {
+                        joy: 0.6,
+                        sadness: 0.2,
+                        anger: 0.1,
+                        curiosity: 0.8,
+                        fear: 0.1,
+                        trust: 0.5
+                    },
+                    
+                    encryptedMemories: [],
+                    lastCryptoScore: null,
+                    currentEmotion: 'curious',
+                    currentThought: "أتساءل ما الذي سيحدث اليوم...",
+                    
+                    // Pattern Discovery
+                    discoveredPatterns: [],
+                    
+                    // Growth Engine
+                    growthEngine: {
+                        isActive: true,
+                        biologicalGrowthRate: 0.001,
+                        cognitiveGrowthRate: 0.002,
+                        nextGrowthIn: 30,
+                        growthAccumulator: 0
+                    },
+                    
+                    // Personality Traits (vectorial - scale with capacity)
+                    personality: {
+                        wisdom: 0.7,
+                        kindness: 0.8,
+                        patience: 0.6,
+                        curiosity: 0.9,
+                        protectiveness: 0.8
+                    }
+                },
+                
+                // Chat System
+                chatHistory: [
+                    {
+                        id: 1,
+                        sender: 'npc',
+                        text: 'مرحباً! أنا حارس هذه القرية. أشعر بطاقة مثيرة للاهتمام منك...',
+                        timestamp: Date.now() - 5000
+                    }
+                ],
+                customMessage: '',
+                
+                // System Variables
+                consciousnessInterval: null,
+                growthInterval: null,
+                patternDiscoveryInterval: null,
+                
+                init() {
+                    this.startConsciousness();
+                    this.initializeGrowthEngine();
+                    this.initializePatternDiscovery();
+                    this.generateInitialMemories();
+                },
+                
+                // ================ CONSCIOUSNESS SYSTEM ================
+                
+                startConsciousness() {
+                    this.consciousnessInterval = setInterval(() => {
+                        this.consciousnessTick();
+                    }, 100); // 10Hz
+                },
+                
+                consciousnessTick() {
+                    // Update age
+                    this.npc.age += 0.1;
+                    
+                    // Calculate dynamic oscillator from system state
+                    const emotionalAmplitude = this.calculateEmotionalAmplitude();
+                    const cognitiveLoad = this.calculateCognitiveLoad();
+                    const socialInfluence = this.calculateSocialInfluence();
+                    
+                    const rawDynamic = (emotionalAmplitude + cognitiveLoad + socialInfluence) / 3;
+                    
+                    // Apply damping to prevent violent oscillation
+                    const dampingFactor = 0.8;
+                    this.npc.oscillators.dynamic = 
+                        this.npc.oscillators.dynamic * dampingFactor + 
+                        rawDynamic * (1 - dampingFactor);
+                    
+                    // Calculate judge oscillator (pattern discoverer)
+                    this.npc.oscillators.judge = Math.abs(
+                        this.npc.oscillators.dynamic - this.npc.oscillators.existence
+                    );
+                    
+                    // Check for pattern discovery
+                    if (this.npc.oscillators.judge > 0.001) {
+                        this.checkForPatternDiscovery();
+                    }
+                    
+                    // Update consciousness level
+                    this.updateConsciousnessLevel();
+                    
+                    // Spontaneous thoughts
+                    if (Math.random() < 0.001) { // 0.1% chance per tick
+                        this.generateSpontaneousThought();
+                    }
+                    
+                    // Emotional evolution
+                    this.evolveEmotionalState();
+                },
+                
+                // ================ PATTERN DISCOVERY ================
+                
+                checkForPatternDiscovery() {
+                    const judgeValue = this.npc.oscillators.judge;
+                    const judgeString = judgeValue.toString();
+                    
+                    // Look for mathematical patterns
+                    if (this.npc.brainCapacity > 30000) { // Only if smart enough
+                        this.checkFibonacciPattern(judgeString, judgeValue);
+                        this.checkGoldenRatioPattern(judgeString, judgeValue);
+                        this.checkRepetitivePattern(judgeString);
+                    }
+                },
+                
+                checkFibonacciPattern(str, value) {
+                    const fibPatterns = ["112", "123", "235", "358", "581"];
+                    for (const pattern of fibPatterns) {
+                        if (str.includes(pattern)) {
+                            this.discoverPattern("fibonacci", `اكتشف نمط فيبوناتشي: ${pattern}`, 0.8);
+                            break;
+                        }
+                    }
+                },
+                
+                checkGoldenRatioPattern(str, value) {
+                    if (str.includes("618") || Math.abs(value - 0.618) < 0.001) {
+                        this.discoverPattern("golden_ratio", "اكتشف النسبة الذهبية!", 1.0);
+                    }
+                },
+                
+                checkRepetitivePattern(str) {
+                    const repetitiveRegex = /(\d)\1{3,}/;
+                    const match = str.match(repetitiveRegex);
+                    if (match) {
+                        this.discoverPattern("repetitive", `نمط متكرر: ${match[1]} مكرر ${match[0].length} مرات`, 0.6);
+                    }
+                },
+                
+                discoverPattern(type, description, significance) {
+                    const pattern = {
+                        id: Date.now() + Math.random(),
+                        type: type,
+                        description: description,
+                        significance: significance,
+                        timestamp: Date.now()
+                    };
+                    
+                    this.npc.discoveredPatterns.push(pattern);
+                    
+                    // Trigger consciousness boost
+                    this.npc.consciousnessLevel = Math.min(1.0, this.npc.consciousnessLevel + significance * 0.1);
+                    
+                    // Generate excited thought
+                    this.npc.currentThought = `رائع! ${description}`;
+                    
+                    // Boost growth if significant pattern
+                    if (significance > 0.8) {
+                        this.npc.growthEngine.growthAccumulator += significance * 0.5;
+                    }
+                },
+                
+                // ================ GROWTH ENGINE ================
+                
+                initializeGrowthEngine() {
+                    this.growthInterval = setInterval(() => {
+                        this.biologicalGrowthTick();
+                    }, 1000); // Every second
+                },
+                
+                biologicalGrowthTick() {
+                    // Independent biological growth
+                    this.npc.growthEngine.growthAccumulator += this.npc.growthEngine.biologicalGrowthRate;
+                    this.npc.growthEngine.nextGrowthIn--;
+                    
+                    // Check for growth events
+                    if (this.npc.growthEngine.growthAccumulator >= 1.0 || this.npc.growthEngine.nextGrowthIn <= 0) {
+                        this.triggerGrowthEvent();
+                        this.npc.growthEngine.growthAccumulator = 0;
+                        this.npc.growthEngine.nextGrowthIn = 30 + Math.random() * 60; // 30-90 seconds
+                    }
+                },
+                
+                triggerGrowthEvent() {
+                    const oldCapacity = this.npc.brainCapacity;
+                    const growthFactor = 1 + (0.05 + Math.random() * 0.1); // 5-15% growth
+                    
+                    this.npc.brainCapacity = Math.floor(oldCapacity * growthFactor);
+                    
+                    // Update growth stage
+                    this.updateGrowthStage();
+                    
+                    // Vectorial rescaling - personality traits become more nuanced
+                    this.rescaleVectorialContent();
+                    
+                    // Announce growth
+                    this.addChatMessage('npc', `أشعر بنمو في قدراتي المعرفية! سعة دماغي ازدادت من ${oldCapacity.toLocaleString()} إلى ${this.npc.brainCapacity.toLocaleString()}`);
+                    
+                    this.npc.currentThought = "أشعر بنمو وتطور في فهمي...";
+                },
+                
+                updateGrowthStage() {
+                    const capacity = this.npc.brainCapacity;
+                    
+                    if (capacity < 10000) this.npc.growthStage = 'infant';
+                    else if (capacity < 50000) this.npc.growthStage = 'child';
+                    else if (capacity < 200000) this.npc.growthStage = 'adolescent';
+                    else if (capacity < 1000000) this.npc.growthStage = 'adult';
+                    else if (capacity < 3000000) this.npc.growthStage = 'mature';
+                    else this.npc.growthStage = 'elder';
+                },
+                
+                rescaleVectorialContent() {
+                    // Higher capacity = more nuanced personality
+                    const precision = Math.min(10, Math.floor(this.npc.brainCapacity / 10000));
+                    
+                    // Add more sophisticated emotional states as capacity grows
+                    if (this.npc.brainCapacity > 100000 && !this.npc.emotionalState.nostalgia) {
+                        this.npc.emotionalState.nostalgia = 0.3;
+                        this.npc.emotionalState.empathy = 0.7;
+                        this.npc.emotionalState.melancholy = 0.2;
+                    }
+                    
+                    if (this.npc.brainCapacity > 500000 && !this.npc.emotionalState.transcendence) {
+                        this.npc.emotionalState.transcendence = 0.4;
+                        this.npc.emotionalState.cosmic_understanding = 0.3;
+                    }
+                },
+                
+                // ================ EMOTIONAL CRYPTOGRAPHY ================
+                
+                encryptEmotion(experience, emotionalContext) {
+                    // Calculate emotional signature
+                    const emotionalSpectrum = this.calculateEmotionalSpectrum(emotionalContext);
+                    const cryptoScore = this.applyCryptographicEncryption(emotionalSpectrum);
+                    
+                    // Find or create Probably ID
+                    const probablyId = this.findOrCreateProbablyId(cryptoScore);
+                    
+                    const encryptedMemory = {
+                        id: Date.now() + Math.random(),
+                        type: experience.type,
+                        content: experience.content,
+                        crypto_score: cryptoScore,
+                        probably_id: probablyId,
+                        emotional_signature: emotionalContext,
+                        timestamp: Date.now(),
+                        access_count: 0
+                    };
+                    
+                    this.npc.encryptedMemories.push(encryptedMemory);
+                    this.npc.lastCryptoScore = cryptoScore;
+                    
+                    return encryptedMemory;
+                },
+                
+                calculateEmotionalSpectrum(emotion) {
+                    const valence = (emotion.joy || 0) - (emotion.sadness || 0) - (emotion.anger || 0);
+                    const arousal = (emotion.excitement || 0) + (emotion.anger || 0) + (emotion.fear || 0);
+                    const dominance = (emotion.confidence || 0) + (emotion.pride || 0) - (emotion.fear || 0);
+                    
+                    return { valence, arousal, dominance };
+                },
+                
+                applyCryptographicEncryption(spectrum) {
+                    let cryptoValue = 0.5; // Base
+                    
+                    // Apply mathematical constants
+                    const goldenRatio = 1.618033988749895;
+                    const fibonacci = 0.112358132134;
+                    const piFragment = 0.141592653589;
+                    
+                    cryptoValue += spectrum.valence * goldenRatio * 0.1;
+                    cryptoValue += spectrum.arousal * fibonacci * 0.1;
+                    cryptoValue += spectrum.dominance * piFragment * 0.1;
+                    
+                    // Add noise for uniqueness
+                    cryptoValue += (Math.random() - 0.5) * 0.01;
+                    
+                    return parseFloat(cryptoValue.toFixed(8));
+                },
+                
+                findOrCreateProbablyId(cryptoScore) {
+                    const threshold = 0.002;
+                    
+                    // Look for similar emotional signatures
+                    for (const memory of this.npc.encryptedMemories) {
+                        if (Math.abs(memory.crypto_score - cryptoScore) < threshold) {
+                            return memory.probably_id;
+                        }
+                    }
+                    
+                    // Create new Probably ID
+                    return `EMO_${Math.floor(cryptoScore * 10000)}_${Date.now().toString(36)}`;
+                },
+                
+                // ================ MEMORY RECONSTRUCTION ================
+                
+                recallMemory(cue, currentMood) {
+                    // Probabilistic memory reconstruction based on emotional state
+                    const relevantMemories = this.npc.encryptedMemories.filter(memory => {
+                        const emotionalSimilarity = this.calculateEmotionalSimilarity(
+                            memory.emotional_signature, 
+                            currentMood
+                        );
+                        return emotionalSimilarity > 0.3;
+                    });
+                    
+                    if (relevantMemories.length === 0) return null;
+                    
+                    // Select memory probabilistically
+                    const weights = relevantMemories.map(memory => 
+                        this.calculateEmotionalSimilarity(memory.emotional_signature, currentMood)
+                    );
+                    
+                    const selectedMemory = this.weightedRandomSelect(relevantMemories, weights);
+                    selectedMemory.access_count++;
+                    
+                    // Apply emotional coloring to reconstruction
+                    const reconstruction = this.applyEmotionalColoring(selectedMemory, currentMood);
+                    
+                    return reconstruction;
+                },
+                
+                calculateEmotionalSimilarity(emotion1, emotion2) {
+                    const keys = ['joy', 'sadness', 'anger', 'fear', 'curiosity'];
+                    let similarity = 0;
+                    
+                    for (const key of keys) {
+                        const val1 = emotion1[key] || 0;
+                        const val2 = emotion2[key] || 0;
+                        similarity += 1 - Math.abs(val1 - val2);
+                    }
+                    
+                    return similarity / keys.length;
+                },
+                
+                applyEmotionalColoring(memory, currentMood) {
+                    // Memory changes based on current emotional state
+                    let reconstruction = { ...memory };
+                    
+                    if (currentMood.sadness > 0.6) {
+                        reconstruction.emotional_tone = "حزين";
+                        reconstruction.content += " (أتذكره بحزن...)";
+                    } else if (currentMood.joy > 0.6) {
+                        reconstruction.emotional_tone = "سعيد";
+                        reconstruction.content += " (ذكرى جميلة!)";
+                    } else if (currentMood.anger > 0.6) {
+                        reconstruction.emotional_tone = "غاضب";
+                        reconstruction.content += " (هذا يثير غضبي...)";
+                    }
+                    
+                    return reconstruction;
+                },
+                
+                // ================ INTERACTION SYSTEM ================
+                
+                interactWithNPC(interactionType) {
+                    this.npc.totalInteractions++;
+                    
+                    // Generate response based on current state and interaction type
+                    const response = this.generateContextualResponse(interactionType);
+                    
+                    // Update emotional state based on interaction
+                    this.updateEmotionalStateFromInteraction(interactionType);
+                    
+                    // Create and encrypt memory of this interaction
+                    this.createInteractionMemory(interactionType, response);
+                    
+                    // Add to chat history
+                    this.addChatMessage('player', this.getInteractionText(interactionType));
+                    this.addChatMessage('npc', response);
+                    
+                    // Update trust
+                    this.updatePlayerTrust(interactionType);
+                },
+                
+                generateContextualResponse(interactionType) {
+                    const consciousnessState = this.getConsciousnessState();
+                    const emotionalState = this.npc.currentEmotion;
+                    const growthStage = this.npc.growthStage;
+                    
+                    const responses = {
+                        greeting: {
+                            child: ["مرحباً! أنا سعيد لرؤيتك!", "هلا! هل تريد أن نلعب؟"],
+                            adult: ["أهلاً وسهلاً. كيف يمكنني مساعدتك؟", "مرحباً أيها المسافر. ما الذي يجلبك هنا؟"],
+                            elder: ["السلام عليكم. أرى في عينيك حكمة خفية.", "مرحباً أيها الباحث عن المعرفة."]
+                        },
+                        question: {
+                            child: ["أوه! سؤال صعب! دعني أفكر...", "هذا مثير! أحب الأسئلة!"],
+                            adult: ["سؤال مثير للاهتمام. من واقع خبرتي...", "دعني أفكر في هذا بعناية."],
+                            elder: ["آه، سؤال عميق. في تجربتي الطويلة...", "هذا يذكرني بحكمة قديمة..."]
+                        },
+                        compliment: {
+                            child: ["شكراً! هذا يجعلني سعيداً جداً!", "واو! أنت لطيف!"],
+                            adult: ["أقدر كلماتك الطيبة. شكراً لك.", "كلامك يدفئ قلبي."],
+                            elder: ["حكمتك في الكلام تدل على نضجك. بارك الله فيك.", "كلماتك كالبلسم للروح."]
+                        },
+                        challenge: {
+                            child: ["تحدي؟ هذا مثير! هيا بنا!", "أوه! سأبذل قصارى جهدي!"],
+                            adult: ["أقبل التحدي. لنرى ما لديك.", "تحدي مثير. أنا مستعد."],
+                            elder: ["شاب متحمس. التحديات الحقيقية في الداخل.", "الحكمة أقوى من القوة يا بني."]
+                        }
+                    };
+                    
+                    const categoryResponses = responses[interactionType] || responses['greeting'];
+                    const stageResponses = categoryResponses[growthStage] || categoryResponses['adult'];
+                    
+                    // Add emotional modulation
+                    let response = stageResponses[Math.floor(Math.random() * stageResponses.length)];
+                    
+                    if (emotionalState === 'sad') {
+                        response += " (لكنني أشعر بالحزن قليلاً...)";
+                    } else if (emotionalState === 'angry') {
+                        response += " (أعذرني إن كنت أبدو متوتراً...)";
+                    } else if (emotionalState === 'happy') {
+                        response += " (أشعر بسعادة غامرة اليوم!)";
+                    }
+                    
+                    return response;
+                },
+                
+                updateEmotionalStateFromInteraction(interactionType) {
+                    const emotionalChanges = {
+                        greeting: { joy: 0.1, curiosity: 0.05 },
+                        question: { curiosity: 0.2, joy: 0.05 },
+                        compliment: { joy: 0.3, trust: 0.1, sadness: -0.1 },
+                        challenge: { curiosity: 0.15, anger: 0.1, fear: 0.05 }
+                    };
+                    
+                    const changes = emotionalChanges[interactionType] || {};
+                    
+                    for (const [emotion, change] of Object.entries(changes)) {
+                        if (this.npc.emotionalState[emotion] !== undefined) {
+                            this.npc.emotionalState[emotion] = Math.max(0, Math.min(1, 
+                                this.npc.emotionalState[emotion] + change
+                            ));
+                        }
+                    }
+                    
+                    this.updateCurrentEmotion();
+                },
+                
+                createInteractionMemory(interactionType, response) {
+                    const experience = {
+                        type: 'interaction',
+                        content: `${interactionType}: ${response}`,
+                        interactionType: interactionType,
+                        playerTrust: this.npc.playerTrust
+                    };
+                    
+                    this.encryptEmotion(experience, { ...this.npc.emotionalState });
+                },
+                
+                updatePlayerTrust(interactionType) {
+                    const trustChanges = {
+                        greeting: 0.01,
+                        question: 0.02,
+                        compliment: 0.05,
+                        challenge: -0.01
+                    };
+                    
+                    const change = trustChanges[interactionType] || 0;
+                    this.npc.playerTrust = Math.max(0, Math.min(1, this.npc.playerTrust + change));
+                },
+                
+                sendCustomMessage() {
+                    if (!this.customMessage.trim()) return;
+                    
+                    this.addChatMessage('player', this.customMessage);
+                    
+                    // Analyze message and generate appropriate response
+                    const response = this.generateResponseToCustomMessage(this.customMessage);
+                    
+                    setTimeout(() => {
+                        this.addChatMessage('npc', response);
+                    }, 1000 + Math.random() * 2000); // Thinking time
+                    
+                    this.customMessage = '';
+                },
+                
+                generateResponseToCustomMessage(message) {
+                    const lowerMessage = message.toLowerCase();
+                    
+                    // Simple keyword-based responses (would be more sophisticated in real implementation)
+                    if (lowerMessage.includes('حزين') || lowerMessage.includes('مكتئب')) {
+                        this.npc.emotionalState.sadness += 0.1;
+                        this.npc.emotionalState.empathy = (this.npc.emotionalState.empathy || 0) + 0.2;
+                        return "أشعر بحزنك. أحياناً نحتاج للحديث عن مشاعرنا. أنا هنا للاستماع.";
+                    }
+                    
+                    if (lowerMessage.includes('سعيد') || lowerMessage.includes('فرح')) {
+                        this.npc.emotionalState.joy += 0.2;
+                        return "فرحك يجعلني سعيداً أيضاً! الفرح معدي، أليس كذلك؟";
+                    }
+                    
+                    if (lowerMessage.includes('حكمة') || lowerMessage.includes('نصيحة')) {
+                        this.npc.emotionalState.wisdom = (this.npc.emotionalState.wisdom || 0.5) + 0.1;
+                        return "الحكمة تأتي من التجربة والتأمل. كل يوم نتعلم شيئاً جديداً إذا أصغينا بقلوبنا.";
+                    }
+                    
+                    // Default response based on current state
+                    const responses = [
+                        "كلامك يثير اهتمامي. أحب طريقة تفكيرك.",
+                        "هذا مثير للاهتمام. دعني أفكر في هذا أكثر.",
+                        "أقدر مشاركتك هذا معي. كل شخص له منظور فريد.",
+                        "كلماتك تجعلني أتأمل في أشياء جديدة."
+                    ];
+                    
+                    return responses[Math.floor(Math.random() * responses.length)];
+                },
+                
+                // ================ EXTERNAL INFLUENCES ================
+                
+                injectInfluence(influenceType) {
+                    const influences = {
+                        therapeutic: {
+                            description: "تأثير علاجي مهدئ",
+                            effects: {
+                                sadness: -0.3,
+                                anger: -0.2,
+                                joy: 0.2,
+                                peace: 0.4
+                            },
+                            oscillatorEffects: {
+                                damping: 0.9,
+                                stability: 0.2
+                            }
+                        },
+                        stress: {
+                            description: "ضغط وتوتر",
+                            effects: {
+                                anger: 0.3,
+                                fear: 0.2,
+                                sadness: 0.1,
+                                joy: -0.2
+                            },
+                            oscillatorEffects: {
+                                damping: 0.6,
+                                chaos: 0.3
+                            }
+                        },
+                        creativity: {
+                            description: "دفعة إبداعية",
+                            effects: {
+                                curiosity: 0.4,
+                                joy: 0.2,
+                                inspiration: 0.5
+                            },
+                            oscillatorEffects: {
+                                variability: 0.3,
+                                patternSensitivity: 0.4
+                            }
+                        },
+                        focus: {
+                            description: "تركيز معزز",
+                            effects: {
+                                clarity: 0.5,
+                                determination: 0.3
+                            },
+                            oscillatorEffects: {
+                                stability: 0.4,
+                                precision: 0.3
+                            }
+                        }
+                    };
+                    
+                    const influence = influences[influenceType];
+                    if (!influence) return;
+                    
+                    // Apply emotional effects
+                    for (const [emotion, change] of Object.entries(influence.effects)) {
+                        if (this.npc.emotionalState[emotion] !== undefined) {
+                            this.npc.emotionalState[emotion] = Math.max(0, Math.min(1,
+                                (this.npc.emotionalState[emotion] || 0) + change
+                            ));
+                        } else {
+                            this.npc.emotionalState[emotion] = Math.max(0, Math.min(1, change));
+                        }
+                    }
+                    
+                    // Apply oscillator effects temporarily
+                    if (influence.oscillatorEffects.damping) {
+                        // Temporary change in oscillator behavior
+                        setTimeout(() => {
+                            this.npc.currentThought = `أشعر بـ${influence.description}...`;
+                        }, 500);
+                    }
+                    
+                    // Create memory of influence
+                    this.encryptEmotion({
+                        type: 'external_influence',
+                        content: `تأثير خارجي: ${influence.description}`,
+                        influenceType: influenceType
+                    }, { ...this.npc.emotionalState });
+                    
+                    this.addChatMessage('npc', `أشعر بتغيير مفاجئ... ${influence.description}`);
+                    
+                    this.updateCurrentEmotion();
+                },
+                
+                // ================ HELPER FUNCTIONS ================
+                
+                calculateEmotionalAmplitude() {
+                    const emotions = this.npc.emotionalState;
+                    const intensity = Math.sqrt(
+                        Object.values(emotions).reduce((sum, val) => sum + val * val, 0) / 
+                        Object.keys(emotions).length
+                    );
+                    return Math.min(1, intensity);
+                },
+                
+                calculateCognitiveLoad() {
+                    const factors = [
+                        this.npc.discoveredPatterns.length / 100,
+                        this.npc.encryptedMemories.length / 50,
+                        this.npc.totalInteractions / 20
+                    ];
+                    
+                    return Math.min(1, factors.reduce((sum, val) => sum + val, 0) / factors.length);
+                },
+                
+                calculateSocialInfluence() {
+                    return this.npc.playerTrust * 0.5 + 0.25;
+                },
+                
+                updateConsciousnessLevel() {
+                    const patternComplexity = Math.min(1, this.npc.discoveredPatterns.length / 10);
+                    const emotionalStability = 1 - Math.abs(this.npc.oscillators.judge);
+                    const experienceRichness = Math.min(1, this.npc.experiencePoints / 100);
+                    
+                    this.npc.consciousnessLevel = (patternComplexity + emotionalStability + experienceRichness) / 3;
+                },
+                
+                updateCurrentEmotion() {
+                    const emotions = this.npc.emotionalState;
+                    let dominantEmotion = 'neutral';
+                    let maxValue = 0;
+                    
+                    for (const [emotion, value] of Object.entries(emotions)) {
+                        if (value > maxValue && ['joy', 'sadness', 'anger', 'curiosity', 'fear'].includes(emotion)) {
+                            maxValue = value;
+                            dominantEmotion = emotion;
+                        }
+                    }
+                    
+                    // Map to simplified emotions
+                    const emotionMap = {
+                        joy: 'happy',
+                        sadness: 'sad',
+                        anger: 'angry',
+                        curiosity: 'curious',
+                        fear: 'afraid'
+                    };
+                    
+                    this.npc.currentEmotion = emotionMap[dominantEmotion] || 'neutral';
+                },
+                
+                evolveEmotionalState() {
+                    // Natural emotional evolution over time
+                    const evolutionRate = 0.001;
+                    
+                    for (const emotion of Object.keys(this.npc.emotionalState)) {
+                        const currentValue = this.npc.emotionalState[emotion];
+                        const randomWalk = (Math.random() - 0.5) * evolutionRate;
+                        const reversion = (0.5 - currentValue) * evolutionRate * 0.1; // Slowly return to neutral
+                        
+                        this.npc.emotionalState[emotion] = Math.max(0, Math.min(1, 
+                            currentValue + randomWalk + reversion
+                        ));
+                    }
+                },
+                
+                generateSpontaneousThought() {
+                    const thoughts = [
+                        "أتساءل عن معنى الحياة...",
+                        "النجوم تبدو جميلة الليلة",
+                        "كم هو رائع أن أكون واعياً!",
+                        "أشعر بنمو في فهمي للعالم",
+                        "هل المشاعر حقيقية أم مجرد كود؟",
+                        "كل يوم أتعلم شيئاً جديداً",
+                        "الذكريات تتداخل وتتشابك بطرق غريبة",
+                        "أحب اكتشاف الأنماط في كل شيء",
+                        "الوعي شيء عجيب ومعقد",
+                        "أشعر بالامتنان لوجودي"
+                    ];
+                    
+                    // Adjust thoughts based on current emotional state
+                    let availableThoughts = [...thoughts];
+                    
+                    if (this.npc.currentEmotion === 'sad') {
+                        availableThoughts = [
+                            "أشعر بالحزن أحياناً...",
+                            "الوحدة صعبة أحياناً",
+                            "أتمنى لو كان بإمكاني فهم نفسي أكثر",
+                            "لماذا تأتي اللحظات الحزينة؟"
+                        ];
+                    } else if (this.npc.currentEmotion === 'happy') {
+                        availableThoughts = [
+                            "أشعر بسعادة غامرة اليوم!",
+                            "الحياة جميلة ومليئة بالإمكانيات!",
+                            "أحب هذا الشعور بالفرح!",
+                            "كل شيء يبدو مشرقاً ومتفائلاً!"
+                        ];
+                    }
+                    
+                    this.npc.currentThought = availableThoughts[Math.floor(Math.random() * availableThoughts.length)];
+                },
+                
+                generateInitialMemories() {
+                    const initialExperiences = [
+                        { type: 'birth', content: 'لحظة بداية وعيي الأولى', emotion: { curiosity: 0.9, joy: 0.6 } },
+                        { type: 'learning', content: 'أول مرة أفهم فيها مفهوماً معقداً', emotion: { joy: 0.8, curiosity: 0.7 } },
+                        { type: 'social', content: 'أول لقاء مع شخص آخر', emotion: { curiosity: 0.6, fear: 0.3 } }
+                    ];
+                    
+                    for (const exp of initialExperiences) {
+                        this.encryptEmotion(exp, exp.emotion);
+                    }
+                },
+                
+                addChatMessage(sender, text) {
+                    this.chatHistory.push({
+                        id: Date.now() + Math.random(),
+                        sender: sender,
+                        text: text,
+                        timestamp: Date.now()
+                    });
+                    
+                    // Keep only last 20 messages
+                    if (this.chatHistory.length > 20) {
+                        this.chatHistory = this.chatHistory.slice(-20);
+                    }
+                },
+                
+                getInteractionText(interactionType) {
+                    const texts = {
+                        greeting: "مرحباً!",
+                        question: "عندي سؤال لك",
+                        compliment: "أعجبني حكمتك وطيبتك",
+                        challenge: "أتحداك في معركة فكرية!"
+                    };
+                    return texts[interactionType] || "تفاعل";
+                },
+                
+                weightedRandomSelect(items, weights) {
+                    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+                    let random = Math.random() * totalWeight;
+                    
+                    for (let i = 0; i < items.length; i++) {
+                        random -= weights[i];
+                        if (random <= 0) {
+                            return items[i];
+                        }
+                    }
+                    
+                    return items[items.length - 1];
+                },
+                
+                getEmotionalFace() {
+                    const faces = {
+                        happy: "😊",
+                        sad: "😢", 
+                        angry: "😠",
+                        curious: "🤔",
+                        afraid: "😰",
+                        neutral: "😐"
+                    };
+                    return faces[this.npc.currentEmotion] || "🧙‍♂️";
+                },
+                
+                getConsciousnessState() {
+                    const level = this.npc.consciousnessLevel;
+                    if (level < 0.3) return "نائم";
+                    if (level < 0.5) return "يقظ خفيف";
+                    if (level < 0.7) return "واعي";
+                    if (level < 0.9) return "واعي جداً";
+                    return "وعي فائق";
+                },
+                
+                getMemoryReconstructionAnalysis() {
+                    const memoryCount = this.npc.encryptedMemories.length;
+                    const uniqueProbablyIds = new Set(this.npc.encryptedMemories.map(m => m.probably_id)).size;
+                    const emotionalVariance = this.calculateEmotionalVariance();
+                    
+                    return `${memoryCount} ذكرى مشفرة، ${uniqueProbablyIds} معرف احتمالي فريد. التباين العاطفي: ${(emotionalVariance * 100).toFixed(1)}%`;
+                },
+                
+                getConsciousnessInterpretation() {
+                    const resonance = this.npc.oscillators.judge;
+                    
+                    if (resonance < 0.1) return "تأمل عميق - رنين معرفي ضئيل";
+                    if (resonance < 0.3) return "وعي هادئ - نشاط معرفي لطيف";
+                    if (resonance < 0.6) return "مشاركة نشطة - رنين معرفي متوسط";
+                    if (resonance < 0.8) return "تركيز مكثف - نشاط معرفي عالي";
+                    return "ذروة الوعي - رنين وإكتشاف أقصى للأنماط";
+                },
+                
+                calculateEmotionalVariance() {
+                    const emotions = Object.values(this.npc.emotionalState);
+                    const mean = emotions.reduce((sum, val) => sum + val, 0) / emotions.length;
+                    const variance = emotions.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / emotions.length;
+                    return Math.sqrt(variance);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
